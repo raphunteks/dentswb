@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= seo.title %></title>
+    <meta name="description" content="<%= seo.desc %>">
+    <link rel="canonical" href="<%= settings.siteUrl %><%= seo.path %>">
+    <link rel="stylesheet" href="/public/css/style.css">
+</head>
+<body>
+    <header id="main-header">
+        <div class="container nav-container">
+            <a href="/" class="logo"><span class="logo-mark"></span><%= settings.siteName || 'Dents Web' %></a>
+            <div class="hamburger" id="hamburger-btn"><span></span><span></span><span></span></div>
+            <nav class="nav-links" id="nav-links">
+                <a href="/">Home</a>
+                <a href="/services">Services</a>
+                <a href="/portfolio">Portfolio</a>
+                <a href="/pricing">Pricing</a>
+                <a href="/about" class="active">About</a>
+                <a href="/contact">Contact</a>
+                <a href="/faq">FAQ</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="section section-pt-hero">
+            <div class="container">
+                <div class="text-center" style="max-width: 800px; margin: 0 auto 80px;">
+                    <h1 style="margin-bottom: 24px;">Lebih dari sekadar pembuat website.</h1>
+                    <p style="font-size: 1.2rem;">Kami adalah partner teknologi yang memastikan investasi digital Anda memberikan hasil (ROI) yang terukur. Kami menolak arsitektur usang dan template lambat.</p>
+                </div>
+                
+                <div class="grid-2">
+                    <div class="glass-panel glass-panel-p">
+                        <h3 style="color: var(--primary);">Filosofi Kami</h3>
+                        <p>Banyak bisnis membuang anggaran untuk website yang tidak pernah ditemukan di Google dan terlalu lambat untuk digunakan. Kami membangun sebaliknya: cepat, aman, SEO-ready sejak baris kode pertama ditulis.</p>
+                    </div>
+                    <div class="glass-panel glass-panel-p">
+                        <h3 style="color: var(--primary);">Pendekatan Teknis</h3>
+                        <p>Kami menggunakan fondasi Server-Side Rendering (SSR) dipadukan dengan optimasi Core Web Vitals untuk memastikan Google mencintai website Anda dan pengunjung merasa nyaman berselancar.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="section" style="border-top: 1px solid var(--glass-border); padding-bottom: 40px;">
+        <div class="container text-center" style="color: var(--text-muted); font-size: 0.9rem;">
+            &copy; <span id="year"></span> <%= settings.siteName || 'Dents Web' %>. All rights reserved.
+        </div>
+    </footer>
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+        window.addEventListener('scroll', () => document.getElementById('main-header').classList.toggle('scrolled', window.scrollY > 20));
+        document.getElementById('hamburger-btn').addEventListener('click', () => document.getElementById('nav-links').classList.toggle('mobile-open'));
+    </script>
+</body>
+</html>

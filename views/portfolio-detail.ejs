@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= seo.title %></title>
+    <meta name="description" content="<%= seo.desc %>">
+    <link rel="canonical" href="<%= settings.siteUrl %><%= seo.path %>">
+    
+    <!-- Unique OG Tags per project -->
+    <meta property="og:title" content="<%= seo.title %>">
+    <meta property="og:description" content="<%= seo.desc %>">
+    <meta property="og:image" content="<%= seo.image %>">
+    
+    <link rel="stylesheet" href="/public/css/style.css">
+</head>
+<body>
+    <header id="main-header">
+        <div class="container nav-container">
+            <a href="/" class="logo"><span class="logo-mark"></span><%= settings.siteName || 'Dents Web' %></a>
+            <div class="hamburger" id="hamburger-btn"><span></span><span></span><span></span></div>
+            <nav class="nav-links" id="nav-links">
+                <a href="/">Home</a>
+                <a href="/services">Services</a>
+                <a href="/portfolio" class="active">Portfolio</a>
+                <a href="/pricing">Pricing</a>
+                <a href="/about">About</a>
+                <a href="/contact">Contact</a>
+                <a href="/faq">FAQ</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="section section-pt-hero">
+            <div class="container">
+                <a href="/portfolio" style="color: var(--primary); margin-bottom: 24px; display: inline-block;">&larr; Kembali ke Portfolio</a>
+                
+                <div style="margin-bottom: 40px;">
+                    <span class="tag" style="margin-bottom: 16px;"><%= project.category %></span>
+                    <h1><%= project.title %></h1>
+                </div>
+
+                <div class="glass-panel" style="padding: 32px; margin-bottom: 40px; display: flex; flex-wrap: wrap; gap: 40px; border-bottom: 1px solid var(--glass-border);">
+                    <div>
+                        <h4 style="color: var(--text-secondary); margin-bottom: 8px;">Klien</h4>
+                        <p style="color: white; margin:0; font-weight: 500;"><%= project.client %></p>
+                    </div>
+                    <div>
+                        <h4 style="color: var(--text-secondary); margin-bottom: 8px;">Tahun</h4>
+                        <p style="color: white; margin:0; font-weight: 500;"><%= project.year %></p>
+                    </div>
+                    <% if(project.projectUrl) { %>
+                    <div>
+                        <h4 style="color: var(--text-secondary); margin-bottom: 8px;">Live Link</h4>
+                        <a href="<%= project.projectUrl %>" target="_blank" style="color: var(--primary); font-weight: 500;">Kunjungi Website &nearr;</a>
+                    </div>
+                    <% } %>
+                </div>
+
+                <% if(project.image) { %>
+                    <img src="<%= project.image %>" alt="<%= project.title %>" style="width: 100%; max-height: 600px; object-fit: cover; border-radius: var(--radius-lg); margin-bottom: 60px; border: 1px solid var(--glass-border);">
+                <% } %>
+
+                <div class="grid-2">
+                    <div>
+                        <h3 style="margin-bottom: 24px; color: var(--primary);">Ikhtisar Proyek</h3>
+                        <!-- Notice the use of <%- %> for pre-sanitized trusted HTML formatting if applicable, but we stick to <p> for safety if it's raw text -->
+                        <p style="font-size: 1.1rem; line-height: 1.8;"><%= project.description %></p>
+                    </div>
+                    
+                    <div class="glass-panel glass-panel-p">
+                        <h3 style="margin-bottom: 24px;">Tantangan & Solusi</h3>
+                        <h4 style="color: var(--text-secondary); margin-bottom: 8px;">Tantangan</h4>
+                        <p style="margin-bottom: 24px;"><%= project.challenge || '-' %></p>
+                        
+                        <h4 style="color: var(--text-secondary); margin-bottom: 8px;">Solusi</h4>
+                        <p><%= project.solution || '-' %></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="section" style="border-top: 1px solid var(--glass-border); padding-bottom: 40px;">
+        <div class="container text-center" style="color: var(--text-muted); font-size: 0.9rem;">
+            &copy; <span id="year"></span> <%= settings.siteName || 'Dents Web' %>. All rights reserved.
+        </div>
+    </footer>
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+        window.addEventListener('scroll', () => document.getElementById('main-header').classList.toggle('scrolled', window.scrollY > 20));
+        document.getElementById('hamburger-btn').addEventListener('click', () => document.getElementById('nav-links').classList.toggle('mobile-open'));
+    </script>
+</body>
+</html>

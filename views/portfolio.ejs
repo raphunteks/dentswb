@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= seo.title %></title>
+    <meta name="description" content="<%= seo.desc %>">
+    <link rel="canonical" href="<%= settings.siteUrl %><%= seo.path %>">
+    <link rel="stylesheet" href="/public/css/style.css">
+</head>
+<body>
+    <header id="main-header">
+        <div class="container nav-container">
+            <a href="/" class="logo"><span class="logo-mark"></span><%= settings.siteName || 'Dents Web' %></a>
+            <div class="hamburger" id="hamburger-btn"><span></span><span></span><span></span></div>
+            <nav class="nav-links" id="nav-links">
+                <a href="/">Home</a>
+                <a href="/services">Services</a>
+                <a href="/portfolio" class="active">Portfolio</a>
+                <a href="/pricing">Pricing</a>
+                <a href="/about">About</a>
+                <a href="/contact">Contact</a>
+                <a href="/faq">FAQ</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="section section-pt-hero">
+            <div class="container">
+                <div class="text-center" style="max-width: 600px; margin: 0 auto 80px;">
+                    <h1 style="margin-bottom: 16px;">Our Work</h1>
+                    <p>Kumpulan studi kasus dan bukti eksekusi arsitektur digital yang kami bangun untuk klien.</p>
+                </div>
+                
+                <div class="grid-2">
+                    <% if(portfolio && portfolio.length > 0) { %>
+                        <% portfolio.forEach(item => { %>
+                            <div class="portfolio-card" onclick="window.location.href='/portfolio/<%= item.slug %>'">
+                                <div class="portfolio-img" style="background-image: url('<%= item.image %>')"></div>
+                                <div class="portfolio-info">
+                                    <span class="tag"><%= item.category %></span>
+                                    <h3 style="margin-top: 12px; margin-bottom: 8px;"><%= item.title %></h3>
+                                    <p style="font-size: 0.9rem; margin-bottom: 16px;">Klien: <%= item.client %> &bull; <%= item.year %></p>
+                                    <p style="font-size: 0.95rem; color: var(--text-secondary);"><%= item.shortDescription %></p>
+                                </div>
+                            </div>
+                        <% }) %>
+                    <% } else { %>
+                        <p class="text-center" style="grid-column: 1 / -1;">Belum ada data portfolio yang dipublikasikan.</p>
+                    <% } %>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="section" style="border-top: 1px solid var(--glass-border); padding-bottom: 40px;">
+        <div class="container text-center" style="color: var(--text-muted); font-size: 0.9rem;">
+            &copy; <span id="year"></span> <%= settings.siteName || 'Dents Web' %>. All rights reserved.
+        </div>
+    </footer>
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+        window.addEventListener('scroll', () => document.getElementById('main-header').classList.toggle('scrolled', window.scrollY > 20));
+        document.getElementById('hamburger-btn').addEventListener('click', () => document.getElementById('nav-links').classList.toggle('mobile-open'));
+    </script>
+</body>
+</html>

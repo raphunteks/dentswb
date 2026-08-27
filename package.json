@@ -1,0 +1,34 @@
+{
+  "name": "dents-web",
+  "version": "1.0.0",
+  "description": "Build Your Digital Presence. Premium Digital Agency Custom Website.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "agency",
+    "web",
+    "development",
+    "seo",
+    "ssr",
+    "express",
+    "ejs"
+  ],
+  "author": "Santriman Omnibuilder / Dents Web",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@upstash/redis": "^1.34.3",
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^5.0.1",
+    "express-rate-limit": "^7.4.1",
+    "helmet": "^8.0.0"
+  },
+  "engines": {
+    "node": ">=20.x"
+  }
+}

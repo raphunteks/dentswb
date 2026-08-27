@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= seo.title %></title>
+    <meta name="description" content="<%= seo.desc %>">
+    <link rel="canonical" href="<%= settings.siteUrl %><%= seo.path %>">
+    <link rel="stylesheet" href="/public/css/style.css">
+</head>
+<body>
+    <header id="main-header">
+        <div class="container nav-container">
+            <a href="/" class="logo"><span class="logo-mark"></span><%= settings.siteName || 'Dents Web' %></a>
+            <div class="hamburger" id="hamburger-btn"><span></span><span></span><span></span></div>
+            <nav class="nav-links" id="nav-links">
+                <a href="/">Home</a>
+                <a href="/services" class="active">Services</a>
+                <a href="/portfolio">Portfolio</a>
+                <a href="/pricing">Pricing</a>
+                <a href="/about">About</a>
+                <a href="/contact">Contact</a>
+                <a href="/faq">FAQ</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="section section-pt-hero">
+            <div class="container">
+                <div class="text-center" style="max-width: 600px; margin: 0 auto 80px;">
+                    <h1 style="margin-bottom: 16px;">Layanan Kami</h1>
+                    <p>Pilih arsitektur digital yang tepat untuk mempercepat pertumbuhan bisnis Anda.</p>
+                </div>
+                
+                <div class="grid-2">
+                    <% if(services && services.length > 0) { %>
+                        <% services.forEach(service => { %>
+                            <div class="glass-panel glass-panel-p">
+                                <h2><%= service.title %></h2>
+                                <p style="font-size: 1.1rem; margin-bottom: 24px;"><%= service.description %></p>
+                                
+                                <% if(service.features && service.features.length > 0) { %>
+                                    <h4 style="margin-bottom: 12px; color: var(--primary);">Termasuk:</h4>
+                                    <ul style="display: flex; flex-direction: column; gap: 8px; color: var(--text-secondary); margin-bottom: 32px;">
+                                        <% service.features.forEach(feat => { %>
+                                            <li>✓ <%= feat %></li>
+                                        <% }) %>
+                                    </ul>
+                                <% } %>
+                                
+                                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--glass-border); padding-top: 24px;">
+                                    <div>
+                                        <span style="display: block; font-size: 0.8rem; color: var(--text-secondary);">Mulai dari</span>
+                                        <span style="font-weight: 700; font-size: 1.2rem;"><%= service.startingPrice || 'Hubungi Kami' %></span>
+                                    </div>
+                                    <a href="/contact?service=<%= service.slug %>" class="btn btn-primary">Konsultasi</a>
+                                </div>
+                            </div>
+                        <% }) %>
+                    <% } else { %>
+                        <p class="text-center" style="grid-column: 1 / -1;">Informasi layanan sedang kami siapkan.</p>
+                    <% } %>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="section" style="border-top: 1px solid var(--glass-border); padding-bottom: 40px;">
+        <div class="container text-center" style="color: var(--text-muted); font-size: 0.9rem;">
+            &copy; <span id="year"></span> <%= settings.siteName || 'Dents Web' %>. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+        const header = document.getElementById('main-header');
+        window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 20));
+        document.getElementById('hamburger-btn').addEventListener('click', () => document.getElementById('nav-links').classList.toggle('mobile-open'));
+    </script>
+</body>
+</html>
