@@ -3,7 +3,6 @@ const express = require('express');
 const path = require('path');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-const bcrypt = require('bcryptjs');
 const cookieParser = require('cookie-parser');
 const crypto = require('crypto');
 const { Redis } = require('@upstash/redis');
@@ -11,8 +10,11 @@ const { Redis } = require('@upstash/redis');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Initialize Redis (Uses UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN from .env automatically)
-const redis = Redis.fromEnv();
+// Initialize Redis directly from Vercel KV Environment Variables
+const redis = new Redis({
+    url: process.env.KV_REST_API_URL,
+    token: process.env.KV_REST_API_TOKEN,
+});
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -22,15 +24,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// Security Headers (Helmet config adjusted for Inline Scripts if needed for EJS/VanillaJS interactions)
+// Security Headers
 app.use(helmet({
     contentSecurityPolicy: {
         directives: {
             defaultSrc: ["'self'"],
-            scriptSrc: ["'self'", "'unsafe-inline'"], // unsafe-inline allowed for EJS injected scripts
+            scriptSrc: ["'self'", "'unsafe-inline'"],
             styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
             fontSrc: ["'self'", "https://fonts.gstatic.com"],
-            imgSrc: ["'self'", "data:", "https://*"], // allow external image hosts for portfolio
+            imgSrc: ["'self'", "data:", "https://*"], 
             connectSrc: ["'self'"]
         }
     },
@@ -39,16 +41,14 @@ app.use(helmet({
 
 // Rate Limiting
 const publicLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 150, // limit each IP to 150 requests per windowMs
+    windowMs: 15 * 60 * 1000,
+    max: 150, 
     message: 'Terlalu banyak permintaan dari IP ini, coba lagi nanti.',
-    standardHeaders: true,
-    legacyHeaders: false,
 });
 
 const loginLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
-    max: 5, // 5 failed attempts allowed
+    max: 10,
     message: 'Terlalu banyak percobaan login. Silakan tunggu 15 menit.',
 });
 
@@ -58,15 +58,14 @@ const leadLimiter = rateLimit({
     message: 'Terlalu banyak form yang dikirim. Silakan tunggu beberapa saat.',
 });
 
-app.use(publicLimiter); // Apply to all by default
+app.use(publicLimiter); 
 
-// Helper to fetch global settings (mocking a cache pattern)
+// Global Settings Helper
 async function getGlobalSettings() {
     try {
         const settings = await redis.get('dents:settings');
         if (settings) return settings;
         
-        // Fallback default settings
         const defaultSettings = {
             siteName: 'Dents Web',
             tagline: 'Build Your Digital Presence.',
@@ -75,11 +74,10 @@ async function getGlobalSettings() {
             email: 'hello@dentsweb.com',
             whatsapp: '+6281234567890'
         };
-        // Save defaults if not exist
         await redis.set('dents:settings', defaultSettings);
         return defaultSettings;
     } catch (err) {
-        console.error('[ERROR] Failed to fetch settings from Redis', err);
+        console.error('[ERROR] Failed to fetch settings', err);
         return { siteName: 'Dents Web', defaultSeoTitle: 'Dents Web' };
     }
 }
@@ -100,8 +98,7 @@ async function requireAdmin(req, res, next) {
             return res.redirect('/admin-login');
         }
 
-        // Refresh TTL on activity (30 mins)
-        await redis.expire(`dents:admin:sessions:${sessionId}`, 1800);
+        await redis.expire(`dents:admin:sessions:${sessionId}`, 1800); // refresh 30 mins
         next();
     } catch (err) {
         console.error('[ERROR] Auth Check Failed', err);
@@ -115,7 +112,6 @@ async function requireAdmin(req, res, next) {
 
 app.get('/', async (req, res) => {
     const settings = await getGlobalSettings();
-    // Fetch featured portfolio & services for homepage
     const rawServices = await redis.get('dents:services') || [];
     const rawPortfolio = await redis.get('dents:portfolio') || [];
     
@@ -138,7 +134,7 @@ app.get('/services', async (req, res) => {
     res.render('services', {
         settings,
         services: publishedServices,
-        seo: { title: `Layanan Kami | ${settings.siteName}`, desc: 'Jelajahi layanan web development dan maintenance premium kami.', path: '/services' }
+        seo: { title: `Layanan Kami | ${settings.siteName}`, desc: 'Jelajahi layanan web development premium kami.', path: '/services' }
     });
 });
 
@@ -150,7 +146,7 @@ app.get('/portfolio', async (req, res) => {
     res.render('portfolio', {
         settings,
         portfolio: publishedPortfolio,
-        seo: { title: `Portfolio | ${settings.siteName}`, desc: 'Karya digital dan case study website dari klien-klien Dents Web.', path: '/portfolio' }
+        seo: { title: `Portfolio | ${settings.siteName}`, desc: 'Karya digital dari klien-klien Dents Web.', path: '/portfolio' }
     });
 });
 
@@ -164,12 +160,7 @@ app.get('/portfolio/:slug', async (req, res) => {
     res.render('portfolio-detail', {
         settings,
         project,
-        seo: { 
-            title: `${project.seoTitle || project.title} | ${settings.siteName}`, 
-            desc: project.seoDescription || project.shortDescription, 
-            path: `/portfolio/${project.slug}`,
-            image: project.image
-        }
+        seo: { title: `${project.seoTitle || project.title} | ${settings.siteName}`, desc: project.seoDescription || project.shortDescription, path: `/portfolio/${project.slug}`, image: project.image }
     });
 });
 
@@ -181,7 +172,7 @@ app.get('/pricing', async (req, res) => {
     res.render('pricing', {
         settings,
         pricing: activePricing,
-        seo: { title: `Investasi Digital | ${settings.siteName}`, desc: 'Harga dan paket transparan untuk kebutuhan website bisnis Anda.', path: '/pricing' }
+        seo: { title: `Investasi Digital | ${settings.siteName}`, desc: 'Harga dan paket transparan untuk kebutuhan website Anda.', path: '/pricing' }
     });
 });
 
@@ -193,7 +184,7 @@ app.get('/faq', async (req, res) => {
     res.render('faq', {
         settings,
         faq: publishedFaq,
-        seo: { title: `FAQ | ${settings.siteName}`, desc: 'Pertanyaan yang sering diajukan mengenai layanan Dents Web.', path: '/faq' }
+        seo: { title: `FAQ | ${settings.siteName}`, desc: 'Pertanyaan yang sering diajukan.', path: '/faq' }
     });
 });
 
@@ -201,7 +192,7 @@ app.get('/about', async (req, res) => {
     const settings = await getGlobalSettings();
     res.render('about', {
         settings,
-        seo: { title: `Tentang Kami | ${settings.siteName}`, desc: 'Misi dan filosofi Dents Web dalam membangun kehadiran digital.', path: '/about' }
+        seo: { title: `Tentang Kami | ${settings.siteName}`, desc: 'Misi dan filosofi Dents Web.', path: '/about' }
     });
 });
 
@@ -209,18 +200,17 @@ app.get('/contact', async (req, res) => {
     const settings = await getGlobalSettings();
     res.render('contact', {
         settings,
-        seo: { title: `Hubungi Kami | ${settings.siteName}`, desc: 'Mari berdiskusi. Konsultasikan kebutuhan website Anda hari ini.', path: '/contact' }
+        seo: { title: `Hubungi Kami | ${settings.siteName}`, desc: 'Konsultasikan kebutuhan website Anda.', path: '/contact' }
     });
 });
 
 // ==========================================
-// PUBLIC API (Form Submission)
+// PUBLIC API
 // ==========================================
 app.post('/api/leads', leadLimiter, async (req, res) => {
     try {
         const { name, whatsapp, email, company, message } = req.body;
         
-        // Basic Server-side validation
         if (!name || !whatsapp || !message) {
             return res.status(400).json({ success: false, message: 'Nama, WhatsApp, dan Pesan wajib diisi.' });
         }
@@ -232,19 +222,15 @@ app.post('/api/leads', leadLimiter, async (req, res) => {
             email: email ? email.trim() : '',
             company: company ? company.trim() : '',
             message: message.trim(),
-            status: 'NEW', // NEW, CONTACTED, QUOTED, WON, LOST
+            status: 'NEW', 
             createdAt: new Date().toISOString()
         };
 
         const leads = await redis.get('dents:leads') || [];
-        leads.unshift(newLead); // Add to beginning
-        
-        // Keep only last 500 leads to prevent memory bloat in Redis Array (optional optimization)
+        leads.unshift(newLead);
         if (leads.length > 500) leads.pop();
 
         await redis.set('dents:leads', leads);
-        
-        console.log(`[INFO] New lead submitted: ${newLead.id}`);
         res.status(201).json({ success: true, message: 'Pesan berhasil dikirim.' });
     } catch (err) {
         console.error('[ERROR] /api/leads', err);
@@ -268,39 +254,32 @@ app.get('/admin-login', (req, res) => {
 app.post('/admin/login', loginLimiter, async (req, res) => {
     try {
         const { username, password } = req.body;
-        const envUser = process.env.ADMIN_USERNAME || 'admin';
-        const envPassHash = process.env.ADMIN_PASSWORD_HASH;
+        
+        const envUser = process.env.ADMIN_USERNAME;
+        const envPass = process.env.ADMIN_PASSWORD;
 
-        if (!envPassHash) {
-            console.error('[FATAL] ADMIN_PASSWORD_HASH is not configured in .env');
+        if (!envUser || !envPass) {
+            console.error('[FATAL] ADMIN_USERNAME atau ADMIN_PASSWORD is not configured in .env');
             return res.status(500).json({ success: false, message: 'Server misconfiguration.' });
         }
 
-        if (username !== envUser) {
+        // Plaintext comparison as requested
+        if (username !== envUser || password !== envPass) {
             return res.status(401).json({ success: false, message: 'Kredensial tidak valid.' });
         }
 
-        const isValid = await bcrypt.compare(password, envPassHash);
-        if (!isValid) {
-            return res.status(401).json({ success: false, message: 'Kredensial tidak valid.' });
-        }
-
-        // Generate Secure Session
         const sessionId = crypto.randomUUID();
         const sessionData = { username, loginAt: new Date().toISOString() };
         
-        // Store in Redis (Expire in 1 hour)
         await redis.set(`dents:admin:sessions:${sessionId}`, sessionData, { ex: 3600 });
 
-        // Set HttpOnly Cookie
         res.cookie('admin_session', sessionId, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'Lax',
-            maxAge: 3600000 // 1 hour
+            maxAge: 3600000
         });
 
-        console.log(`[AUTH] Admin logged in: ${username}`);
         res.json({ success: true, redirect: '/admin-dashboard' });
     } catch (err) {
         console.error('[ERROR] Login failed', err);
@@ -325,9 +304,6 @@ app.get('/admin-dashboard', requireAdmin, async (req, res) => {
 // ==========================================
 // ADMIN API (CRUD Endpoints)
 // ==========================================
-// All these routes are protected by requireAdmin middleware
-
-// Utility function for basic Redis List CRUD
 async function handleListGet(req, res, redisKey) {
     try {
         const data = await redis.get(redisKey) || [];
@@ -363,30 +339,30 @@ async function handleListUpdate(req, res, redisKey, idField = 'id') {
     }
 }
 
-// Leads API
 app.get('/api/admin/leads', requireAdmin, (req, res) => handleListGet(req, res, 'dents:leads'));
 app.patch('/api/admin/leads/:id', requireAdmin, (req, res) => handleListUpdate(req, res, 'dents:leads'));
 app.delete('/api/admin/leads/:id', requireAdmin, (req, res) => handleListUpdate(req, res, 'dents:leads'));
 
-// Portfolio API
 app.get('/api/admin/portfolio', requireAdmin, (req, res) => handleListGet(req, res, 'dents:portfolio'));
 app.post('/api/admin/portfolio', requireAdmin, (req, res) => handleListUpdate(req, res, 'dents:portfolio'));
 app.put('/api/admin/portfolio/:id', requireAdmin, (req, res) => handleListUpdate(req, res, 'dents:portfolio'));
 app.delete('/api/admin/portfolio/:id', requireAdmin, (req, res) => handleListUpdate(req, res, 'dents:portfolio'));
 
-// Services API
 app.get('/api/admin/services', requireAdmin, (req, res) => handleListGet(req, res, 'dents:services'));
 app.post('/api/admin/services', requireAdmin, (req, res) => handleListUpdate(req, res, 'dents:services'));
 app.put('/api/admin/services/:id', requireAdmin, (req, res) => handleListUpdate(req, res, 'dents:services'));
 app.delete('/api/admin/services/:id', requireAdmin, (req, res) => handleListUpdate(req, res, 'dents:services'));
 
-// FAQ API
+app.get('/api/admin/pricing', requireAdmin, (req, res) => handleListGet(req, res, 'dents:pricing'));
+app.post('/api/admin/pricing', requireAdmin, (req, res) => handleListUpdate(req, res, 'dents:pricing'));
+app.put('/api/admin/pricing/:id', requireAdmin, (req, res) => handleListUpdate(req, res, 'dents:pricing'));
+app.delete('/api/admin/pricing/:id', requireAdmin, (req, res) => handleListUpdate(req, res, 'dents:pricing'));
+
 app.get('/api/admin/faq', requireAdmin, (req, res) => handleListGet(req, res, 'dents:faq'));
 app.post('/api/admin/faq', requireAdmin, (req, res) => handleListUpdate(req, res, 'dents:faq'));
 app.put('/api/admin/faq/:id', requireAdmin, (req, res) => handleListUpdate(req, res, 'dents:faq'));
 app.delete('/api/admin/faq/:id', requireAdmin, (req, res) => handleListUpdate(req, res, 'dents:faq'));
 
-// Settings API
 app.get('/api/admin/settings', requireAdmin, async (req, res) => {
     try {
         const settings = await getGlobalSettings();
@@ -401,7 +377,7 @@ app.put('/api/admin/settings', requireAdmin, async (req, res) => {
 });
 
 // ==========================================
-// SEO & SYSTEM ROUTES
+// SEO & ERRORS
 // ==========================================
 app.get('/robots.txt', (req, res) => {
     res.type('text/plain');
@@ -429,21 +405,15 @@ app.get('/sitemap.xml', async (req, res) => {
     res.send(xml);
 });
 
-// 404 Fallback
 app.use((req, res, next) => {
     res.status(404).send('404 - Halaman Tidak Ditemukan. Silakan kembali ke beranda.'); 
 });
 
-// Global Error Handler
 app.use((err, req, res, next) => {
     console.error('[FATAL] Uncaught Error:', err);
     res.status(500).send('500 - Terjadi kesalahan internal server.');
 });
 
-// ==========================================
-// SERVER BOOTSTRAP (For Vercel)
-// ==========================================
-// Vercel serverless functions need the app instance exported
 module.exports = app;
 
 if (require.main === module) {
