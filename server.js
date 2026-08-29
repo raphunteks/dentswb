@@ -10,6 +10,13 @@ const { Redis } = require('@upstash/redis');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// ==========================================
+// FIX VERCEL 500 ERROR (RATE LIMIT & PROXY)
+// Vercel menggunakan reverse proxy. Kita harus memberitahu Express 
+// untuk mempercayai proxy ini agar express-rate-limit bisa membaca IP user.
+// ==========================================
+app.set('trust proxy', 1);
+
 // Initialize Redis directly from Vercel KV Environment Variables
 const redis = new Redis({
     url: process.env.KV_REST_API_URL,
@@ -17,9 +24,9 @@ const redis = new Redis({
 });
 
 app.set('view engine', 'ejs');
-// Menggunakan __dirname yang dikombinasikan dengan 'includeFiles' di vercel.json adalah cara paling stabil di Vercel
-app.set('views', path.join(__dirname, 'views'));
-app.use('/public', express.static(path.join(__dirname, 'public')));
+// FIX VERCEL PATH RESOLUTION: Gunakan process.cwd() alih-alih __dirname
+app.set('views', path.join(process.cwd(), 'views'));
+app.use('/public', express.static(path.join(process.cwd(), 'public')));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
