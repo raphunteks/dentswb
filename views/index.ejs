@@ -10,10 +10,8 @@
     <meta name="keywords" content="<%= typeof seo !== 'undefined' ? seo.keywords : 'jasa pembuatan website, web developer, aplikasi mobile' %>">
     <link rel="canonical" href="<%= typeof seo !== 'undefined' ? seo.url : 'https://www.dentsweb.my.id' %>">
     
-    <!-- Google Site Verification (Dinamis dari Database) -->
-    <% if (typeof settings !== 'undefined' && settings.googleVerification) { %>
-    <meta name="google-site-verification" content="<%= settings.googleVerification %>" />
-    <% } %>
+    <!-- Google Site Verification (Hardcoded for 100% GSC Reliability) -->
+    <meta name="google-site-verification" content="e67nOsjn34kGZ_5feJrhj68I24DnRqzB2OZOpgxIuY4" />
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="<%= (typeof seo !== 'undefined' && seo.path === '/') ? 'website' : 'article' %>">
