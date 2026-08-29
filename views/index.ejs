@@ -20,6 +20,41 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="/public/css/style.css">
+
+    <!-- CSS Khusus untuk Infinite Scroll Testimonial -->
+    <style>
+        .marquee-wrapper {
+            display: flex;
+            overflow: hidden;
+            user-select: none;
+            gap: 30px;
+            padding: 20px 0;
+            mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+        }
+        .marquee-track {
+            display: flex;
+            gap: 30px;
+            flex-shrink: 0;
+            min-width: 100%;
+            animation: scrollX 40s linear infinite;
+        }
+        .marquee-wrapper:hover .marquee-track {
+            animation-play-state: paused;
+        }
+        @keyframes scrollX {
+            from { transform: translateX(0); }
+            to { transform: translateX(calc(-100% - 30px)); }
+        }
+        .testimonial-card-inf {
+            width: 400px;
+            flex-shrink: 0;
+        }
+        @media (max-width: 768px) {
+            .testimonial-card-inf { width: 320px; }
+            .marquee-track { animation-duration: 30s; }
+        }
+    </style>
 </head>
 <body>
     
@@ -124,9 +159,6 @@
                                 <h3 style="color: var(--text-primary);"><%= service.title %></h3>
                                 <ul style="margin-top: 24px;">
                                     <% 
-                                        // ==========================================
-                                        // VERCEL CRASH FIX: SAFE SPLIT HANDLING
-                                        // ==========================================
                                         let featureList = [];
                                         if (service.features) {
                                             if (Array.isArray(service.features)) {
@@ -257,46 +289,72 @@
             </div>
         </section>
 
-        <!-- PAGE 7: TESTIMONIALS -->
-        <section class="section">
-            <div class="container text-center" style="margin-bottom: 60px;">
+        <!-- PAGE 7: TESTIMONIALS (INFINITE CAROUSEL) -->
+        <section class="section" style="overflow: hidden;">
+            <div class="container text-center" style="margin-bottom: 40px;">
                 <h2>Apa Kata <span class="text-holo">Klien Kami</span></h2>
                 <p>Testimoni jujur dari para pemilik bisnis yang telah bekerja sama dengan tim <%= typeof settings !== 'undefined' ? settings.siteName : 'Dents Web' %>.</p>
             </div>
-            <!-- Gunakan grid-3 agar responsif dari CSS Anda -->
-            <div class="container grid-3">
-                <div class="glass-panel glass-panel-p">
-                    <p style="font-style: italic; font-weight: 500; font-size: 1.05rem; margin-bottom: 24px; color: var(--text-primary);">"I've been using this service for my UMKM and it is very cool! The website is user friendly and the service quality to hear the instruction is very good job."</p>
-                    <div style="color: var(--warning); margin-bottom: 16px; font-size: 1.2rem; letter-spacing: 2px;">★★★★★</div>
-                    <div style="display: flex; align-items: center; gap: 16px;">
-                        <div style="width: 45px; height: 45px; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border-light); color: var(--text-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">AW</div>
-                        <div>
-                            <h4 style="margin: 0; font-size: 1rem;">Adhi Wicaksono</h4>
-                            <p style="margin: 0; font-size: 0.85rem;">Dapoer Niknik</p>
+            
+            <% 
+                // Data binding dinamis untuk review
+                let reviewData = [];
+                if (typeof testimonials !== 'undefined' && testimonials.length > 0) {
+                    reviewData = testimonials;
+                } else {
+                    // Fallback Dummy jika data dari DB kosong (Admin belum mengisi)
+                    reviewData = [
+                        { quote: "I've been using this service for my UMKM and it is very cool! The website is user friendly and the service quality to hear the instruction is very good job.", rating: 5, initial: "AW", name: "Adhi Wicaksono", client: "Dapoer Niknik" },
+                        { quote: "Sangat professional dan sesuai harapan. Sebagai client saya puas dengan projectnya. Saya akan rekomendasikan ke teman saya yang butuh jasa website juga. Thankyou <3", rating: 5, initial: "RD", name: "Ratih Dewi", client: "Kopi Bintang" },
+                        { quote: "Mantap, Hasilnya memuaskan. Akhirnya punya website buat branding kami! Sangat adaptif dengan revisi-revisi yang kami minta di tengah jalan.", rating: 5, initial: "AN", name: "Akmal Adhi Nugroho", client: "Anggana Project" },
+                        { quote: "Pelayanan sangat cepat dan responsif. Desain yang diberikan benar-benar mencerminkan identitas brand kami. Sangat recommended!", rating: 5, initial: "BP", name: "Budi Pratama", client: "Tech Startup" },
+                        { quote: "Tidak perlu ragu lagi, tim Dents Web sangat solutif. Mereka tidak hanya membuat website, tapi memberikan masukan bisnis yang berguna.", rating: 5, initial: "SA", name: "Siti Aisyah", client: "Griya Fashion" }
+                    ];
+                }
+            %>
+
+            <!-- Wrapper Marquee -->
+            <div class="marquee-wrapper">
+                <!-- Track 1 (Utama) -->
+                <div class="marquee-track">
+                    <% reviewData.forEach(rev => { %>
+                        <div class="glass-panel glass-panel-p testimonial-card-inf">
+                            <p style="font-style: italic; font-weight: 500; font-size: 1.05rem; margin-bottom: 24px; color: var(--text-primary);">"<%= rev.quote %>"</p>
+                            <div style="color: var(--warning); margin-bottom: 16px; font-size: 1.2rem; letter-spacing: 2px;">
+                                <%= '★'.repeat(rev.rating || 5) %>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 16px;">
+                                <div style="width: 45px; height: 45px; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border-light); color: var(--text-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                                    <%= rev.initial || rev.name.substring(0,2).toUpperCase() %>
+                                </div>
+                                <div>
+                                    <h4 style="margin: 0; font-size: 1rem;"><%= rev.name %></h4>
+                                    <p style="margin: 0; font-size: 0.85rem;"><%= rev.client %></p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    <% }) %>
                 </div>
-                <div class="glass-panel glass-panel-p">
-                    <p style="font-style: italic; font-weight: 500; font-size: 1.05rem; margin-bottom: 24px; color: var(--text-primary);">"Sangat professional dan sesuai harapan. Sebagai client saya puas dengan projectnya. Saya akan rekomendasikan ke teman saya yang butuh jasa website juga. Thankyou <3"</p>
-                    <div style="color: var(--warning); margin-bottom: 16px; font-size: 1.2rem; letter-spacing: 2px;">★★★★★</div>
-                    <div style="display: flex; align-items: center; gap: 16px;">
-                        <div style="width: 45px; height: 45px; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border-light); color: var(--text-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">RD</div>
-                        <div>
-                            <h4 style="margin: 0; font-size: 1rem;">Ratih Dewi</h4>
-                            <p style="margin: 0; font-size: 0.85rem;">Kopi Bintang</p>
+                
+                <!-- Track 2 (Kloningan Untuk Efek Infinite) -->
+                <div class="marquee-track" aria-hidden="true">
+                    <% reviewData.forEach(rev => { %>
+                        <div class="glass-panel glass-panel-p testimonial-card-inf">
+                            <p style="font-style: italic; font-weight: 500; font-size: 1.05rem; margin-bottom: 24px; color: var(--text-primary);">"<%= rev.quote %>"</p>
+                            <div style="color: var(--warning); margin-bottom: 16px; font-size: 1.2rem; letter-spacing: 2px;">
+                                <%= '★'.repeat(rev.rating || 5) %>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 16px;">
+                                <div style="width: 45px; height: 45px; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border-light); color: var(--text-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                                    <%= rev.initial || rev.name.substring(0,2).toUpperCase() %>
+                                </div>
+                                <div>
+                                    <h4 style="margin: 0; font-size: 1rem;"><%= rev.name %></h4>
+                                    <p style="margin: 0; font-size: 0.85rem;"><%= rev.client %></p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="glass-panel glass-panel-p">
-                    <p style="font-style: italic; font-weight: 500; font-size: 1.05rem; margin-bottom: 24px; color: var(--text-primary);">"Mantap, Hasilnya memuaskan. Akhirnya punya website buat branding kami! Sangat adaptif dengan revisi-revisi yang kami minta di tengah jalan."</p>
-                    <div style="color: var(--warning); margin-bottom: 16px; font-size: 1.2rem; letter-spacing: 2px;">★★★★★</div>
-                    <div style="display: flex; align-items: center; gap: 16px;">
-                        <div style="width: 45px; height: 45px; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border-light); color: var(--text-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">AN</div>
-                        <div>
-                            <h4 style="margin: 0; font-size: 1rem;">Akmal Adhi Nugroho</h4>
-                            <p style="margin: 0; font-size: 0.85rem;">Anggana Project</p>
-                        </div>
-                    </div>
+                    <% }) %>
                 </div>
             </div>
         </section>
