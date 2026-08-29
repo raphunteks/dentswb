@@ -75,12 +75,12 @@ async function getGlobalSettings() {
         if (settings) return settings;
         
         const defaultSettings = {
-            siteName: 'Dents Web',
+            siteName: 'ents Web',
             tagline: 'Build Your Digital Presence.',
-            defaultSeoTitle: 'Dents Web — Agency Digital Premium',
+            defaultSeoTitle: 'ents Web — Agency Digital',
             defaultSeoDescription: 'Website Custom untuk Bisnis yang Ingin Tampil Serius. Jasa pembuatan website premium, SEO, dan performa tinggi.',
-            email: 'hello@dentsweb.com',
-            whatsapp: '+6281234567890'
+            email: 'dentswebsitebuilder@gmail.com',
+            whatsapp: '+6285338922586'
         };
         await redis.set('dents:settings', defaultSettings);
         return defaultSettings;
