@@ -15,7 +15,6 @@ const PORT = process.env.PORT || 3000;
 // ==========================================
 app.set('trust proxy', 1);
 
-// Initialize Redis directly from Vercel KV Environment Variables
 const redis = new Redis({
     url: process.env.KV_REST_API_URL,
     token: process.env.KV_REST_API_TOKEN,
