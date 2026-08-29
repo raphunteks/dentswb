@@ -340,7 +340,7 @@ p {
 }
 
 /* --------------------------------------------------------------------------
-   Forms & Inputs (Neumorphic Deep Inset)
+   Forms & Inputs (Neumorphic Deep Inset & Radio Pills)
    -------------------------------------------------------------------------- */
 .form-group { 
   margin-bottom: 28px; 
@@ -375,6 +375,44 @@ p {
   border-color: var(--primary); 
   background: rgba(0, 0, 0, 0.8);
   box-shadow: var(--neu-shadow-inner), 0 0 0 4px rgba(79, 172, 254, 0.15); 
+}
+
+/* Radio Pill Buttons (For Contact Form Services Selection) */
+.radio-pill-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 28px;
+}
+
+.radio-pill-input {
+    display: none; /* Hide original radio button */
+}
+
+.radio-pill-label {
+    display: inline-block;
+    padding: 10px 24px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-pill);
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.radio-pill-label:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+}
+
+.radio-pill-input:checked + .radio-pill-label {
+    background: var(--holo-gradient);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: var(--shadow-glow-primary);
 }
 
 /* --------------------------------------------------------------------------
