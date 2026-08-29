@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= typeof seo !== 'undefined' ? seo.title : 'ents Web | Premium Digital Agency' %></title>
+    <title><%= typeof seo !== 'undefined' ? seo.title : 'Dents Web | Premium Digital Agency' %></title>
     <meta name="description" content="<%= typeof seo !== 'undefined' ? seo.desc : 'Jasa pembuatan website dan aplikasi profesional.' %>">
-    <link rel="canonical" href="<%= (typeof settings !== 'undefined' && settings.siteUrl ? settings.siteUrl : '') %><%= typeof seo !== 'undefined' ? seo.path : '' %>">
+    <link rel="canonical" href="<%= (typeof settings !== 'undefined' && settings.siteUrl ? settings.siteUrl : 'https://www.dentsweb.my.id') %><%= typeof seo !== 'undefined' ? seo.path : '' %>">
     
     <meta property="og:title" content="<%= typeof seo !== 'undefined' ? seo.title : 'Dents Web' %>">
     <meta property="og:description" content="<%= typeof seo !== 'undefined' ? seo.desc : '' %>">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="<%= (typeof settings !== 'undefined' && settings.siteUrl ? settings.siteUrl : '') %><%= typeof seo !== 'undefined' ? seo.path : '' %>">
+    <meta property="og:url" content="<%= (typeof settings !== 'undefined' && settings.siteUrl ? settings.siteUrl : 'https://www.dentsweb.my.id') %><%= typeof seo !== 'undefined' ? seo.path : '' %>">
     
     <link rel="icon" type="image/png" href="/public/img/axalogo.png">
     <link rel="apple-touch-icon" href="/public/img/axalogo.png">
@@ -68,7 +68,7 @@
                     <div class="tag" style="margin-bottom: 24px;">🚀 Agensi Digital No. 1</div>
                     <h1>Jasa Pembuatan <br><span class="text-holo">Website & Aplikasi</span><br> Professional</h1>
                     <p style="font-size: 1.2rem; margin-bottom: 40px; max-width: 500px; color: var(--text-secondary);">
-                        Kembangkan bisnis Anda di era digital bersama <strong><%= typeof settings !== 'undefined' ? settings.siteName : 'Dents Web' %></strong>. Mulai dari landing page, website perusahaan, hingga sistem informasi kustom.
+                        Kembangkan bisnis Anda di era digital bersama <strong>Dents Web</strong>. Mulai dari landing page, website perusahaan, hingga sistem informasi kustom.
                     </p>
                     <div style="display: flex; gap: 16px; flex-wrap: wrap;">
                         <a href="/contact" class="btn btn-primary">Konsultasi WhatsApp &nearr;</a>
@@ -94,7 +94,7 @@
         <section id="about" class="section">
             <div class="container">
                 <div class="text-center" style="margin-bottom: 60px;">
-                    <h2>Tentang <span class="text-holo"><%= typeof settings !== 'undefined' ? settings.siteName : 'Dents Web' %></span></h2>
+                    <h2>Tentang <span class="text-holo">Dents Web</span></h2>
                     <p style="max-width: 800px; margin: 0 auto;">Kami hadir sebagai studio teknologi dan mitra strategis yang berdedikasi membangun website profesional, aplikasi mobile kustom, serta produk digital inovatif yang dirancang khusus untuk mempercepat pertumbuhan bisnis Anda.</p>
                 </div>
                 <div class="grid-3">
@@ -293,7 +293,7 @@
         <section class="section" style="overflow: hidden;">
             <div class="container text-center" style="margin-bottom: 40px;">
                 <h2>Apa Kata <span class="text-holo">Klien Kami</span></h2>
-                <p>Testimoni jujur dari para pemilik bisnis yang telah bekerja sama dengan tim <%= typeof settings !== 'undefined' ? settings.siteName : 'Dents Web' %>.</p>
+                <p>Testimoni jujur dari para pemilik bisnis yang telah bekerja sama dengan tim Dents Web.</p>
             </div>
             
             <% 
