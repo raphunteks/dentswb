@@ -68,25 +68,50 @@ const leadLimiter = rateLimit({
 
 app.use(publicLimiter); 
 
-// Global Settings Helper
+// ==========================================
+// GLOBAL SETTINGS HELPER (UPGRADED JSON SCHEMA)
+// ==========================================
 async function getGlobalSettings() {
+    const defaultSettings = {
+        siteName: "Dents Web",
+        tagline: "Build Your Digital Presence.",
+        siteUrl: "https://dentswebs.vercel.app",
+        email: "dentswebsitebuilder@gmail.com",
+        whatsapp: "6285338922586",
+        address: "Indonesia",
+        socialLinks: {
+            instagram: "",
+            linkedin: "",
+            facebook: ""
+        },
+        defaultSeoTitle: "Dents Web — Website Custom untuk Bisnis yang Ingin Tampil Serius",
+        defaultSeoDescription: "Dents Web membantu bisnis membangun website custom yang profesional, cepat, SEO-ready, dan fokus pada konversi.",
+        defaultOgImage: "/public/img/axalogo.png",
+        googleVerification: "",
+        analyticsId: "",
+        favicon: "/public/img/axalogo.png",
+        logo: "/public/img/axalogo.png"
+    };
+
     try {
         const settings = await redis.get('dents:settings');
-        if (settings) return settings;
+        if (settings) {
+            // DEEP MERGE: Mencegah error jika data di Redis belum memiliki field baru (seperti socialLinks)
+            return {
+                ...defaultSettings,
+                ...settings,
+                socialLinks: {
+                    ...defaultSettings.socialLinks,
+                    ...(settings.socialLinks || {})
+                }
+            };
+        }
         
-        const defaultSettings = {
-            siteName: 'ents Web',
-            tagline: 'Build Your Digital Presence.',
-            defaultSeoTitle: 'ents Web — Agency Digital',
-            defaultSeoDescription: 'Website Custom untuk Bisnis yang Ingin Tampil Serius. Jasa pembuatan website premium, SEO, dan performa tinggi.',
-            email: 'dentswebsitebuilder@gmail.com',
-            whatsapp: '+6285338922586'
-        };
         await redis.set('dents:settings', defaultSettings);
         return defaultSettings;
     } catch (err) {
         console.error('[ERROR] Failed to fetch settings', err);
-        return { siteName: 'Dents Web', defaultSeoTitle: 'Dents Web' };
+        return defaultSettings;
     }
 }
 
@@ -122,14 +147,17 @@ app.get('/', async (req, res) => {
     const settings = await getGlobalSettings();
     const rawServices = await redis.get('dents:services') || [];
     const rawPortfolio = await redis.get('dents:portfolio') || [];
+    const rawTestimonials = await redis.get('dents:testimonials') || []; // Fetch Testimonials
     
     const featuredServices = rawServices.filter(s => s.isPublished && s.isFeatured).slice(0, 3);
     const featuredPortfolio = rawPortfolio.filter(p => p.isPublished && p.isFeatured).slice(0, 4);
+    const activeTestimonials = rawTestimonials.filter(t => t.isPublished !== false); // Default tampil semua yg aktif
 
     res.render('index', { 
         settings, 
         services: featuredServices,
         portfolio: featuredPortfolio,
+        testimonials: activeTestimonials,
         seo: { title: settings.defaultSeoTitle, desc: settings.defaultSeoDescription, path: '/' } 
     });
 });
@@ -271,7 +299,6 @@ app.post('/admin/login', loginLimiter, async (req, res) => {
             return res.status(500).json({ success: false, message: 'Server misconfiguration.' });
         }
 
-        // Plaintext comparison as requested
         if (username !== envUser || password !== envPass) {
             return res.status(401).json({ success: false, message: 'Kredensial tidak valid.' });
         }
