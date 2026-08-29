@@ -8,7 +8,7 @@
     <title><%= typeof seo !== 'undefined' ? seo.title : 'Dents Web | Premium Digital Agency' %></title>
     <meta name="description" content="<%= typeof seo !== 'undefined' ? seo.desc : 'Jasa pembuatan website dan aplikasi profesional.' %>">
     <meta name="keywords" content="<%= typeof seo !== 'undefined' ? seo.keywords : 'jasa pembuatan website, web developer, aplikasi mobile' %>">
-    <link rel="canonical" href="<%= typeof seo !== 'undefined' ? seo.url : 'https://dentsweb.my.id' %>">
+    <link rel="canonical" href="<%= typeof seo !== 'undefined' ? seo.url : 'https://www.dentsweb.my.id' %>">
     
     <!-- Google Site Verification (Dinamis dari Database) -->
     <% if (typeof settings !== 'undefined' && settings.googleVerification) { %>
@@ -17,7 +17,7 @@
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="<%= (typeof seo !== 'undefined' && seo.path === '/') ? 'website' : 'article' %>">
-    <meta property="og:url" content="<%= typeof seo !== 'undefined' ? seo.url : 'https://dentsweb.my.id' %>">
+    <meta property="og:url" content="<%= typeof seo !== 'undefined' ? seo.url : 'https://www.dentsweb.my.id' %>">
     <meta property="og:title" content="<%= typeof seo !== 'undefined' ? seo.title : 'Dents Web' %>">
     <meta property="og:description" content="<%= typeof seo !== 'undefined' ? seo.desc : '' %>">
     <meta property="og:image" content="<%= typeof seo !== 'undefined' ? seo.image : '/public/img/axalogo.png' %>">
