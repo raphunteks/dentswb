@@ -73,9 +73,9 @@ app.use(publicLimiter);
 // ==========================================
 async function getGlobalSettings() {
     const defaultSettings = {
-        siteName: "Dents Web",
+        siteName: "ents Web",
         tagline: "Build Your Digital Presence.",
-        siteUrl: "https://dentswebs.vercel.app",
+        siteUrl: "https://www.dentsweb.my.id",
         email: "dentswebsitebuilder@gmail.com",
         whatsapp: "6285338922586",
         address: "Indonesia",
@@ -147,11 +147,11 @@ app.get('/', async (req, res) => {
     const settings = await getGlobalSettings();
     const rawServices = await redis.get('dents:services') || [];
     const rawPortfolio = await redis.get('dents:portfolio') || [];
-    const rawTestimonials = await redis.get('dents:testimonials') || []; // Fetch Testimonials
+    const rawTestimonials = await redis.get('dents:testimonials') || []; 
     
     const featuredServices = rawServices.filter(s => s.isPublished && s.isFeatured).slice(0, 3);
     const featuredPortfolio = rawPortfolio.filter(p => p.isPublished && p.isFeatured).slice(0, 4);
-    const activeTestimonials = rawTestimonials.filter(t => t.isPublished !== false); // Default tampil semua yg aktif
+    const activeTestimonials = rawTestimonials.filter(t => t.isPublished !== false); 
 
     res.render('index', { 
         settings, 
@@ -170,7 +170,7 @@ app.get('/services', async (req, res) => {
     res.render('services', {
         settings,
         services: publishedServices,
-        seo: { title: `Layanan Kami | ${settings.siteName}`, desc: 'Jelajahi layanan web development premium kami.', path: '/services' }
+        seo: { title: `Layanan Kami | Dents Web`, desc: 'Jelajahi layanan web development premium kami.', path: '/services' }
     });
 });
 
@@ -182,7 +182,7 @@ app.get('/portfolio', async (req, res) => {
     res.render('portfolio', {
         settings,
         portfolio: publishedPortfolio,
-        seo: { title: `Portfolio | ${settings.siteName}`, desc: 'Karya digital dari klien-klien Dents Web.', path: '/portfolio' }
+        seo: { title: `Portfolio | Dents Web`, desc: 'Karya digital dari klien-klien Dents Web.', path: '/portfolio' }
     });
 });
 
@@ -196,7 +196,7 @@ app.get('/portfolio/:slug', async (req, res) => {
     res.render('portfolio-detail', {
         settings,
         project,
-        seo: { title: `${project.seoTitle || project.title} | ${settings.siteName}`, desc: project.seoDescription || project.shortDescription, path: `/portfolio/${project.slug}`, image: project.image }
+        seo: { title: `${project.seoTitle || project.title} | Dents Web`, desc: project.seoDescription || project.shortDescription, path: `/portfolio/${project.slug}`, image: project.image }
     });
 });
 
@@ -208,7 +208,7 @@ app.get('/pricing', async (req, res) => {
     res.render('pricing', {
         settings,
         pricing: activePricing,
-        seo: { title: `Investasi Digital | ${settings.siteName}`, desc: 'Harga dan paket transparan untuk kebutuhan website Anda.', path: '/pricing' }
+        seo: { title: `Investasi Digital | Dents Web`, desc: 'Harga dan paket transparan untuk kebutuhan website Anda.', path: '/pricing' }
     });
 });
 
@@ -220,7 +220,7 @@ app.get('/faq', async (req, res) => {
     res.render('faq', {
         settings,
         faq: publishedFaq,
-        seo: { title: `FAQ | ${settings.siteName}`, desc: 'Pertanyaan yang sering diajukan.', path: '/faq' }
+        seo: { title: `FAQ | Dents Web`, desc: 'Pertanyaan yang sering diajukan.', path: '/faq' }
     });
 });
 
@@ -228,7 +228,7 @@ app.get('/about', async (req, res) => {
     const settings = await getGlobalSettings();
     res.render('about', {
         settings,
-        seo: { title: `Tentang Kami | ${settings.siteName}`, desc: 'Misi dan filosofi Dents Web.', path: '/about' }
+        seo: { title: `Tentang Kami | Dents Web`, desc: 'Misi dan filosofi Dents Web.', path: '/about' }
     });
 });
 
@@ -236,7 +236,7 @@ app.get('/contact', async (req, res) => {
     const settings = await getGlobalSettings();
     res.render('contact', {
         settings,
-        seo: { title: `Hubungi Kami | ${settings.siteName}`, desc: 'Konsultasikan kebutuhan website Anda.', path: '/contact' }
+        seo: { title: `Hubungi Kami | Dents Web`, desc: 'Konsultasikan kebutuhan website Anda.', path: '/contact' }
     });
 });
 
