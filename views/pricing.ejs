@@ -16,8 +16,8 @@
             <nav class="nav-links" id="nav-links">
                 <a href="/">Home</a>
                 <a href="/services">Services</a>
-                <a href="/portfolio">Portfolio</a>
-                <a href="/pricing" class="active">Pricing</a>
+                <a href="/portfolio" class="active">Portfolio</a>
+                <a href="/pricing">Pricing</a>
                 <a href="/about">About</a>
                 <a href="/contact">Contact</a>
                 <a href="/faq">FAQ</a>
@@ -29,32 +29,25 @@
         <section class="section section-pt-hero">
             <div class="container">
                 <div class="text-center" style="max-width: 600px; margin: 0 auto 80px;">
-                    <h1 style="margin-bottom: 16px;">Investasi Digital</h1>
-                    <p>Skema harga transparan tanpa biaya tersembunyi. Pilih paket yang sesuai dengan roadmap bisnis Anda.</p>
+                    <h1 style="margin-bottom: 16px;">Our Work</h1>
+                    <p>Kumpulan studi kasus dan bukti eksekusi arsitektur digital yang kami bangun untuk klien.</p>
                 </div>
                 
-                <div class="grid-3">
-                    <% if(pricing && pricing.length > 0) { %>
-                        <% pricing.forEach(pkg => { %>
-                            <div class="glass-panel glass-panel-p" style="display: flex; flex-direction: column; <%= pkg.isFeatured ? 'border-color: var(--primary); box-shadow: var(--shadow-glow); transform: translateY(-10px);' : '' %>">
-                                <% if(pkg.isFeatured) { %>
-                                    <div class="tag" style="background: var(--primary); color: var(--bg-base); border: none; margin-bottom: 16px; width: max-content; font-weight: 700;">Rekomendasi</div>
-                                <% } %>
-                                <h3><%= pkg.name %></h3>
-                                <p style="font-size: 0.9rem; min-height: 45px;"><%= pkg.description %></p>
-                                <div style="font-size: 2.5rem; font-weight: 700; margin: 24px 0; color: white;">
-                                    <%= pkg.price %>
+                <div class="grid-2">
+                    <% if(portfolio && portfolio.length > 0) { %>
+                        <% portfolio.forEach(item => { %>
+                            <div class="portfolio-card" onclick="window.location.href='/portfolio/<%= item.slug %>'">
+                                <div class="portfolio-img" style="background-image: url('<%= item.image %>')"></div>
+                                <div class="portfolio-info">
+                                    <span class="tag"><%= item.category %></span>
+                                    <h3 style="margin-top: 12px; margin-bottom: 8px;"><%= item.title %></h3>
+                                    <p style="font-size: 0.9rem; margin-bottom: 16px;">Klien: <%= item.client %> &bull; <%= item.year %></p>
+                                    <p style="font-size: 0.95rem; color: var(--text-secondary);"><%= item.shortDescription %></p>
                                 </div>
-                                <ul style="margin-bottom: 40px; flex: 1; display: flex; flex-direction: column; gap: 12px; color: var(--text-secondary);">
-                                    <% pkg.features.forEach(feat => { %>
-                                        <li>✓ <%= feat %></li>
-                                    <% }) %>
-                                </ul>
-                                <a href="/contact?package=<%= pkg.name %>" class="btn <%= pkg.isFeatured ? 'btn-primary' : 'btn-secondary' %>" style="width: 100%;">Pilih Paket</a>
                             </div>
                         <% }) %>
                     <% } else { %>
-                        <p class="text-center" style="grid-column: 1 / -1;">Informasi harga sedang disiapkan.</p>
+                        <p class="text-center" style="grid-column: 1 / -1;">Belum ada data portfolio yang dipublikasikan.</p>
                     <% } %>
                 </div>
             </div>
