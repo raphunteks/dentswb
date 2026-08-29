@@ -3,96 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= seo.title %></title>
-    <meta name="description" content="<%= seo.desc %>">
-    <link rel="canonical" href="<%= settings.siteUrl %><%= seo.path %>">
+    
+    <!-- DYNAMIC SEO GOLD STANDARD -->
+    <title><%= typeof seo !== 'undefined' ? seo.title : 'Hubungi Kami | Dents Web' %></title>
+    <meta name="description" content="<%= typeof seo !== 'undefined' ? seo.desc : 'Ceritakan masalah dan target bisnis Anda. Tim engineer kami akan merancang arsitektur yang tepat.' %>">
+    <meta name="keywords" content="<%= typeof seo !== 'undefined' ? seo.keywords : 'kontak web developer, jasa website, hubungi pembuat aplikasi, Dents Web' %>">
+    <link rel="canonical" href="<%= typeof seo !== 'undefined' ? seo.url : 'https://dentsweb.my.id/contact' %>">
+    
+    <!-- Google Site Verification (Hardcoded for 100% GSC Reliability) -->
+    <meta name="google-site-verification" content="e67nOsjn34kGZ_5feJrhj68I24DnRqzB2OZOpgxIuY4" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="<%= typeof seo !== 'undefined' ? seo.url : 'https://dentsweb.my.id/contact' %>">
+    <meta property="og:title" content="<%= typeof seo !== 'undefined' ? seo.title : 'Hubungi Kami | Dents Web' %>">
+    <meta property="og:description" content="<%= typeof seo !== 'undefined' ? seo.desc : '' %>">
+    <meta property="og:image" content="<%= typeof seo !== 'undefined' ? seo.image : '/public/img/axalogo.png' %>">
+    
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="<%= typeof seo !== 'undefined' ? seo.url : 'https://dentsweb.my.id/contact' %>">
+    <meta name="twitter:title" content="<%= typeof seo !== 'undefined' ? seo.title : 'Hubungi Kami | Dents Web' %>">
+    <meta name="twitter:description" content="<%= typeof seo !== 'undefined' ? seo.desc : '' %>">
+    <meta name="twitter:image" content="<%= typeof seo !== 'undefined' ? seo.image : '/public/img/axalogo.png' %>">
+
+    <!-- DYNAMIC JSON-LD SCHEMA (Rich Snippets Google) -->
+    <% if (typeof seo !== 'undefined' && seo.schemaString) { %>
+    <script type="application/ld+json">
+        <%- seo.schemaString %>
+    </script>
+    <% } %>
+    
+    <link rel="icon" type="image/png" href="/public/img/axalogo.png">
+    <link rel="apple-touch-icon" href="/public/img/axalogo.png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="/public/css/style.css">
 </head>
 <body>
-    <header id="main-header">
-        <div class="container nav-container">
-            <a href="/" class="logo"><span class="logo-mark"></span><%= settings.siteName || 'Dents Web' %></a>
-            <div class="hamburger" id="hamburger-btn"><span></span><span></span><span></span></div>
-            <nav class="nav-links" id="nav-links">
-                <a href="/">Home</a>
-                <a href="/services">Services</a>
-                <a href="/portfolio">Portfolio</a>
-                <a href="/pricing">Pricing</a>
-                <a href="/about">About</a>
-                <a href="/contact" class="active">Contact</a>
-                <a href="/faq">FAQ</a>
-            </nav>
-        </div>
-    </header>
+    
+    <%- include('partials/header') %>
 
     <main>
-        <section class="section section-pt-hero">
-            <div class="container grid-2">
+        <section class="section section-pt-hero" style="min-height: 100vh;">
+            <div class="container grid-2" style="align-items: flex-start;">
                 <div>
-                    <h1 style="margin-bottom: 24px;">Mari Berdiskusi.</h1>
-                    <p style="font-size: 1.1rem; margin-bottom: 40px;">Ceritakan masalah dan target bisnis Anda. Tim engineer kami akan merancang arsitektur yang tepat untuk eksekusi yang optimal.</p>
+                    <h1 style="font-size: clamp(3rem, 6vw, 4.5rem); margin-bottom: 24px;">Mari Mulai Sesuatu yang <br><span class="text-holo">Luar Biasa</span></h1>
+                    <p style="font-size: 1.1rem; margin-bottom: 40px; color: var(--text-secondary); max-width: 480px;">Ceritakan kebutuhan bisnis Anda. Tim ahli kami siap mendengarkan, menganalisis, dan memberikan solusi terbaik untuk pertumbuhan digital Anda.</p>
                     
-                    <div style="margin-bottom: 24px;">
-                        <h4 style="color: var(--text-secondary);">Email</h4>
-                        <p style="font-weight: 500; font-size: 1.1rem;"><%= settings.email %></p>
-                    </div>
-                    <div>
-                        <h4 style="color: var(--text-secondary);">WhatsApp</h4>
-                        <p style="font-weight: 500; font-size: 1.1rem;"><%= settings.whatsapp %></p>
+                    <div style="display: flex; flex-direction: column; gap: 24px;">
+                        <div class="glass-panel" style="padding: 24px; display: flex; align-items: center; gap: 20px;">
+                            <div style="width: 50px; height: 50px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border-light); border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 1.5rem;">✉️</div>
+                            <div>
+                                <p style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin: 0; color: var(--primary);">Email</p>
+                                <h4 style="margin: 0; font-size: 1.1rem; color: var(--text-primary);"><%= typeof settings !== 'undefined' ? settings.email : 'hello@dentsweb.com' %></h4>
+                            </div>
+                        </div>
+                        <div class="glass-panel" style="padding: 24px; display: flex; align-items: center; gap: 20px;">
+                            <div style="width: 50px; height: 50px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border-light); border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 1.5rem;">💬</div>
+                            <div>
+                                <p style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin: 0; color: var(--primary);">WhatsApp</p>
+                                <h4 style="margin: 0; font-size: 1.1rem; color: var(--text-primary);"><%= typeof settings !== 'undefined' ? settings.whatsapp : '+62 812 3456 7890' %></h4>
+                            </div>
+                        </div>
+                        <div class="glass-panel" style="padding: 24px; display: flex; align-items: center; gap: 20px;">
+                            <div style="width: 50px; height: 50px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border-light); border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 1.5rem;">📍</div>
+                            <div>
+                                <p style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin: 0; color: var(--primary);">Lokasi</p>
+                                <h4 style="margin: 0; font-size: 1.1rem; color: var(--text-primary);">Indonesia</h4>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="glass-panel glass-panel-p">
+                    <h3 style="margin-bottom: 8px; color: var(--text-primary);">Ceritakan Kebutuhan Anda</h3>
+                    <p style="font-size: 0.95rem; margin-bottom: 32px; color: var(--text-secondary);">Isi form di bawah ini dan kami akan segera menghubungi Anda via WhatsApp.</p>
+
                     <form id="contact-form">
                         <div id="form-alert" style="display:none; padding: 16px; border-radius: var(--radius-sm); margin-bottom: 24px; font-weight: 500;"></div>
                         
-                        <div class="form-group">
-                            <label class="form-label">Nama Lengkap *</label>
-                            <input type="text" class="form-control" name="name" required>
+                        <!-- Radio Pill Buttons untuk Jenis Layanan -->
+                        <div class="form-group" style="margin-bottom: 32px;">
+                            <label class="form-label" style="margin-bottom: 16px;">Layanan Yang Dibutuhkan *</label>
+                            <div class="radio-pill-group">
+                                <input type="radio" id="srv_uiux" name="service_type" value="UI/UX Design" class="radio-pill-input" checked>
+                                <label for="srv_uiux" class="radio-pill-label">UI/UX Design</label>
+
+                                <input type="radio" id="srv_web" name="service_type" value="Web Development" class="radio-pill-input">
+                                <label for="srv_web" class="radio-pill-label">Web Development</label>
+
+                                <input type="radio" id="srv_mobile" name="service_type" value="Mobile Apps" class="radio-pill-input">
+                                <label for="srv_mobile" class="radio-pill-label">Mobile Apps</label>
+
+                                <input type="radio" id="srv_other" name="service_type" value="Lainnya" class="radio-pill-input">
+                                <label for="srv_other" class="radio-pill-label">Lainnya</label>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">Nomor WhatsApp *</label>
-                            <input type="tel" class="form-control" name="whatsapp" required>
+
+                        <!-- 2 Kolom untuk Nama & WhatsApp -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px;">
+                            <div>
+                                <label class="form-label">Nama Lengkap *</label>
+                                <input type="text" class="form-control" name="name" placeholder="Cth: Budi Santoso" required>
+                            </div>
+                            <div>
+                                <label class="form-label">Nomor WhatsApp *</label>
+                                <input type="tel" class="form-control" name="whatsapp" placeholder="Cth: 08123456789" required>
+                            </div>
                         </div>
+
                         <div class="form-group">
-                            <label class="form-label">Email Aktif</label>
-                            <input type="email" class="form-control" name="email">
+                            <label class="form-label">Alamat Email</label>
+                            <input type="email" class="form-control" name="email" placeholder="Cth: budi@perusahaan.com">
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">Perusahaan / Brand</label>
-                            <input type="text" class="form-control" name="company">
+
+                        <div class="form-group" style="margin-bottom: 32px;">
+                            <label class="form-label">Detail Proyek *</label>
+                            <textarea class="form-control" name="message" rows="5" placeholder="Ceritakan gambaran singkat proyek Anda, tujuan yang ingin dicapai, dan estimasi waktu jika ada..." required></textarea>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">Ceritakan Singkat Project Anda *</label>
-                            <textarea class="form-control" name="message" rows="5" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%;" id="btn-submit">Kirim Pesan Request</button>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%;" id="btn-submit">Kirim Pesan Sekarang</button>
                     </form>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer class="section" style="border-top: 1px solid var(--glass-border); padding-bottom: 40px;">
-        <div class="container text-center" style="color: var(--text-muted); font-size: 0.9rem;">
-            &copy; <span id="year"></span> <%= settings.siteName || 'Dents Web' %>. All rights reserved.
-        </div>
-    </footer>
+    <%- include('partials/footer') %>
 
     <script>
-        document.getElementById('year').textContent = new Date().getFullYear();
-        window.addEventListener('scroll', () => document.getElementById('main-header').classList.toggle('scrolled', window.scrollY > 20));
-        document.getElementById('hamburger-btn').addEventListener('click', () => document.getElementById('nav-links').classList.toggle('mobile-open'));
-
         document.getElementById('contact-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btn-submit');
             const alertBox = document.getElementById('form-alert');
-            btn.textContent = 'Memproses...';
+            btn.textContent = 'MEMPROSES...';
             btn.disabled = true;
 
             const formData = new FormData(e.target);
             const payload = Object.fromEntries(formData.entries());
+
+            // Menggabungkan Service Type ke dalam pesan utama agar terbaca oleh backend (API Leads)
+            const finalMessage = `[Layanan: ${payload.service_type}] - ${payload.message}`;
+            payload.message = finalMessage;
+            delete payload.service_type; // Clean up payload
 
             try {
                 const res = await fetch('/api/leads', {
@@ -104,22 +161,22 @@
 
                 alertBox.style.display = 'block';
                 if(res.ok && data.success) {
-                    alertBox.style.backgroundColor = 'rgba(16, 185, 129, 0.1)';
+                    alertBox.style.backgroundColor = 'rgba(0, 230, 118, 0.1)';
                     alertBox.style.color = 'var(--success)';
                     alertBox.style.border = '1px solid var(--success)';
-                    alertBox.textContent = data.message;
+                    alertBox.textContent = 'Pesan berhasil dikirim! Tim kami akan segera menghubungi Anda.';
                     e.target.reset();
                 } else {
                     throw new Error(data.message || 'Terjadi kesalahan sistem.');
                 }
             } catch (err) {
                 alertBox.style.display = 'block';
-                alertBox.style.backgroundColor = 'rgba(239, 68, 68, 0.1)';
+                alertBox.style.backgroundColor = 'rgba(255, 75, 43, 0.1)';
                 alertBox.style.color = 'var(--danger)';
                 alertBox.style.border = '1px solid var(--danger)';
                 alertBox.textContent = err.message;
             } finally {
-                btn.textContent = 'Kirim Pesan Request';
+                btn.textContent = 'KIRIM PESAN SEKARANG';
                 btn.disabled = false;
             }
         });
