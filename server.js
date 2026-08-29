@@ -87,7 +87,7 @@ async function getGlobalSettings() {
         defaultSeoTitle: "Dents Web — Website Custom untuk Bisnis yang Ingin Tampil Serius",
         defaultSeoDescription: "Dents Web membantu bisnis membangun website custom yang profesional, cepat, SEO-ready, dan fokus pada konversi.",
         defaultOgImage: "/public/img/axalogo.png",
-        googleVerification: "",
+        googleVerification: "e67nOsjn34kGZ_5feJrhj68I24DnRqzB2OZOpgxIuY4",
         analyticsId: "",
         favicon: "/public/img/axalogo.png",
         logo: "/public/img/axalogo.png"
