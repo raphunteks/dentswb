@@ -15,6 +15,7 @@ const PORT = process.env.PORT || 3000;
 // ==========================================
 app.set('trust proxy', 1);
 
+// Initialize Redis directly from Vercel KV
 const redis = new Redis({
     url: process.env.KV_REST_API_URL,
     token: process.env.KV_REST_API_TOKEN,
@@ -44,29 +45,17 @@ app.use(helmet({
 }));
 
 // Rate Limiting
-const publicLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 150, 
-    message: 'Terlalu banyak permintaan dari IP ini, coba lagi nanti.',
-});
-const loginLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 10,
-    message: 'Terlalu banyak percobaan login. Silakan tunggu 15 menit.',
-});
-const leadLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 10,
-    message: 'Terlalu banyak form yang dikirim. Silakan tunggu beberapa saat.',
-});
+const publicLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 150, message: 'Terlalu banyak permintaan.' });
+const loginLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 10, message: 'Terlalu banyak percobaan login.' });
+const leadLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 10, message: 'Terlalu banyak form yang dikirim.' });
 app.use(publicLimiter); 
 
 // ==========================================
-// GLOBAL SETTINGS HELPER
+// GLOBAL SETTINGS HELPER 
 // ==========================================
 async function getGlobalSettings() {
     const defaultSettings = {
-        siteName: "ents Web", // Untuk visual UI menyambung logo "D"
+        siteName: "ents Web", // Visual UI
         tagline: "Build Your Digital Presence.",
         siteUrl: "https://dentsweb.my.id",
         email: "dentswebsitebuilder@gmail.com",
@@ -94,7 +83,6 @@ async function getGlobalSettings() {
         await redis.set('dents:settings', defaultSettings);
         return defaultSettings;
     } catch (err) {
-        console.error('[ERROR] Failed to fetch settings', err);
         return defaultSettings;
     }
 }
@@ -107,40 +95,64 @@ function buildSEO(settings, pageData) {
     const cleanPath = pageData.path === '/' ? '' : pageData.path;
     const fullUrl = `${siteUrl}${cleanPath}`;
     
-    // SEO memaksakan "Dents Web" agar tidak terbaca "ents Web" di Google
     const title = pageData.title ? `${pageData.title} | Dents Web` : settings.defaultSeoTitle;
     const desc = pageData.desc || settings.defaultSeoDescription;
     const image = pageData.image ? (pageData.image.startsWith('http') ? pageData.image : `${siteUrl}${pageData.image}`) : `${siteUrl}${settings.defaultOgImage}`;
     const keywords = pageData.keywords || "jasa pembuatan website, web developer, aplikasi mobile, Dents Web, agensi digital, website purwokerto, SEO website";
 
-    let schemaArray = [];
-
-    // 1. Base Organization Schema (Semua Halaman)
-    schemaArray.push({
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "Dents Web",
-        "url": siteUrl,
-        "logo": `${siteUrl}${settings.logo}`,
-        "contactPoint": {
-            "@type": "ContactPoint",
-            "telephone": `+${settings.whatsapp}`,
-            "contactType": "customer service"
+    // MASTER SCHEMA GRAPH
+    let schemaGraph = [
+        {
+            "@type": "WebSite",
+            "@id": `${siteUrl}/#website`,
+            "url": `${siteUrl}/`,
+            "name": "Dents Web",
+            "alternateName": ["Dents Web Agency", "DentsWeb"],
+            "publisher": { "@id": `${siteUrl}/#organization` },
+            "potentialAction": {
+                "@type": "SearchAction",
+                "target": `${siteUrl}/search?q={search_term_string}`,
+                "query-input": "required name=search_term_string"
+            }
         },
-        "sameAs": [settings.socialLinks?.instagram, settings.socialLinks?.facebook, settings.socialLinks?.linkedin].filter(Boolean)
-    });
+        {
+            "@type": "Organization",
+            "@id": `${siteUrl}/#organization`,
+            "name": "Dents Web",
+            "url": `${siteUrl}/`,
+            "logo": {
+                "@type": "ImageObject",
+                "url": `${siteUrl}${settings.logo}`
+            },
+            "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": `+${settings.whatsapp}`,
+                "contactType": "customer service"
+            },
+            "sameAs": [settings.socialLinks?.instagram, settings.socialLinks?.facebook, settings.socialLinks?.linkedin].filter(Boolean)
+        },
+        {
+            "@type": "WebPage",
+            "@id": `${fullUrl}#webpage`,
+            "url": fullUrl,
+            "name": title,
+            "description": desc,
+            "isPartOf": { "@id": `${siteUrl}/#website` },
+            "about": { "@id": `${siteUrl}/#organization` }
+        }
+    ];
 
-    // 2. Breadcrumb Schema (Jika bukan Homepage)
+    // BREADCRUMB SCHEMA BUILDER
     if (pageData.path !== '/') {
         const pathParts = pageData.path.split('/').filter(p => p);
         let breadcrumb = {
-            "@context": "https://schema.org",
             "@type": "BreadcrumbList",
+            "@id": `${fullUrl}#breadcrumb`,
             "itemListElement": [{
                 "@type": "ListItem",
                 "position": 1,
                 "name": "Beranda",
-                "item": siteUrl
+                "item": `${siteUrl}/`
             }]
         };
         let currUrl = siteUrl;
@@ -153,25 +165,31 @@ function buildSEO(settings, pageData) {
                 "item": currUrl
             });
         });
-        schemaArray.push(breadcrumb);
+        schemaGraph.push(breadcrumb);
     } else {
-        // WebSite Schema + SearchBox untuk Homepage
-        schemaArray.push({
-            "@context": "https://schema.org",
-            "@type": "WebSite",
-            "url": siteUrl,
-            "potentialAction": {
-                "@type": "SearchAction",
-                "target": `${siteUrl}/?q={search_term_string}`,
-                "query-input": "required name=search_term_string"
-            }
+        // SITELINKS SCHEMA FOR HOMEPAGE
+        schemaGraph.push({
+            "@type": "ItemList",
+            "@id": `${siteUrl}/#sitelinks`,
+            "name": "Navigasi Utama Dents Web",
+            "itemListElement": [
+                { "@type": "SiteNavigationElement", "position": 1, "name": "Layanan Kami", "url": `${siteUrl}/services` },
+                { "@type": "SiteNavigationElement", "position": 2, "name": "Portfolio", "url": `${siteUrl}/portfolio` },
+                { "@type": "SiteNavigationElement", "position": 3, "name": "Investasi Digital", "url": `${siteUrl}/pricing` },
+                { "@type": "SiteNavigationElement", "position": 4, "name": "Hubungi Kami", "url": `${siteUrl}/contact` }
+            ]
         });
     }
 
-    // 3. Inject Custom Schema dari Parameter Route (FAQ, ItemList, dll)
+    // INJECT CUSTOM SPECIFIC SCHEMA (FAQ, Items, etc)
     if (pageData.schema) {
-        schemaArray.push(pageData.schema);
+        schemaGraph.push(pageData.schema);
     }
+
+    const finalSchema = {
+        "@context": "https://schema.org",
+        "@graph": schemaGraph
+    };
 
     return {
         title,
@@ -179,7 +197,7 @@ function buildSEO(settings, pageData) {
         url: fullUrl,
         image,
         keywords,
-        schemaString: JSON.stringify(schemaArray)
+        schemaString: JSON.stringify(finalSchema)
     };
 }
 
@@ -223,11 +241,7 @@ app.get('/', async (req, res) => {
         services: featuredServices,
         portfolio: featuredPortfolio,
         testimonials: activeTestimonials,
-        seo: buildSEO(settings, { 
-            title: "", // Kosong agar pakai defaultSeoTitle
-            desc: settings.defaultSeoDescription, 
-            path: '/' 
-        }) 
+        seo: buildSEO(settings, { title: "", desc: settings.defaultSeoDescription, path: '/' }) 
     });
 });
 
@@ -236,9 +250,7 @@ app.get('/services', async (req, res) => {
     const services = await redis.get('dents:services') || [];
     const publishedServices = services.filter(s => s.isPublished).sort((a, b) => (a.order || 0) - (b.order || 0));
 
-    // Dynamic ItemList Schema untuk layanan
     const serviceSchema = {
-        "@context": "https://schema.org",
         "@type": "ItemList",
         "itemListElement": publishedServices.map((s, idx) => ({
             "@type": "ListItem",
@@ -299,9 +311,7 @@ app.get('/faq', async (req, res) => {
     const faq = await redis.get('dents:faq') || [];
     const publishedFaq = faq.filter(f => f.isPublished).sort((a, b) => (a.order || 0) - (b.order || 0));
 
-    // Dynamic FAQPage Schema untuk Google Search
     const faqSchema = publishedFaq.length > 0 ? {
-        "@context": "https://schema.org",
         "@type": "FAQPage",
         "mainEntity": publishedFaq.map(f => ({
             "@type": "Question",
@@ -363,7 +373,7 @@ app.post('/api/leads', leadLimiter, async (req, res) => {
 });
 
 // ==========================================
-// ADMIN ROUTES (Views & Auth)
+// ADMIN ROUTES & API (Unchanged)
 // ==========================================
 app.get('/admin', (req, res) => {
     if (req.cookies.admin_session) return res.redirect('/admin-dashboard');
@@ -405,9 +415,6 @@ app.get('/admin-dashboard', requireAdmin, async (req, res) => {
     res.render('admin-dashboard', { settings, seo: { title: 'Dashboard Admin', desc: '', path: '' }});
 });
 
-// ==========================================
-// ADMIN API (CRUD Endpoints)
-// ==========================================
 async function handleListGet(req, res, redisKey) {
     try {
         const data = await redis.get(redisKey) || [];
