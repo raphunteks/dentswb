@@ -51,13 +51,14 @@ const leadLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 10, message: 'Ter
 app.use(publicLimiter); 
 
 // ==========================================
-// GLOBAL SETTINGS HELPER 
+// GLOBAL SETTINGS HELPER
 // ==========================================
 async function getGlobalSettings() {
     const defaultSettings = {
-        siteName: "ents Web", // Visual UI
+        siteName: "ents Web", // Untuk visual UI yang menyambung dengan logo
+        brandName: "Dents Web", // Nama asli untuk SEO & Google
         tagline: "Build Your Digital Presence.",
-        siteUrl: "https://dentsweb.my.id",
+        siteUrl: "https://www.dentsweb.my.id", // WAJIB SAMA DENGAN GSC (Pakai www)
         email: "dentswebsitebuilder@gmail.com",
         whatsapp: "6285338922586",
         address: "Indonesia",
@@ -91,43 +92,50 @@ async function getGlobalSettings() {
 // DYNAMIC SEO & JSON-LD SCHEMA BUILDER (GSC GOLD STANDARD)
 // ==========================================
 function buildSEO(settings, pageData) {
-    const siteUrl = settings.siteUrl ? settings.siteUrl.replace(/\/$/, '') : 'https://dentsweb.my.id';
+    // Paksa pastikan base URL sesuai dengan GSC (www)
+    const siteUrl = settings.siteUrl ? settings.siteUrl.replace(/\/$/, '') : 'https://www.dentsweb.my.id';
     const cleanPath = pageData.path === '/' ? '' : pageData.path;
     const fullUrl = `${siteUrl}${cleanPath}`;
     
-    const title = pageData.title ? `${pageData.title} | Dents Web` : settings.defaultSeoTitle;
+    // Title selalu menggunakan nama Brand asli (Dents Web) bukan "ents Web"
+    const title = pageData.title ? `${pageData.title} | ${settings.brandName}` : settings.defaultSeoTitle;
     const desc = pageData.desc || settings.defaultSeoDescription;
     const image = pageData.image ? (pageData.image.startsWith('http') ? pageData.image : `${siteUrl}${pageData.image}`) : `${siteUrl}${settings.defaultOgImage}`;
-    const keywords = pageData.keywords || "jasa pembuatan website, web developer, aplikasi mobile, Dents Web, agensi digital, website purwokerto, SEO website";
+    const keywords = pageData.keywords || "jasa pembuatan website, web developer, aplikasi mobile, Dents Web, agensi digital, website profesional, SEO website";
 
-    // MASTER SCHEMA GRAPH
+    // MENGGUNAKAN STANDAR ENTERPRISE @graph AGAR GOOGLE TIDAK BINGUNG
     let schemaGraph = [
         {
             "@type": "WebSite",
             "@id": `${siteUrl}/#website`,
             "url": `${siteUrl}/`,
-            "name": "Dents Web",
-            "alternateName": ["Dents Web Agency", "DentsWeb"],
+            "name": settings.brandName,
+            "alternateName": ["DentsWeb", "Dents Web Agency"],
             "publisher": { "@id": `${siteUrl}/#organization` },
             "potentialAction": {
                 "@type": "SearchAction",
-                "target": `${siteUrl}/search?q={search_term_string}`,
+                "target": `${siteUrl}/?q={search_term_string}`,
                 "query-input": "required name=search_term_string"
             }
         },
         {
             "@type": "Organization",
             "@id": `${siteUrl}/#organization`,
-            "name": "Dents Web",
+            "name": settings.brandName,
             "url": `${siteUrl}/`,
             "logo": {
                 "@type": "ImageObject",
-                "url": `${siteUrl}${settings.logo}`
+                "@id": `${siteUrl}/#logo`,
+                "inLanguage": "id-ID",
+                "url": `${siteUrl}${settings.logo}`,
+                "contentUrl": `${siteUrl}${settings.logo}`,
+                "caption": `Logo ${settings.brandName}`
             },
+            "image": { "@id": `${siteUrl}/#logo` },
             "contactPoint": {
                 "@type": "ContactPoint",
                 "telephone": `+${settings.whatsapp}`,
-                "contactType": "customer service"
+                "contactType": "customer support"
             },
             "sameAs": [settings.socialLinks?.instagram, settings.socialLinks?.facebook, settings.socialLinks?.linkedin].filter(Boolean)
         },
@@ -138,50 +146,57 @@ function buildSEO(settings, pageData) {
             "name": title,
             "description": desc,
             "isPartOf": { "@id": `${siteUrl}/#website` },
-            "about": { "@id": `${siteUrl}/#organization` }
+            "about": { "@id": `${siteUrl}/#organization` },
+            "breadcrumb": { "@id": `${fullUrl}#breadcrumb` }
         }
     ];
 
-    // BREADCRUMB SCHEMA BUILDER
+    // BREADCRUMB LIST DINAMIS (DI-GENERATE UNTUK SEMUA HALAMAN TERMASUK HOME)
+    let breadcrumbElements = [{
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Beranda",
+        "item": `${siteUrl}/`
+    }];
+
     if (pageData.path !== '/') {
         const pathParts = pageData.path.split('/').filter(p => p);
-        let breadcrumb = {
-            "@type": "BreadcrumbList",
-            "@id": `${fullUrl}#breadcrumb`,
-            "itemListElement": [{
-                "@type": "ListItem",
-                "position": 1,
-                "name": "Beranda",
-                "item": `${siteUrl}/`
-            }]
-        };
         let currUrl = siteUrl;
         pathParts.forEach((part, idx) => {
             currUrl += `/${part}`;
-            breadcrumb.itemListElement.push({
+            breadcrumbElements.push({
                 "@type": "ListItem",
                 "position": idx + 2,
                 "name": part.charAt(0).toUpperCase() + part.slice(1).replace(/-/g, ' '),
                 "item": currUrl
             });
         });
-        schemaGraph.push(breadcrumb);
-    } else {
-        // SITELINKS SCHEMA FOR HOMEPAGE
+    }
+
+    schemaGraph.push({
+        "@type": "BreadcrumbList",
+        "@id": `${fullUrl}#breadcrumb`,
+        "name": `Breadcrumb ${title}`,
+        "itemListElement": breadcrumbElements
+    });
+
+    // SITELINKS NAVIGATION KHUSUS HALAMAN UTAMA (Beranda)
+    if (pageData.path === '/') {
         schemaGraph.push({
             "@type": "ItemList",
             "@id": `${siteUrl}/#sitelinks`,
-            "name": "Navigasi Utama Dents Web",
+            "name": `Navigasi Utama ${settings.brandName}`,
             "itemListElement": [
-                { "@type": "SiteNavigationElement", "position": 1, "name": "Layanan Kami", "url": `${siteUrl}/services` },
-                { "@type": "SiteNavigationElement", "position": 2, "name": "Portfolio", "url": `${siteUrl}/portfolio` },
-                { "@type": "SiteNavigationElement", "position": 3, "name": "Investasi Digital", "url": `${siteUrl}/pricing` },
-                { "@type": "SiteNavigationElement", "position": 4, "name": "Hubungi Kami", "url": `${siteUrl}/contact` }
+                { "@type": "SiteNavigationElement", "position": 1, "name": "Layanan Kami", "description": "Solusi web development & digital marketing.", "url": `${siteUrl}/services` },
+                { "@type": "SiteNavigationElement", "position": 2, "name": "Portfolio", "description": "Karya digital terbaik dari klien kami.", "url": `${siteUrl}/portfolio` },
+                { "@type": "SiteNavigationElement", "position": 3, "name": "Harga & Paket", "description": "Investasi digital transparan tanpa biaya tersembunyi.", "url": `${siteUrl}/pricing` },
+                { "@type": "SiteNavigationElement", "position": 4, "name": "Tentang Kami", "description": "Profil dan filosofi tim Dents Web.", "url": `${siteUrl}/about` },
+                { "@type": "SiteNavigationElement", "position": 5, "name": "Hubungi Kami", "description": "Konsultasi gratis proyek website Anda.", "url": `${siteUrl}/contact` }
             ]
         });
     }
 
-    // INJECT CUSTOM SPECIFIC SCHEMA (FAQ, Items, etc)
+    // INJECT SCHEMA TAMBAHAN (Misal: FAQPage, ItemList Services)
     if (pageData.schema) {
         schemaGraph.push(pageData.schema);
     }
@@ -191,13 +206,16 @@ function buildSEO(settings, pageData) {
         "@graph": schemaGraph
     };
 
+    // BUG FIX VERCEL EJS: Hapus karakter < yang bisa merusak parse JSON di browser
+    const safeSchemaString = JSON.stringify(finalSchema).replace(/</g, '\\u003c');
+
     return {
         title,
         desc,
         url: fullUrl,
         image,
         keywords,
-        schemaString: JSON.stringify(finalSchema)
+        schemaString: safeSchemaString
     };
 }
 
@@ -252,6 +270,8 @@ app.get('/services', async (req, res) => {
 
     const serviceSchema = {
         "@type": "ItemList",
+        "@id": `${settings.siteUrl}/services#list`,
+        "name": "Daftar Layanan Dents Web",
         "itemListElement": publishedServices.map((s, idx) => ({
             "@type": "ListItem",
             "position": idx + 1,
@@ -313,6 +333,7 @@ app.get('/faq', async (req, res) => {
 
     const faqSchema = publishedFaq.length > 0 ? {
         "@type": "FAQPage",
+        "@id": `${settings.siteUrl}/faq#faq`,
         "mainEntity": publishedFaq.map(f => ({
             "@type": "Question",
             "name": f.question,
@@ -373,7 +394,7 @@ app.post('/api/leads', leadLimiter, async (req, res) => {
 });
 
 // ==========================================
-// ADMIN ROUTES & API (Unchanged)
+// ADMIN ROUTES & API
 // ==========================================
 app.get('/admin', (req, res) => {
     if (req.cookies.admin_session) return res.redirect('/admin-dashboard');
