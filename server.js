@@ -17,9 +17,9 @@ const redis = new Redis({
 });
 
 app.set('view engine', 'ejs');
-// FIX VERCEL PATH RESOLUTION: Gunakan process.cwd() alih-alih __dirname
-app.set('views', path.join(process.cwd(), 'views'));
-app.use('/public', express.static(path.join(process.cwd(), 'public')));
+// Menggunakan __dirname yang dikombinasikan dengan 'includeFiles' di vercel.json adalah cara paling stabil di Vercel
+app.set('views', path.join(__dirname, 'views'));
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
