@@ -3,66 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= seo.title %></title>
-    <meta name="description" content="<%= seo.desc %>">
-    <link rel="canonical" href="<%= settings.siteUrl %><%= seo.path %>">
+    
+    <!-- DYNAMIC SEO GOLD STANDARD -->
+    <title><%= typeof seo !== 'undefined' ? seo.title : 'Investasi Digital | Dents Web' %></title>
+    <meta name="description" content="<%= typeof seo !== 'undefined' ? seo.desc : 'Skema harga transparan tanpa biaya tersembunyi.' %>">
+    <meta name="keywords" content="<%= typeof seo !== 'undefined' ? seo.keywords : 'harga pembuatan website, biaya web developer, paket aplikasi mobile, harga website profesional' %>">
+    <link rel="canonical" href="<%= typeof seo !== 'undefined' ? seo.url : 'https://dentsweb.my.id/pricing' %>">
+    
+    <!-- Google Site Verification (Hardcoded for 100% GSC Reliability) -->
+    <meta name="google-site-verification" content="e67nOsjn34kGZ_5feJrhj68I24DnRqzB2OZOpgxIuY4" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="<%= typeof seo !== 'undefined' ? seo.url : 'https://dentsweb.my.id/pricing' %>">
+    <meta property="og:title" content="<%= typeof seo !== 'undefined' ? seo.title : 'Investasi Digital | Dents Web' %>">
+    <meta property="og:description" content="<%= typeof seo !== 'undefined' ? seo.desc : '' %>">
+    <meta property="og:image" content="<%= typeof seo !== 'undefined' ? seo.image : '/public/img/axalogo.png' %>">
+    
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="<%= typeof seo !== 'undefined' ? seo.url : 'https://dentsweb.my.id/pricing' %>">
+    <meta name="twitter:title" content="<%= typeof seo !== 'undefined' ? seo.title : 'Investasi Digital | Dents Web' %>">
+    <meta name="twitter:description" content="<%= typeof seo !== 'undefined' ? seo.desc : '' %>">
+    <meta name="twitter:image" content="<%= typeof seo !== 'undefined' ? seo.image : '/public/img/axalogo.png' %>">
+
+    <!-- DYNAMIC JSON-LD SCHEMA (Rich Snippets Google) -->
+    <% if (typeof seo !== 'undefined' && seo.schemaString) { %>
+    <script type="application/ld+json">
+        <%- seo.schemaString %>
+    </script>
+    <% } %>
+    
+    <link rel="icon" type="image/png" href="/public/img/axalogo.png">
+    <link rel="apple-touch-icon" href="/public/img/axalogo.png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="/public/css/style.css">
 </head>
 <body>
-    <header id="main-header">
-        <div class="container nav-container">
-            <a href="/" class="logo"><span class="logo-mark"></span><%= settings.siteName || 'Dents Web' %></a>
-            <div class="hamburger" id="hamburger-btn"><span></span><span></span><span></span></div>
-            <nav class="nav-links" id="nav-links">
-                <a href="/">Home</a>
-                <a href="/services">Services</a>
-                <a href="/portfolio" class="active">Portfolio</a>
-                <a href="/pricing">Pricing</a>
-                <a href="/about">About</a>
-                <a href="/contact">Contact</a>
-                <a href="/faq">FAQ</a>
-            </nav>
-        </div>
-    </header>
+    
+    <%- include('partials/header') %>
 
     <main>
-        <section class="section section-pt-hero">
+        <section class="section section-pt-hero" style="min-height: 100vh; padding-bottom: 120px;">
             <div class="container">
-                <div class="text-center" style="max-width: 600px; margin: 0 auto 80px;">
-                    <h1 style="margin-bottom: 16px;">Our Work</h1>
-                    <p>Kumpulan studi kasus dan bukti eksekusi arsitektur digital yang kami bangun untuk klien.</p>
+                <div class="text-center" style="max-width: 800px; margin: 0 auto 80px;">
+                    <div class="tag">PRICING PLANS</div>
+                    <h1 style="margin-bottom: 24px;">Investasi <span class="text-holo">Digital</span></h1>
+                    <p style="font-size: 1.15rem;">Skema harga transparan tanpa biaya tersembunyi. Pilih paket yang paling sesuai dengan skala dan roadmap pertumbuhan bisnis Anda.</p>
                 </div>
                 
-                <div class="grid-2">
-                    <% if(portfolio && portfolio.length > 0) { %>
-                        <% portfolio.forEach(item => { %>
-                            <div class="portfolio-card" onclick="window.location.href='/portfolio/<%= item.slug %>'">
-                                <div class="portfolio-img" style="background-image: url('<%= item.image %>')"></div>
-                                <div class="portfolio-info">
-                                    <span class="tag"><%= item.category %></span>
-                                    <h3 style="margin-top: 12px; margin-bottom: 8px;"><%= item.title %></h3>
-                                    <p style="font-size: 0.9rem; margin-bottom: 16px;">Klien: <%= item.client %> &bull; <%= item.year %></p>
-                                    <p style="font-size: 0.95rem; color: var(--text-secondary);"><%= item.shortDescription %></p>
+                <div class="grid-3" style="align-items: center;">
+                    <% if(typeof pricing !== 'undefined' && pricing.length > 0) { %>
+                        <% pricing.forEach(pkg => { %>
+                            <!-- Card Background Highlight jika Featured -->
+                            <div class="glass-panel glass-panel-p" style="display: flex; flex-direction: column; position: relative; min-height: 550px; <%= pkg.isFeatured ? 'border-color: var(--primary); box-shadow: var(--shadow-glow-holo); transform: translateY(-15px) scale(1.02); z-index: 2;' : 'z-index: 1;' %>">
+                                
+                                <% if(pkg.isFeatured) { %>
+                                    <!-- Badge Populer -->
+                                    <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: var(--holo-gradient); color: var(--bg-base); padding: 6px 20px; border-radius: var(--radius-pill); font-weight: 800; font-size: 0.8rem; letter-spacing: 1.5px;">
+                                        PILIHAN POPULER
+                                    </div>
+                                <% } %>
+
+                                <h3 style="color: var(--text-primary); text-transform: uppercase; letter-spacing: 1px; font-size: 1.2rem;"><%= pkg.name %></h3>
+                                <p style="font-size: 0.95rem; min-height: 50px; color: var(--text-secondary); margin-top: 8px;"><%= pkg.description %></p>
+                                
+                                <div style="margin: 24px 0; border-bottom: 1px solid var(--glass-border-dark); padding-bottom: 24px;">
+                                    <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Mulai dari</span>
+                                    <div style="font-size: 2.5rem; font-weight: 800; color: <%= pkg.isFeatured ? 'var(--primary)' : 'var(--text-primary)' %>; line-height: 1;">
+                                        <%= pkg.price %>
+                                    </div>
+                                </div>
+                                
+                                <ul style="margin-bottom: 40px; flex: 1; display: flex; flex-direction: column; gap: 14px;">
+                                    <% 
+                                        // Robust Feature Split Fix (Anti-Crash)
+                                        let featureList = [];
+                                        if (pkg.features) {
+                                            if (Array.isArray(pkg.features)) {
+                                                featureList = pkg.features;
+                                            } else if (typeof pkg.features === 'string') {
+                                                featureList = pkg.features.split(',');
+                                            }
+                                        }
+                                    %>
+                                    <% featureList.forEach(feat => { %>
+                                        <li style="display: flex; align-items: flex-start; gap: 12px; font-size: 0.95rem; color: var(--text-secondary);">
+                                            <span style="color: var(--success); font-weight: 800;">✓</span> 
+                                            <span><%= typeof feat === 'string' ? feat.trim() : feat %></span>
+                                        </li>
+                                    <% }) %>
+                                </ul>
+                                
+                                <div style="margin-top: auto;">
+                                    <a href="/contact?package=<%= pkg.name %>" class="btn <%= pkg.isFeatured ? 'btn-primary' : 'btn-secondary' %>" style="width: 100%;">
+                                        Pilih Paket <%= pkg.name %>
+                                    </a>
                                 </div>
                             </div>
                         <% }) %>
                     <% } else { %>
-                        <p class="text-center" style="grid-column: 1 / -1;">Belum ada data portfolio yang dipublikasikan.</p>
+                        <!-- Fallback / Default Pricing if DB is empty -->
+                        <div class="glass-panel glass-panel-p" style="display: flex; flex-direction: column; min-height: 550px;">
+                            <h3 style="color: var(--text-primary); text-transform: uppercase; letter-spacing: 1px; font-size: 1.2rem;">Starter</h3>
+                            <p style="font-size: 0.95rem; min-height: 50px; color: var(--text-secondary); margin-top: 8px;">Cocok untuk bisnis kecil atau personal branding.</p>
+                            <div style="margin: 24px 0; border-bottom: 1px solid var(--glass-border-dark); padding-bottom: 24px;">
+                                <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Mulai dari</span>
+                                <div style="font-size: 2.5rem; font-weight: 800; color: var(--text-primary); line-height: 1;">Rp 1.5M</div>
+                            </div>
+                            <ul style="margin-bottom: 40px; flex: 1; display: flex; flex-direction: column; gap: 14px;">
+                                <li style="display: flex; align-items: flex-start; gap: 12px; font-size: 0.95rem; color: var(--text-secondary);"><span style="color: var(--success); font-weight: 800;">✓</span> Free Domain & Hosting 1 Thn</li>
+                                <li style="display: flex; align-items: flex-start; gap: 12px; font-size: 0.95rem; color: var(--text-secondary);"><span style="color: var(--success); font-weight: 800;">✓</span> Maks. 5 Halaman</li>
+                                <li style="display: flex; align-items: flex-start; gap: 12px; font-size: 0.95rem; color: var(--text-secondary);"><span style="color: var(--success); font-weight: 800;">✓</span> Desain Responsif</li>
+                                <li style="display: flex; align-items: flex-start; gap: 12px; font-size: 0.95rem; color: var(--text-secondary);"><span style="color: var(--success); font-weight: 800;">✓</span> Integrasi WhatsApp</li>
+                            </ul>
+                            <div style="margin-top: auto;">
+                                <a href="/contact?package=Starter" class="btn btn-secondary" style="width: 100%;">Pilih Paket</a>
+                            </div>
+                        </div>
+
+                        <div class="glass-panel glass-panel-p" style="display: flex; flex-direction: column; position: relative; min-height: 550px; border-color: var(--primary); box-shadow: var(--shadow-glow-holo); transform: translateY(-15px) scale(1.02); z-index: 2;">
+                            <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: var(--holo-gradient); color: var(--bg-base); padding: 6px 20px; border-radius: var(--radius-pill); font-weight: 800; font-size: 0.8rem; letter-spacing: 1.5px;">PILIHAN POPULER</div>
+                            <h3 style="color: var(--text-primary); text-transform: uppercase; letter-spacing: 1px; font-size: 1.2rem;">Business</h3>
+                            <p style="font-size: 0.95rem; min-height: 50px; color: var(--text-secondary); margin-top: 8px;">Pilihan ideal untuk UMKM dan profil perusahaan profesional.</p>
+                            <div style="margin: 24px 0; border-bottom: 1px solid var(--glass-border-dark); padding-bottom: 24px;">
+                                <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Mulai dari</span>
+                                <div style="font-size: 2.5rem; font-weight: 800; color: var(--primary); line-height: 1;">Rp 3.5M</div>
+                            </div>
+                            <ul style="margin-bottom: 40px; flex: 1; display: flex; flex-direction: column; gap: 14px;">
+                                <li style="display: flex; align-items: flex-start; gap: 12px; font-size: 0.95rem; color: var(--text-secondary);"><span style="color: var(--success); font-weight: 800;">✓</span> Free Domain & Cloud Hosting</li>
+                                <li style="display: flex; align-items: flex-start; gap: 12px; font-size: 0.95rem; color: var(--text-secondary);"><span style="color: var(--success); font-weight: 800;">✓</span> Hingga 15 Halaman Custom</li>
+                                <li style="display: flex; align-items: flex-start; gap: 12px; font-size: 0.95rem; color: var(--text-secondary);"><span style="color: var(--success); font-weight: 800;">✓</span> Optimasi Kecepatan & SEO</li>
+                                <li style="display: flex; align-items: flex-start; gap: 12px; font-size: 0.95rem; color: var(--text-secondary);"><span style="color: var(--success); font-weight: 800;">✓</span> Panel Admin (CMS)</li>
+                                <li style="display: flex; align-items: flex-start; gap: 12px; font-size: 0.95rem; color: var(--text-secondary);"><span style="color: var(--success); font-weight: 800;">✓</span> Email Bisnis Profesional</li>
+                            </ul>
+                            <div style="margin-top: auto;">
+                                <a href="/contact?package=Business" class="btn btn-primary" style="width: 100%;">Pilih Paket Business</a>
+                            </div>
+                        </div>
+
+                        <div class="glass-panel glass-panel-p" style="display: flex; flex-direction: column; min-height: 550px;">
+                            <h3 style="color: var(--text-primary); text-transform: uppercase; letter-spacing: 1px; font-size: 1.2rem;">Enterprise</h3>
+                            <p style="font-size: 0.95rem; min-height: 50px; color: var(--text-secondary); margin-top: 8px;">Sistem kustom, E-Commerce, atau Web App skala besar.</p>
+                            <div style="margin: 24px 0; border-bottom: 1px solid var(--glass-border-dark); padding-bottom: 24px;">
+                                <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Mulai dari</span>
+                                <div style="font-size: 2.5rem; font-weight: 800; color: var(--text-primary); line-height: 1;">Custom</div>
+                            </div>
+                            <ul style="margin-bottom: 40px; flex: 1; display: flex; flex-direction: column; gap: 14px;">
+                                <li style="display: flex; align-items: flex-start; gap: 12px; font-size: 0.95rem; color: var(--text-secondary);"><span style="color: var(--success); font-weight: 800;">✓</span> Dedicated Cloud Server</li>
+                                <li style="display: flex; align-items: flex-start; gap: 12px; font-size: 0.95rem; color: var(--text-secondary);"><span style="color: var(--success); font-weight: 800;">✓</span> Fitur Kustom Sesuai Kebutuhan</li>
+                                <li style="display: flex; align-items: flex-start; gap: 12px; font-size: 0.95rem; color: var(--text-secondary);"><span style="color: var(--success); font-weight: 800;">✓</span> Integrasi API & Payment Gateway</li>
+                                <li style="display: flex; align-items: flex-start; gap: 12px; font-size: 0.95rem; color: var(--text-secondary);"><span style="color: var(--success); font-weight: 800;">✓</span> Full UI/UX Prototype</li>
+                            </ul>
+                            <div style="margin-top: auto;">
+                                <a href="/contact?package=Enterprise" class="btn btn-secondary" style="width: 100%;">Hubungi Kami</a>
+                            </div>
+                        </div>
                     <% } %>
                 </div>
+
+                <!-- Custom Request Banner -->
+                <div class="glass-panel" style="margin-top: 80px; padding: 40px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px; border-left: 4px solid var(--primary);">
+                    <div>
+                        <h3 style="margin-bottom: 8px; color: var(--text-primary);">Butuh Sistem yang Lebih Spesifik?</h3>
+                        <p style="margin: 0; color: var(--text-secondary);">Konsultasikan arsitektur sistem informasi atau aplikasi mobile impian Anda bersama tim ahli kami.</p>
+                    </div>
+                    <a href="/contact" class="btn btn-primary" style="white-space: nowrap;">Request Custom Quote &nearr;</a>
+                </div>
+
             </div>
         </section>
     </main>
 
-    <footer class="section" style="border-top: 1px solid var(--glass-border); padding-bottom: 40px;">
-        <div class="container text-center" style="color: var(--text-muted); font-size: 0.9rem;">
-            &copy; <span id="year"></span> <%= settings.siteName || 'Dents Web' %>. All rights reserved.
-        </div>
-    </footer>
-    <script>
-        document.getElementById('year').textContent = new Date().getFullYear();
-        window.addEventListener('scroll', () => document.getElementById('main-header').classList.toggle('scrolled', window.scrollY > 20));
-        document.getElementById('hamburger-btn').addEventListener('click', () => document.getElementById('nav-links').classList.toggle('mobile-open'));
-    </script>
+    <%- include('partials/footer') %>
+
 </body>
 </html>
