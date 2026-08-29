@@ -5,42 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= seo.title %></title>
     <meta name="description" content="<%= seo.desc %>">
-    <link rel="canonical" href="<%= settings.siteUrl %><%= seo.path %>">
+    
+    <!-- Mencegah undefined error jika settings.siteUrl belum di-set di redis -->
+    <link rel="canonical" href="<%= (settings.siteUrl || '') + seo.path %>">
     
     <!-- OpenGraph SEO -->
     <meta property="og:title" content="<%= seo.title %>">
     <meta property="og:description" content="<%= seo.desc %>">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="<%= settings.siteUrl %><%= seo.path %>">
+    <meta property="og:url" content="<%= (settings.siteUrl || '') + seo.path %>">
     
     <!-- Favicon / App Icon -->
     <link rel="icon" type="image/png" href="/public/img/axalogo.png">
     <link rel="apple-touch-icon" href="/public/img/axalogo.png">
     
     <link rel="stylesheet" href="/public/css/style.css">
-    <!-- script src="/public/js/protect-devtools.js" defer></script> -->
 </head>
 <body>
-    <header id="main-header">
-        <div class="container nav-container">
-            <a href="/" class="logo">
-                <span class="logo-mark"></span>
-                <%= settings.siteName || 'Dents Web' %>
-            </a>
-            <div class="hamburger" id="hamburger-btn">
-                <span></span><span></span><span></span>
-            </div>
-            <nav class="nav-links" id="nav-links">
-                <a href="/" class="active">Home</a>
-                <a href="/services">Services</a>
-                <a href="/portfolio">Portfolio</a>
-                <a href="/pricing">Pricing</a>
-                <a href="/about">About</a>
-                <a href="/contact">Contact</a>
-                <a href="/faq">FAQ</a>
-            </nav>
-        </div>
-    </header>
+    
+    <!-- Include Header Partial -->
+    <%- include('partials/header') %>
 
     <main>
         <section class="section section-pt-hero" style="min-height: 90vh; display: flex; align-items: center;">
@@ -66,7 +50,7 @@
                         <% services.forEach(service => { %>
                             <div class="glass-panel glass-panel-p">
                                 <h3 style="color: var(--primary);"><%= service.title %></h3>
-                                <p><%= service.shortDescription %></p>
+                                <p><%= service.shortDescription || service.description %></p>
                                 <a href="/services" style="font-weight: 500; font-size: 0.9rem; color: var(--text-primary);">Pelajari selengkapnya &rarr;</a>
                             </div>
                         <% }) %>
@@ -106,46 +90,8 @@
         </section>
     </main>
 
-    <footer class="section" style="border-top: 1px solid var(--glass-border); padding-bottom: 40px; background: rgba(0,0,0,0.3);">
-        <div class="container grid-2">
-            <div>
-                <a href="/" class="logo" style="margin-bottom: 24px;">
-                    <span class="logo-mark"></span> <%= settings.siteName || 'Dents Web' %>
-                </a>
-                <p style="max-width: 400px;"><%= settings.tagline %></p>
-            </div>
-            <div style="display: flex; gap: 60px; justify-content: flex-end; flex-wrap: wrap;">
-                <div>
-                    <h4 style="margin-bottom: 16px;">Agency</h4>
-                    <ul style="display: flex; flex-direction: column; gap: 8px;">
-                        <li><a href="/services" style="color: var(--text-secondary);">Services</a></li>
-                        <li><a href="/portfolio" style="color: var(--text-secondary);">Portfolio</a></li>
-                        <li><a href="/pricing" style="color: var(--text-secondary);">Pricing</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 style="margin-bottom: 16px;">Company</h4>
-                    <ul style="display: flex; flex-direction: column; gap: 8px;">
-                        <li><a href="/about" style="color: var(--text-secondary);">About Us</a></li>
-                        <li><a href="/contact" style="color: var(--text-secondary);">Contact</a></li>
-                        <li><a href="/faq" style="color: var(--text-secondary);">FAQ</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="container text-center" style="margin-top: 80px; color: var(--text-muted); font-size: 0.9rem;">
-            &copy; <span id="year"></span> <%= settings.siteName || 'Dents Web' %>. All rights reserved.
-        </div>
-    </footer>
+    <!-- Include Footer Partial -->
+    <%- include('partials/footer') %>
 
-    <script>
-        document.getElementById('year').textContent = new Date().getFullYear();
-        const header = document.getElementById('main-header');
-        window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 20));
-        
-        document.getElementById('hamburger-btn').addEventListener('click', () => {
-            document.getElementById('nav-links').classList.toggle('mobile-open');
-        });
-    </script>
 </body>
 </html>
