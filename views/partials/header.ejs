@@ -1,20 +1,20 @@
 <header id="main-header">
     <div class="container nav-container">
         <a href="/" class="logo">
-            <span class="logo-mark"></span>
-            <%= settings.siteName || 'Dents Web' %>
+            <img src="/public/img/axalogo.png" alt="Logo" style="width: 32px; height: 32px; object-fit: contain; border-radius: 8px;">
+            <%= settings && settings.siteName ? settings.siteName : 'Dents Web' %>
         </a>
         <div class="hamburger" id="hamburger-btn">
             <span></span><span></span><span></span>
         </div>
         <nav class="nav-links" id="nav-links">
-            <a href="/" class="<%= seo.path === '/' ? 'active' : '' %>">Home</a>
-            <a href="/services" class="<%= seo.path === '/services' ? 'active' : '' %>">Services</a>
-            <a href="/portfolio" class="<%= seo.path && seo.path.startsWith('/portfolio') ? 'active' : '' %>">Portfolio</a>
-            <a href="/pricing" class="<%= seo.path === '/pricing' ? 'active' : '' %>">Pricing</a>
-            <a href="/about" class="<%= seo.path === '/about' ? 'active' : '' %>">About</a>
-            <a href="/contact" class="<%= seo.path === '/contact' ? 'active' : '' %>">Contact</a>
-            <a href="/faq" class="<%= seo.path === '/faq' ? 'active' : '' %>">FAQ</a>
+            <a href="/" class="<%= (typeof seo !== 'undefined' && seo.path === '/') ? 'active' : '' %>">Home</a>
+            <a href="/services" class="<%= (typeof seo !== 'undefined' && seo.path === '/services') ? 'active' : '' %>">Services</a>
+            <a href="/portfolio" class="<%= (typeof seo !== 'undefined' && seo.path && seo.path.startsWith('/portfolio')) ? 'active' : '' %>">Portfolio</a>
+            <a href="/pricing" class="<%= (typeof seo !== 'undefined' && seo.path === '/pricing') ? 'active' : '' %>">Pricing</a>
+            <a href="/about" class="<%= (typeof seo !== 'undefined' && seo.path === '/about') ? 'active' : '' %>">About</a>
+            <a href="/faq" class="<%= (typeof seo !== 'undefined' && seo.path === '/faq') ? 'active' : '' %>">FAQ</a>
+            <a href="/contact" class="btn btn-primary" style="padding: 8px 16px; font-size: 0.85rem;">Mulai Project</a>
         </nav>
     </div>
 </header>
