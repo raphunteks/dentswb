@@ -3,80 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= seo.title %></title>
-    <meta name="description" content="<%= seo.desc %>">
-    <link rel="canonical" href="<%= settings.siteUrl %><%= seo.path %>">
+    
+    <!-- DYNAMIC SEO GOLD STANDARD -->
+    <title><%= typeof seo !== 'undefined' ? seo.title : 'Layanan Kami | Dents Web' %></title>
+    <meta name="description" content="<%= typeof seo !== 'undefined' ? seo.desc : 'Jasa pembuatan website dan aplikasi profesional.' %>">
+    <meta name="keywords" content="<%= typeof seo !== 'undefined' ? seo.keywords : 'jasa pembuatan website, web developer, aplikasi mobile, solusi digital, web custom' %>">
+    <link rel="canonical" href="<%= typeof seo !== 'undefined' ? seo.url : 'https://dentsweb.my.id/services' %>">
+    
+    <!-- Google Site Verification (Hardcoded for 100% GSC Reliability) -->
+    <meta name="google-site-verification" content="e67nOsjn34kGZ_5feJrhj68I24DnRqzB2OZOpgxIuY4" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="<%= typeof seo !== 'undefined' ? seo.url : 'https://dentsweb.my.id/services' %>">
+    <meta property="og:title" content="<%= typeof seo !== 'undefined' ? seo.title : 'Layanan Kami | Dents Web' %>">
+    <meta property="og:description" content="<%= typeof seo !== 'undefined' ? seo.desc : '' %>">
+    <meta property="og:image" content="<%= typeof seo !== 'undefined' ? seo.image : '/public/img/axalogo.png' %>">
+    
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="<%= typeof seo !== 'undefined' ? seo.url : 'https://dentsweb.my.id/services' %>">
+    <meta name="twitter:title" content="<%= typeof seo !== 'undefined' ? seo.title : 'Layanan Kami | Dents Web' %>">
+    <meta name="twitter:description" content="<%= typeof seo !== 'undefined' ? seo.desc : '' %>">
+    <meta name="twitter:image" content="<%= typeof seo !== 'undefined' ? seo.image : '/public/img/axalogo.png' %>">
+
+    <!-- DYNAMIC JSON-LD SCHEMA (Rich Snippets Google) -->
+    <% if (typeof seo !== 'undefined' && seo.schemaString) { %>
+    <script type="application/ld+json">
+        <%- seo.schemaString %>
+    </script>
+    <% } %>
+    
+    <link rel="icon" type="image/png" href="/public/img/axalogo.png">
+    <link rel="apple-touch-icon" href="/public/img/axalogo.png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="/public/css/style.css">
 </head>
 <body>
-    <header id="main-header">
-        <div class="container nav-container">
-            <a href="/" class="logo"><span class="logo-mark"></span><%= settings.siteName || 'Dents Web' %></a>
-            <div class="hamburger" id="hamburger-btn"><span></span><span></span><span></span></div>
-            <nav class="nav-links" id="nav-links">
-                <a href="/">Home</a>
-                <a href="/services" class="active">Services</a>
-                <a href="/portfolio">Portfolio</a>
-                <a href="/pricing">Pricing</a>
-                <a href="/about">About</a>
-                <a href="/contact">Contact</a>
-                <a href="/faq">FAQ</a>
-            </nav>
-        </div>
-    </header>
+    
+    <%- include('partials/header') %>
 
     <main>
-        <section class="section section-pt-hero">
+        <section class="section section-pt-hero" style="min-height: 100vh; padding-bottom: 120px;">
             <div class="container">
-                <div class="text-center" style="max-width: 600px; margin: 0 auto 80px;">
-                    <h1 style="margin-bottom: 16px;">Layanan Kami</h1>
-                    <p>Pilih arsitektur digital yang tepat untuk mempercepat pertumbuhan bisnis Anda.</p>
+                <div class="text-center" style="max-width: 800px; margin: 0 auto 80px;">
+                    <div class="tag">SOLUSI DIGITAL</div>
+                    <h1 style="margin-bottom: 24px;">Layanan <span class="text-holo">Terbaik Kami</span></h1>
+                    <p style="font-size: 1.15rem;">Pilih arsitektur digital yang tepat untuk mempercepat pertumbuhan bisnis Anda. Dari company profile hingga sistem web terintegrasi khusus perusahaan.</p>
                 </div>
                 
-                <div class="grid-2">
-                    <% if(services && services.length > 0) { %>
+                <div class="grid-3">
+                    <% if(typeof services !== 'undefined' && services.length > 0) { %>
                         <% services.forEach(service => { %>
-                            <div class="glass-panel glass-panel-p">
-                                <h2><%= service.title %></h2>
-                                <p style="font-size: 1.1rem; margin-bottom: 24px;"><%= service.description %></p>
+                            <div class="glass-panel glass-panel-p" style="display: flex; flex-direction: column;">
+                                <div style="font-size: 2.5rem; margin-bottom: 20px;"><%= service.icon || '🚀' %></div>
+                                <h2 style="font-size: 1.6rem; color: var(--text-primary); margin-bottom: 12px;"><%= service.title %></h2>
+                                <p style="font-size: 1rem; margin-bottom: 32px; color: var(--text-secondary); flex-grow: 1;"><%= service.description || service.shortDescription %></p>
                                 
-                                <% if(service.features && service.features.length > 0) { %>
-                                    <h4 style="margin-bottom: 12px; color: var(--primary);">Termasuk:</h4>
-                                    <ul style="display: flex; flex-direction: column; gap: 8px; color: var(--text-secondary); margin-bottom: 32px;">
-                                        <% service.features.forEach(feat => { %>
-                                            <li>✓ <%= feat %></li>
+                                <% 
+                                    // Robust Feature Split Fix (Anti-Crash)
+                                    let featureList = [];
+                                    if (service.features) {
+                                        if (Array.isArray(service.features)) {
+                                            featureList = service.features;
+                                        } else if (typeof service.features === 'string') {
+                                            featureList = service.features.split(',');
+                                        }
+                                    }
+                                %>
+                                
+                                <% if(featureList.length > 0) { %>
+                                    <h4 style="margin-bottom: 16px; color: var(--primary); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1.5px;">Termasuk:</h4>
+                                    <ul style="display: flex; flex-direction: column; gap: 12px; color: var(--text-secondary); margin-bottom: 40px;">
+                                        <% featureList.forEach(feat => { %>
+                                            <li style="display: flex; gap: 12px; font-size: 0.95rem; align-items: flex-start;">
+                                                <span style="color: var(--success); font-weight: 800;">✓</span> 
+                                                <span><%= typeof feat === 'string' ? feat.trim() : feat %></span>
+                                            </li>
                                         <% }) %>
                                     </ul>
                                 <% } %>
                                 
-                                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--glass-border); padding-top: 24px;">
-                                    <div>
-                                        <span style="display: block; font-size: 0.8rem; color: var(--text-secondary);">Mulai dari</span>
-                                        <span style="font-weight: 700; font-size: 1.2rem;"><%= service.startingPrice || 'Hubungi Kami' %></span>
-                                    </div>
-                                    <a href="/contact?service=<%= service.slug %>" class="btn btn-primary">Konsultasi</a>
+                                <!-- Harga & CTA ditempatkan di paling bawah secara sejajar -->
+                                <div style="margin-top: auto; border-top: 1px solid var(--glass-border-light); padding-top: 24px;">
+                                    <span style="display: block; font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Mulai dari</span>
+                                    <span style="font-weight: 800; font-size: 1.5rem; color: var(--text-primary); display: block; margin-bottom: 24px;"><%= service.startingPrice || 'Hubungi Kami' %></span>
+                                    
+                                    <a href="/contact?service=<%= service.slug || 'custom' %>" class="btn btn-primary" style="width: 100%;">Konsultasi Sekarang</a>
                                 </div>
                             </div>
                         <% }) %>
                     <% } else { %>
-                        <p class="text-center" style="grid-column: 1 / -1;">Informasi layanan sedang kami siapkan.</p>
+                        <div class="glass-panel glass-panel-p" style="grid-column: 1 / -1; text-align: center; padding: 80px 20px;">
+                            <div style="font-size: 3rem; margin-bottom: 24px;">🚧</div>
+                            <h3 style="color: var(--text-primary);">Informasi layanan sedang diperbarui.</h3>
+                            <p style="max-width: 500px; margin: 16px auto 32px;">Kami sedang meracik paket layanan terbaik untuk Anda. Silakan hubungi kami untuk mendiskusikan kebutuhan sistem Anda secara langsung.</p>
+                            <a href="/contact" class="btn btn-primary">Hubungi Kami</a>
+                        </div>
                     <% } %>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer class="section" style="border-top: 1px solid var(--glass-border); padding-bottom: 40px;">
-        <div class="container text-center" style="color: var(--text-muted); font-size: 0.9rem;">
-            &copy; <span id="year"></span> <%= settings.siteName || 'Dents Web' %>. All rights reserved.
-        </div>
-    </footer>
+    <%- include('partials/footer') %>
 
-    <script>
-        document.getElementById('year').textContent = new Date().getFullYear();
-        const header = document.getElementById('main-header');
-        window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 20));
-        document.getElementById('hamburger-btn').addEventListener('click', () => document.getElementById('nav-links').classList.toggle('mobile-open'));
-    </script>
 </body>
 </html>
