@@ -3,59 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= seo.title %></title>
-    <meta name="description" content="<%= seo.desc %>">
-    <link rel="canonical" href="<%= settings.siteUrl %><%= seo.path %>">
+    
+    <!-- DYNAMIC SEO GOLD STANDARD -->
+    <title><%= typeof seo !== 'undefined' ? seo.title : 'Tentang Kami | Dents Web' %></title>
+    <meta name="description" content="<%= typeof seo !== 'undefined' ? seo.desc : 'Kami adalah partner teknologi yang memastikan investasi digital Anda memberikan hasil yang terukur.' %>">
+    <meta name="keywords" content="<%= typeof seo !== 'undefined' ? seo.keywords : 'tentang dents web, profil agensi digital, web developer profesional, partner teknologi' %>">
+    <link rel="canonical" href="<%= typeof seo !== 'undefined' ? seo.url : 'https://dentsweb.my.id/about' %>">
+    
+    <!-- Google Site Verification (Hardcoded for 100% GSC Reliability) -->
+    <meta name="google-site-verification" content="e67nOsjn34kGZ_5feJrhj68I24DnRqzB2OZOpgxIuY4" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="<%= typeof seo !== 'undefined' ? seo.url : 'https://dentsweb.my.id/about' %>">
+    <meta property="og:title" content="<%= typeof seo !== 'undefined' ? seo.title : 'Tentang Kami | Dents Web' %>">
+    <meta property="og:description" content="<%= typeof seo !== 'undefined' ? seo.desc : '' %>">
+    <meta property="og:image" content="<%= typeof seo !== 'undefined' ? seo.image : '/public/img/axalogo.png' %>">
+    
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="<%= typeof seo !== 'undefined' ? seo.url : 'https://dentsweb.my.id/about' %>">
+    <meta name="twitter:title" content="<%= typeof seo !== 'undefined' ? seo.title : 'Tentang Kami | Dents Web' %>">
+    <meta name="twitter:description" content="<%= typeof seo !== 'undefined' ? seo.desc : '' %>">
+    <meta name="twitter:image" content="<%= typeof seo !== 'undefined' ? seo.image : '/public/img/axalogo.png' %>">
+
+    <!-- DYNAMIC JSON-LD SCHEMA (Rich Snippets Google) -->
+    <% if (typeof seo !== 'undefined' && seo.schemaString) { %>
+    <script type="application/ld+json">
+        <%- seo.schemaString %>
+    </script>
+    <% } %>
+    
+    <link rel="icon" type="image/png" href="/public/img/axalogo.png">
+    <link rel="apple-touch-icon" href="/public/img/axalogo.png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="/public/css/style.css">
 </head>
 <body>
-    <header id="main-header">
-        <div class="container nav-container">
-            <a href="/" class="logo"><span class="logo-mark"></span><%= settings.siteName || 'Dents Web' %></a>
-            <div class="hamburger" id="hamburger-btn"><span></span><span></span><span></span></div>
-            <nav class="nav-links" id="nav-links">
-                <a href="/">Home</a>
-                <a href="/services">Services</a>
-                <a href="/portfolio">Portfolio</a>
-                <a href="/pricing">Pricing</a>
-                <a href="/about" class="active">About</a>
-                <a href="/contact">Contact</a>
-                <a href="/faq">FAQ</a>
-            </nav>
-        </div>
-    </header>
+    
+    <%- include('partials/header') %>
 
     <main>
-        <section class="section section-pt-hero">
+        <section class="section section-pt-hero" style="min-height: 100vh; padding-bottom: 120px; display: flex; align-items: center;">
             <div class="container">
                 <div class="text-center" style="max-width: 800px; margin: 0 auto 80px;">
-                    <h1 style="margin-bottom: 24px;">Lebih dari sekadar pembuat website.</h1>
-                    <p style="font-size: 1.2rem;">Kami adalah partner teknologi yang memastikan investasi digital Anda memberikan hasil (ROI) yang terukur. Kami menolak arsitektur usang dan template lambat.</p>
+                    <div class="tag" style="margin-bottom: 24px;">TENTANG KAMI</div>
+                    <h1 style="margin-bottom: 24px; font-size: clamp(2.5rem, 5vw, 4rem);">Lebih dari sekadar <br><span class="text-holo">pembuat website.</span></h1>
+                    <p style="font-size: 1.15rem; color: var(--text-secondary); line-height: 1.8;">Kami adalah partner teknologi yang memastikan investasi digital Anda memberikan hasil (ROI) yang terukur. Kami menolak arsitektur usang dan template lambat.</p>
                 </div>
                 
-                <div class="grid-2">
-                    <div class="glass-panel glass-panel-p">
-                        <h3 style="color: var(--primary);">Filosofi Kami</h3>
-                        <p>Banyak bisnis membuang anggaran untuk website yang tidak pernah ditemukan di Google dan terlalu lambat untuk digunakan. Kami membangun sebaliknya: cepat, aman, SEO-ready sejak baris kode pertama ditulis.</p>
+                <div class="grid-2" style="align-items: stretch;">
+                    <div class="glass-panel glass-panel-p" style="display: flex; flex-direction: column; transition: var(--transition);">
+                        <div style="width: 56px; height: 56px; background: rgba(79, 172, 254, 0.1); border: 1px solid rgba(79, 172, 254, 0.2); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 24px; color: var(--primary);">
+                            💡
+                        </div>
+                        <h3 style="color: var(--text-primary); margin-bottom: 16px;">Filosofi Kami</h3>
+                        <p style="font-size: 1.05rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 0;">Banyak bisnis membuang anggaran untuk website yang tidak pernah ditemukan di Google dan terlalu lambat untuk digunakan. Kami membangun sebaliknya: cepat, aman, dan SEO-ready sejak baris kode pertama ditulis.</p>
                     </div>
-                    <div class="glass-panel glass-panel-p">
-                        <h3 style="color: var(--primary);">Pendekatan Teknis</h3>
-                        <p>Kami menggunakan fondasi Server-Side Rendering (SSR) dipadukan dengan optimasi Core Web Vitals untuk memastikan Google mencintai website Anda dan pengunjung merasa nyaman berselancar.</p>
+                    
+                    <div class="glass-panel glass-panel-p" style="display: flex; flex-direction: column; transition: var(--transition);">
+                        <div style="width: 56px; height: 56px; background: rgba(217, 249, 157, 0.1); border: 1px solid rgba(217, 249, 157, 0.2); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 24px; color: var(--accent-neon);">
+                            ⚡
+                        </div>
+                        <h3 style="color: var(--text-primary); margin-bottom: 16px;">Pendekatan Teknis</h3>
+                        <p style="font-size: 1.05rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 0;">Kami menggunakan fondasi Server-Side Rendering (SSR) dipadukan dengan optimasi Core Web Vitals untuk memastikan mesin pencari mencintai website Anda dan pengunjung merasa nyaman saat berselancar.</p>
                     </div>
                 </div>
+
+                <!-- Call to Action Section -->
+                <div class="glass-panel" style="margin-top: 80px; padding: 60px 40px; text-align: center; background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(79,172,254,0.05) 100%);">
+                    <h2 style="font-size: clamp(1.8rem, 4vw, 2.5rem); margin-bottom: 16px;">Siap Membangun Arsitektur <span class="text-holo">Masa Depan?</span></h2>
+                    <p style="max-width: 600px; margin: 0 auto 32px; color: var(--text-secondary);">Jangan biarkan bisnis Anda tertinggal. Diskusikan roadmap digital Anda bersama tim engineer dan desainer ahli kami.</p>
+                    <a href="/contact" class="btn btn-primary">Mulai Konsultasi Sekarang &nearr;</a>
+                </div>
+
             </div>
         </section>
     </main>
 
-    <footer class="section" style="border-top: 1px solid var(--glass-border); padding-bottom: 40px;">
-        <div class="container text-center" style="color: var(--text-muted); font-size: 0.9rem;">
-            &copy; <span id="year"></span> <%= settings.siteName || 'Dents Web' %>. All rights reserved.
-        </div>
-    </footer>
-    <script>
-        document.getElementById('year').textContent = new Date().getFullYear();
-        window.addEventListener('scroll', () => document.getElementById('main-header').classList.toggle('scrolled', window.scrollY > 20));
-        document.getElementById('hamburger-btn').addEventListener('click', () => document.getElementById('nav-links').classList.toggle('mobile-open'));
-    </script>
+    <%- include('partials/footer') %>
+
 </body>
 </html>
