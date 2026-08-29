@@ -8,20 +8,19 @@
     <!-- DYNAMIC SEO GOLD STANDARD (SSR) -->
     <title><%= typeof seo !== 'undefined' ? seo.title : 'Dents Web | Premium Digital Agency' %></title>
     <meta name="description" content="<%= typeof seo !== 'undefined' ? seo.desc : 'Jasa pembuatan website dan aplikasi profesional.' %>">
-    <meta name="keywords" content="<%= typeof seo !== 'undefined' ? seo.keywords : 'jasa pembuatan website, web developer, aplikasi mobile' %>">
+    <meta name="keywords" content="<%= typeof seo !== 'undefined' ? seo.keywords : 'jasa pembuatan website, web developer, aplikasi mobile, Dents Web' %>">
     <meta name="author" content="<%= typeof settings !== 'undefined' ? settings.brandName || 'Dents Web' : 'Dents Web' %>">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     
-    <link rel="canonical" href="<%= typeof seo !== 'undefined' ? seo.url : 'https://www.dentsweb.my.id' %>">
+    <link rel="canonical" href="<%= typeof seo !== 'undefined' ? seo.url : 'https://www.dentsweb.my.id/' %>">
+    <link rel="sitemap" type="application/xml" title="Sitemap Dents Web" href="https://www.dentsweb.my.id/sitemap.xml">
     
-    <!-- Google Site Verification (Dinamis dari Database) -->
-    <% if (typeof settings !== 'undefined' && settings.googleVerification) { %>
-    <meta name="google-site-verification" content="<%= settings.googleVerification %>" />
-    <% } %>
+    <!-- Google Site Verification (Hardcoded for 100% GSC Reliability) -->
+    <meta name="google-site-verification" content="e67nOsjn34kGZ_5feJrhj68I24DnRqzB2OZOpgxIuY4" />
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="<%= (typeof seo !== 'undefined' && seo.path === '/') ? 'website' : 'article' %>">
-    <meta property="og:url" content="<%= typeof seo !== 'undefined' ? seo.url : 'https://www.dentsweb.my.id' %>">
+    <meta property="og:url" content="<%= typeof seo !== 'undefined' ? seo.url : 'https://www.dentsweb.my.id/' %>">
     <meta property="og:site_name" content="<%= typeof settings !== 'undefined' ? settings.brandName || 'Dents Web' : 'Dents Web' %>">
     <meta property="og:title" content="<%= typeof seo !== 'undefined' ? seo.title : 'Dents Web' %>">
     <meta property="og:description" content="<%= typeof seo !== 'undefined' ? seo.desc : '' %>">
@@ -30,7 +29,7 @@
     
     <!-- Twitter Cards -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="<%= typeof seo !== 'undefined' ? seo.url : 'https://www.dentsweb.my.id' %>">
+    <meta name="twitter:url" content="<%= typeof seo !== 'undefined' ? seo.url : 'https://www.dentsweb.my.id/' %>">
     <meta name="twitter:title" content="<%= typeof seo !== 'undefined' ? seo.title : 'Dents Web' %>">
     <meta name="twitter:description" content="<%= typeof seo !== 'undefined' ? seo.desc : '' %>">
     <meta name="twitter:image" content="<%= typeof seo !== 'undefined' ? seo.image : '/public/img/axalogo.png' %>">
