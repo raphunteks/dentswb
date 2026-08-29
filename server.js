@@ -12,8 +12,6 @@ const PORT = process.env.PORT || 3000;
 
 // ==========================================
 // FIX VERCEL 500 ERROR (RATE LIMIT & PROXY)
-// Vercel menggunakan reverse proxy. Kita harus memberitahu Express 
-// untuk mempercayai proxy ini agar express-rate-limit bisa membaca IP user.
 // ==========================================
 app.set('trust proxy', 1);
 
@@ -24,7 +22,6 @@ const redis = new Redis({
 });
 
 app.set('view engine', 'ejs');
-// FIX VERCEL PATH RESOLUTION: Gunakan process.cwd() alih-alih __dirname
 app.set('views', path.join(process.cwd(), 'views'));
 app.use('/public', express.static(path.join(process.cwd(), 'public')));
 
@@ -53,37 +50,30 @@ const publicLimiter = rateLimit({
     max: 150, 
     message: 'Terlalu banyak permintaan dari IP ini, coba lagi nanti.',
 });
-
 const loginLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 10,
     message: 'Terlalu banyak percobaan login. Silakan tunggu 15 menit.',
 });
-
 const leadLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 10,
     message: 'Terlalu banyak form yang dikirim. Silakan tunggu beberapa saat.',
 });
-
 app.use(publicLimiter); 
 
 // ==========================================
-// GLOBAL SETTINGS HELPER (UPGRADED JSON SCHEMA)
+// GLOBAL SETTINGS HELPER
 // ==========================================
 async function getGlobalSettings() {
     const defaultSettings = {
-        siteName: "ents Web",
+        siteName: "ents Web", // Untuk visual UI menyambung logo "D"
         tagline: "Build Your Digital Presence.",
-        siteUrl: "https://www.dentsweb.my.id",
+        siteUrl: "https://dentsweb.my.id",
         email: "dentswebsitebuilder@gmail.com",
         whatsapp: "6285338922586",
         address: "Indonesia",
-        socialLinks: {
-            instagram: "",
-            linkedin: "",
-            facebook: ""
-        },
+        socialLinks: { instagram: "", linkedin: "", facebook: "" },
         defaultSeoTitle: "Dents Web — Website Custom untuk Bisnis yang Ingin Tampil Serius",
         defaultSeoDescription: "Dents Web membantu bisnis membangun website custom yang profesional, cepat, SEO-ready, dan fokus pada konversi.",
         defaultOgImage: "/public/img/axalogo.png",
@@ -96,23 +86,102 @@ async function getGlobalSettings() {
     try {
         const settings = await redis.get('dents:settings');
         if (settings) {
-            // DEEP MERGE: Mencegah error jika data di Redis belum memiliki field baru (seperti socialLinks)
             return {
                 ...defaultSettings,
                 ...settings,
-                socialLinks: {
-                    ...defaultSettings.socialLinks,
-                    ...(settings.socialLinks || {})
-                }
+                socialLinks: { ...defaultSettings.socialLinks, ...(settings.socialLinks || {}) }
             };
         }
-        
         await redis.set('dents:settings', defaultSettings);
         return defaultSettings;
     } catch (err) {
         console.error('[ERROR] Failed to fetch settings', err);
         return defaultSettings;
     }
+}
+
+// ==========================================
+// DYNAMIC SEO & JSON-LD SCHEMA BUILDER (GSC GOLD STANDARD)
+// ==========================================
+function buildSEO(settings, pageData) {
+    const siteUrl = settings.siteUrl ? settings.siteUrl.replace(/\/$/, '') : 'https://dentsweb.my.id';
+    const cleanPath = pageData.path === '/' ? '' : pageData.path;
+    const fullUrl = `${siteUrl}${cleanPath}`;
+    
+    // SEO memaksakan "Dents Web" agar tidak terbaca "ents Web" di Google
+    const title = pageData.title ? `${pageData.title} | Dents Web` : settings.defaultSeoTitle;
+    const desc = pageData.desc || settings.defaultSeoDescription;
+    const image = pageData.image ? (pageData.image.startsWith('http') ? pageData.image : `${siteUrl}${pageData.image}`) : `${siteUrl}${settings.defaultOgImage}`;
+    const keywords = pageData.keywords || "jasa pembuatan website, web developer, aplikasi mobile, Dents Web, agensi digital, website purwokerto, SEO website";
+
+    let schemaArray = [];
+
+    // 1. Base Organization Schema (Semua Halaman)
+    schemaArray.push({
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Dents Web",
+        "url": siteUrl,
+        "logo": `${siteUrl}${settings.logo}`,
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": `+${settings.whatsapp}`,
+            "contactType": "customer service"
+        },
+        "sameAs": [settings.socialLinks?.instagram, settings.socialLinks?.facebook, settings.socialLinks?.linkedin].filter(Boolean)
+    });
+
+    // 2. Breadcrumb Schema (Jika bukan Homepage)
+    if (pageData.path !== '/') {
+        const pathParts = pageData.path.split('/').filter(p => p);
+        let breadcrumb = {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [{
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Beranda",
+                "item": siteUrl
+            }]
+        };
+        let currUrl = siteUrl;
+        pathParts.forEach((part, idx) => {
+            currUrl += `/${part}`;
+            breadcrumb.itemListElement.push({
+                "@type": "ListItem",
+                "position": idx + 2,
+                "name": part.charAt(0).toUpperCase() + part.slice(1).replace(/-/g, ' '),
+                "item": currUrl
+            });
+        });
+        schemaArray.push(breadcrumb);
+    } else {
+        // WebSite Schema + SearchBox untuk Homepage
+        schemaArray.push({
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "url": siteUrl,
+            "potentialAction": {
+                "@type": "SearchAction",
+                "target": `${siteUrl}/?q={search_term_string}`,
+                "query-input": "required name=search_term_string"
+            }
+        });
+    }
+
+    // 3. Inject Custom Schema dari Parameter Route (FAQ, ItemList, dll)
+    if (pageData.schema) {
+        schemaArray.push(pageData.schema);
+    }
+
+    return {
+        title,
+        desc,
+        url: fullUrl,
+        image,
+        keywords,
+        schemaString: JSON.stringify(schemaArray)
+    };
 }
 
 // Authentication Middleware
@@ -122,7 +191,6 @@ async function requireAdmin(req, res, next) {
         if (req.path.startsWith('/api/')) return res.status(401).json({ success: false, message: 'Unauthorized' });
         return res.redirect('/admin-login');
     }
-
     try {
         const sessionData = await redis.get(`dents:admin:sessions:${sessionId}`);
         if (!sessionData) {
@@ -130,11 +198,9 @@ async function requireAdmin(req, res, next) {
             if (req.path.startsWith('/api/')) return res.status(401).json({ success: false, message: 'Session expired' });
             return res.redirect('/admin-login');
         }
-
-        await redis.expire(`dents:admin:sessions:${sessionId}`, 1800); // refresh 30 mins
+        await redis.expire(`dents:admin:sessions:${sessionId}`, 1800);
         next();
     } catch (err) {
-        console.error('[ERROR] Auth Check Failed', err);
         res.status(500).send('Internal Server Error');
     }
 }
@@ -158,7 +224,11 @@ app.get('/', async (req, res) => {
         services: featuredServices,
         portfolio: featuredPortfolio,
         testimonials: activeTestimonials,
-        seo: { title: settings.defaultSeoTitle, desc: settings.defaultSeoDescription, path: '/' } 
+        seo: buildSEO(settings, { 
+            title: "", // Kosong agar pakai defaultSeoTitle
+            desc: settings.defaultSeoDescription, 
+            path: '/' 
+        }) 
     });
 });
 
@@ -167,10 +237,23 @@ app.get('/services', async (req, res) => {
     const services = await redis.get('dents:services') || [];
     const publishedServices = services.filter(s => s.isPublished).sort((a, b) => (a.order || 0) - (b.order || 0));
 
+    // Dynamic ItemList Schema untuk layanan
+    const serviceSchema = {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "itemListElement": publishedServices.map((s, idx) => ({
+            "@type": "ListItem",
+            "position": idx + 1,
+            "url": `${settings.siteUrl}/services#${s.slug || idx}`,
+            "name": s.title,
+            "description": s.shortDescription || s.description
+        }))
+    };
+
     res.render('services', {
         settings,
         services: publishedServices,
-        seo: { title: `Layanan Kami | Dents Web`, desc: 'Jelajahi layanan web development premium kami.', path: '/services' }
+        seo: buildSEO(settings, { title: 'Layanan Kami', desc: 'Jelajahi layanan web development premium kami.', path: '/services', schema: serviceSchema })
     });
 });
 
@@ -182,7 +265,7 @@ app.get('/portfolio', async (req, res) => {
     res.render('portfolio', {
         settings,
         portfolio: publishedPortfolio,
-        seo: { title: `Portfolio | Dents Web`, desc: 'Karya digital dari klien-klien Dents Web.', path: '/portfolio' }
+        seo: buildSEO(settings, { title: 'Portfolio', desc: 'Karya digital dari klien-klien Dents Web.', path: '/portfolio' })
     });
 });
 
@@ -196,7 +279,7 @@ app.get('/portfolio/:slug', async (req, res) => {
     res.render('portfolio-detail', {
         settings,
         project,
-        seo: { title: `${project.seoTitle || project.title} | Dents Web`, desc: project.seoDescription || project.shortDescription, path: `/portfolio/${project.slug}`, image: project.image }
+        seo: buildSEO(settings, { title: project.seoTitle || project.title, desc: project.seoDescription || project.shortDescription, path: `/portfolio/${project.slug}`, image: project.image })
     });
 });
 
@@ -208,7 +291,7 @@ app.get('/pricing', async (req, res) => {
     res.render('pricing', {
         settings,
         pricing: activePricing,
-        seo: { title: `Investasi Digital | Dents Web`, desc: 'Harga dan paket transparan untuk kebutuhan website Anda.', path: '/pricing' }
+        seo: buildSEO(settings, { title: 'Investasi Digital', desc: 'Harga dan paket transparan untuk kebutuhan website Anda.', path: '/pricing' })
     });
 });
 
@@ -217,10 +300,21 @@ app.get('/faq', async (req, res) => {
     const faq = await redis.get('dents:faq') || [];
     const publishedFaq = faq.filter(f => f.isPublished).sort((a, b) => (a.order || 0) - (b.order || 0));
 
+    // Dynamic FAQPage Schema untuk Google Search
+    const faqSchema = publishedFaq.length > 0 ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": publishedFaq.map(f => ({
+            "@type": "Question",
+            "name": f.question,
+            "acceptedAnswer": { "@type": "Answer", "text": f.answer }
+        }))
+    } : null;
+
     res.render('faq', {
         settings,
         faq: publishedFaq,
-        seo: { title: `FAQ | Dents Web`, desc: 'Pertanyaan yang sering diajukan.', path: '/faq' }
+        seo: buildSEO(settings, { title: 'FAQ', desc: 'Pertanyaan yang sering diajukan mengenai layanan Dents Web.', path: '/faq', schema: faqSchema })
     });
 });
 
@@ -228,7 +322,7 @@ app.get('/about', async (req, res) => {
     const settings = await getGlobalSettings();
     res.render('about', {
         settings,
-        seo: { title: `Tentang Kami | Dents Web`, desc: 'Misi dan filosofi Dents Web.', path: '/about' }
+        seo: buildSEO(settings, { title: 'Tentang Kami', desc: 'Misi dan filosofi agensi Dents Web.', path: '/about' })
     });
 });
 
@@ -236,7 +330,7 @@ app.get('/contact', async (req, res) => {
     const settings = await getGlobalSettings();
     res.render('contact', {
         settings,
-        seo: { title: `Hubungi Kami | Dents Web`, desc: 'Konsultasikan kebutuhan website Anda.', path: '/contact' }
+        seo: buildSEO(settings, { title: 'Hubungi Kami', desc: 'Konsultasikan kebutuhan website Anda sekarang.', path: '/contact' })
     });
 });
 
@@ -246,10 +340,7 @@ app.get('/contact', async (req, res) => {
 app.post('/api/leads', leadLimiter, async (req, res) => {
     try {
         const { name, whatsapp, email, company, message } = req.body;
-        
-        if (!name || !whatsapp || !message) {
-            return res.status(400).json({ success: false, message: 'Nama, WhatsApp, dan Pesan wajib diisi.' });
-        }
+        if (!name || !whatsapp || !message) return res.status(400).json({ success: false, message: 'Nama, WhatsApp, dan Pesan wajib diisi.' });
 
         const newLead = {
             id: `lead_${Date.now()}`,
@@ -265,11 +356,9 @@ app.post('/api/leads', leadLimiter, async (req, res) => {
         const leads = await redis.get('dents:leads') || [];
         leads.unshift(newLead);
         if (leads.length > 500) leads.pop();
-
         await redis.set('dents:leads', leads);
         res.status(201).json({ success: true, message: 'Pesan berhasil dikirim.' });
     } catch (err) {
-        console.error('[ERROR] /api/leads', err);
         res.status(500).json({ success: false, message: 'Terjadi kesalahan server.' });
     }
 });
@@ -290,36 +379,17 @@ app.get('/admin-login', (req, res) => {
 app.post('/admin/login', loginLimiter, async (req, res) => {
     try {
         const { username, password } = req.body;
-        
         const envUser = process.env.ADMIN_USERNAME;
         const envPass = process.env.ADMIN_PASSWORD;
 
-        if (!envUser || !envPass) {
-            console.error('[FATAL] ADMIN_USERNAME atau ADMIN_PASSWORD is not configured in .env');
-            return res.status(500).json({ success: false, message: 'Server misconfiguration.' });
-        }
-
-        if (username !== envUser || password !== envPass) {
-            return res.status(401).json({ success: false, message: 'Kredensial tidak valid.' });
-        }
+        if (!envUser || !envPass) return res.status(500).json({ success: false, message: 'Server misconfiguration.' });
+        if (username !== envUser || password !== envPass) return res.status(401).json({ success: false, message: 'Kredensial tidak valid.' });
 
         const sessionId = crypto.randomUUID();
-        const sessionData = { username, loginAt: new Date().toISOString() };
-        
-        await redis.set(`dents:admin:sessions:${sessionId}`, sessionData, { ex: 3600 });
-
-        res.cookie('admin_session', sessionId, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'Lax',
-            maxAge: 3600000
-        });
-
+        await redis.set(`dents:admin:sessions:${sessionId}`, { username, loginAt: new Date().toISOString() }, { ex: 3600 });
+        res.cookie('admin_session', sessionId, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'Lax', maxAge: 3600000 });
         res.json({ success: true, redirect: '/admin-dashboard' });
-    } catch (err) {
-        console.error('[ERROR] Login failed', err);
-        res.status(500).json({ success: false, message: 'Internal Server Error' });
-    }
+    } catch (err) { res.status(500).json({ success: false, message: 'Internal Server Error' }); }
 });
 
 app.post('/admin/logout', async (req, res) => {
@@ -343,9 +413,7 @@ async function handleListGet(req, res, redisKey) {
     try {
         const data = await redis.get(redisKey) || [];
         res.json({ success: true, data });
-    } catch (err) {
-        res.status(500).json({ success: false, message: err.message });
-    }
+    } catch (err) { res.status(500).json({ success: false, message: err.message }); }
 }
 
 async function handleListUpdate(req, res, redisKey, idField = 'id') {
@@ -368,10 +436,7 @@ async function handleListUpdate(req, res, redisKey, idField = 'id') {
 
         await redis.set(redisKey, list);
         res.json({ success: true, message: 'Operasi berhasil.' });
-    } catch (err) {
-        console.error(`[ERROR] CRUD on ${redisKey}`, err);
-        res.status(500).json({ success: false, message: 'Server error' });
-    }
+    } catch (err) { res.status(500).json({ success: false, message: 'Server error' }); }
 }
 
 app.get('/api/admin/leads', requireAdmin, (req, res) => handleListGet(req, res, 'dents:leads'));
@@ -421,7 +486,7 @@ app.get('/robots.txt', (req, res) => {
 
 app.get('/sitemap.xml', async (req, res) => {
     const settings = await getGlobalSettings();
-    const baseUrl = settings.siteUrl || `https://${req.get('host')}`;
+    const baseUrl = settings.siteUrl ? settings.siteUrl.replace(/\/$/, '') : `https://${req.get('host')}`;
     
     let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
     
