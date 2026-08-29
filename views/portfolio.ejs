@@ -3,66 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= seo.title %></title>
-    <meta name="description" content="<%= seo.desc %>">
-    <link rel="canonical" href="<%= settings.siteUrl %><%= seo.path %>">
+    
+    <!-- DYNAMIC SEO GOLD STANDARD -->
+    <title><%= typeof seo !== 'undefined' ? seo.title : 'Portfolio Kami | Dents Web' %></title>
+    <meta name="description" content="<%= typeof seo !== 'undefined' ? seo.desc : 'Kumpulan studi kasus dan bukti eksekusi arsitektur digital yang kami bangun untuk klien.' %>">
+    <meta name="keywords" content="<%= typeof seo !== 'undefined' ? seo.keywords : 'portfolio website, contoh desain website, proyek aplikasi mobile, studi kasus Dents Web' %>">
+    <link rel="canonical" href="<%= typeof seo !== 'undefined' ? seo.url : 'https://dentsweb.my.id/portfolio' %>">
+    
+    <!-- Google Site Verification (Hardcoded for 100% GSC Reliability) -->
+    <meta name="google-site-verification" content="e67nOsjn34kGZ_5feJrhj68I24DnRqzB2OZOpgxIuY4" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="<%= typeof seo !== 'undefined' ? seo.url : 'https://dentsweb.my.id/portfolio' %>">
+    <meta property="og:title" content="<%= typeof seo !== 'undefined' ? seo.title : 'Portfolio Kami | Dents Web' %>">
+    <meta property="og:description" content="<%= typeof seo !== 'undefined' ? seo.desc : '' %>">
+    <meta property="og:image" content="<%= typeof seo !== 'undefined' ? seo.image : '/public/img/axalogo.png' %>">
+    
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="<%= typeof seo !== 'undefined' ? seo.url : 'https://dentsweb.my.id/portfolio' %>">
+    <meta name="twitter:title" content="<%= typeof seo !== 'undefined' ? seo.title : 'Portfolio Kami | Dents Web' %>">
+    <meta name="twitter:description" content="<%= typeof seo !== 'undefined' ? seo.desc : '' %>">
+    <meta name="twitter:image" content="<%= typeof seo !== 'undefined' ? seo.image : '/public/img/axalogo.png' %>">
+
+    <!-- DYNAMIC JSON-LD SCHEMA (Rich Snippets Google) -->
+    <% if (typeof seo !== 'undefined' && seo.schemaString) { %>
+    <script type="application/ld+json">
+        <%- seo.schemaString %>
+    </script>
+    <% } %>
+    
+    <link rel="icon" type="image/png" href="/public/img/axalogo.png">
+    <link rel="apple-touch-icon" href="/public/img/axalogo.png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="/public/css/style.css">
 </head>
 <body>
-    <header id="main-header">
-        <div class="container nav-container">
-            <a href="/" class="logo"><span class="logo-mark"></span><%= settings.siteName || 'Dents Web' %></a>
-            <div class="hamburger" id="hamburger-btn"><span></span><span></span><span></span></div>
-            <nav class="nav-links" id="nav-links">
-                <a href="/">Home</a>
-                <a href="/services">Services</a>
-                <a href="/portfolio" class="active">Portfolio</a>
-                <a href="/pricing">Pricing</a>
-                <a href="/about">About</a>
-                <a href="/contact">Contact</a>
-                <a href="/faq">FAQ</a>
-            </nav>
-        </div>
-    </header>
+    
+    <%- include('partials/header') %>
 
     <main>
-        <section class="section section-pt-hero">
+        <section class="section section-pt-hero" style="min-height: 100vh;">
             <div class="container">
                 <div class="text-center" style="max-width: 600px; margin: 0 auto 80px;">
-                    <h1 style="margin-bottom: 16px;">Our Work</h1>
-                    <p>Kumpulan studi kasus dan bukti eksekusi arsitektur digital yang kami bangun untuk klien.</p>
+                    <div class="tag">PORTFOLIO KAMI</div>
+                    <h1 style="margin-bottom: 16px;">Karya <span class="text-holo">Terbaik</span></h1>
+                    <p style="font-size: 1.15rem;">Kumpulan studi kasus dan bukti eksekusi arsitektur digital yang kami bangun untuk klien.</p>
                 </div>
                 
                 <div class="grid-2">
-                    <% if(portfolio && portfolio.length > 0) { %>
+                    <% if(typeof portfolio !== 'undefined' && portfolio.length > 0) { %>
                         <% portfolio.forEach(item => { %>
                             <div class="portfolio-card" onclick="window.location.href='/portfolio/<%= item.slug %>'">
-                                <div class="portfolio-img" style="background-image: url('<%= item.image %>')"></div>
+                                <div class="portfolio-img" style="background-image: url('<%= item.image || '/public/img/placeholder.png' %>')"></div>
                                 <div class="portfolio-info">
                                     <span class="tag"><%= item.category %></span>
-                                    <h3 style="margin-top: 12px; margin-bottom: 8px;"><%= item.title %></h3>
-                                    <p style="font-size: 0.9rem; margin-bottom: 16px;">Klien: <%= item.client %> &bull; <%= item.year %></p>
-                                    <p style="font-size: 0.95rem; color: var(--text-secondary);"><%= item.shortDescription %></p>
+                                    <h3 style="margin-top: 16px; margin-bottom: 8px; color: var(--text-primary);"><%= item.title %></h3>
+                                    <p style="font-size: 0.9rem; margin-bottom: 16px; color: var(--text-primary); font-weight: 500;">
+                                        Klien: <span style="color: var(--primary);"><%= item.client %></span> &bull; <%= item.year %>
+                                    </p>
+                                    <p style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 0; line-height: 1.6;">
+                                        <%= item.shortDescription || item.description %>
+                                    </p>
                                 </div>
                             </div>
                         <% }) %>
                     <% } else { %>
-                        <p class="text-center" style="grid-column: 1 / -1;">Belum ada data portfolio yang dipublikasikan.</p>
+                        <div class="glass-panel glass-panel-p" style="grid-column: 1 / -1; text-align: center; padding: 80px 20px;">
+                            <div style="font-size: 3rem; margin-bottom: 24px;">📂</div>
+                            <h3 style="color: var(--text-primary);">Belum ada data portfolio yang dipublikasikan.</h3>
+                            <p style="max-width: 500px; margin: 16px auto 0;">Kami sedang menyusun studi kasus dari proyek-proyek terbaru kami. Silakan kembali lagi nanti.</p>
+                        </div>
                     <% } %>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer class="section" style="border-top: 1px solid var(--glass-border); padding-bottom: 40px;">
-        <div class="container text-center" style="color: var(--text-muted); font-size: 0.9rem;">
-            &copy; <span id="year"></span> <%= settings.siteName || 'Dents Web' %>. All rights reserved.
-        </div>
-    </footer>
-    <script>
-        document.getElementById('year').textContent = new Date().getFullYear();
-        window.addEventListener('scroll', () => document.getElementById('main-header').classList.toggle('scrolled', window.scrollY > 20));
-        document.getElementById('hamburger-btn').addEventListener('click', () => document.getElementById('nav-links').classList.toggle('mobile-open'));
-    </script>
+    <%- include('partials/footer') %>
+
 </body>
 </html>
