@@ -134,12 +134,25 @@
                                 <div class="icon-box"><%= service.icon || '💻' %></div>
                                 <h3 style="font-size: 1.3rem;"><%= service.title %></h3>
                                 <ul style="margin-top: 20px;">
-                                    <% if(service.features) { service.features.split(',').forEach(f => { %>
-                                        <li style="margin-bottom: 12px; color: var(--text-muted); display: flex; gap: 8px;">
-                                            <span style="color: var(--accent-blue);">✓</span> <%= f.trim() %>
-                                        </li>
-                                    <% })} else { %>
-                                        <p><%= service.shortDescription %></p>
+                                    <% 
+                                        // Robust Data Type Handling for Features (String vs Array)
+                                        let featureList = [];
+                                        if (service.features) {
+                                            if (Array.isArray(service.features)) {
+                                                featureList = service.features;
+                                            } else if (typeof service.features === 'string') {
+                                                featureList = service.features.split(',');
+                                            }
+                                        }
+                                    %>
+                                    <% if (featureList.length > 0) { %>
+                                        <% featureList.forEach(f => { %>
+                                            <li style="margin-bottom: 12px; color: var(--text-muted); display: flex; gap: 8px;">
+                                                <span style="color: var(--accent-blue);">✓</span> <%= typeof f === 'string' ? f.trim() : f %>
+                                            </li>
+                                        <% }) %>
+                                    <% } else { %>
+                                        <p style="color: var(--text-muted); line-height: 1.6;"><%= service.shortDescription || service.description || 'Deskripsi belum tersedia.' %></p>
                                     <% } %>
                                 </ul>
                             </div>
