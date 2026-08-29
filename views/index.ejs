@@ -3,95 +3,413 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= seo.title %></title>
-    <meta name="description" content="<%= seo.desc %>">
+    <title><%= typeof seo !== 'undefined' ? seo.title : 'Dents Web | Premium Digital Agency' %></title>
+    <meta name="description" content="<%= typeof seo !== 'undefined' ? seo.desc : 'Jasa pembuatan website dan aplikasi profesional.' %>">
+    <link rel="canonical" href="<%= (typeof settings !== 'undefined' && settings.siteUrl ? settings.siteUrl : '') %><%= typeof seo !== 'undefined' ? seo.path : '' %>">
     
-    <!-- Mencegah undefined error jika settings.siteUrl belum di-set di redis -->
-    <link rel="canonical" href="<%= (settings.siteUrl || '') + seo.path %>">
-    
-    <!-- OpenGraph SEO -->
-    <meta property="og:title" content="<%= seo.title %>">
-    <meta property="og:description" content="<%= seo.desc %>">
+    <meta property="og:title" content="<%= typeof seo !== 'undefined' ? seo.title : 'Dents Web' %>">
+    <meta property="og:description" content="<%= typeof seo !== 'undefined' ? seo.desc : '' %>">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="<%= (settings.siteUrl || '') + seo.path %>">
+    <meta property="og:url" content="<%= (typeof settings !== 'undefined' && settings.siteUrl ? settings.siteUrl : '') %><%= typeof seo !== 'undefined' ? seo.path : '' %>">
     
-    <!-- Favicon / App Icon -->
     <link rel="icon" type="image/png" href="/public/img/axalogo.png">
     <link rel="apple-touch-icon" href="/public/img/axalogo.png">
+    
+    <!-- Using Google Fonts matching the reference -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="/public/css/style.css">
 </head>
 <body>
     
-    <!-- Include Header Partial -->
     <%- include('partials/header') %>
 
     <main>
-        <section class="section section-pt-hero" style="min-height: 90vh; display: flex; align-items: center;">
-            <div class="container text-center" style="max-width: 800px;">
-                <div class="tag" style="margin-bottom: 24px; border-color: rgba(79, 172, 254, 0.5); color: var(--primary);">Premium Digital Agency</div>
-                <h1><%= settings.tagline || 'Build Your Digital Presence.' %></h1>
-                <p style="font-size: 1.2rem; margin-bottom: 40px;"><%= seo.desc %></p>
-                <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
-                    <a href="/contact" class="btn btn-primary">Mulai Project</a>
-                    <a href="/portfolio" class="btn btn-secondary">Lihat Portfolio</a>
+        <!-- PAGE 1: HERO SECTION -->
+        <section class="section section-pt-hero bg-dark" style="min-height: 100vh; display: flex; align-items: center; overflow: hidden;">
+            <div class="container grid-2">
+                <div style="z-index: 2;">
+                    <div class="tag tag-glass">🚀 Agensi Digital No. 1</div>
+                    <h1>Jasa Pembuatan <br><span class="text-lime">Website & Aplikasi</span><br> Professional</h1>
+                    <p class="text-light" style="font-size: 1.2rem; margin-bottom: 40px; opacity: 0.9; max-width: 500px;">
+                        Kembangkan bisnis Anda di era digital bersama <strong><%= typeof settings !== 'undefined' ? settings.siteName : 'Dents Web' %></strong>. Mulai dari landing page, company profile, toko online, hingga sistem informasi khusus.
+                    </p>
+                    <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                        <a href="/contact" class="btn btn-neon">Konsultasi via WhatsApp &nearr;</a>
+                        <a href="#portfolio" class="btn btn-outline">Lihat Portofolio Kami</a>
+                    </div>
+                </div>
+                <!-- Hero Visual Representation -->
+                <div class="hero-visual">
+                    <div style="position: absolute; right: 0; width: 80%; height: 80%; background: var(--accent-neon); border-radius: 40px; transform: rotate(-5deg); z-index: 0; opacity: 0.8;"></div>
+                    <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Professional Web Design" style="position: absolute; right: 20px; top: 20px; width: 80%; height: 80%; object-fit: cover; border-radius: 30px; z-index: 1; box-shadow: var(--shadow-glass);">
+                    
+                    <div class="float-card float-1">
+                        <span style="background: #22c55e; width: 24px; height: 24px; border-radius: 50%; color: white; display: inline-flex; align-items: center; justify-content: center; font-size: 12px;">✓</span>
+                        <div>Trusted by<br><span style="font-size: 0.8rem; font-weight: 400;">Multiple Clients</span></div>
+                    </div>
+                    <div class="float-card float-2">
+                        <div>4.9/5<br><span style="font-size: 0.8rem; font-weight: 400;">Feedback Client</span></div>
+                    </div>
+                    <div class="float-card float-3">
+                        <div>24/7<br><span style="font-size: 0.8rem; font-weight: 400;">Support Available</span></div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section class="section">
+        <!-- PAGE 2: ABOUT SECTION -->
+        <section id="about" class="section bg-white">
             <div class="container">
                 <div class="text-center" style="margin-bottom: 60px;">
-                    <h2>Layanan Kami</h2>
-                    <p>Solusi digital end-to-end yang dirancang untuk skala bisnis modern.</p>
+                    <h2>Tentang <span class="text-accent"><%= typeof settings !== 'undefined' ? settings.siteName : 'Dents Web' %></span></h2>
+                    <p style="max-width: 800px; margin: 0 auto;">Kami hadir sebagai studio teknologi dan mitra strategis yang berdedikasi membangun website profesional, aplikasi mobile kustom, serta produk digital inovatif yang dirancang khusus untuk mempercepat pertumbuhan bisnis Anda.</p>
                 </div>
                 <div class="grid-3">
-                    <% if(services && services.length > 0) { %>
+                    <div class="card-neu" style="grid-column: span 1; background: url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80') center/cover; min-height: 350px;">
+                        <!-- Image Card -->
+                    </div>
+                    <div class="card-neu" style="background-color: var(--accent-neon); border: none;">
+                        <h3 style="color: var(--bg-dark);">Solusi Digital Bisnis Anda</h3>
+                        <p style="color: var(--bg-dark); font-weight: 500; margin-top: 16px;">Kami menghadirkan pembuatan website kustom mulai dari Landing Page, Company Profile, hingga E-Commerce yang cepat, responsif, aman, dan teroptimasi SEO untuk memaksimalkan kehadiran digital bisnis Anda.</p>
+                    </div>
+                    <div class="card-neu" style="background-color: var(--accent-blue); border: none;">
+                        <h3 style="color: var(--bg-white);">Transparansi & Dukungan Berkala</h3>
+                        <p style="color: rgba(255,255,255,0.9); margin-top: 16px;">Kami memberikan transparansi penuh mulai dari progres mingguan hingga penyerahan proyek secara utuh. Dukungan pasca-rilis selalu tersedia untuk Anda.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 3: PROBLEM & SOLUTION -->
+        <section class="section bg-gray">
+            <div class="container grid-2">
+                <div>
+                    <div class="tag tag-light">PROBLEM & SOLUTION</div>
+                    <h2>Mengapa Website adalah <span class="text-accent">Wajib</span> untuk Bisnis Anda?</h2>
+                    <p style="margin-bottom: 32px;">Di era digital, tidak memiliki website berarti membiarkan potensi pelanggan Anda pergi ke kompetitor. Website bukan sekadar gaya hidup, tapi infrastruktur fundamental bisnis modern.</p>
+                    <div style="background: var(--bg-white); border-left: 4px solid var(--accent-blue); padding: 24px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; box-shadow: var(--shadow-soft);">
+                        <p style="font-style: italic; margin: 0; color: var(--bg-dark); font-weight: 600;">"Website adalah kantor pusat digital Anda. Tanpa itu, bisnis Anda tidak terlihat di peta pencarian pelanggan."</p>
+                    </div>
+                </div>
+                <div class="grid-4">
+                    <div class="card-neu" style="padding: 24px;">
+                        <div class="icon-box">🛡️</div>
+                        <h4>Kredibilitas</h4>
+                        <p style="font-size: 0.9rem; margin-top: 8px;">Dianggap lebih terpercaya oleh 84% calon konsumen digital.</p>
+                    </div>
+                    <div class="card-neu" style="padding: 24px;">
+                        <div class="icon-box">🌍</div>
+                        <h4>Market Reach</h4>
+                        <p style="font-size: 0.9rem; margin-top: 8px;">Tembus batasan geografis di seluruh Indonesia bahkan global.</p>
+                    </div>
+                    <div class="card-neu" style="padding: 24px;">
+                        <div class="icon-box">⏰</div>
+                        <h4>Buka 24/7</h4>
+                        <p style="font-size: 0.9rem; margin-top: 8px;">Tetap dapat diakses pelanggan kapan saja tanpa henti.</p>
+                    </div>
+                    <div class="card-neu" style="padding: 24px;">
+                        <div class="icon-box">📈</div>
+                        <h4>Investasi</h4>
+                        <p style="font-size: 0.9rem; margin-top: 8px;">Aset digital yang jauh lebih hemat dibanding iklan tradisional.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 4: SERVICES -->
+        <section id="services" class="section bg-white">
+            <div class="container">
+                <div class="text-center" style="margin-bottom: 60px;">
+                    <div class="tag tag-light">LAYANAN KAMI</div>
+                    <h2>Jasa Buat Website & <br>Solusi Digital UMKM</h2>
+                    <p style="max-width: 600px; margin: 0 auto;">Fokus pada pertumbuhan bisnis Anda melalui solusi teknologi yang tepat guna.</p>
+                </div>
+                <div class="grid-3">
+                    <% if(typeof services !== 'undefined' && services.length > 0) { %>
                         <% services.forEach(service => { %>
-                            <div class="glass-panel glass-panel-p">
-                                <h3 style="color: var(--primary);"><%= service.title %></h3>
-                                <p><%= service.shortDescription || service.description %></p>
-                                <a href="/services" style="font-weight: 500; font-size: 0.9rem; color: var(--text-primary);">Pelajari selengkapnya &rarr;</a>
+                            <div class="card-neu">
+                                <div class="icon-box"><%= service.icon || '💻' %></div>
+                                <h3 style="font-size: 1.3rem;"><%= service.title %></h3>
+                                <ul style="margin-top: 20px;">
+                                    <% if(service.features) { service.features.split(',').forEach(f => { %>
+                                        <li style="margin-bottom: 12px; color: var(--text-muted); display: flex; gap: 8px;">
+                                            <span style="color: var(--accent-blue);">✓</span> <%= f.trim() %>
+                                        </li>
+                                    <% })} else { %>
+                                        <p><%= service.shortDescription %></p>
+                                    <% } %>
+                                </ul>
                             </div>
                         <% }) %>
                     <% } else { %>
-                        <p class="text-center" style="grid-column: 1 / -1;">Layanan sedang diperbarui.</p>
+                        <!-- Fallback / Default Services if DB is empty -->
+                        <div class="card-neu">
+                            <div class="icon-box">🌐</div>
+                            <h3 style="font-size: 1.3rem;">Landing Page & Company Profile</h3>
+                            <ul style="margin-top: 20px;">
+                                <li style="margin-bottom: 12px; color: var(--text-muted); display: flex; gap: 8px;"><span style="color: var(--accent-blue);">✓</span> Desain modern & premium</li>
+                                <li style="margin-bottom: 12px; color: var(--text-muted); display: flex; gap: 8px;"><span style="color: var(--accent-blue);">✓</span> Mobile-first responsive</li>
+                                <li style="margin-bottom: 12px; color: var(--text-muted); display: flex; gap: 8px;"><span style="color: var(--accent-blue);">✓</span> Optimasi SEO on-page</li>
+                                <li style="margin-bottom: 12px; color: var(--text-muted); display: flex; gap: 8px;"><span style="color: var(--accent-blue);">✓</span> Integrasi tombol WhatsApp</li>
+                            </ul>
+                        </div>
+                        <div class="card-neu">
+                            <div class="icon-box">⚙️</div>
+                            <h3 style="font-size: 1.3rem;">Sistem Custom & Web App</h3>
+                            <ul style="margin-top: 20px;">
+                                <li style="margin-bottom: 12px; color: var(--text-muted); display: flex; gap: 8px;"><span style="color: var(--accent-blue);">✓</span> Dashboard admin user-friendly</li>
+                                <li style="margin-bottom: 12px; color: var(--text-muted); display: flex; gap: 8px;"><span style="color: var(--accent-blue);">✓</span> Manajemen data & inventori</li>
+                                <li style="margin-bottom: 12px; color: var(--text-muted); display: flex; gap: 8px;"><span style="color: var(--accent-blue);">✓</span> Sistem CRM / Kasir Online</li>
+                                <li style="margin-bottom: 12px; color: var(--text-muted); display: flex; gap: 8px;"><span style="color: var(--accent-blue);">✓</span> Keamanan data terjamin</li>
+                            </ul>
+                        </div>
+                        <div class="card-neu">
+                            <div class="icon-box">🎨</div>
+                            <h3 style="font-size: 1.3rem;">UI/UX Design & Branding</h3>
+                            <ul style="margin-top: 20px;">
+                                <li style="margin-bottom: 12px; color: var(--text-muted); display: flex; gap: 8px;"><span style="color: var(--accent-blue);">✓</span> User journey yang intuitif</li>
+                                <li style="margin-bottom: 12px; color: var(--text-muted); display: flex; gap: 8px;"><span style="color: var(--accent-blue);">✓</span> Mockup desain hi-fidelity</li>
+                                <li style="margin-bottom: 12px; color: var(--text-muted); display: flex; gap: 8px;"><span style="color: var(--accent-blue);">✓</span> Identitas visual & logo</li>
+                                <li style="margin-bottom: 12px; color: var(--text-muted); display: flex; gap: 8px;"><span style="color: var(--accent-blue);">✓</span> Prototype interaktif</li>
+                            </ul>
+                        </div>
                     <% } %>
                 </div>
             </div>
         </section>
 
-        <section class="section">
-            <div class="container">
-                <div class="text-center" style="margin-bottom: 60px;">
-                    <h2>Karya Terbaik</h2>
-                    <p>Portfolio proyek digital yang telah kami eksekusi dengan standar industri terbaik.</p>
+        <!-- PAGE 6: STEPS -->
+        <section class="section bg-gray">
+            <div class="container grid-2">
+                <div>
+                    <h2 style="font-size: clamp(2.5rem, 5vw, 3.5rem); line-height: 1.1;">4 Langkah Mudah<br>Memulai <span class="text-accent">Proyek Anda</span></h2>
+                    <p style="margin-top: 24px; margin-bottom: 32px;">Ingin mulai membangun proyek Anda? Hubungi kami langsung dengan klik tombol di bawah. Kami akan memandu Anda secara transparan dari briefing kebutuhan hingga serah terima melalui 4 langkah praktis berikut.</p>
+                    <ul style="margin-bottom: 40px;">
+                        <li style="margin-bottom: 16px; font-weight: 600;"><span style="color: #22c55e; margin-right: 8px;">✔️</span> Alur kerja adaptif & fleksibel</li>
+                        <li style="margin-bottom: 16px; font-weight: 600;"><span style="color: #22c55e; margin-right: 8px;">✔️</span> Diskusi & konsultasi berkala</li>
+                        <li style="margin-bottom: 16px; font-weight: 600;"><span style="color: #22c55e; margin-right: 8px;">✔️</span> Revisi solutif sesuai kesepakatan</li>
+                        <li style="margin-bottom: 16px; font-weight: 600;"><span style="color: #22c55e; margin-right: 8px;">✔️</span> Dukungan penuh setelah proyek rilis</li>
+                    </ul>
+                    <a href="/contact" class="btn btn-primary">Mulai Konsultasi Proyek &nearr;</a>
                 </div>
-                <div class="grid-2">
-                    <% if(portfolio && portfolio.length > 0) { %>
-                        <% portfolio.forEach(item => { %>
-                            <div class="portfolio-card" onclick="window.location.href='/portfolio/<%= item.slug %>'">
-                                <div class="portfolio-img" style="background-image: url('<%= item.image || '/public/img/placeholder.png' %>')"></div>
-                                <div class="portfolio-info">
-                                    <span class="tag"><%= item.category %></span>
-                                    <h3 style="margin-top: 12px; margin-bottom: 8px;"><%= item.title %></h3>
-                                    <p style="font-size: 0.9rem; margin-bottom: 0;">Klien: <%= item.client %></p>
-                                </div>
-                            </div>
+                <div style="padding-left: 20px;">
+                    <div class="step-item">
+                        <div class="step-number">1</div>
+                        <div>
+                            <h4>Konsultasi & Briefing Kebutuhan</h4>
+                            <p style="font-size: 0.95rem; margin-top: 8px;">Sampaikan kebutuhan bisnis Anda kepada kami, mulai dari jenis platform yang ingin dibuat, fitur-fitur utama, hingga target audiens.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">2</div>
+                        <div>
+                            <h4>Rekomendasi Solusi & Paket</h4>
+                            <p style="font-size: 0.95rem; margin-top: 8px;">Tim kami akan menganalisis kebutuhan Anda dan menyarankan jenis website/aplikasi serta paket investasi terbaik yang paling tepat guna.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">3</div>
+                        <div>
+                            <h4>Deal & Pengisian Informasi</h4>
+                            <p style="font-size: 0.95rem; margin-top: 8px;">Setelah menyetujui proposal, Anda melakukan pembayaran DP 50%. Selanjutnya, Anda mengisi data informasi lengkap serta menyerahkan aset (logo, teks, gambar).</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">4</div>
+                        <div>
+                            <h4>Eksekusi & Serah Terima</h4>
+                            <p style="font-size: 0.95rem; margin-top: 8px;">Tim kami memulai proses desain dan development. Setelah selesai dan melalui proses revisi, pelunasan dilakukan dan source code/akses diserahkan.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 5/7: TESTIMONIALS (Karya/Klien) -->
+        <section id="portfolio" class="section bg-dark">
+            <div class="container text-center" style="margin-bottom: 60px;">
+                <h2 class="text-light">Apa Kata <span class="text-lime">Klien Kami</span></h2>
+                <p>Testimoni jujur dari para pemilik bisnis yang telah mempercayakan platform digital mereka bersama tim <%= typeof settings !== 'undefined' ? settings.siteName : 'Dents Web' %>.</p>
+            </div>
+            <div class="container testimonial-scroll">
+                <div class="card-neu testimonial-card">
+                    <p style="font-style: italic; color: var(--bg-dark); font-weight: 500; font-size: 1.1rem; margin-bottom: 24px;">"I've been using this service for my UMKM and it is very cool! The website is user friendly and the service quality to hear the instruction is very good job."</p>
+                    <div style="color: #f59e0b; margin-bottom: 16px;">★★★★★</div>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 40px; height: 40px; background: var(--accent-blue); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">AW</div>
+                        <div>
+                            <h4 style="margin: 0; font-size: 1rem;">Adhi Wicaksono</h4>
+                            <p style="margin: 0; font-size: 0.8rem; color: var(--text-muted);">Dapoer Niknik</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-neu testimonial-card">
+                    <p style="font-style: italic; color: var(--bg-dark); font-weight: 500; font-size: 1.1rem; margin-bottom: 24px;">"Sangat professional dan sesuai harapan. Sebagai client saya puas dengan projectnya. Saya akan rekomendasikan ke teman saya yang butuh jasa website juga. Thankyou <3"</p>
+                    <div style="color: #f59e0b; margin-bottom: 16px;">★★★★★</div>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 40px; height: 40px; background: var(--accent-blue); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">RD</div>
+                        <div>
+                            <h4 style="margin: 0; font-size: 1rem;">Ratih Dewi</h4>
+                            <p style="margin: 0; font-size: 0.8rem; color: var(--text-muted);">Kopi Bintang Pringsewu</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-neu testimonial-card">
+                    <p style="font-style: italic; color: var(--bg-dark); font-weight: 500; font-size: 1.1rem; margin-bottom: 24px;">"Mantap, Hasilnya memuaskan. Akhirnya punya website buat branding kami! Sangat adaptif dengan revisi-revisi yang kami minta."</p>
+                    <div style="color: #f59e0b; margin-bottom: 16px;">★★★★★</div>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 40px; height: 40px; background: var(--accent-blue); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">AN</div>
+                        <div>
+                            <h4 style="margin: 0; font-size: 1rem;">Akmal Adhi Nugroho</h4>
+                            <p style="margin: 0; font-size: 0.8rem; color: var(--text-muted);">Founder • Anggana Project</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 8: FAQ -->
+        <section id="faq" class="section bg-white">
+            <div class="container grid-2" style="align-items: flex-start;">
+                <div>
+                    <h2 style="font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1.1;">Ada yang Ingin<br><span class="text-accent" style="font-style: italic;">Ditanyakan?</span></h2>
+                    <p style="margin-top: 24px; margin-bottom: 40px;">Pertanyaan yang paling sering kami terima dari calon klien. Tidak menemukan jawaban yang Anda cari? Langsung hubungi kami.</p>
+                    <a href="/contact" class="btn btn-primary">Hubungi Kami &nearr;</a>
+                </div>
+                <div>
+                    <% if(typeof faq !== 'undefined' && faq.length > 0) { %>
+                        <% faq.forEach((item, index) => { %>
+                            <details>
+                                <summary><span style="color: var(--text-muted); margin-right: 16px; font-size: 0.9rem;">0<%= index+1 %></span> <%= item.question %></summary>
+                                <div class="faq-content"><%= item.answer %></div>
+                            </details>
                         <% }) %>
                     <% } else { %>
-                        <p class="text-center" style="grid-column: 1 / -1;">Belum ada portfolio unggulan.</p>
+                        <details>
+                            <summary><span style="color: var(--text-muted); margin-right: 16px; font-size: 0.9rem;">01</span> Berapa lama waktu pengerjaan proyek?</summary>
+                            <div class="faq-content">Tergantung jenis layanannya. Landing page biasanya selesai dalam 3-5 hari kerja. Company profile 7-14 hari. E-commerce dan sistem informasi 2-6 minggu. Mobile app minimal 4-8 minggu. Kami selalu memberikan estimasi waktu di awal.</div>
+                        </details>
+                        <details>
+                            <summary><span style="color: var(--text-muted); margin-right: 16px; font-size: 0.9rem;">02</span> Apakah ada biaya revisi?</summary>
+                            <div class="faq-content">Revisi minor pada masa development tidak dikenakan biaya. Revisi mayor yang merubah struktur atau scope pekerjaan di awal akan disesuaikan kembali harganya.</div>
+                        </details>
+                        <details>
+                            <summary><span style="color: var(--text-muted); margin-right: 16px; font-size: 0.9rem;">03</span> Domain dan hosting sudah termasuk?</summary>
+                            <div class="faq-content">Ya, untuk paket Business dan Pro kami sudah memasukkan biaya domain (.com/.id) dan hosting cloud untuk tahun pertama.</div>
+                        </details>
+                        <details>
+                            <summary><span style="color: var(--text-muted); margin-right: 16px; font-size: 0.9rem;">04</span> Bagaimana cara memulai proyek?</summary>
+                            <div class="faq-content">Cukup klik tombol "Mulai Project", hubungi kami via WhatsApp, sampaikan kebutuhan Anda, dan tim kami akan segera membuatkan proposal untuk Anda pelajari.</div>
+                        </details>
                     <% } %>
                 </div>
-                <div class="text-center" style="margin-top: 60px;">
-                    <a href="/portfolio" class="btn btn-secondary">Lihat Semua Karya</a>
+            </div>
+        </section>
+
+        <!-- PAGE 9: CONTACT -->
+        <section class="section bg-gray" style="padding-bottom: 120px;">
+            <div class="container grid-2" style="align-items: flex-start;">
+                <div>
+                    <h2 style="font-size: clamp(2.5rem, 5vw, 3.5rem); line-height: 1.1;">Mari Mulai Sesuatu yang <span class="text-accent" style="font-style: italic;">Luar Biasa</span></h2>
+                    <p style="margin-top: 24px; margin-bottom: 40px;">Ceritakan kebutuhan bisnis Anda. Tim ahli kami siap mendengarkan, menganalisis, dan memberikan solusi terbaik untuk pertumbuhan digital Anda.</p>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 16px;">
+                        <div class="card-neu" style="padding: 24px; display: flex; align-items: center; gap: 16px;">
+                            <div class="icon-box" style="margin: 0; width: 48px; height: 48px;">✉️</div>
+                            <div>
+                                <p style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin: 0; color: var(--text-muted);">Email</p>
+                                <h4 style="margin: 0; font-size: 1.1rem;"><%= typeof settings !== 'undefined' ? settings.email : 'hello@dentsweb.com' %></h4>
+                            </div>
+                        </div>
+                        <div class="card-neu" style="padding: 24px; display: flex; align-items: center; gap: 16px;">
+                            <div class="icon-box" style="margin: 0; width: 48px; height: 48px;">💬</div>
+                            <div>
+                                <p style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin: 0; color: var(--text-muted);">WhatsApp</p>
+                                <h4 style="margin: 0; font-size: 1.1rem;"><%= typeof settings !== 'undefined' ? settings.whatsapp : '+62 812 3456 7890' %></h4>
+                            </div>
+                        </div>
+                        <div class="card-neu" style="padding: 24px; display: flex; align-items: center; gap: 16px;">
+                            <div class="icon-box" style="margin: 0; width: 48px; height: 48px;">📍</div>
+                            <div>
+                                <p style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin: 0; color: var(--text-muted);">Lokasi</p>
+                                <h4 style="margin: 0; font-size: 1.1rem;">Indonesia</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-neu" style="padding: 40px;">
+                    <h3 style="margin-bottom: 8px;">Ceritakan Kebutuhan Anda</h3>
+                    <p style="font-size: 0.9rem; margin-bottom: 32px;">Isi form di bawah ini dan kami akan segera menghubungi Anda via WhatsApp.</p>
+                    
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label class="form-label">Nama Lengkap *</label>
+                            <input type="text" id="name" class="form-control" placeholder="Cth: Budi Santoso" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nomor WhatsApp *</label>
+                            <input type="tel" id="whatsapp" class="form-control" placeholder="Cth: 08123456789" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Alamat Email</label>
+                            <input type="email" id="email" class="form-control" placeholder="Cth: budi@perusahaan.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Detail Proyek *</label>
+                            <textarea id="message" class="form-control" rows="4" placeholder="Ceritakan gambaran singkat proyek Anda, tujuan yang ingin dicapai, dan estimasi waktu jika ada..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%; border-radius: var(--radius-sm);">Kirim Pesan</button>
+                        <div id="formFeedback" style="margin-top: 15px; text-align: center; font-weight: 600;"></div>
+                    </form>
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- Include Footer Partial -->
     <%- include('partials/footer') %>
 
+    <!-- Logic API Form -->
+    <script>
+        const form = document.getElementById('contactForm');
+        if(form) {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = e.target.querySelector('button');
+                const feedback = document.getElementById('formFeedback');
+                btn.disabled = true;
+                btn.textContent = 'Mengirim...';
+
+                try {
+                    const res = await fetch('/api/leads', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            name: document.getElementById('name').value,
+                            whatsapp: document.getElementById('whatsapp').value,
+                            email: document.getElementById('email').value,
+                            message: document.getElementById('message').value
+                        })
+                    });
+                    const data = await res.json();
+                    
+                    if(data.success) {
+                        feedback.innerHTML = '<span style="color: var(--success);">Pesan berhasil dikirim! Tim kami akan segera menghubungi Anda.</span>';
+                        e.target.reset();
+                    } else {
+                        feedback.innerHTML = `<span style="color: var(--danger);">${data.message}</span>`;
+                    }
+                } catch (err) {
+                    feedback.innerHTML = '<span style="color: var(--danger);">Gagal menghubungi server.</span>';
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = 'Kirim Pesan';
+                }
+            });
+        }
+    </script>
 </body>
 </html>
