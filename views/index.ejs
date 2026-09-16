@@ -366,7 +366,9 @@
                     <% if (typeof portfolio !== 'undefined' && portfolio.length > 0) { %>
                         <% portfolio.forEach(item => { %>
                             <div class="portfolio-card-kalana" onclick="window.location.href='/portfolio/<%= item.slug %>'">
-                                <div class="portfolio-img-cover" style="background-image: url('<%= item.image || "/public/img/axalogo.png" %>');"></div>
+                                <div class="portfolio-img-cover">
+                                    <img src="<%= item.image || '/public/img/axalogo.png' %>" alt="<%= item.title %>" loading="lazy">
+                                </div>
                                 <div class="portfolio-body">
                                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                                         <span class="badge-tag-royal"><%= item.category %></span>
