@@ -11,6 +11,7 @@
             <a href="/" class="nav-pill-link <%= (typeof seo !== 'undefined' && seo.path === '/') ? 'active' : '' %>">Home</a>
             <a href="/services" class="nav-pill-link <%= (typeof seo !== 'undefined' && seo.path === '/services') ? 'active' : '' %>">Services</a>
             <a href="/portfolio" class="nav-pill-link <%= (typeof seo !== 'undefined' && seo.path && seo.path.startsWith('/portfolio')) ? 'active' : '' %>">Portfolio</a>
+            <a href="/articles" class="nav-pill-link <%= (typeof seo !== 'undefined' && seo.path && (seo.path === '/articles' || seo.path.startsWith('/article/'))) ? 'active' : '' %>">Articles</a>
             <a href="/pricing" class="nav-pill-link <%= (typeof seo !== 'undefined' && seo.path === '/pricing') ? 'active' : '' %>">Pricing</a>
             <a href="/about" class="nav-pill-link <%= (typeof seo !== 'undefined' && seo.path === '/about') ? 'active' : '' %>">About</a>
             <a href="/faq" class="nav-pill-link <%= (typeof seo !== 'undefined' && seo.path === '/faq') ? 'active' : '' %>">FAQ</a>
@@ -35,6 +36,7 @@
     <a href="/" class="<%= (typeof seo !== 'undefined' && seo.path === '/') ? 'active' : '' %>">Home</a>
     <a href="/services" class="<%= (typeof seo !== 'undefined' && seo.path === '/services') ? 'active' : '' %>">Services</a>
     <a href="/portfolio" class="<%= (typeof seo !== 'undefined' && seo.path && seo.path.startsWith('/portfolio')) ? 'active' : '' %>">Portfolio</a>
+    <a href="/articles" class="<%= (typeof seo !== 'undefined' && seo.path && (seo.path === '/articles' || seo.path.startsWith('/article/'))) ? 'active' : '' %>">Articles</a>
     <a href="/pricing" class="<%= (typeof seo !== 'undefined' && seo.path === '/pricing') ? 'active' : '' %>">Pricing</a>
     <a href="/about" class="<%= (typeof seo !== 'undefined' && seo.path === '/about') ? 'active' : '' %>">About</a>
     <a href="/faq" class="<%= (typeof seo !== 'undefined' && seo.path === '/faq') ? 'active' : '' %>">FAQ</a>
