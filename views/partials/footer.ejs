@@ -1,59 +1,168 @@
-<footer class="section" style="border-top: 1px solid var(--glass-border); padding-bottom: 40px; background: rgba(0,0,0,0.3);">
-    <div class="container grid-2">
-        <div>
-            <a href="/" class="logo" style="margin-bottom: 24px; display: flex; align-items: center; gap: 8px;">
-                <img src="/public/img/axalogo.png" alt="Logo" style="width: 32px; height: 32px; object-fit: contain; border-radius: 8px;">
-                <%= settings && settings.siteName ? settings.siteName : 'Dents Web' %>
-            </a>
-            <p style="max-width: 400px;"><%= settings && settings.tagline ? settings.tagline : 'Build Your Digital Presence.' %></p>
-        </div>
-        <div style="display: flex; gap: 60px; justify-content: flex-end; flex-wrap: wrap;">
+<footer class="footer-kalana">
+    <!-- Ambient subtle orbs -->
+    <div class="orb-glow-blue" style="top: -200px; left: -100px; opacity: 0.3;"></div>
+    <div class="orb-glow-lime" style="bottom: -150px; right: -50px; opacity: 0.05;"></div>
+
+    <div class="container" style="position: relative; z-index: 2;">
+        <div class="footer-grid">
+            <!-- Brand Info & Live Status -->
+            <div class="footer-brand">
+                <a href="/" class="footer-brand-link" aria-label="Beranda" style="display: inline-flex; align-items: center; gap: 4px; margin-bottom: 20px;">
+                    <img src="<%= typeof settings !== 'undefined' && settings.logo ? settings.logo : '/public/img/axalogo.png' %>" alt="Logo" style="width: 36px; height: 36px; object-fit: contain; border-radius: 8px;" width="36" height="36">
+                    <span style="font-family: 'Lexend Deca', sans-serif; font-size: 1.4rem; font-weight: 800; color: #ffffff;">
+                        <%= typeof settings !== 'undefined' && settings.siteName ? settings.siteName : 'ents Web' %>
+                    </span>
+                </a>
+                <p style="max-width: 380px; margin-bottom: 24px; color: rgba(255,255,255,0.68); font-size: 0.95rem; line-height: 1.7;">
+                    <%= typeof settings !== 'undefined' && settings.tagline ? settings.tagline : 'Build Your Digital Presence.' %> Kami merancang website &amp; aplikasi berkinerja tinggi, zero template lemot, fokus konversi, dan SEO-ready dari nol.
+                </p>
+                <div class="footer-status-pill">
+                    <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 10px var(--success);"></span>
+                    Siap Menerima Proyek Baru
+                </div>
+            </div>
+
+            <!-- Services -->
             <div>
-                <h4 style="margin-bottom: 16px;">Agency</h4>
-                <ul style="display: flex; flex-direction: column; gap: 8px;">
-                    <li><a href="/services" style="color: var(--text-secondary); transition: var(--transition);">Services</a></li>
-                    <li><a href="/portfolio" style="color: var(--text-secondary); transition: var(--transition);">Portfolio</a></li>
-                    <li><a href="/pricing" style="color: var(--text-secondary); transition: var(--transition);">Pricing</a></li>
+                <h4 class="footer-col-title">Solusi &amp; Layanan</h4>
+                <ul class="footer-nav-list">
+                    <li><a href="/services">Web Development</a></li>
+                    <li><a href="/services">Sistem Informasi Kustom</a></li>
+                    <li><a href="/services">UI/UX Design &amp; Rebrand</a></li>
+                    <li><a href="/portfolio">Studi Kasus Proyek</a></li>
+                    <li><a href="/pricing">Investasi &amp; Paket Harga</a></li>
                 </ul>
             </div>
+
+            <!-- Company (Note: Admin navigation permanently removed for privacy) -->
             <div>
-                <h4 style="margin-bottom: 16px;">Company</h4>
-                <ul style="display: flex; flex-direction: column; gap: 8px;">
-                    <li><a href="/about" style="color: var(--text-secondary); transition: var(--transition);">About Us</a></li>
-                    <li><a href="/contact" style="color: var(--text-secondary); transition: var(--transition);">Contact</a></li>
-                    <li><a href="/faq" style="color: var(--text-secondary); transition: var(--transition);">FAQ</a></li>
+                <h4 class="footer-col-title">Perusahaan</h4>
+                <ul class="footer-nav-list">
+                    <li><a href="/about">Tentang Kami</a></li>
+                    <li><a href="/contact">Konsultasi Project</a></li>
+                    <li><a href="/faq">Tanya Jawab (FAQ)</a></li>
+                    <li><a href="/sitemap.xml" target="_blank" rel="noopener">Sitemap XML</a></li>
                 </ul>
             </div>
+
+            <!-- Direct Contact (SVG Icons) -->
+            <div>
+                <h4 class="footer-col-title">Hubungi Kami</h4>
+                <p style="font-size: 0.9rem; margin-bottom: 14px; color: rgba(255,255,255,0.6);">Konsultasikan roadmap digital Anda langsung dengan engineer kami:</p>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <!-- WhatsApp -->
+                    <a href="https://wa.me/<%= typeof settings !== 'undefined' && settings.whatsapp ? settings.whatsapp : '6285338922586' %>" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 8px; color: var(--lime-accent); font-weight: 700; font-size: 0.95rem;">
+                        <svg class="svg-icon svg-icon-md" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.112.551 4.095 1.517 5.823l-1.517 5.605 5.748-1.507c1.685.918 3.607 1.442 5.652 1.442 6.627 0 12-5.373 12-12 0-6.627-5.373-12-12-12z"/></svg>
+                        <span>WhatsApp Official</span> &nearr;
+                    </a>
+                    <!-- Email -->
+                    <a href="mailto:<%= typeof settings !== 'undefined' && settings.email ? settings.email : 'dentswebsitebuilder@gmail.com' %>" style="display: inline-flex; align-items: center; gap: 8px; color: rgba(255,255,255,0.85); font-size: 0.9rem;">
+                        <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                        <span style="word-break: break-all;"><%= typeof settings !== 'undefined' && settings.email ? settings.email : 'dentswebsitebuilder@gmail.com' %></span>
+                    </a>
+                    <!-- Location -->
+                    <span style="display: inline-flex; align-items: center; gap: 8px; font-size: 0.85rem; color: rgba(255,255,255,0.55);">
+                        <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
+                        <span><%= typeof settings !== 'undefined' && settings.address ? settings.address : 'Indonesia' %></span>
+                    </span>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="container text-center" style="margin-top: 80px; color: var(--text-muted); font-size: 0.9rem;">
-        &copy; <span id="year"></span> <%= settings && settings.siteName ? settings.siteName : 'Dents Web' %>. All rights reserved.
+
+        <div class="footer-bottom-bar">
+            <div>
+                &copy; <span id="year"></span> <%= typeof settings !== 'undefined' && settings.siteName ? settings.siteName : 'ents Web' %>. Seluruh hak cipta dilindungi.
+            </div>
+            <div style="display: flex; gap: 16px; align-items: center;">
+                <span style="color: rgba(255,255,255,0.4); font-size: 0.85rem;">Kecepatan &bull; Keamanan &bull; Konversi</span>
+            </div>
+        </div>
     </div>
 </footer>
 
+<!-- ==========================================
+     INTERACTIVE FLOATING WHATSAPP CHAT BUBBLE WIDGET
+     (Sesuai Desain Lampiran Pengguna)
+     ========================================== -->
+<!-- Popup Dialog Modal -->
+<div class="wa-chat-popup" id="wa-chat-popup" role="dialog" aria-modal="true" aria-labelledby="wa-popup-title">
+    <div class="wa-chat-header">
+        <div class="wa-chat-title" id="wa-popup-title">
+            <svg class="svg-icon svg-icon-md" viewBox="0 0 24 24" fill="currentColor" style="color: #25D366;" aria-hidden="true"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.112.551 4.095 1.517 5.823l-1.517 5.605 5.748-1.507c1.685.918 3.607 1.442 5.652 1.442 6.627 0 12-5.373 12-12 0-6.627-5.373-12-12-12z"/></svg>
+            <span>Chat Admin <%= typeof settings !== 'undefined' && settings.brandName ? settings.brandName : 'Dents Web' %></span>
+        </div>
+        <button class="wa-chat-close" id="wa-close-btn" aria-label="Tutup Chat WhatsApp">&times;</button>
+    </div>
+    <div class="wa-chat-body">
+        <p class="wa-chat-greeting">
+            Ada yang bisa kami bantu seputar kebutuhan website, aplikasi, atau konsultasi digital Anda?
+        </p>
+        <textarea class="wa-chat-input" id="wa-message-input" rows="3" placeholder="Ketik pesan konsultasi singkat..."></textarea>
+        <button class="wa-chat-submit" id="wa-send-btn" type="button">
+            <span>Kirim ke WhatsApp</span>
+            <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+        </button>
+    </div>
+</div>
+
+<!-- Round Trigger Button -->
+<button class="wa-floating-btn" id="wa-floating-trigger" aria-label="Buka Chat WhatsApp Admin" type="button">
+    <svg class="svg-icon svg-icon-xl" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.112.551 4.095 1.517 5.823l-1.517 5.605 5.748-1.507c1.685.918 3.607 1.442 5.652 1.442 6.627 0 12-5.373 12-12 0-6.627-5.373-12-12-12z"/></svg>
+</button>
+
 <script>
-    // Set dynamically year
-    const yearEl = document.getElementById('year');
-    if (yearEl) yearEl.textContent = new Date().getFullYear();
-    
-    // Header Scroll Effect
-    const header = document.getElementById('main-header');
-    if(header) {
-        window.addEventListener('scroll', () => {
-            header.classList.toggle('scrolled', window.scrollY > 20);
+    // WhatsApp Floating Widget Logic
+    (function() {
+        const trigger = document.getElementById('wa-floating-trigger');
+        const popup = document.getElementById('wa-chat-popup');
+        const closeBtn = document.getElementById('wa-close-btn');
+        const sendBtn = document.getElementById('wa-send-btn');
+        const msgInput = document.getElementById('wa-message-input');
+        const waNumber = '<%= typeof settings !== "undefined" && settings.whatsapp ? settings.whatsapp.replace(/[^0-9]/g, "") : "6285338922586" %>';
+
+        if (trigger && popup) {
+            trigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                popup.classList.toggle('active');
+                if (popup.classList.contains('active') && msgInput) {
+                    msgInput.focus();
+                }
+            });
+        }
+
+        if (closeBtn && popup) {
+            closeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                popup.classList.remove('active');
+            });
+        }
+
+        if (sendBtn && msgInput) {
+            sendBtn.addEventListener('click', () => {
+                const message = msgInput.value.trim();
+                const defaultGreeting = "Halo Admin <%= typeof settings !== 'undefined' && settings.brandName ? settings.brandName : 'Dents Web' %>, saya ingin konsultasi mengenai pembuatan website / aplikasi.";
+                const finalMsg = message ? message : defaultGreeting;
+                const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(finalMsg)}`;
+                window.open(waUrl, '_blank');
+                popup.classList.remove('active');
+                msgInput.value = '';
+            });
+        }
+
+        // Close on outside click
+        document.addEventListener('click', (e) => {
+            if (popup && popup.classList.contains('active')) {
+                if (!popup.contains(e.target) && !trigger.contains(e.target)) {
+                    popup.classList.remove('active');
+                }
+            }
         });
-    }
-    
-    // Hamburger Menu Logic
-    const hamburgerBtn = document.getElementById('hamburger-btn');
-    const navLinks = document.getElementById('nav-links');
-    if (hamburgerBtn && navLinks) {
-        hamburgerBtn.addEventListener('click', () => {
-            navLinks.classList.toggle('mobile-open');
-            hamburgerBtn.classList.toggle('open');
-        });
-    }
+
+        // Set Dynamic Year
+        const yr = document.getElementById('year');
+        if (yr) yr.textContent = new Date().getFullYear();
+    })();
 </script>
 
-<!-- Security / DevTools Deterrent -->
+<!-- Security Deterrent -->
 <script src="/public/js/protect-devtools.js" defer></script>
