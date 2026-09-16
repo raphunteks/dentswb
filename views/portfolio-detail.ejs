@@ -36,6 +36,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@500;600;700;800&family=Playfair+Display:ital,wght@1,400;1,500;1,600;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="/public/css/style.css">
+    <script src="/public/js/tech-icons.js"></script>
 </head>
 <body>
     
@@ -135,8 +136,22 @@
                     </div>
                 </div>
 
+                <!-- Tech Stack Section -->
+                <% if (project.tools && project.tools.length > 0) { %>
+                <div class="tactile-card tactile-card-heavy" style="margin-top: 50px; padding: 36px 32px; background: #ffffff;">
+                    <div class="badge-tag-royal" style="margin-bottom: 12px;">ARSITEKTUR TEKNOLOGI</div>
+                    <h3 style="font-size: 1.5rem; color: var(--navy-text); margin-bottom: 8px;">Stack &amp; Tools yang Digunakan</h3>
+                    <p style="color: var(--slate-muted); font-size: 0.95rem; margin-bottom: 24px;">Teknologi industri yang kami kombinasikan untuk membangun sistem ini secara handal, aman, dan berkecepatan tinggi.</p>
+                    <div id="detail-tools-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px;">
+                        <% project.tools.forEach(tId => { %>
+                            <div class="detail-tool-card" data-tool-id="<%= tId %>"></div>
+                        <% }) %>
+                    </div>
+                </div>
+                <% } %>
+
                 <!-- Callout CTA -->
-                <div class="tactile-card tactile-card-heavy" style="margin-top: 80px; padding: 60px 40px; text-align: center; background: #ffffff; border-color: var(--border-light); border-bottom-color: var(--royal-blue);">
+                <div class="tactile-card tactile-card-heavy" style="margin-top: 60px; padding: 60px 40px; text-align: center; background: #ffffff; border-color: var(--border-light); border-bottom-color: var(--royal-blue);">
                     <h2 style="font-size: clamp(1.8rem, 3.5vw, 2.5rem); color: var(--navy-text); margin-bottom: 16px;">
                         Ingin Membangun Solusi Serupa buat <span class="font-editorial text-royal">Bisnis Lu?</span>
                     </h2>
@@ -154,5 +169,28 @@
 
     <%- include('partials/footer') %>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.detail-tool-card').forEach(el => {
+                const id = el.getAttribute('data-tool-id');
+                const tool = window.getTechTool ? window.getTechTool(id) : null;
+                if (tool) {
+                    el.innerHTML = `
+                        <div style="display: flex; align-items: flex-start; gap: 14px; padding: 14px 16px; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; height: 100%; box-sizing: border-box;">
+                            <div style="width: 38px; height: 38px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: #ffffff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); padding: 6px;">
+                                ${tool.svg}
+                            </div>
+                            <div style="flex: 1; min-width: 0;">
+                                <div style="font-size: 0.95rem; font-weight: 700; color: #0a0f29;">${tool.name}</div>
+                                <div style="font-size: 0.78rem; color: #64748b; line-height: 1.45; margin-top: 3px;">${tool.desc}</div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    el.innerHTML = `<span class="tech-chip-pill" style="display: inline-block; padding: 8px 14px; background: #f1f5f9; border-radius: 8px; font-weight: 700; color: #334155;">${id}</span>`;
+                }
+            });
+        });
+    </script>
 </body>
 </html>
