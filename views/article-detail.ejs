@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#05081c">
+    
+    <!-- DYNAMIC SEO GOLD STANDARD -->
+    <title><%= typeof seo !== 'undefined' ? seo.title : article.title + ' | Dents Web' %></title>
+    <meta name="description" content="<%= typeof seo !== 'undefined' ? seo.desc : article.excerpt %>">
+    <meta name="keywords" content="<%= typeof seo !== 'undefined' ? seo.keywords : (article.tags || []).join(', ') %>">
+    <link rel="canonical" href="<%= typeof seo !== 'undefined' ? seo.url : 'https://dentsweb.my.id/article/' + article.slug %>">
+    
+    <!-- Google Site Verification -->
+    <% if (typeof settings !== 'undefined' && settings.googleVerification) { %>
+    <meta name="google-site-verification" content="<%= settings.googleVerification %>" />
+    <% } %>
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="<%= typeof seo !== 'undefined' ? seo.url : 'https://dentsweb.my.id/article/' + article.slug %>">
+    <meta property="og:title" content="<%= typeof seo !== 'undefined' ? seo.title : article.title %>">
+    <meta property="og:description" content="<%= typeof seo !== 'undefined' ? seo.desc : article.excerpt %>">
+    <meta property="og:image" content="<%= typeof seo !== 'undefined' ? seo.image : (article.image || '/public/img/axalogo.png') %>">
+    <meta property="article:published_time" content="<%= article.publishedAt || '2026-03-16' %>">
+    <meta property="article:section" content="<%= article.category %>">
+    
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="<%= typeof seo !== 'undefined' ? seo.url : 'https://dentsweb.my.id/article/' + article.slug %>">
+    <meta name="twitter:title" content="<%= typeof seo !== 'undefined' ? seo.title : article.title %>">
+    <meta name="twitter:description" content="<%= typeof seo !== 'undefined' ? seo.desc : article.excerpt %>">
+    <meta name="twitter:image" content="<%= typeof seo !== 'undefined' ? seo.image : (article.image || '/public/img/axalogo.png') %>">
+
+    <!-- Schema.org JSON-LD (TechArticle) -->
+    <% if (typeof seo !== 'undefined' && seo.schemaString) { %>
+    <script type="application/ld+json">
+        <%- seo.schemaString %>
+    </script>
+    <% } %>
+    
+    <link rel="icon" type="image/png" href="<%= typeof settings !== 'undefined' && settings.favicon ? settings.favicon : '/public/img/axalogo.png' %>">
+    <link rel="apple-touch-icon" href="<%= typeof settings !== 'undefined' && settings.logo ? settings.logo : '/public/img/axalogo.png' %>">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@500;600;700;800&family=Playfair+Display:ital,wght@1,400;1,500;1,600;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/public/css/style.css">
+    <script src="/public/js/tech-icons.js"></script>
+</head>
+<body>
+    <%- include('partials/header') %>
+
+<!-- Top Reading Progress Indicator -->
+<div id="readingProgress" class="reading-progress-bar"></div>
+
+<main class="main-content" style="background: var(--navy-deep); min-height: 85vh; padding: 40px 0 100px; position: relative;">
+    
+    <!-- Ambient Background Light -->
+    <div style="position: absolute; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(33, 82, 207, 0.15) 0%, transparent 70%); top: 50px; left: 50%; transform: translateX(-50%); filter: blur(90px); pointer-events: none;"></div>
+
+    <div class="container" style="position: relative; z-index: 2;">
+        
+        <div class="article-reader-container">
+            
+            <!-- Breadcrumbs Navigation -->
+            <nav aria-label="Breadcrumb" style="margin-bottom: 24px;">
+                <ol style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; list-style: none; padding: 0; font-size: 0.85rem; color: #94a3b8;">
+                    <li>
+                        <a href="/" style="color: #94a3b8; text-decoration: none; transition: color 0.2s;">Beranda</a>
+                    </li>
+                    <li>/</li>
+                    <li>
+                        <a href="/articles" style="color: #94a3b8; text-decoration: none; transition: color 0.2s;">Artikel</a>
+                    </li>
+                    <li>/</li>
+                    <li style="color: var(--lime-accent); font-weight: 600; max-width: 280px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        <%= article.title %>
+                    </li>
+                </ol>
+            </nav>
+
+            <!-- Reader Article Header -->
+            <header class="article-reader-header">
+                <div style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 999px; background: rgba(33, 82, 207, 0.2); border: 1px solid rgba(59, 130, 246, 0.4); color: #93c5fd; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 20px;">
+                    <%= article.category || 'Materi Pemrograman' %>
+                </div>
+
+                <h1 class="article-reader-title"><%= article.title %></h1>
+
+                <div class="article-reader-meta-row">
+                    <span style="display: inline-flex; align-items: center; gap: 6px;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                        <%= article.author || 'Dents Web Engineering' %>
+                    </span>
+                    <span>&bull;</span>
+                    <span style="display: inline-flex; align-items: center; gap: 6px;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                        Dipublikasikan: <%= article.publishedAt || '15 Mar 2026' %>
+                    </span>
+                    <span>&bull;</span>
+                    <span style="display: inline-flex; align-items: center; gap: 6px;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        <%= article.readingTime || '5 menit baca' %>
+                    </span>
+                </div>
+
+                <p style="font-size: 1.15rem; color: #cbd5e1; line-height: 1.7; max-width: 780px; margin: 0 auto; font-style: italic;">
+                    "<%= article.excerpt %>"
+                </p>
+            </header>
+
+            <!-- Featured Cover Image -->
+            <% if (article.coverImage) { %>
+                <div class="article-reader-cover-box">
+                    <img src="<%= article.coverImage %>" alt="<%= article.title %>" class="article-reader-cover">
+                </div>
+            <% } %>
+
+            <!-- Article Main Rich Content -->
+            <article class="article-content" id="articleBody">
+                <%- article.content %>
+            </article>
+
+            <!-- Tags Section -->
+            <% if (article.tags && article.tags.length > 0) { %>
+                <div style="margin-top: 36px; padding-top: 20px; border-top: 1px solid var(--navy-surface-border); display: flex; flex-wrap: wrap; align-items: center; gap: 8px;">
+                    <span style="font-size: 0.85rem; font-weight: 700; color: #94a3b8; margin-right: 4px;">Topik Terkait:</span>
+                    <% article.tags.forEach(function(tag) { %>
+                        <a href="/articles?q=<%= encodeURIComponent(tag) %>" style="display: inline-block; padding: 4px 12px; border-radius: 999px; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12); color: #cbd5e1; font-size: 0.8rem; text-decoration: none; transition: all 0.2s;">
+                            #<%= tag %>
+                        </a>
+                    <% }); %>
+                </div>
+            <% } %>
+
+            <!-- Social Share Bar -->
+            <div class="article-share-bar">
+                <span style="font-size: 0.9rem; font-weight: 700; color: #ffffff;">Bagikan Materi Ini:</span>
+                
+                <!-- WhatsApp Share -->
+                <a href="https://api.whatsapp.com/send?text=<%= encodeURIComponent(article.title + ' ' + (settings.siteUrl || 'https://dentsweb.my.id') + '/article/' + article.slug) %>" 
+                   target="_blank" rel="noopener noreferrer" class="article-share-btn" style="background: rgba(37, 211, 102, 0.15); border-color: rgba(37, 211, 102, 0.3); color: #4ade80;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2z"/></svg>
+                    WhatsApp
+                </a>
+
+                <!-- LinkedIn Share -->
+                <a href="https://www.linkedin.com/sharing/share-offsite/?url=<%= encodeURIComponent((settings.siteUrl || 'https://dentsweb.my.id') + '/article/' + article.slug) %>" 
+                   target="_blank" rel="noopener noreferrer" class="article-share-btn" style="background: rgba(10, 102, 194, 0.15); border-color: rgba(10, 102, 194, 0.3); color: #60a5fa;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+                    LinkedIn
+                </a>
+
+                <!-- Copy Link Button -->
+                <button type="button" id="copyLinkBtn" class="article-share-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    Salin Tautan
+                </button>
+            </div>
+
+            <!-- Author Profile Box -->
+            <div style="margin-top: 48px; background: rgba(16, 24, 59, 0.85); border: 1px solid var(--navy-surface-border); border-radius: var(--radius-lg); padding: 28px; display: flex; flex-direction: column; gap: 20px;">
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <div style="width: 54px; height: 54px; border-radius: 50%; background: #080c24; border: 2px solid var(--royal-blue); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0;">
+                        <img src="/public/img/axalogo.png" alt="Dents Web Studio" style="width: 36px; height: auto;">
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1.1rem; font-weight: 700; color: #ffffff; margin-bottom: 4px;">Dents Web Engineering Team</h3>
+                        <p style="font-size: 0.85rem; color: #94a3b8;">Tim insinyur piranti lunak, UI/UX, dan infrastruktur cloud di Dents Web.</p>
+                    </div>
+                </div>
+                <p style="font-size: 0.925rem; color: #cbd5e1; line-height: 1.65; margin: 0;">
+                    Kami berdedikasi membangun web aplikasi berkecepatan tinggi, sistem informasi enterprise, dan landing page konversi maksimal menggunakan arsitektur modern standar industri global.
+                </p>
+            </div>
+
+            <!-- Related Articles -->
+            <% if (relatedArticles && relatedArticles.length > 0) { %>
+                <div style="margin-top: 64px;">
+                    <h2 style="font-size: 1.5rem; font-weight: 800; color: #ffffff; margin-bottom: 24px; display: flex; align-items: center; gap: 10px;">
+                        <span style="color: var(--lime-accent);">&rarr;</span> Materi Terkait Lainnya
+                    </h2>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px;">
+                        <% relatedArticles.forEach(function(rel) { %>
+                            <a href="/article/<%= rel.slug %>" style="background: rgba(16, 24, 59, 0.6); border: 1px solid var(--navy-surface-border); border-radius: var(--radius-md); padding: 20px; text-decoration: none; display: flex; flex-direction: column; gap: 10px; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--royal-blue)'; this.style.transform='translateY(-3px)'" onmouseout="this.style.borderColor='var(--navy-surface-border)'; this.style.transform='none'">
+                                <span style="font-size: 0.72rem; font-weight: 700; color: var(--lime-accent); text-transform: uppercase;"><%= rel.category || 'Materi' %></span>
+                                <h4 style="font-size: 0.975rem; font-weight: 700; color: #ffffff; line-height: 1.4;"><%= rel.title %></h4>
+                                <span style="font-size: 0.78rem; color: #94a3b8; margin-top: auto;"><%= rel.readingTime || '5 menit baca' %></span>
+                            </a>
+                        <% }); %>
+                    </div>
+                </div>
+            <% } %>
+
+        </div>
+
+    </div>
+</main>
+
+<script>
+    // Reading progress calculation
+    window.addEventListener('scroll', function() {
+        const docEl = document.documentElement;
+        const scrollTop = docEl.scrollTop || document.body.scrollTop;
+        const scrollHeight = docEl.scrollHeight - docEl.clientHeight;
+        const progress = (scrollTop / (scrollHeight || 1)) * 100;
+        const bar = document.getElementById('readingProgress');
+        if (bar) bar.style.width = progress + '%';
+    });
+
+    // Copy link helper
+    document.getElementById('copyLinkBtn')?.addEventListener('click', function() {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(window.location.href).then(function() {
+                alert('Tautan artikel berhasil disalin ke clipboard!');
+            });
+        }
+    });
+</script>
+
+<%- include('partials/footer') %>
+</body>
+</html>
