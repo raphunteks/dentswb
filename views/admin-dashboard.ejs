@@ -3,213 +3,799 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#05081c">
     <title>Admin Console | Dents Web</title>
+    <link rel="icon" type="image/png" href="/public/img/axalogo.png">
     <meta name="robots" content="noindex, nofollow">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="/public/css/style.css">
+    <style>
+        .admin-stat-card {
+            background: var(--navy-surface);
+            border: 2px solid var(--navy-surface-border);
+            border-bottom: 5px solid #1441a5;
+            border-radius: var(--radius-lg);
+            padding: 24px;
+        }
+        .toast-box {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast-item {
+            padding: 14px 20px;
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #ffffff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            animation: slideInToast 0.3s ease;
+        }
+        .toast-success { background: #00c853; }
+        .toast-error { background: #ef4444; }
+        @keyframes slideInToast {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .btn-action-edit {
+            background: rgba(33, 82, 207, 0.2);
+            color: #60a5fa;
+            border: 1px solid #3b82f6;
+            padding: 5px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-right: 6px;
+            transition: all 0.2s ease;
+        }
+        .btn-action-edit:hover {
+            background: #2563eb;
+            color: #ffffff;
+        }
+        .btn-action-delete {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+            padding: 5px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s ease;
+        }
+        .btn-action-delete:hover {
+            background: var(--danger);
+            color: #ffffff;
+        }
+    </style>
 </head>
 <body>
-    <!-- Topbar for Mobile Admin -->
-    <header id="main-header" style="border-bottom: 1px solid var(--glass-border); background: var(--bg-surface);">
-        <div class="container nav-container" style="max-width: 100%;">
-            <div class="logo"><span class="logo-mark"></span> Console</div>
-            <div class="hamburger" id="admin-hamburger"><span></span><span></span><span></span></div>
-        </div>
-    </header>
 
-    <div class="admin-layout">
-        <aside class="admin-sidebar" id="admin-sidebar">
-            <div style="margin-bottom: 32px;">
-                <div class="tag" style="border-color: var(--success); color: var(--success);">Session Active</div>
+    <!-- Topbar Mobile for Drawer Toggle -->
+    <div class="admin-mobile-topbar">
+        <div style="display: flex; align-items: center; gap: 4px;">
+            <img src="/public/img/axalogo.png" alt="Dents Logo" style="height: 28px; width: auto; object-fit: contain;">
+            <span style="font-family: 'Lexend Deca', sans-serif; font-size: 1.05rem; font-weight: 800; color: #ffffff; letter-spacing: -0.5px;">ents Console</span>
+        </div>
+        <button id="admin-menu-toggle" type="button" aria-label="Buka Menu" style="background: var(--navy-surface); border: 1px solid var(--navy-surface-border); color: #ffffff; padding: 6px 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+    </div>
+    <div class="admin-drawer-overlay" id="admin-drawer-overlay"></div>
+
+    <div class="admin-layout-kalana">
+        <!-- Sidebar Navigation -->
+        <aside class="admin-sidebar-kalana">
+            <div style="display: flex; align-items: center; gap: 4px; margin-bottom: 32px; padding-bottom: 20px; border-bottom: 1px solid var(--navy-surface-border);">
+                <img src="/public/img/axalogo.png" alt="Dents Logo" style="height: 32px; width: auto; object-fit: contain;">
+                <span style="font-family: 'Lexend Deca', sans-serif; font-size: 1.15rem; font-weight: 800; color: #ffffff; letter-spacing: -0.5px;">ents Console</span>
             </div>
-            <nav class="admin-menu">
-                <a class="admin-menu-item active" data-tab="leads">Leads</a>
-                <a class="admin-menu-item" data-tab="portfolio">Portfolio</a>
-                <a class="admin-menu-item" data-tab="services">Services</a>
-                <a class="admin-menu-item" data-tab="pricing">Pricing</a>
-                <a class="admin-menu-item" data-tab="faq">FAQ</a>
-                <a class="admin-menu-item" data-tab="settings">Settings</a>
-                <a class="admin-menu-item" style="color: var(--danger); margin-top: 24px;" onclick="handleLogout()">Logout</a>
+
+            <div style="margin-bottom: 24px;">
+                <div class="badge-tag-lime" style="font-size: 0.75rem; padding: 4px 12px; display: inline-flex; align-items: center; gap: 6px;">
+                    <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #05081c;"></span> Sesi Admin Aktif
+                </div>
+            </div>
+
+            <nav style="display: flex; flex-direction: column; flex-grow: 1;">
+                <div class="admin-nav-item active" data-tab="leads">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                    <span>Leads Masuk</span>
+                </div>
+                <div class="admin-nav-item" data-tab="portfolio">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                    <span>Portofolio</span>
+                </div>
+                <div class="admin-nav-item" data-tab="services">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 12 22 12"></polyline></svg>
+                    <span>Layanan</span>
+                </div>
+                <div class="admin-nav-item" data-tab="pricing">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                    <span>Paket Harga</span>
+                </div>
+                <div class="admin-nav-item" data-tab="testimonials">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                    <span>Testimoni Klien</span>
+                </div>
+                <div class="admin-nav-item" data-tab="faq">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    <span>FAQ</span>
+                </div>
+                <div class="admin-nav-item" data-tab="settings">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    <span>Pengaturan Web</span>
+                </div>
+
+                <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid var(--navy-surface-border);">
+                    <a href="/" target="_blank" class="admin-nav-item" style="color: var(--slate-muted); text-decoration: none;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                        <span>Kunjungi Situs</span>
+                    </a>
+                    <div class="admin-nav-item" style="color: var(--danger); cursor: pointer;" onclick="handleLogout()">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                        <span>Keluar Sesi</span>
+                    </div>
+                </div>
             </nav>
         </aside>
 
-        <main class="admin-content">
-            <!-- PANEL: LEADS -->
+        <!-- Main Dashboard Content -->
+        <main class="admin-content-kalana">
+
+            <!-- TAB 1: LEADS -->
             <div id="panel-leads" class="admin-panel">
-                <h2>Incoming Leads</h2>
-                <div class="glass-panel table-responsive" style="margin-top: 24px;">
-                    <table class="data-table" id="table-leads">
-                        <thead><tr><th>Tanggal</th><th>Nama</th><th>WhatsApp</th><th>Status</th><th>Aksi</th></tr></thead>
-                        <tbody><tr><td colspan="5">Loading data...</td></tr></tbody>
+                <div style="margin-bottom: 28px;">
+                    <h2 style="font-size: 1.8rem; color: #ffffff; margin-bottom: 6px;">Prospek &amp; Leads Masuk</h2>
+                    <p style="color: var(--slate-muted); font-size: 0.95rem;">Daftar pesan konsultasi dari formulir kontak publik.</p>
+                </div>
+
+                <div class="tactile-card-dark admin-table-responsive" style="padding: 0;">
+                    <table class="admin-table" id="table-leads">
+                        <thead>
+                            <tr>
+                                <th>Tanggal</th>
+                                <th>Nama Lengkap</th>
+                                <th>WhatsApp</th>
+                                <th>Email</th>
+                                <th>Pesan</th>
+                                <th>Status</th>
+                                <th style="text-align: right;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td colspan="7" style="text-align: center; color: var(--slate-muted); padding: 30px;">Memuat data leads...</td></tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- PANEL: PORTFOLIO -->
+            <!-- TAB 2: PORTFOLIO -->
             <div id="panel-portfolio" class="admin-panel" style="display: none;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-                    <h2>Portfolio</h2>
-                    <button class="btn btn-primary" onclick="openModal('modal-portfolio')">+ Add Project</button>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; flex-wrap: wrap; gap: 16px;">
+                    <div>
+                        <h2 style="font-size: 1.8rem; color: #ffffff; margin-bottom: 6px;">Manajemen Portofolio</h2>
+                        <p style="color: var(--slate-muted); font-size: 0.95rem;">Kelola proyek dan studi kasus yang tampil di halaman portofolio.</p>
+                    </div>
+                    <button class="btn-royal" onclick="openModal('modal-portfolio')">+ Tambah Proyek Baru</button>
                 </div>
-                <div class="glass-panel table-responsive">
-                    <table class="data-table" id="table-portfolio">
-                        <thead><tr><th>Judul</th><th>Klien</th><th>Status</th><th>Aksi</th></tr></thead>
-                        <tbody><tr><td colspan="4">Loading data...</td></tr></tbody>
+
+                <div class="tactile-card-dark admin-table-responsive" style="padding: 0;">
+                    <table class="admin-table" id="table-portfolio">
+                        <thead>
+                            <tr>
+                                <th>Judul Proyek</th>
+                                <th>Klien</th>
+                                <th>Kategori</th>
+                                <th>Tahun</th>
+                                <th>Status</th>
+                                <th style="text-align: right;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td colspan="6" style="text-align: center; color: var(--slate-muted); padding: 30px;">Memuat data portofolio...</td></tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- PANEL: SERVICES -->
+            <!-- TAB 3: SERVICES -->
             <div id="panel-services" class="admin-panel" style="display: none;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-                    <h2>Services</h2>
-                    <button class="btn btn-primary" onclick="openModal('modal-service')">+ Add Service</button>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; flex-wrap: wrap; gap: 16px;">
+                    <div>
+                        <h2 style="font-size: 1.8rem; color: #ffffff; margin-bottom: 6px;">Manajemen Layanan</h2>
+                        <p style="color: var(--slate-muted); font-size: 0.95rem;">Kelola daftar layanan dan paket solusi digital.</p>
+                    </div>
+                    <button class="btn-royal" onclick="openModal('modal-services')">+ Tambah Layanan</button>
                 </div>
-                <div class="glass-panel table-responsive">
-                    <table class="data-table" id="table-services">
-                        <thead><tr><th>Layanan</th><th>Harga</th><th>Status</th><th>Aksi</th></tr></thead>
-                        <tbody><tr><td colspan="4">Loading data...</td></tr></tbody>
+
+                <div class="tactile-card-dark admin-table-responsive" style="padding: 0;">
+                    <table class="admin-table" id="table-services">
+                        <thead>
+                            <tr>
+                                <th>Icon</th>
+                                <th>Nama Layanan</th>
+                                <th>Harga Mulai</th>
+                                <th>Status</th>
+                                <th style="text-align: right;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td colspan="5" style="text-align: center; color: var(--slate-muted); padding: 30px;">Memuat data layanan...</td></tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- PANEL: PRICING -->
+            <!-- TAB 4: PRICING -->
             <div id="panel-pricing" class="admin-panel" style="display: none;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-                    <h2>Pricing</h2>
-                    <button class="btn btn-primary" onclick="openModal('modal-pricing')">+ Add Package</button>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; flex-wrap: wrap; gap: 16px;">
+                    <div>
+                        <h2 style="font-size: 1.8rem; color: #ffffff; margin-bottom: 6px;">Manajemen Paket Harga</h2>
+                        <p style="color: var(--slate-muted); font-size: 0.95rem;">Atur paket investasi dan fasilitas yang didapatkan dari tiap paket.</p>
+                    </div>
+                    <button class="btn-royal" onclick="openModal('modal-pricing')">+ Tambah Paket</button>
                 </div>
-                <div class="glass-panel table-responsive">
-                    <table class="data-table" id="table-pricing">
-                        <thead><tr><th>Paket</th><th>Harga</th><th>Featured</th><th>Aksi</th></tr></thead>
-                        <tbody><tr><td colspan="4">Loading data...</td></tr></tbody>
+
+                <div class="tactile-card-dark admin-table-responsive" style="padding: 0;">
+                    <table class="admin-table" id="table-pricing">
+                        <thead>
+                            <tr>
+                                <th>Nama Paket</th>
+                                <th>Biaya Investasi</th>
+                                <th>Populer</th>
+                                <th>Status</th>
+                                <th style="text-align: right;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td colspan="5" style="text-align: center; color: var(--slate-muted); padding: 30px;">Memuat data paket harga...</td></tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- PANEL: FAQ -->
+            <!-- TAB 5: TESTIMONIALS -->
+            <div id="panel-testimonials" class="admin-panel" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; flex-wrap: wrap; gap: 16px;">
+                    <div>
+                        <h2 style="font-size: 1.8rem; color: #ffffff; margin-bottom: 6px;">Manajemen Testimoni Klien</h2>
+                        <p style="color: var(--slate-muted); font-size: 0.95rem;">Kelola ulasan, nama klien, peran bisnis, rating, dan testimoni nyata.</p>
+                    </div>
+                    <button class="btn-royal" onclick="openModal('modal-testimonials')">+ Tambah Testimoni</button>
+                </div>
+
+                <div class="tactile-card-dark admin-table-responsive" style="padding: 0;">
+                    <table class="admin-table" id="table-testimonials">
+                        <thead>
+                            <tr>
+                                <th>Nama Klien</th>
+                                <th>Role / Perusahaan</th>
+                                <th>Rating</th>
+                                <th>Ulasan / Testimoni</th>
+                                <th>Status</th>
+                                <th style="text-align: right;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td colspan="6" style="text-align: center; color: var(--slate-muted); padding: 30px;">Memuat data testimoni...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB 6: FAQ -->
             <div id="panel-faq" class="admin-panel" style="display: none;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-                    <h2>FAQ</h2>
-                    <button class="btn btn-primary" onclick="openModal('modal-faq')">+ Add FAQ</button>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; flex-wrap: wrap; gap: 16px;">
+                    <div>
+                        <h2 style="font-size: 1.8rem; color: #ffffff; margin-bottom: 6px;">Manajemen FAQ</h2>
+                        <p style="color: var(--slate-muted); font-size: 0.95rem;">Daftar pertanyaan dan jawaban di halaman bantuan.</p>
+                    </div>
+                    <button class="btn-royal" onclick="openModal('modal-faq')">+ Tambah FAQ</button>
                 </div>
-                <div class="glass-panel table-responsive">
-                    <table class="data-table" id="table-faq">
-                        <thead><tr><th>Pertanyaan</th><th>Aksi</th></tr></thead>
-                        <tbody><tr><td colspan="2">Loading data...</td></tr></tbody>
+
+                <div class="tactile-card-dark admin-table-responsive" style="padding: 0;">
+                    <table class="admin-table" id="table-faq">
+                        <thead>
+                            <tr>
+                                <th>Pertanyaan</th>
+                                <th>Jawaban Singkat</th>
+                                <th style="text-align: right;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td colspan="3" style="text-align: center; color: var(--slate-muted); padding: 30px;">Memuat data FAQ...</td></tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- PANEL: SETTINGS -->
+            <!-- TAB 7: SETTINGS -->
             <div id="panel-settings" class="admin-panel" style="display: none;">
-                <h2>Settings</h2>
-                <div class="glass-panel glass-panel-p" style="margin-top: 24px; max-width: 600px;">
+                <div style="margin-bottom: 28px;">
+                    <h2 style="font-size: 1.8rem; color: #ffffff; margin-bottom: 6px;">Pengaturan Global Situs &amp; Brand</h2>
+                    <p style="color: var(--slate-muted); font-size: 0.95rem;">Perbarui identitas studio, nomor WhatsApp admin, dan default SEO metadata.</p>
+                </div>
+
+                <div class="tactile-card-dark" style="max-width: 720px;">
                     <form id="form-settings">
-                        <div class="form-group">
-                            <label class="form-label">Site Name</label>
-                            <input type="text" class="form-control" name="siteName" id="set-siteName">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                            <div class="form-group">
+                                <label class="form-label" style="color: #ffffff;">Nama Situs (Site Name)</label>
+                                <input type="text" class="form-control" name="siteName" id="set-siteName" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" style="color: #ffffff;">Nama Brand (Brand Name)</label>
+                                <input type="text" class="form-control" name="brandName" id="set-brandName" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                            </div>
                         </div>
+
                         <div class="form-group">
-                            <label class="form-label">Email Kontak</label>
-                            <input type="email" class="form-control" name="email" id="set-email">
+                            <label class="form-label" style="color: #ffffff;">Tagline Brand</label>
+                            <input type="text" class="form-control" name="tagline" id="set-tagline" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
                         </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                            <div class="form-group">
+                                <label class="form-label" style="color: #ffffff;">Email Kontak Resmi</label>
+                                <input type="email" class="form-control" name="email" id="set-email" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" style="color: #ffffff;">Nomor WhatsApp (Cth: 6285338922586)</label>
+                                <input type="text" class="form-control" name="whatsapp" id="set-whatsapp" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                            </div>
+                        </div>
+
                         <div class="form-group">
-                            <label class="form-label">WhatsApp (+62...)</label>
-                            <input type="text" class="form-control" name="whatsapp" id="set-wa">
+                            <label class="form-label" style="color: #ffffff;">Lokasi / Alamat Studio</label>
+                            <input type="text" class="form-control" name="address" id="set-address" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
                         </div>
+
                         <div class="form-group">
-                            <label class="form-label">SEO Title Default</label>
-                            <input type="text" class="form-control" name="defaultSeoTitle" id="set-seoTitle">
+                            <label class="form-label" style="color: #ffffff;">Default SEO Title</label>
+                            <input type="text" class="form-control" name="defaultSeoTitle" id="set-seoTitle" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
                         </div>
+
                         <div class="form-group">
-                            <label class="form-label">SEO Description Default</label>
-                            <textarea class="form-control" name="defaultSeoDescription" id="set-seoDesc" rows="3"></textarea>
+                            <label class="form-label" style="color: #ffffff;">Default SEO Description</label>
+                            <textarea class="form-control" name="defaultSeoDescription" id="set-seoDesc" rows="3" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary">Save Settings</button>
+
+                        <button type="submit" class="btn-lime" style="width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+                            <span>Simpan Pengaturan Global</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </button>
                     </form>
                 </div>
             </div>
+
         </main>
     </div>
 
-    <!-- PORTFOLIO MODAL -->
-    <div class="modal-overlay" id="modal-portfolio">
-        <div class="modal-content">
-            <h3 style="margin-bottom: 24px;">Project Form</h3>
+    <!-- ==========================================
+         MODALS FORM CRUD (PORTFOLIO, SERVICES, PRICING, TESTIMONIALS, FAQ)
+         ========================================== -->
+
+    <!-- Modal Portfolio -->
+    <div class="modal-overlay-kalana" id="modal-portfolio">
+        <div class="modal-card-kalana">
+            <div class="modal-header-kalana">
+                <h3 id="modal-title-portfolio" style="color: #ffffff; font-size: 1.35rem; margin: 0;">Form Portofolio Proyek</h3>
+                <button type="button" class="modal-close-btn" onclick="closeModal('modal-portfolio')" aria-label="Tutup">&times;</button>
+            </div>
             <form onsubmit="handleFormSubmit(event, 'portfolio')">
-                <input type="hidden" name="id" id="port-id">
-                <div class="form-group"><label class="form-label">Title</label><input type="text" class="form-control" name="title" required></div>
-                <div class="form-group"><label class="form-label">Slug (URL friendly)</label><input type="text" class="form-control" name="slug" required></div>
-                <div class="form-group"><label class="form-label">Client Name</label><input type="text" class="form-control" name="client" required></div>
-                <div class="form-group"><label class="form-label">Category</label><input type="text" class="form-control" name="category" required></div>
-                <div class="form-group"><label class="form-label">Year</label><input type="number" class="form-control" name="year" required></div>
-                <div class="form-group"><label class="form-label">Image URL</label><input type="text" class="form-control" name="image" placeholder="https://..." required></div>
-                <div class="form-group"><label class="form-label">Description</label><textarea class="form-control" name="description" rows="4"></textarea></div>
+                <input type="hidden" name="id">
                 <div class="form-group">
-                    <label class="form-label">Status</label>
-                    <select class="form-control" name="isPublished">
+                    <label class="form-label" style="color: #ffffff;">Judul Proyek *</label>
+                    <input type="text" class="form-control" name="title" required style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" style="color: #ffffff;">Slug URL (cth: beresin-app) *</label>
+                    <input type="text" class="form-control" name="slug" required style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div class="form-group">
+                        <label class="form-label" style="color: #ffffff;">Nama Klien *</label>
+                        <input type="text" class="form-control" name="client" required style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" style="color: #ffffff;">Tahun *</label>
+                        <input type="number" class="form-control" name="year" value="2026" required style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" style="color: #ffffff;">Kategori *</label>
+                    <input type="text" class="form-control" name="category" placeholder="Cth: Web Development" required style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" style="color: #ffffff;">URL Gambar Cover *</label>
+                    <input type="text" class="form-control" name="image" placeholder="https://... atau /public/img/..." required style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" style="color: #ffffff;">URL Live Website (Opsional)</label>
+                    <input type="url" class="form-control" name="projectUrl" placeholder="https://..." style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" style="color: #ffffff;">Deskripsi Singkat</label>
+                    <textarea class="form-control" name="shortDescription" rows="2" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" style="color: #ffffff;">Deskripsi Lengkap / Ikhtisar</label>
+                    <textarea class="form-control" name="description" rows="3" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" style="color: #ffffff;">Status Publikasi</label>
+                    <select class="form-control" name="isPublished" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
                         <option value="true">Published</option>
                         <option value="false">Draft</option>
                     </select>
                 </div>
-                <div style="display: flex; gap: 16px; margin-top: 32px;">
-                    <button type="button" class="btn btn-secondary" onclick="closeModal('modal-portfolio')">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save Project</button>
+                <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 28px;">
+                    <button type="button" class="btn-ghost-white" onclick="closeModal('modal-portfolio')">Batal</button>
+                    <button type="submit" class="btn-royal">Simpan Portofolio</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- TOAST NOTIFICATION -->
-    <div class="toast-container" id="toast-container"></div>
+    <!-- Modal Services -->
+    <div class="modal-overlay-kalana" id="modal-services">
+        <div class="modal-card-kalana">
+            <div class="modal-header-kalana">
+                <h3 id="modal-title-services" style="color: #ffffff; font-size: 1.35rem; margin: 0;">Form Layanan</h3>
+                <button type="button" class="modal-close-btn" onclick="closeModal('modal-services')" aria-label="Tutup">&times;</button>
+            </div>
+            <form onsubmit="handleFormSubmit(event, 'services')">
+                <input type="hidden" name="id">
+                <div class="form-group">
+                    <label class="form-label" style="color: #ffffff;">Nama Layanan *</label>
+                    <input type="text" class="form-control" name="title" placeholder="Cth: High-Performance Landing Page" required style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" style="color: #ffffff;">Slug URL (Cth: landing-page)</label>
+                    <input type="text" class="form-control" name="slug" placeholder="cth: landing-page" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" style="color: #ffffff;">Harga Mulai Dari (Starting Price)</label>
+                    <input type="text" class="form-control" name="startingPrice" placeholder="Cth: Rp 1.500.000" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" style="color: #ffffff;">Keterangan / Deskripsi Layanan</label>
+                    <textarea class="form-control" name="description" rows="3" placeholder="Jelaskan value utama dari layanan ini..." style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" style="color: #ffffff;">Fasilitas &amp; Fitur Layanan (Pisahkan dengan koma)</label>
+                    <textarea class="form-control" name="features" rows="3" placeholder="Mobile-First, Integrasi WhatsApp, Cloudflare SSL, 3-5 Hari Kerja" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" style="color: #ffffff;">Status Publikasi</label>
+                    <select class="form-control" name="isPublished" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                        <option value="true">Published</option>
+                        <option value="false">Draft</option>
+                    </select>
+                </div>
+                <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 28px;">
+                    <button type="button" class="btn-ghost-white" onclick="closeModal('modal-services')">Batal</button>
+                    <button type="submit" class="btn-royal">Simpan Layanan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Pricing -->
+    <div class="modal-overlay-kalana" id="modal-pricing">
+        <div class="modal-card-kalana">
+            <div class="modal-header-kalana">
+                <h3 id="modal-title-pricing" style="color: #ffffff; font-size: 1.35rem; margin: 0;">Form Paket Harga</h3>
+                <button type="button" class="modal-close-btn" onclick="closeModal('modal-pricing')" aria-label="Tutup">&times;</button>
+            </div>
+            <form onsubmit="handleFormSubmit(event, 'pricing')">
+                <input type="hidden" name="id">
+                <div class="form-group">
+                    <label class="form-label" style="color: #ffffff;">Nama Paket *</label>
+                    <input type="text" class="form-control" name="name" placeholder="Cth: Company Profile Pro" required style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" style="color: #ffffff;">Biaya Investasi / Harga *</label>
+                    <input type="text" class="form-control" name="price" placeholder="Cth: Rp 3.500.000" required style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" style="color: #ffffff;">Keterangan / Deskripsi Paket</label>
+                    <textarea class="form-control" name="description" rows="2" placeholder="Solusi komprehensif buat bangun otoritas brand..." style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" style="color: #ffffff;">Fasilitas &amp; Fitur Paket (Pisahkan dengan koma)</label>
+                    <textarea class="form-control" name="features" rows="3" placeholder="7 Halaman Dinamis, Panel Admin Mandiri, SEO Google, Garansi 30 Hari" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);"></textarea>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div class="form-group">
+                        <label class="form-label" style="color: #ffffff;">Pilihan Populer / Featured?</label>
+                        <select class="form-control" name="isFeatured" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                            <option value="false">Tidak</option>
+                            <option value="true">Ya (Badge Pilihan Favorit)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" style="color: #ffffff;">Status</label>
+                        <select class="form-control" name="isPublished" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                            <option value="true">Published</option>
+                            <option value="false">Draft</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 28px;">
+                    <button type="button" class="btn-ghost-white" onclick="closeModal('modal-pricing')">Batal</button>
+                    <button type="submit" class="btn-royal">Simpan Paket</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Testimonials -->
+    <div class="modal-overlay-kalana" id="modal-testimonials">
+        <div class="modal-card-kalana">
+            <div class="modal-header-kalana">
+                <h3 id="modal-title-testimonials" style="color: #ffffff; font-size: 1.35rem; margin: 0;">Form Testimoni Klien</h3>
+                <button type="button" class="modal-close-btn" onclick="closeModal('modal-testimonials')" aria-label="Tutup">&times;</button>
+            </div>
+            <form onsubmit="handleFormSubmit(event, 'testimonials')">
+                <input type="hidden" name="id">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div class="form-group">
+                        <label class="form-label" style="color: #ffffff;">Nama Klien *</label>
+                        <input type="text" class="form-control" name="name" placeholder="Cth: Raditya Pratama" required style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" style="color: #ffffff;">Peran / Jabatan (Role) *</label>
+                        <input type="text" class="form-control" name="role" placeholder="Cth: Founder" required style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div class="form-group">
+                        <label class="form-label" style="color: #ffffff;">Nama Perusahaan / Brand *</label>
+                        <input type="text" class="form-control" name="company" placeholder="Cth: Studio Kreasi Digital" required style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" style="color: #ffffff;">Rating Bintang (1 - 5)</label>
+                        <select class="form-control" name="rating" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                            <option value="5" selected>5 Bintang (Sempurna)</option>
+                            <option value="4">4 Bintang</option>
+                            <option value="3">3 Bintang</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" style="color: #ffffff;">Isi Testimoni / Ulasan Klien *</label>
+                    <textarea class="form-control" name="content" rows="4" placeholder="Tuliskan pengalaman atau dampak nyata setelah bekerjasama dengan Dents Web..." required style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" style="color: #ffffff;">Status Publikasi</label>
+                    <select class="form-control" name="isPublished" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                        <option value="true">Published (Tampil di Marquee Homepage)</option>
+                        <option value="false">Draft</option>
+                    </select>
+                </div>
+                <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 28px;">
+                    <button type="button" class="btn-ghost-white" onclick="closeModal('modal-testimonials')">Batal</button>
+                    <button type="submit" class="btn-royal">Simpan Testimoni</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal FAQ -->
+    <div class="modal-overlay-kalana" id="modal-faq">
+        <div class="modal-card-kalana">
+            <div class="modal-header-kalana">
+                <h3 id="modal-title-faq" style="color: #ffffff; font-size: 1.35rem; margin: 0;">Form FAQ</h3>
+                <button type="button" class="modal-close-btn" onclick="closeModal('modal-faq')" aria-label="Tutup">&times;</button>
+            </div>
+            <form onsubmit="handleFormSubmit(event, 'faq')">
+                <input type="hidden" name="id">
+                <div class="form-group">
+                    <label class="form-label" style="color: #ffffff;">Pertanyaan *</label>
+                    <input type="text" class="form-control" name="question" placeholder="Cth: Berapa lama estimasi pengerjaan website?" required style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" style="color: #ffffff;">Jawaban Lengkap *</label>
+                    <textarea class="form-control" name="answer" rows="4" placeholder="Tuliskan jawaban yang informatif dan jelas..." required style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" style="color: #ffffff;">Status</label>
+                    <select class="form-control" name="isPublished" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                        <option value="true">Published</option>
+                        <option value="false">Draft</option>
+                    </select>
+                </div>
+                <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 28px;">
+                    <button type="button" class="btn-ghost-white" onclick="closeModal('modal-faq')">Batal</button>
+                    <button type="submit" class="btn-royal">Simpan FAQ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-box" id="toast-container"></div>
 
     <script>
-        // --- UI UTILS ---
+        // Global in-memory cache for fast pre-filling during Edit
+        window.cacheData = {
+            leads: [],
+            portfolio: [],
+            services: [],
+            pricing: [],
+            testimonials: [],
+            faq: []
+        };
+
+        // UI Helpers
         function showToast(message, type = 'success') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
-            toast.className = `toast`;
-            toast.style.borderLeftColor = type === 'success' ? 'var(--success)' : 'var(--danger)';
+            toast.className = `toast-item ${type === 'success' ? 'toast-success' : 'toast-error'}`;
             toast.textContent = message;
             container.appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
+            setTimeout(() => toast.remove(), 3500);
         }
 
-        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function openModal(id) { 
+            const m = document.getElementById(id);
+            if (!m) return;
+            const form = m.querySelector('form');
+            if (form) {
+                form.reset();
+                const idInput = form.querySelector('input[name="id"]');
+                if (idInput) idInput.value = '';
+            }
+            
+            // Set title back to Add
+            const entity = id.replace('modal-', '');
+            const titleEl = document.getElementById(`modal-title-${entity}`);
+            if (titleEl) {
+                const entityNames = {
+                    portfolio: 'Portofolio Proyek',
+                    services: 'Layanan',
+                    pricing: 'Paket Harga',
+                    testimonials: 'Testimoni Klien',
+                    faq: 'FAQ'
+                };
+                titleEl.textContent = `Tambah ${entityNames[entity] || entity}`;
+            }
+            m.classList.add('active');
+            m.style.display = 'flex'; 
+        }
+
         function closeModal(id) { 
             const m = document.getElementById(id);
-            m.style.display = 'none'; 
-            m.querySelector('form').reset();
-            m.querySelector('input[name="id"]').value = '';
+            if (m) {
+                m.classList.remove('active');
+                m.style.display = 'none'; 
+                const form = m.querySelector('form');
+                if (form) {
+                    form.reset();
+                    const idInput = form.querySelector('input[name="id"]');
+                    if (idInput) idInput.value = '';
+                }
+            }
         }
 
-        // --- TAB SWITCHER ---
-        document.querySelectorAll('.admin-menu-item').forEach(item => {
-            if(item.textContent === 'Logout') return;
-            item.addEventListener('click', (e) => {
-                document.querySelectorAll('.admin-menu-item').forEach(i => i.classList.remove('active'));
-                e.target.classList.add('active');
-                
-                document.querySelectorAll('.admin-panel').forEach(p => p.style.display = 'none');
-                const tab = e.target.getAttribute('data-tab');
-                document.getElementById(`panel-${tab}`).style.display = 'block';
-                
-                loadData(tab);
-                
-                // mobile menu auto close
-                if(window.innerWidth <= 768) {
-                    document.getElementById('admin-sidebar').style.display = 'none';
+        // Open Edit Modal with Pre-filled Form Values
+        function openEditModal(entity, id) {
+            const list = window.cacheData[entity] || [];
+            const item = list.find(x => String(x.id) === String(id));
+            if (!item) {
+                showToast('Data tidak ditemukan.', 'error');
+                return;
+            }
+
+            const modal = document.getElementById(`modal-${entity}`);
+            if (!modal) {
+                showToast('Modal tidak ditemukan: ' + entity, 'error');
+                return;
+            }
+            const form = modal.querySelector('form');
+            if (!form) return;
+
+            form.reset();
+
+            // Explicit safe field value setter
+            const setVal = (name, val) => {
+                const el = form.elements[name];
+                if (el) {
+                    el.value = (val !== undefined && val !== null) ? val : '';
                 }
+            };
+
+            setVal('id', item.id);
+
+            if (entity === 'portfolio') {
+                setVal('title', item.title);
+                setVal('slug', item.slug);
+                setVal('client', item.client);
+                setVal('year', item.year);
+                setVal('category', item.category);
+                setVal('image', item.image);
+                setVal('projectUrl', item.projectUrl);
+                setVal('shortDescription', item.shortDescription);
+                setVal('description', item.description);
+                setVal('isPublished', item.isPublished ? 'true' : 'false');
+            } else if (entity === 'services') {
+                setVal('title', item.title);
+                setVal('slug', item.slug);
+                setVal('startingPrice', item.startingPrice);
+                setVal('description', item.description);
+                setVal('features', Array.isArray(item.features) ? item.features.join(', ') : (item.features || ''));
+                setVal('isPublished', item.isPublished !== false ? 'true' : 'false');
+            } else if (entity === 'pricing') {
+                setVal('name', item.name);
+                setVal('price', item.price);
+                setVal('description', item.description);
+                setVal('features', Array.isArray(item.features) ? item.features.join(', ') : (item.features || ''));
+                setVal('isFeatured', item.isFeatured ? 'true' : 'false');
+                setVal('isPublished', item.isPublished !== false ? 'true' : 'false');
+            } else if (entity === 'testimonials') {
+                setVal('name', item.name);
+                setVal('role', item.role);
+                setVal('company', item.company);
+                setVal('rating', item.rating || 5);
+                setVal('content', item.content);
+                setVal('isPublished', item.isPublished !== false ? 'true' : 'false');
+            } else if (entity === 'faq') {
+                setVal('question', item.question);
+                setVal('answer', item.answer);
+                setVal('isPublished', item.isPublished !== false ? 'true' : 'false');
+            }
+
+            // Set Title to Edit
+            const titleEl = document.getElementById(`modal-title-${entity}`);
+            if (titleEl) {
+                const entityNames = {
+                    portfolio: 'Portofolio Proyek',
+                    services: 'Layanan',
+                    pricing: 'Paket Harga',
+                    testimonials: 'Testimoni Klien',
+                    faq: 'FAQ'
+                };
+                titleEl.textContent = `Edit ${entityNames[entity] || entity}`;
+            }
+
+            modal.classList.add('active');
+            modal.style.display = 'flex';
+        }
+
+        // Tab Switcher
+        document.querySelectorAll('.admin-nav-item').forEach(item => {
+            const tab = item.getAttribute('data-tab');
+            if (!tab) return;
+            item.addEventListener('click', () => {
+                document.querySelectorAll('.admin-nav-item').forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+
+                document.querySelectorAll('.admin-panel').forEach(p => p.style.display = 'none');
+                const targetPanel = document.getElementById(`panel-${tab}`);
+                if (targetPanel) targetPanel.style.display = 'block';
+
+                loadData(tab);
             });
         });
 
-        // Mobile menu toggle
-        document.getElementById('admin-hamburger').addEventListener('click', () => {
-            const sb = document.getElementById('admin-sidebar');
-            sb.style.display = sb.style.display === 'block' ? 'none' : 'block';
-        });
-
-        // --- CORE API FETCHER ---
+        // API Fetcher
         async function api(url, method = 'GET', body = null) {
             const options = { method, headers: { 'Content-Type': 'application/json' } };
             if (body) options.body = JSON.stringify(body);
@@ -217,7 +803,7 @@
                 const res = await fetch(url, options);
                 if (res.status === 401) { window.location.href = '/admin-login'; return; }
                 const data = await res.json();
-                if(!res.ok) throw new Error(data.message || 'Server error');
+                if (!res.ok) throw new Error(data.message || 'Server error');
                 return data;
             } catch (err) {
                 showToast(err.message, 'error');
@@ -225,110 +811,258 @@
             }
         }
 
-        // --- DATA LOADERS (KISS approach) ---
+        // Loaders
         async function loadData(tab) {
             if (tab === 'leads') {
                 const res = await api('/api/admin/leads');
+                window.cacheData.leads = res.data || [];
                 const tb = document.querySelector('#table-leads tbody');
-                tb.innerHTML = res.data.length ? res.data.map(l => `
+                tb.innerHTML = (res.data && res.data.length) ? res.data.map(l => `
                     <tr>
-                        <td>${new Date(l.createdAt).toLocaleDateString('id-ID')}</td>
-                        <td>${l.name}</td>
-                        <td>${l.whatsapp}</td>
-                        <td><span class="tag">${l.status}</span></td>
-                        <td><button class="tag" style="background:var(--danger); color:white; border:none;" onclick="deleteRecord('leads', '${l.id}')">Del</button></td>
-                    </tr>
-                `).join('') : '<tr><td colspan="5">No leads yet.</td></tr>';
-            }
-            
-            if (tab === 'portfolio') {
-                const res = await api('/api/admin/portfolio');
-                const tb = document.querySelector('#table-portfolio tbody');
-                tb.innerHTML = res.data.length ? res.data.map(p => `
-                    <tr>
-                        <td style="font-weight: 500; color: white;">${p.title}</td>
-                        <td>${p.client}</td>
-                        <td><span class="tag">${p.isPublished ? 'Published' : 'Draft'}</span></td>
-                        <td>
-                            <!-- Edit logic omitted for brevity in MVP, implementing delete only -->
-                            <button class="tag" style="background:var(--danger); color:white; border:none;" onclick="deleteRecord('portfolio', '${p.id}')">Del</button>
+                        <td style="color: var(--slate-muted); font-size: 0.85rem;">${new Date(l.createdAt).toLocaleDateString('id-ID')}</td>
+                        <td style="font-weight: 700; color: #ffffff;">${escapeHtml(l.name)}</td>
+                        <td><a href="https://wa.me/${l.whatsapp.replace(/[^0-9]/g, '')}" target="_blank" style="color: var(--lime-accent); font-weight: 600; text-decoration: none;">${escapeHtml(l.whatsapp)} &nearr;</a></td>
+                        <td style="color: var(--slate-muted);">${escapeHtml(l.email || '-')}</td>
+                        <td style="max-width: 260px; font-size: 0.85rem; line-height: 1.5;">${escapeHtml(l.message)}</td>
+                        <td><span class="badge-tag-royal" style="font-size: 0.75rem;">${escapeHtml(l.status || 'Baru')}</span></td>
+                        <td style="text-align: right; white-space: nowrap;">
+                            <button class="btn-action-delete" onclick="deleteRecord('leads', '${l.id}')">Hapus</button>
                         </td>
                     </tr>
-                `).join('') : '<tr><td colspan="4">No portfolio items.</td></tr>';
+                `).join('') : '<tr><td colspan="7" style="text-align: center; padding: 30px; color: var(--slate-muted);">Belum ada pesan leads masuk.</td></tr>';
+            }
+
+            if (tab === 'portfolio') {
+                const res = await api('/api/admin/portfolio');
+                window.cacheData.portfolio = res.data || [];
+                const tb = document.querySelector('#table-portfolio tbody');
+                tb.innerHTML = (res.data && res.data.length) ? res.data.map(p => `
+                    <tr>
+                        <td style="font-weight: 700; color: #ffffff;">${escapeHtml(p.title)}</td>
+                        <td style="color: var(--slate-muted);">${escapeHtml(p.client)}</td>
+                        <td><span class="badge-tag-royal" style="font-size: 0.75rem;">${escapeHtml(p.category)}</span></td>
+                        <td style="color: var(--slate-muted);">${p.year}</td>
+                        <td><span class="badge-tag-lime" style="font-size: 0.75rem;">${p.isPublished ? 'Published' : 'Draft'}</span></td>
+                        <td style="text-align: right; white-space: nowrap;">
+                            <button class="btn-action-edit" onclick="openEditModal('portfolio', '${p.id}')">Edit</button>
+                            <button class="btn-action-delete" onclick="deleteRecord('portfolio', '${p.id}')">Hapus</button>
+                        </td>
+                    </tr>
+                `).join('') : '<tr><td colspan="6" style="text-align: center; padding: 30px; color: var(--slate-muted);">Belum ada portofolio di database.</td></tr>';
+            }
+
+            if (tab === 'services') {
+                const res = await api('/api/admin/services');
+                window.cacheData.services = res.data || [];
+                const tb = document.querySelector('#table-services tbody');
+                tb.innerHTML = (res.data && res.data.length) ? res.data.map(s => `
+                    <tr>
+                        <td>
+                            <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(33,82,207,0.2); color: var(--royal-blue); display: flex; align-items: center; justify-content: center;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 12 22 12"></polyline></svg>
+                            </div>
+                        </td>
+                        <td style="font-weight: 700; color: #ffffff;">${escapeHtml(s.title)}</td>
+                        <td style="color: var(--lime-accent); font-weight: 700;">${escapeHtml(s.startingPrice || '-')}</td>
+                        <td><span class="badge-tag-lime" style="font-size: 0.75rem;">${s.isPublished !== false ? 'Published' : 'Draft'}</span></td>
+                        <td style="text-align: right; white-space: nowrap;">
+                            <button class="btn-action-edit" onclick="openEditModal('services', '${s.id}')">Edit</button>
+                            <button class="btn-action-delete" onclick="deleteRecord('services', '${s.id}')">Hapus</button>
+                        </td>
+                    </tr>
+                `).join('') : '<tr><td colspan="5" style="text-align: center; padding: 30px; color: var(--slate-muted);">Belum ada data layanan di database.</td></tr>';
+            }
+
+            if (tab === 'pricing') {
+                const res = await api('/api/admin/pricing');
+                window.cacheData.pricing = res.data || [];
+                const tb = document.querySelector('#table-pricing tbody');
+                tb.innerHTML = (res.data && res.data.length) ? res.data.map(pkg => `
+                    <tr>
+                        <td style="font-weight: 700; color: #ffffff;">${escapeHtml(pkg.name)}</td>
+                        <td style="color: var(--lime-accent); font-weight: 700;">${escapeHtml(pkg.price)}</td>
+                        <td>${pkg.isFeatured ? '<span class="badge-tag-lime" style="font-size: 0.75rem;">Populer</span>' : '<span style="color: var(--slate-muted); font-size: 0.85rem;">Standar</span>'}</td>
+                        <td><span class="badge-tag-lime" style="font-size: 0.75rem;">${pkg.isPublished !== false ? 'Published' : 'Draft'}</span></td>
+                        <td style="text-align: right; white-space: nowrap;">
+                            <button class="btn-action-edit" onclick="openEditModal('pricing', '${pkg.id}')">Edit</button>
+                            <button class="btn-action-delete" onclick="deleteRecord('pricing', '${pkg.id}')">Hapus</button>
+                        </td>
+                    </tr>
+                `).join('') : '<tr><td colspan="5" style="text-align: center; padding: 30px; color: var(--slate-muted);">Belum ada paket harga di database.</td></tr>';
+            }
+
+            if (tab === 'testimonials') {
+                const res = await api('/api/admin/testimonials');
+                window.cacheData.testimonials = res.data || [];
+                const tb = document.querySelector('#table-testimonials tbody');
+                tb.innerHTML = (res.data && res.data.length) ? res.data.map(t => `
+                    <tr>
+                        <td style="font-weight: 700; color: #ffffff;">${escapeHtml(t.name)}</td>
+                        <td style="color: var(--slate-muted);">${escapeHtml(t.role)} &bull; ${escapeHtml(t.company || '')}</td>
+                        <td style="color: #fbbf24; font-weight: 700;">${'★'.repeat(t.rating || 5)}</td>
+                        <td style="max-width: 300px; font-size: 0.85rem; line-height: 1.5; color: var(--slate-body);">${escapeHtml(t.content)}</td>
+                        <td><span class="badge-tag-lime" style="font-size: 0.75rem;">${t.isPublished !== false ? 'Published' : 'Draft'}</span></td>
+                        <td style="text-align: right; white-space: nowrap;">
+                            <button class="btn-action-edit" onclick="openEditModal('testimonials', '${t.id}')">Edit</button>
+                            <button class="btn-action-delete" onclick="deleteRecord('testimonials', '${t.id}')">Hapus</button>
+                        </td>
+                    </tr>
+                `).join('') : '<tr><td colspan="6" style="text-align: center; padding: 30px; color: var(--slate-muted);">Belum ada testimoni klien di database.</td></tr>';
+            }
+
+            if (tab === 'faq') {
+                const res = await api('/api/admin/faq');
+                window.cacheData.faq = res.data || [];
+                const tb = document.querySelector('#table-faq tbody');
+                tb.innerHTML = (res.data && res.data.length) ? res.data.map(f => `
+                    <tr>
+                        <td style="font-weight: 700; color: #ffffff;">${escapeHtml(f.question)}</td>
+                        <td style="color: var(--slate-muted); font-size: 0.85rem; max-width: 320px;">${escapeHtml(f.answer)}</td>
+                        <td style="text-align: right; white-space: nowrap;">
+                            <button class="btn-action-edit" onclick="openEditModal('faq', '${f.id}')">Edit</button>
+                            <button class="btn-action-delete" onclick="deleteRecord('faq', '${f.id}')">Hapus</button>
+                        </td>
+                    </tr>
+                `).join('') : '<tr><td colspan="3" style="text-align: center; padding: 30px; color: var(--slate-muted);">Belum ada data FAQ di database.</td></tr>';
             }
 
             if (tab === 'settings') {
                 const res = await api('/api/admin/settings');
-                if(res.data) {
+                if (res.data) {
                     document.getElementById('set-siteName').value = res.data.siteName || '';
+                    document.getElementById('set-brandName').value = res.data.brandName || '';
+                    document.getElementById('set-tagline').value = res.data.tagline || '';
                     document.getElementById('set-email').value = res.data.email || '';
-                    document.getElementById('set-wa').value = res.data.whatsapp || '';
+                    document.getElementById('set-whatsapp').value = res.data.whatsapp || '';
+                    document.getElementById('set-address').value = res.data.address || '';
                     document.getElementById('set-seoTitle').value = res.data.defaultSeoTitle || '';
                     document.getElementById('set-seoDesc').value = res.data.defaultSeoDescription || '';
                 }
             }
-
-            // Implement other tabs (services, pricing, faq) similar to portfolio.
-            // Placeholder for demonstration
-            ['services', 'pricing', 'faq'].forEach(t => {
-                if(tab === t) {
-                    const tb = document.querySelector(`#table-${t} tbody`);
-                    if(tb) tb.innerHTML = `<tr><td colspan="4">Data loader for ${t} active.</td></tr>`;
-                }
-            })
         }
 
-        // --- CRUD ACTIONS ---
+        // CRUD Handler for POST & PUT
         async function handleFormSubmit(e, endpoint) {
             e.preventDefault();
             const form = e.target;
             const payload = Object.fromEntries(new FormData(form).entries());
             const id = payload.id;
-            
-            // convert string to boolean for publish status
-            if(payload.isPublished) payload.isPublished = payload.isPublished === 'true';
-            
+
+            if (payload.isPublished !== undefined) payload.isPublished = payload.isPublished === 'true';
+            if (payload.isFeatured !== undefined) payload.isFeatured = payload.isFeatured === 'true';
+            if (payload.rating) payload.rating = parseInt(payload.rating, 10);
+            if (payload.year) payload.year = parseInt(payload.year, 10);
+
+            // If features string, split into clean array
+            if (payload.features && typeof payload.features === 'string') {
+                payload.features = payload.features.split(',').map(f => f.trim()).filter(Boolean);
+            }
+
             const method = id ? 'PUT' : 'POST';
             const url = id ? `/api/admin/${endpoint}/${id}` : `/api/admin/${endpoint}`;
-            
+
+            // Remove empty id on create
+            if (!id) delete payload.id;
+
             try {
                 await api(url, method, payload);
-                showToast('Success saved!');
+                showToast(id ? 'Perubahan berhasil disimpan!' : 'Data baru berhasil ditambahkan!', 'success');
                 closeModal(`modal-${endpoint}`);
                 loadData(endpoint);
-            } catch(err) { /* handled by api() */ }
+            } catch (err) {}
         }
 
+        // Delete Record
         async function deleteRecord(endpoint, id) {
-            if(!confirm('Are you sure you want to delete this record?')) return;
+            if (!confirm('Yakin ingin menghapus data ini secara permanen?')) return;
             try {
                 await api(`/api/admin/${endpoint}/${id}`, 'DELETE');
-                showToast('Record deleted.');
+                showToast('Data berhasil dihapus.', 'success');
                 loadData(endpoint);
-            } catch(err) {}
+            } catch (err) {}
         }
 
-        // --- SETTINGS SUBMIT ---
-        document.getElementById('form-settings').addEventListener('submit', async(e) => {
+        // Settings Submit
+        document.getElementById('form-settings').addEventListener('submit', async (e) => {
             e.preventDefault();
             const payload = Object.fromEntries(new FormData(e.target).entries());
             try {
                 await api('/api/admin/settings', 'PUT', payload);
-                showToast('Settings Updated!');
-            } catch(err) {}
+                showToast('Pengaturan global berhasil disimpan!', 'success');
+            } catch (err) {}
         });
 
-        // --- AUTH ---
+        // Logout
         async function handleLogout() {
-            if(!confirm('Logout from secure session?')) return;
+            if (!confirm('Akhiri sesi admin Anda sekarang?')) return;
             try {
                 await api('/admin/logout', 'POST');
                 window.location.href = '/admin-login';
-            } catch(err) {}
+            } catch (err) {}
         }
 
-        // Init
-        document.addEventListener('DOMContentLoaded', () => loadData('leads'));
+        // Safe HTML String Escape
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        // Initialize & Event Bindings
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData('leads');
+
+            // Mobile Drawer Toggle
+            const menuToggle = document.getElementById('admin-menu-toggle');
+            const sidebar = document.querySelector('.admin-sidebar-kalana');
+            const drawerOverlay = document.getElementById('admin-drawer-overlay');
+
+            if (menuToggle && sidebar && drawerOverlay) {
+                menuToggle.addEventListener('click', () => {
+                    sidebar.classList.toggle('active');
+                    drawerOverlay.classList.toggle('active');
+                });
+
+                drawerOverlay.addEventListener('click', () => {
+                    sidebar.classList.remove('active');
+                    drawerOverlay.classList.remove('active');
+                });
+            }
+
+            // Close drawer when clicking nav items on mobile
+            document.querySelectorAll('.admin-nav-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    if (sidebar && drawerOverlay && window.innerWidth <= 1024) {
+                        sidebar.classList.remove('active');
+                        drawerOverlay.classList.remove('active');
+                    }
+                });
+            });
+
+            // Close modal when clicking outside card (on overlay backdrop)
+            document.querySelectorAll('.modal-overlay-kalana').forEach(overlay => {
+                overlay.addEventListener('click', (e) => {
+                    if (e.target === overlay) {
+                        closeModal(overlay.id);
+                    }
+                });
+            });
+
+            // Escape key closes modals & drawer
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    document.querySelectorAll('.modal-overlay-kalana.active').forEach(m => closeModal(m.id));
+                    if (sidebar && drawerOverlay) {
+                        sidebar.classList.remove('active');
+                        drawerOverlay.classList.remove('active');
+                    }
+                }
+            });
+        });
     </script>
 </body>
 </html>
