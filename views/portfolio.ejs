@@ -71,62 +71,92 @@
             </div>
         </section>
 
-        <!-- Portfolio Showcase Grid -->
-        <section class="section-white" style="padding-top: 70px; padding-bottom: 90px;">
+        <!-- Portfolio Showcase Grid (Style Tahoe macOS 3-Columns) -->
+        <section class="portfolio-section-tahoe">
             <div class="container">
-                <div class="grid-2">
+                <div class="portfolio-grid-tahoe">
                     <% if (typeof portfolio !== 'undefined' && portfolio.length > 0) { %>
                         <% portfolio.forEach(item => { %>
-                            <div class="portfolio-card-kalana" onclick="window.location.href='/portfolio/<%= item.slug %>'">
-                                <div class="portfolio-img-cover">
-                                    <img src="<%= item.image || '/public/img/axalogo.png' %>" alt="<%= item.title %>" loading="lazy">
-                                </div>
-                                <div class="portfolio-body">
-                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
-                                        <span class="badge-tag-royal"><%= item.category %></span>
-                                        <span style="font-size: 0.85rem; font-weight: 700; color: var(--slate-muted);">Klien: <%= item.client %> &bull; <%= item.year %></span>
+                            <article class="portfolio-card-tahoe" onclick="window.location.href='/portfolio/<%= item.slug %>'" role="button" tabindex="0" onkeydown="if(event.key==='Enter') window.location.href='/portfolio/<%= item.slug %>'">
+                                <!-- macOS Browser Window Mockup -->
+                                <div class="macos-browser-window">
+                                    <div class="macos-window-header">
+                                        <div class="macos-traffic-lights" aria-hidden="true">
+                                            <span class="traffic-light red"></span>
+                                            <span class="traffic-light yellow"></span>
+                                            <span class="traffic-light green"></span>
+                                        </div>
+                                        <div class="macos-address-pill">
+                                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                                            <span>dentsweb.my.id/<%= item.slug %></span>
+                                        </div>
+                                        <div style="width: 38px;"></div>
                                     </div>
-                                    <h3 style="font-size: 1.4rem; color: var(--navy-text); margin-bottom: 10px;"><%= item.title %></h3>
-                                    <p style="font-size: 0.95rem; color: var(--slate-body); margin-bottom: 16px; line-height: 1.65; flex-grow: 1;">
+                                    <div class="macos-window-body">
+                                        <img src="<%= item.image || '/public/img/axalogo.png' %>" alt="<%= item.title %>" loading="lazy">
+                                    </div>
+                                </div>
+
+                                <!-- Tahoe Content Body -->
+                                <div class="portfolio-tahoe-body">
+                                    <div class="portfolio-tahoe-category">
+                                        <span><%= item.category %></span>
+                                        <span class="portfolio-tahoe-year"><%= item.year || 2026 %></span>
+                                    </div>
+                                    <h2 class="portfolio-tahoe-title"><%= item.title %></h2>
+                                    <p class="portfolio-tahoe-desc">
                                         <%= item.shortDescription || item.description %>
                                     </p>
+
+                                    <!-- Tags Chips (e.g. Landing Page, F&B, Responsive) -->
+                                    <% if (item.tags && item.tags.length > 0) { %>
+                                        <div class="portfolio-tahoe-tags">
+                                            <% (Array.isArray(item.tags) ? item.tags : item.tags.split(',')).forEach(tag => { %>
+                                                <span class="tahoe-tag-pill"><%= tag.trim ? tag.trim() : tag %></span>
+                                            <% }) %>
+                                        </div>
+                                    <% } %>
+
+                                    <!-- Tech Stack Badges -->
                                     <% if (item.tools && item.tools.length > 0) { %>
-                                        <div class="portfolio-tools-list" style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px;">
+                                        <div class="portfolio-tahoe-tools">
                                             <% item.tools.slice(0, 5).forEach(tId => { %>
                                                 <span class="tech-badge-container" data-tool-id="<%= tId %>"></span>
                                             <% }) %>
                                             <% if (item.tools.length > 5) { %>
-                                                <span style="font-size: 0.72rem; font-weight: 700; color: var(--slate-muted); align-self: center; background: rgba(0,0,0,0.05); padding: 3px 8px; border-radius: 999px;">+<%= item.tools.length - 5 %></span>
+                                                <span style="font-size: 0.72rem; font-weight: 700; color: #94a3b8; align-self: center; background: rgba(255,255,255,0.08); padding: 2px 7px; border-radius: 999px;">+<%= item.tools.length - 5 %></span>
                                             <% } %>
                                         </div>
                                     <% } %>
-                                    <div style="display: flex; align-items: center; gap: 8px; color: var(--royal-blue); font-weight: 700; font-size: 0.95rem;">
+
+                                    <!-- Card Action Footer -->
+                                    <div class="portfolio-tahoe-footer">
                                         <span>Buka Studi Kasus Lengkap</span>
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                                     </div>
                                 </div>
-                            </div>
+                            </article>
                         <% }) %>
                     <% } else { %>
-                        <div class="tactile-card tactile-card-heavy" style="grid-column: 1 / -1; text-align: center; padding: 80px 20px;">
-                            <div style="width: 64px; height: 64px; margin: 0 auto 20px; border-radius: 50%; background: var(--offwhite-card); display: flex; align-items: center; justify-content: center; color: var(--slate-muted);">
+                        <div class="tactile-card tactile-card-heavy" style="grid-column: 1 / -1; text-align: center; padding: 80px 20px; background: rgba(16, 26, 61, 0.75); border-color: rgba(255,255,255,0.1);">
+                            <div style="width: 64px; height: 64px; margin: 0 auto 20px; border-radius: 50%; background: rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; color: #94a3b8;">
                                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
                             </div>
-                            <h3 style="color: var(--navy-text); font-size: 1.5rem;">Belum ada portofolio yang dipublikasikan.</h3>
-                            <p style="max-width: 500px; margin: 12px auto 0; color: var(--slate-body);">Kami sedang menyusun studi kasus dari proyek-proyek terbaru. Silakan pantau terus atau kontak kami langsung.</p>
+                            <h3 style="color: #ffffff; font-size: 1.5rem;">Belum ada portofolio yang dipublikasikan.</h3>
+                            <p style="max-width: 500px; margin: 12px auto 0; color: #94a3b8;">Kami sedang menyusun studi kasus dari proyek-proyek terbaru. Silakan pantau terus atau kontak kami langsung.</p>
                         </div>
                     <% } %>
                 </div>
 
                 <!-- Bottom CTA Box -->
-                <div class="tactile-card tactile-card-heavy" style="margin-top: 80px; padding: 60px 40px; text-align: center; background: #ffffff; border-color: var(--border-light); border-bottom-color: var(--royal-blue);">
-                    <h2 style="font-size: clamp(1.8rem, 3.5vw, 2.5rem); color: var(--navy-text); margin-bottom: 16px;">
-                        Punya Konsep Proyek Serupa buat <span class="font-editorial text-royal">Bisnis Lu?</span>
+                <div class="tactile-card tactile-card-heavy" style="margin-top: 80px; padding: 60px 40px; text-align: center; background: rgba(16, 26, 61, 0.85); border-color: rgba(255, 255, 255, 0.12); border-bottom-color: var(--lime-accent);">
+                    <h2 style="font-size: clamp(1.8rem, 3.5vw, 2.5rem); color: #ffffff; margin-bottom: 16px;">
+                        Punya Konsep Proyek Serupa buat <span class="font-editorial text-lime">Bisnis Lu?</span>
                     </h2>
-                    <p style="max-width: 620px; margin: 0 auto 32px; color: var(--slate-body); font-size: 1.05rem; line-height: 1.7;">
+                    <p style="max-width: 620px; margin: 0 auto 32px; color: #cbd5e1; font-size: 1.05rem; line-height: 1.7;">
                         Diskusikan kebutuhan spesifik dan target audiens lu. Tim arsitek kami siap rancang platform yang bikin brand lu langsung diperhitungkan.
                     </p>
-                    <a href="/contact" class="btn-royal" style="display: inline-flex; align-items: center; gap: 8px;">
+                    <a href="/contact" class="btn-lime" style="display: inline-flex; align-items: center; gap: 8px;">
                         Mulai Konsultasi Proyek
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
                     </a>
