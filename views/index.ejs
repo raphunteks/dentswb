@@ -45,6 +45,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@500;600;700;800&family=Playfair+Display:ital,wght@1,400;1,500;1,600;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="/public/css/style.css">
+    <script src="/public/js/tech-icons.js"></script>
 </head>
 <body>
     
@@ -375,9 +376,19 @@
                                         <span style="font-size: 0.85rem; font-weight: 700; color: var(--slate-muted);"><%= item.year %></span>
                                     </div>
                                     <h3 style="font-size: 1.35rem; color: var(--navy-text); margin-bottom: 8px;"><%= item.title %></h3>
-                                    <p style="font-size: 0.925rem; color: var(--slate-body); margin-bottom: 16px; line-height: 1.6;">
+                                    <p style="font-size: 0.925rem; color: var(--slate-body); margin-bottom: 14px; line-height: 1.6;">
                                         <%= item.shortDescription || item.description %>
                                     </p>
+                                    <% if (item.tools && item.tools.length > 0) { %>
+                                        <div class="portfolio-tools-list" style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px;">
+                                            <% item.tools.slice(0, 4).forEach(tId => { %>
+                                                <span class="tech-badge-container" data-tool-id="<%= tId %>"></span>
+                                            <% }) %>
+                                            <% if (item.tools.length > 4) { %>
+                                                <span style="font-size: 0.7rem; font-weight: 700; color: var(--slate-muted); align-self: center; background: rgba(0,0,0,0.05); padding: 2px 6px; border-radius: 999px;">+<%= item.tools.length - 4 %></span>
+                                            <% } %>
+                                        </div>
+                                    <% } %>
                                     <div style="margin-top: auto; display: flex; align-items: center; gap: 8px; color: var(--royal-blue); font-weight: 700; font-size: 0.9rem;">
                                         <span>Buka Studi Kasus</span>
                                         <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
@@ -571,6 +582,15 @@
                 btn.setAttribute('aria-expanded', 'true');
             }
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.tech-badge-container').forEach(el => {
+                const id = el.getAttribute('data-tool-id');
+                if (window.renderTechBadge) {
+                    el.innerHTML = window.renderTechBadge(id, { size: 12, showLabel: true });
+                }
+            });
+        });
     </script>
 </body>
 </html>
