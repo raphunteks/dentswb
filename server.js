@@ -26,6 +26,37 @@ const redis = new Redis({
 app.set('view engine', 'ejs');
 app.set('views', path.join(process.cwd(), 'views'));
 
+// Direct Browser Asset Protection: Block direct URL browsing to private assets (/public/css, /public/js)
+// When accessed directly via address bar, returns customized 404.ejs with status 404
+// Subresource requests (<link rel="stylesheet">, <script src="...">) pass through transparently
+app.use(['/public/css', '/public/js'], async (req, res, next) => {
+    const secFetchDest = req.headers['sec-fetch-dest'];
+    const secFetchMode = req.headers['sec-fetch-mode'];
+    const accept = req.headers['accept'] || '';
+
+    const isDirectNavigation = 
+        secFetchDest === 'document' || 
+        secFetchMode === 'navigate' || 
+        (!secFetchDest && accept.includes('text/html'));
+
+    if (isDirectNavigation) {
+        try {
+            const settings = await getGlobalSettings();
+            return res.status(404).render('404', {
+                settings,
+                seo: buildSEO(settings, {
+                    title: '404 - Halaman Tidak Ditemukan | Dents Web',
+                    desc: 'Aset ini dilindungi dan tidak dapat diakses langsung via peramban.',
+                    path: req.originalUrl || req.path
+                })
+            });
+        } catch (e) {
+            return res.status(404).send('404 Not Found');
+        }
+    }
+    next();
+});
+
 // Static assets with cache-control headers (7 days) for high Google PageSpeed score
 app.use('/public', express.static(path.join(process.cwd(), 'public'), {
     maxAge: '7d',
@@ -182,100 +213,568 @@ async function ensureSeedData() {
             ]);
         }
 
+        const REAL_PORTFOLIO_PROJECTS = [
+            {
+                id: 'port_1',
+                title: 'BEM KBMFKG UMI — Portal Organisasi & Informasi Kabinet Ananta Anardhaya',
+                slug: 'bem-kbmfkg-umi',
+                client: 'BEM KBMFKG UMI',
+                category: 'PORTAL ORGANISASI & KEMAHASISWAAN',
+                year: 2026,
+                image: '/public/img/axalogo.png',
+                tags: ['Portal Organisasi', 'Kemahasiswaan', 'Public Information', 'Responsive Web'],
+                tools: ['html5', 'javascript', 'css3', 'bootstrap', 'vercel'],
+                shortDescription: 'Portal resmi Badan Eksekutif Mahasiswa Keluarga Besar Mahasiswa Fakultas Kedokteran Gigi Universitas Muslim Indonesia sebagai pusat transparansi informasi, publikasi birokrasi, aspirasi mahasiswa, serta kalender program kerja kabinet aktif.',
+                description: 'Portal web modern berstandar enterprise yang dirancang khusus untuk memfasilitasi kebutuhan publikasi informasi, penyaluran aspirasi mahasiswa FKG UMI secara aman, serta dokumentasi seluruh program kerja Badan Eksekutif Mahasiswa dalam satu ekosistem digital terpadu dan responsif di seluruh perangkat.',
+                challenge: 'Penyebaran informasi program kerja dan penyaluran aspirasi mahasiswa sebelumnya tersebar di berbagai kanal media sosial yang tidak terpusat, menyebabkan distorsi informasi dan lambatnya respon organisasi terhadap kebutuhan mahasiswa.',
+                solution: 'Mengembangkan arsitektur portal terpusat dengan sistem manajemen konten dinamis, formulir aspirasi terenkripsi, serta integrasi visual timeline program kerja kabinet berbasis mobile-first responsive design.',
+                projectUrl: 'https://www.bemkbmfkgumi.com/',
+                isFeatured: true,
+                isPublished: true
+            },
+            {
+                id: 'port_2',
+                title: 'HMI KOMKG UMI — Sistem Informasi Kader & Portal Perjuangan Insan Cita',
+                slug: 'hmi-komkg-umi',
+                client: 'HMI Komisariat Kedokteran Gigi UMI',
+                category: 'SISTEM INFORMASI KADER & ORGANISASI',
+                year: 2026,
+                image: '/public/img/axalogo.png',
+                tags: ['Sistem Informasi', 'Database Kader', 'Digital Archive', 'Responsive Design'],
+                tools: ['html5', 'javascript', 'css3', 'tailwindcss', 'vercel'],
+                shortDescription: 'Pusat data digital dan sistem informasi kader HMI Komisariat Kedokteran Gigi UMI untuk mendokumentasikan rekam jejak pengkaderan, materi perkaderan, serta literasi intelektual pergerakan mahasiswa Islam.',
+                description: 'Platform digital kelembagaan yang mengintegrasikan basis data kader, modul pembelajaran Basic Training (LK 1), arsip konstitusi himpunan, serta artikel opini mahasiswa demi mewujudkan tata kelola organisasi yang transparan dan adaptif terhadap transformasi digital era modern.',
+                challenge: 'Pendataan riwayat jenjang perkaderan serta inventarisasi arsip sejarah komisariat yang masih manual dan rentan tercecer saat pergantian kepengurusan periode baru.',
+                solution: 'Pembangunan platform digital arsip dengan repositori materi tersentralisasi, direktori profil kader, serta sistem navigasi interaktif yang memudahkan anggota mengakses materi perkaderan kapan saja.',
+                projectUrl: 'https://www.hmikomkgumi.xyz/',
+                isFeatured: true,
+                isPublished: true
+            },
+            {
+                id: 'port_3',
+                title: 'Estaka Dental Clinic — Smart Clinic & AI Queue Monitor Platform',
+                slug: 'estaka-dental-clinic',
+                client: 'Estaka Dental Care & Aesthetics',
+                category: 'HEALTHCARE & SMART CLINIC WEB APP',
+                year: 2026,
+                image: '/public/img/axalogo.png',
+                tags: ['Healthcare', 'Dental Clinic', 'Patient Booking', 'WhatsApp Gateway'],
+                tools: ['html5', 'javascript', 'css3', 'tailwindcss', 'vite', 'vercel'],
+                shortDescription: 'Aplikasi profil klinik gigi modern dan pemesanan jadwal dokter gigi berbasis sistem notifikasi otomatis WhatsApp yang efisien dan ramah pasien.',
+                description: 'Platform kesehatan dental holistik yang dirancang dengan estetika premium medis, memberikan pengalaman reservasi konsultasi dokter gigi spesialis tanpa hambatan, dilengkapi katalog perawatan gigi interaktif, simulasi biaya estimasi, dan verifikasi jadwal otomatis via bot chat.',
+                challenge: 'Tingginya angka pasien yang membatalkan jadwal konsultasi (no-show) karena alur pendaftaran manual via telepon yang memakan waktu dan tanpa adanya sistem pengingat otomatis.',
+                solution: 'Merancang web app reservasi instan dengan kalender interaktif dokter, penghitungan kuota pasien per sesi secara realtime, dan integrasi WhatsApp auto-confirmation trigger.',
+                projectUrl: 'https://estakadentalclinic.vercel.app/',
+                isFeatured: true,
+                isPublished: true
+            },
+            {
+                id: 'port_4',
+                title: 'Klinik Fahri Dental Care — PWA Kuesioner Riset Karies Gigi Anak Usia Dini',
+                slug: 'fahri-dental-care',
+                client: 'drg. Fahri Dental Care',
+                category: 'PWA CLINICAL RESEARCH & SCREENING',
+                year: 2026,
+                image: '/public/img/axalogo.png',
+                tags: ['PWA', 'Clinical Screening', 'Dental Health', 'Pediatric Dentistry'],
+                tools: ['html5', 'javascript', 'css3', 'tailwindcss', 'vite', 'vercel'],
+                shortDescription: 'Aplikasi skrining dan pengumpulan data kesehatan gigi balita dan anak interaktif untuk deteksi dini risiko Early Childhood Caries (ECC).',
+                description: 'Progressive Web App klinis yang menggabungkan instrumen edukasi interaktif bagi orang tua tentang kebersihan gigi anak dengan sistem surveilans karies gigi balita yang menghasilkan skor risiko langsung bagi praktisi medis gigi di klinik.',
+                challenge: 'Kurangnya kesadaran orang tua mendeteksi tanda karies dini pada balita dan sulitnya mengumpulkan kuesioner klinis terstandar secara manual di ruang tunggu klinik.',
+                solution: 'Implementasi PWA mobile-responsive dengan visualisasi indeks risiko gigi warna-warni ramah orang tua, kuesioner dinamis bercabang, dan penyimpanan data terstruktur.',
+                projectUrl: 'https://fahridental-care.vercel.app/',
+                isFeatured: true,
+                isPublished: true
+            },
+            {
+                id: 'port_5',
+                title: 'NovaCare.AI — Autonomous Patient Care & WhatsApp Gateway Engine',
+                slug: 'novacare-ai',
+                client: 'NovaCare Health Solutions',
+                category: 'AI SAAS & HEALTHCARE AUTOMATION',
+                year: 2026,
+                image: '/public/img/axalogo.png',
+                tags: ['AI Engine', 'SaaS', 'Healthcare Workflow', 'Multi-Agent Bot'],
+                tools: ['html5', 'javascript', 'react', 'nodejs', 'express', 'redis', 'vercel'],
+                shortDescription: 'Sistem operasional fasilitas kesehatan cerdas yang mengautomasi penjadwalan pasien, followup pengobatan, dan broadcast pengingat berkala terintegrasi WhatsApp API.',
+                description: 'Platform SaaS manajemen komunikasi pasien berbasis AI yang memotong beban kerja front office klinik hingga 70%. Dilengkapi sistem triage gejala awal, pengingat kontrol dokter otomatis, dan dashboard analitik retensi pasien realtime.',
+                challenge: 'Staf admin klinik kewalahan menangani ratusan pesan masuk WhatsApp setiap hari, menyebabkan antrean respons lambat dan keluhan pasien terkait kepastian jadwal.',
+                solution: 'Pengembangan arsitektur event-driven Node.js dengan antrean Redis yang mengotomasi alur pesan WhatsApp, sinkronisasi kalender dokter, dan pencatatan riwayat konsultasi.',
+                projectUrl: 'https://novacare-azure.vercel.app/',
+                isFeatured: true,
+                isPublished: true
+            },
+            {
+                id: 'port_6',
+                title: 'E-Form Kuesioner Herlinda — Digital Survey & Prevalensi Karies Gigi Balita',
+                slug: 'kuesioner-herlinda',
+                client: 'Riset Kesehatan Gigi Masyarakat FKG',
+                category: 'ACADEMIC SURVEY & EPIDEMIOLOGY',
+                year: 2026,
+                image: '/public/img/axalogo.png',
+                tags: ['E-Form', 'Academic Research', 'Epidemiology', 'Data Collection'],
+                tools: ['html5', 'javascript', 'css3', 'tailwindcss', 'vercel'],
+                shortDescription: 'Platform instrumen pengumpulan data kuesioner penelitian ilmiah kesehatan gigi balita dengan validasi input realtime dan kalkulasi indeks dmf-t otomatis.',
+                description: 'Web app instrumen survei epidemiologi yang dirancang khusus untuk penelitian skripsi/tesis kedokteran gigi, mempermudah enumerator lapangan mengisi kuesioner penelitian di puskesmas/posyandu dengan visualisasi skor def-t/dmf-t otomatis.',
+                challenge: 'Perekaman data penelitian gigi anak secara kertas konvensional sering menimbulkan kesalahan pengisian variabel, lembar survei basah/rusak di lapangan, dan data input manual yang memakan waktu berminggu-minggu.',
+                solution: 'Membangun formulir kuesioner digital berbasis web dengan validasi kolom ketat, scoring instan tanpa kalkulasi manual, dan ekspor dataset siap olah dalam hitungan detik.',
+                projectUrl: 'https://kuesionerherlinda.vercel.app/',
+                isFeatured: true,
+                isPublished: true
+            },
+            {
+                id: 'port_7',
+                title: 'AxaBOT Portal — Dual Backend Multi-Client WhatsApp Financial Automation',
+                slug: 'portal-finance-multiclient',
+                client: 'Axa Enterprise Financial Services',
+                category: 'FINTECH & MULTI-TENANT AUTOMATION',
+                year: 2026,
+                image: '/public/img/axalogo.png',
+                tags: ['Fintech', 'WhatsApp Bot', 'Multi-Client', 'Realtime Accounting'],
+                tools: ['html5', 'javascript', 'nodejs', 'express', 'postgresql', 'redis', 'docker', 'vercel'],
+                shortDescription: 'Portal keuangan korporat multi-klien dengan arsitektur dual backend yang mengintegrasikan bot WhatsApp interaktif untuk pencatatan kas, invoice otomatis, dan rekonsiliasi realtime.',
+                description: 'Arsitektur fintech tingkat tinggi dengan sistem multi-tenant yang memungkinkan puluhan cabang bisnis mengelola pencatatan pemasukan, pengeluaran, konfirmasi mutasi bank, dan penerbitan nota transaksi langsung dari obrolan WhatsApp tanpa membuka software akuntansi rumit.',
+                challenge: 'Karyawan dan tim lapangan sering lupa merekap bon transaksi operasional, menyebabkan selisih buku kas yang signifikan pada akhir bulan pelaporan.',
+                solution: 'Membangun bot WhatsApp dengan microservice backend ganda yang memproses bukti foto nota melalui OCR, mencatat pembukuan otomatis ke database terpusat, dan mengirimkan alert limit saldo secara berkala.',
+                projectUrl: 'https://prtal-wa-finance.vercel.app/',
+                isFeatured: true,
+                isPublished: true
+            },
+            {
+                id: 'port_8',
+                title: 'Joki Borang PIDGI — Platform Asistensi Logbook Dokter Gigi Internsip No. 1',
+                slug: 'joki-borang-pidgi',
+                client: 'DentisLog Indonesia',
+                category: 'EDUTECH & PROFESSIONAL ASSISTANCE',
+                year: 2026,
+                image: '/public/img/axalogo.png',
+                tags: ['Edutech', 'Internship Tool', 'Logbook Automation', 'Dental Care'],
+                tools: ['html5', 'javascript', 'css3', 'tailwindcss', 'vite', 'vercel'],
+                shortDescription: 'Layanan web komprehensif pendampingan pengisian e-borang logbook Program Internsip Dokter Gigi Indonesia (PIDGI) terstruktur, tepat waktu, dan bebas stres.',
+                description: 'Platform spesifik kedokteran gigi pertama yang memfasilitasi dokter gigi internsip di seluruh wahana Indonesia dalam menyusun pelaporan kasus klinis, mini project, dan rekapitulasi kinerja harian sesuai format standar KKI dan Kemenkes RI.',
+                challenge: 'Jadwal dinas yang padat di RS dan Puskesmas membuat dokter gigi internsip kekurangan waktu dalam memformat dan menyusun narasi rekam medis borang evaluasi.',
+                solution: 'Menghadirkan portal panduan terstruktur dengan katalog template narasi diagnosis, kalkulator capaian target kasus, dan konsultasi privat 1-on-1 via dashboard interaktif.',
+                projectUrl: 'https://jokiborangpidgi.vercel.app/',
+                isFeatured: true,
+                isPublished: true
+            },
+            {
+                id: 'port_9',
+                title: 'Instrumen OHQE — Oral Health Quality of Life Scale for Endodontic Patients',
+                slug: 'instrumen-ohqe',
+                client: 'Riset Departemen Konservasi Gigi FKG',
+                category: 'SCIENTIFIC RESEARCH & CLINICAL METRICS',
+                year: 2026,
+                image: '/public/img/axalogo.png',
+                tags: ['Clinical Scale', 'Endodontics', 'Quality of Life', 'Psychometrics'],
+                tools: ['html5', 'javascript', 'css3', 'tailwindcss', 'vercel'],
+                shortDescription: 'Instrumen digital pengukuran kualitas hidup pasien pasca perawatan saluran akar gigi (Endodontik) berbasis skala psikometrik terstandarisasi internasional.',
+                description: 'Aplikasi klinis riset spesialis konservasi gigi untuk mengukur dampak terapi endodontik terhadap status fungsional, psikologis, dan sosial pasien melalui scoring kuesioner Oral Health-Related Quality of Life (OHRQoL) yang telah divalidasi secara saintifik.',
+                challenge: 'Evaluasi kepuasan dan kualitas hidup pasien pasca perawatan saluran akar selama ini sulit dikuantifikasi secara objektif dan membutuhkan rekonsiliasi manual skala ordinal yang rumit.',
+                solution: 'Digitalisasi kuesioner psikometrik OHQE dengan pembobotan Likert otomatis, deteksi anomali respons, dan visualisasi grafik radar sebelum serta sesudah perawatan.',
+                projectUrl: 'https://instrumenohqe.vercel.app/',
+                isFeatured: true,
+                isPublished: true
+            },
+            {
+                id: 'port_10',
+                title: 'DentsHub Riset — Ekosistem Riset AI Terakreditasi 2026 & Validasi Sitasi DOI',
+                slug: 'dentshub-riset',
+                client: 'DentsHub Academic Research Center',
+                category: 'AI SCHOLAR & ACADEMIC REPOSITORY',
+                year: 2026,
+                image: '/public/img/axalogo.png',
+                tags: ['AI Scholar', 'Academic Repository', 'DOI Validation', 'Research Ecosystem'],
+                tools: ['html5', 'javascript', 'react', 'nextjs', 'tailwindcss', 'vercel'],
+                shortDescription: 'Platform asisten penelusuran literatur ilmiah kedokteran gigi dengan kurasi jurnal bereputasi (Scopus & Sinta), pengecekan sitasi DOI, dan ringkasan makalah cerdas.',
+                description: 'Ekosistem riset generasi baru bagi akademisi kedokteran gigi yang menggabungkan kecerdasan buatan untuk menganalisis ratusan jurnal internasional, menyaring literatur berbasis bukti (Evidence-Based Dentistry), memvalidasi keaslian DOI CrossRef, dan menyusun tinjauan pustaka secara etis.',
+                challenge: 'Waktu yang terbuang sia-sia oleh mahasiswa dan peneliti dalam mencari jurnal relevan di antara jutaan database tanpa filter kredibilitas indeks saintifik yang ketat.',
+                solution: 'Arsitektur pencarian semantik dengan integrasi API DOI resolver, klasifikasi kuartil jurnal instan, dan generator sitasi otomatis berformat Vancouver serta APA 7th Edition.',
+                projectUrl: 'https://dentshubriset.vercel.app/',
+                isFeatured: true,
+                isPublished: true
+            },
+            {
+                id: 'port_11',
+                title: 'FilterCan — Interactive Lightroom Presets & Creative LUTs Marketplace',
+                slug: 'marketplace-filtercan',
+                client: 'FilterCan Creative Studio',
+                category: 'E-COMMERCE & DIGITAL ASSETS',
+                year: 2026,
+                image: '/public/img/axalogo.png',
+                tags: ['E-Commerce', 'Digital Marketplace', 'Interactive Before-After', 'LUTs'],
+                tools: ['html5', 'javascript', 'css3', 'tailwindcss', 'vite', 'vercel'],
+                shortDescription: 'Toko online interaktif aset kreatif digital preset Lightroom dan Cinematic LUTs dengan fitur komparasi slider before-after foto secara langsung di web.',
+                description: 'Marketplace digital modern yang menyajikan pengalaman belanja aset fotografi dan videografi kelas premium. Dilengkapi komponen split-slider real-time interaktif untuk menguji efektivitas preset warna sebelum membeli, serta sistem unduhan instan berkecepatan tinggi.',
+                challenge: 'Banyak calon pembeli ragu membeli preset foto digital karena tidak bisa melihat hasil grading secara langsung pada objek foto nyata sebelum melakukan transaksi.',
+                solution: 'Membangun slider komparasi interaktif ultra-responsif berbasis Canvas/CSS dengan touch-friendly gesture pada layar smartphone serta pengiriman file digital instan.',
+                projectUrl: 'https://filterbycan.vercel.app/',
+                isFeatured: true,
+                isPublished: true
+            },
+            {
+                id: 'port_12',
+                title: 'AXA XYZ Exams — AI-Powered Computer Based Test & Live Proctoring Platform',
+                slug: 'portal-ujian-axa-exams',
+                client: 'AXA Educational Assessment System',
+                category: 'EDUTECH & CBT EXAMINATION SYSTEM',
+                year: 2026,
+                image: '/public/img/axalogo.png',
+                tags: ['CBT Exam', 'Edutech', 'Anti-Cheat Protection', 'Realtime Scoring'],
+                tools: ['html5', 'javascript', 'react', 'nodejs', 'express', 'postgresql', 'vercel'],
+                shortDescription: 'Sistem ujian online Computer Based Test (CBT) berkemampuan tinggi dengan proteksi kecurangan tab-switching, pengacakan soal algoritmik, dan rekap nilai instan.',
+                description: 'Platform evaluasi akademik dan sertifikasi online berstandar industri dengan teknologi anti-cheat berlapis (deteksi perpindahan jendela browser, penonaktifan klik kanan & screenshot), bank soal dinamis, serta analitik butir soal realtime.',
+                challenge: 'Kerentanan kecurangan pada ujian daring konvensional dan seringnya server ujian drop ketika diakses ribuan peserta secara serentak pada detik yang sama.',
+                solution: 'Pengembangan frontend anti-tamper yang memantau fokus jendela peramban, didukung arsitektur load balancing backend yang sanggup menangani concurrent users dengan latensi rendah.',
+                projectUrl: 'https://axa-exams.vercel.app/',
+                isFeatured: true,
+                isPublished: true
+            },
+            {
+                id: 'port_13',
+                title: 'drg. M. Rakhmat Ersyad Muchlis, S.H., Sp.RKG — Executive Radiologist Portfolio',
+                slug: 'drg-rakhmat-ersyad-portfolio',
+                client: 'drg. M. Rakhmat Ersyad Muchlis, S.H., Sp.RKG',
+                category: 'PERSONAL PORTFOLIO & PROFESSIONAL CV',
+                year: 2026,
+                image: '/public/img/axalogo.png',
+                tags: ['Medical Executive', 'Radiology', 'Personal Branding', 'Tahoe Style'],
+                tools: ['html5', 'javascript', 'css3', 'tailwindcss', 'vite', 'vercel'],
+                shortDescription: 'Portofolio digital eksekutif dan resume interaktif Dokter Gigi Spesialis Radiologi Kedokteran Gigi (Sp.RKG) merangkap Sarjana Hukum dengan visualisasi keahlian klinis tingkat tinggi.',
+                description: 'Showcase representasi reputasi profesional medis dan hukum medikolegal terdepan. Menampilkan rekam jejak riset radiologi panoramik/CBCT 3D, publikasi ilmiah, keterlibatan simposium nasional-internasional, serta layanan konsultasi keahlian medis yang terintegrasi secara elegan.',
+                challenge: 'Membangun persona profesional terpercaya yang menggabungkan dua bidang kompetensi langka (Spesialis Radiologi Gigi dan Hukum Kesehatan) dalam satu identitas digital yang berkelas dan modern.',
+                solution: 'Desain estetika Tahoe macOS dengan tipografi tipikal korporat, showcase sertifikasi berlisensi, dan navigasi CV interaktif berkecepatan 100/100 pada Lighthouse.',
+                projectUrl: 'https://mrakhmatersyad.vercel.app/',
+                isFeatured: true,
+                isPublished: true
+            },
+            {
+                id: 'port_14',
+                title: 'Anomaly Space — Cloud Cafe POS, Kitchen Display & Customer Screen System',
+                slug: 'anomaly-space-pos',
+                client: 'Anomaly Space Specialty Coffee',
+                category: 'F&B POS & CLOUD MANAGEMENT',
+                year: 2026,
+                image: '/public/img/axalogo.png',
+                tags: ['POS System', 'F&B Tech', 'Cloud Database', 'Kitchen Display'],
+                tools: ['html5', 'javascript', 'css3', 'gcp'],
+                shortDescription: 'Aplikasi Point of Sale (POS) cloud untuk kafe modern dengan integrasi Kitchen Display System (KDS), split bill cepat, dan pelaporan omzet harian otomatis.',
+                description: 'Solusi kasir digital berbasis cloud web application untuk kafe dan coffee shop sibuk. Memangkas antrean kasir dengan navigasi sentuh kilat, transmisi pesanan instan ke layar barista dapur (KDS), serta kalkulasi persediaan bahan baku biji kopi realtime.',
+                challenge: 'Keterlambatan penyampaian pesanan dari kasir ke barista dan selisih stok persediaan bahan kopi akibat kasir offline konvensional yang tidak sinkron secara realtime.',
+                solution: 'Pembangunan web POS interaktif yang terhubung langsung ke basis data Google Cloud Apps Script realtime dengan antarmuka dual display (layar kasir & layar barista).',
+                projectUrl: 'https://script.google.com/macros/s/AKfycbw5LzOU5HJzGRhpouhF_b3ft-DelJY273xagO57W-IkBtF4-TNjX7F2ZYCtakk31Eht/exec',
+                isFeatured: true,
+                isPublished: true
+            },
+            {
+                id: 'port_15',
+                title: 'E-Pilketos Smaga — Realtime Digital Voting System SMAN 3 Makassar',
+                slug: 'e-pilketos-smaga',
+                client: 'MPK & OSIS SMAN 3 Makassar',
+                category: 'E-VOTING & DEMOCRACY SYSTEM',
+                year: 2026,
+                image: '/public/img/axalogo.png',
+                tags: ['E-Voting', 'Realtime Quick Count', 'Token Authentication', 'Student Governance'],
+                tools: ['html5', 'javascript', 'css3', 'gcp'],
+                shortDescription: 'Sistem pemungutan suara elektronik (E-Voting) pemilihan Ketua & Wakil Ketua OSIS SMA Negeri 3 Makassar dengan verifikasi token sekali pakai dan quick count langsung.',
+                description: 'Aplikasi demokrasi digital sekolah ramah lingkungan bebas kertas yang melayani ribuan pemilih siswa-siswi secara serempak. Menjamin kerahasiaan hak suara dengan token enkripsi satu kali pakai (OTP-like) dan menampilkan persentase suara masuk secara langsung di proyektor aula.',
+                challenge: 'Proses pemilihan ketua OSIS manual dengan kertas suara memakan biaya tinggi, penghitungan surat suara hingga larut malam, serta risiko manipulasi suara.',
+                solution: 'Merancang sistem e-voting web dengan bilik suara digital terautentikasi token unik, pencegahan suara ganda (anti-double voting), dan siaran grafik quick count transparan realtime.',
+                projectUrl: 'https://script.google.com/macros/s/AKfycbzG-WjY-bsx5I12ynk1_6ilclVM4Pli37vmpytqeaeJkESCkQqX5D9IZkBzaM6vCmcC/exec',
+                isFeatured: true,
+                isPublished: true
+            },
+            {
+                id: 'port_16',
+                title: 'Gria Efata Permai – Interactive Real Estate & Digital Site Plan Portal',
+                slug: 'gria-efata-permai',
+                client: 'PT Efata Jaya Raya',
+                category: 'REAL ESTATE & INTERACTIVE SITE PLAN',
+                year: 2026,
+                image: '/public/img/axalogo.png',
+                tags: ['Real Estate', 'Digital Site Plan', 'Unit Booking', 'Interactive Map'],
+                tools: ['html5', 'javascript', 'css3', 'gcp'],
+                shortDescription: 'Portal perumahan modern dengan denah site plan interaktif untuk memeriksa status kavling (tersedia, terpesan, terjual) dan simulasi estimasi cicilan KPR.',
+                description: 'Web app pemasaran properti digital yang mentransformasikan brosur fisik menjadi pengalaman eksplorasi interaktif. Pengunjung dapat mengeklik kavling unit pada peta masterplan secara visual, melihat spesifikasi tipe rumah, mengunduh brosur PDF, dan langsung menghubungi agen pemasaran via WhatsApp.',
+                challenge: 'Konsumen properti kesulitan memvisualisasikan posisi kavling strategis dari brosur cetak 2D, sehingga tim sales kesulitan mengonfirmasi ketersediaan unit yang masih kosong.',
+                solution: 'Membangun peta interaktif SVG site plan berbasis vektor responsif dengan indikator warna status unit realtime yang tersinkronisasi dengan database penjualan pengembang.',
+                projectUrl: 'https://script.google.com/macros/s/AKfycbz-QT1iuDrZEf5OlTRtuAeQGOwE4pxZ_b1DmBHbYz3R-IAnOlT6BuVyZxO67cuvHG8/exec',
+                isFeatured: true,
+                isPublished: true
+            },
+            {
+                id: 'port_17',
+                title: 'Bams Barbershop – Online Queue & Service Appointment Booking',
+                slug: 'bams-barbershop-booking',
+                client: 'Bams Barbershop & Grooming',
+                category: 'LIFESTYLE & ONLINE QUEUE SYSTEM',
+                year: 2026,
+                image: '/public/img/axalogo.png',
+                tags: ['Barbershop', 'Online Queue', 'Appointment System', 'SMS/WA Reminder'],
+                tools: ['html5', 'javascript', 'css3', 'gcp'],
+                shortDescription: 'Sistem antrean cerdas dan pemesanan layanan potong rambut secara daring untuk menghindari kerumunan ruang tunggu dengan notifikasi estimasi giliran realtime.',
+                description: 'Solusi pemesanan antrean barbershop modern yang memungkinkan pelanggan memilih kapster favorit, memilih paket grooming, dan memantau posisi antrean berjalan dari rumah atau kafe, lengkap dengan estimasi menit tunggu yang akurat.',
+                challenge: 'Pelanggan sering berbalik pulang karena antrean di kursi tunggu barbershop terlalu padat dan waktu tunggu tidak dapat diprediksi.',
+                solution: 'Aplikasi antrean online dengan penomoran virtual otomatis, pemantauan status kursi aktif, serta tombol appointment yang ramah pengguna smartphone.',
+                projectUrl: 'https://script.google.com/macros/s/AKfycbxgGdUfpjnODbdUDdwL9hGwjJeecMflQWKoZHFaN4Wm9-b7iTI9wNozsIM3LsKT3W0/exec',
+                isFeatured: true,
+                isPublished: true
+            },
+            {
+                id: 'port_18',
+                title: 'Smart RPP – AI-Powered Curriculum Generator & Modul Ajar Terotomasi',
+                slug: 'smart-rpp-kurikulum-merdeka',
+                client: 'Komunitas Guru Inovatif Nusantara',
+                category: 'EDUTECH & AI PRODUCTIVITY',
+                year: 2026,
+                image: '/public/img/axalogo.png',
+                tags: ['AI Generator', 'Kurikulum Merdeka', 'Edutech', 'Modul Ajar'],
+                tools: ['html5', 'javascript', 'css3', 'gcp'],
+                shortDescription: 'Platform asisten guru cerdas bertenaga AI untuk menyusun Rencana Pelaksanaan Pembelajaran (RPP) dan Modul Ajar Kurikulum Merdeka dalam hitungan detik.',
+                description: 'Aplikasi produktivitas pendidikan revolusioner yang membantu para guru dari tingkat SD hingga SMA menyusun modul ajar, asesmen diagnostik, rubrik penilaian, dan profil pelajar pancasila sesuai capaian pembelajaran (CP) secara otomatis dan terstandarisasi Kemendikbudristek.',
+                challenge: 'Beban administrasi pembuatan dokumen RPP yang sangat banyak menyita waktu tenaga pendidik hingga mengurangi fokus utama dalam mendampingi murid di kelas.',
+                solution: 'Mengembangkan formulir cerdas yang menghubungkan data mata pelajaran dengan prompt AI terstruktur, menghasilkan dokumen modul ajar komprehensif yang siap unduh dan cetak.',
+                projectUrl: 'https://script.google.com/macros/s/AKfycbwaLRPdwdUYxzxstqiQUASC19ivpRyZ2oMDiDQks0Ozk9pjrd7Kp1cRgZJqlrpfaXyx/exec',
+                isFeatured: true,
+                isPublished: true
+            },
+            {
+                id: 'port_19',
+                title: 'NGS StaffFlow – Enterprise Employee Self-Service & Expense Reimbursement',
+                slug: 'ngs-staffflow-hr-portal',
+                client: 'PT Nusantara Global Solusindo',
+                category: 'ENTERPRISE HRIS & WORKFLOW',
+                year: 2026,
+                image: '/public/img/axalogo.png',
+                tags: ['HRIS Portal', 'Staff Management', 'Reimbursement', 'Leave Approval'],
+                tools: ['html5', 'javascript', 'css3', 'gcp'],
+                shortDescription: 'Portal swakelola karyawan untuk pengajuan cuti online, klaim penggantian biaya (reimbursement) instan, dan persetujuan bertingkat manajerial.',
+                description: 'Aplikasi internal perusahaan (Employee Self-Service) untuk memangkas birokrasi perizinan kerja. Karyawan dapat mengunggah struk klaim biaya, memantau sisa kuota cuti tahunan, dan mendapatkan otorisasi persetujuan atasan secara berjenjang melalui notifikasi email otomatis.',
+                challenge: 'Pengajuan cuti dan klaim bon kantor yang masih menggunakan form kertas manual sering hilang di meja atasan dan menyulitkan rekapitulasi tim payroll HRD.',
+                solution: 'Implementasi alur kerja approval digital terpadu dengan validasi sisa saldo cuti otomatis, lampiran dokumen digital, serta audit trail riwayat pengajuan transparan.',
+                projectUrl: 'https://script.google.com/macros/s/AKfycbxXO7nf0uRRIx4dGUJzvzBg5_DCG_UmKvpeP5YHf6kQ0PjiuNtIIkpCDlNXwyn8JIav/exec',
+                isFeatured: true,
+                isPublished: true
+            },
+            {
+                id: 'port_20',
+                title: 'FlowSales CRM – Visual Kanban Pipeline Deals & Sales Conversion Accelerator',
+                slug: 'flowsales-crm-pipeline',
+                client: 'FlowSales Business Acceleration',
+                category: 'CRM & B2B SALES PIPELINE',
+                year: 2026,
+                image: '/public/img/axalogo.png',
+                tags: ['CRM', 'Sales Pipeline', 'Kanban Board', 'Lead Scoring'],
+                tools: ['html5', 'javascript', 'css3', 'gcp'],
+                shortDescription: 'Platform Customer Relationship Management (CRM) interaktif dengan papan Kanban drag-and-drop untuk memantau prospek penjualan dari kontak awal hingga deal closing.',
+                description: 'Sistem percepatan konversi penjualan B2B yang dirancang untuk tim sales modern. Memberikan visibilitas menyeluruh terhadap performa deal di setiap tahapan corong penjualan (funnel), rekam histori interaksi prospek, kalkulasi potensi omzet tertimbang, dan metrik konversi tim.',
+                challenge: 'Kehilangan prospek potensial bernilai puluhan juta rupiah karena catatan sales tersebar di buku catatan pribadi staf dan ketiadaan sistem tindak lanjut terorganisir.',
+                solution: 'Pembangunan papan visual Kanban pipeline responsif dengan penanda prioritas prospek (hot/warm/cold), reminder follow-up otomatis, dan rekap metrik penjualan interaktif.',
+                projectUrl: 'https://script.google.com/macros/s/AKfycbxG5OeF3_ekRRekIQr05xtZZ2hvdA4b5mUFM6CzEYxaiSbwSNO6xD_vJwJbr0R9FTCu/exec',
+                isFeatured: true,
+                isPublished: true
+            }
+        ];
+
+        const MASKED_TESTIMONIALS = [
+            {
+                id: 'testi_1',
+                name: 'drg. Ah*** Fau**, Sp.KG',
+                role: 'Ketua Umum BEM Periode 2025/2026',
+                company: 'BEM KBMFKG UMI',
+                content: 'Portal BEM KBMFKG UMI yang dibangun oleh Dents Web benar-benar melampaui ekspektasi kabinet kami. Tampilannya modern, sangat cepat dibuka oleh mahasiswa di smartphone, dan fitur penyaluran aspirasinya membuat komunikasi mahasiswa jadi transparan dan profesional.',
+                rating: 5,
+                isPublished: true
+            },
+            {
+                id: 'testi_2',
+                name: 'Muh. Rid*** Pra****, S.KG',
+                role: 'Sekretaris Umum Komisariat',
+                company: 'HMI KOMKG UMI',
+                content: 'Digitalisasi sistem informasi kader kami kini tertata sangat rapi. Database anggota dan arsip materi perkaderan tersimpan dengan aman serta mudah diakses kader di mana saja. Pekerjaan Dents Web sangat sistematis dan rapi!',
+                rating: 5,
+                isPublished: true
+            },
+            {
+                id: 'testi_3',
+                name: 'drg. Es** Ward****, Sp.Pros',
+                role: 'Founder & Principal Dentist',
+                company: 'Estaka Modern Dental Clinic',
+                content: 'Sistem booking konsultasi gigi yang terhubung ke WhatsApp otomatis telah memangkas angka pembatalan jadwal pasien kami hingga lebih dari 60%. Desain visualnya juga sangat elegan dan merepresentasikan standar klinik premium.',
+                rating: 5,
+                isPublished: true
+            },
+            {
+                id: 'testi_4',
+                name: 'drg. Fah** Rama******',
+                role: 'Dokter Penanggung Jawab Klinik',
+                company: 'Klinik Fahri Dental Care',
+                content: 'PWA kuesioner karies gigi anak kami sangat responsif dan mudah digunakan oleh para orang tua di ruang tunggu. Data survei klinis terdata akurat tanpa perlu rekap kertas manual lagi. Luar biasa!',
+                rating: 5,
+                isPublished: true
+            },
+            {
+                id: 'testi_5',
+                name: 'dr. No** Arya****, M.Biomed',
+                role: 'Chief Medical Technology Officer',
+                company: 'NovaCare.AI Healthcare',
+                content: 'Integrasi backend Node.js dan WhatsApp gateway engine yang dibangun Dents Web sangat stabil melayani ribuan pesan pasien harian tanpa kendala down. Solusi rekayasa perangkat lunak kelas dunia!',
+                rating: 5,
+                isPublished: true
+            },
+            {
+                id: 'testi_6',
+                name: 'drg. Herl****, M.Kes',
+                role: 'Ketua Tim Peneliti Epidemiologi',
+                company: 'Riset Karies Gigi Anak FKG',
+                content: 'Aplikasi E-Form penelitian karies gigi balita ini sangat membantu pengumpulan data lapangan di berbagai puskesmas. Perhitungan skor indeks dmf-t otomatis sangat menghemat waktu analisis tesis kami.',
+                rating: 5,
+                isPublished: true
+            },
+            {
+                id: 'testi_7',
+                name: 'Hen*** Guna***, S.E.',
+                role: 'Managing Partner',
+                company: 'AxaBOT Multi-Client Finance',
+                content: 'Arsitektur multi-tenant dan integrasi bot WhatsApp finance dari Dents Web memungkinkan klien-klien kami merekonsiliasi kas cabang dalam hitungan detik. Benar-benar game changer untuk efisiensi bisnis!',
+                rating: 5,
+                isPublished: true
+            },
+            {
+                id: 'testi_8',
+                name: 'drg. Nadh*** Salsab***',
+                role: 'Koordinator Asistensi Internsip',
+                company: 'DentisLog PIDGI Assistance',
+                content: 'Platform joki borang PIDGI ini membantu dokter gigi internsip menyusun logbook kasus klinis dengan sangat terstruktur dan tepat waktu. Tampilan platformnya bersih dan layanannya sangat profesional.',
+                rating: 5,
+                isPublished: true
+            },
+            {
+                id: 'testi_9',
+                name: 'drg. Absab**** Aul** R., S.KG',
+                role: 'Peneliti Utama Departemen Konservasi',
+                company: 'Instrumen OHQE Endodontik',
+                content: 'Instrumen digital pengukuran kualitas hidup pasien endodontik ini memudahkan scoring psikometrik OHRQoL secara instan dan akurat. Validasi data dan grafik visualisasinya sangat memuaskan pembimbing riset kami.',
+                rating: 5,
+                isPublished: true
+            },
+            {
+                id: 'testi_10',
+                name: 'M. Azh** Arsy**, S.KG',
+                role: 'Lead Academic Researcher',
+                company: 'DentsHub Riset Academic Platform',
+                content: 'Pencarian literatur jurnal Scopus dan validasi DOI otomatis di platform DentsHub Riset bekerja sangat cepat dan akurat. Menyelesaikan tinjauan pustaka saintifik kedokteran gigi kini jauh lebih efisien.',
+                rating: 5,
+                isPublished: true
+            },
+            {
+                id: 'testi_11',
+                name: 'Ri** Ardia*****',
+                role: 'Creative Director',
+                company: 'FilterCan Creative Studio',
+                content: 'Fitur interactive before-after slider di website FilterCan meningkatkan konversi penjualan preset Lightroom kami secara drastis. Pembeli bisa langsung melihat efek warna sebelum checkout. UI/UX-nya top markotop!',
+                rating: 5,
+                isPublished: true
+            },
+            {
+                id: 'testi_12',
+                name: 'Dr. Ir. H. Mans***, M.T.',
+                role: 'Kepala Pusat Evaluasi Akademik',
+                company: 'AXA XYZ Enterprise Exam System',
+                content: 'Platform CBT AXA Exams sangat tangguh menangani ribuan peserta ujian bersamaan. Sistem proteksi anti-kecurangan tab switching dan auto scoring-nya membuat jalannya ujian online terjamin kredibilitasnya.',
+                rating: 5,
+                isPublished: true
+            },
+            {
+                id: 'testi_13',
+                name: 'drg. M. Rakh*** Ers***, Sp.RKG',
+                role: 'Spesialis Radiologi Kedokteran Gigi & Konsultan Hukum',
+                company: 'drg. M. Rakhmat Ersyad Muchlis, S.H., Sp.RKG',
+                content: 'Portofolio profesional saya tampil begitu presisi, eksklusif, dan berwibawa dengan gaya visual Tahoe macOS. Representasi kompetensi ganda di bidang radiologi dental dan hukum kesehatan tersampaikan dengan sempurna.',
+                rating: 5,
+                isPublished: true
+            },
+            {
+                id: 'testi_14',
+                name: 'Kev** Sanj***',
+                role: 'Operational Manager',
+                company: 'Anomaly Space Cafe',
+                content: 'Aplikasi kasir POS cloud dan kitchen display system Anomaly Space mempercepat alur operasional kafe kami di jam padat. Antrean kasir berkurang drastis dan rekap omzet harian selalu akurat.',
+                rating: 5,
+                isPublished: true
+            },
+            {
+                id: 'testi_15',
+                name: 'Fadh** Nurhid****',
+                role: 'Ketua Panitia Pemilihan MPK',
+                company: 'E-Pilketos SMAN 3 Makassar',
+                content: 'Pemilihan ketua OSIS SMA Negeri 3 Makassar berlangsung sangat sukses dan transparan dengan sistem e-voting ini. Penghitungan suara yang biasanya sampai malam kini selesai dalam 1 detik setelah bilik suara ditutup!',
+                rating: 5,
+                isPublished: true
+            },
+            {
+                id: 'testi_16',
+                name: 'Ir. Hend**** Ef****, M.M.',
+                role: 'Direktur Utama',
+                company: 'PT Efata Jaya Raya / Gria Efata Permai',
+                content: 'Portal digital site plan interaktif Gria Efata Permai sangat memudahkan calon pembeli rumah memilih blok kavling favorit secara visual. Penjualan unit perumahan kami meningkat signifikan berkat web ini!',
+                rating: 5,
+                isPublished: true
+            },
+            {
+                id: 'testi_17',
+                name: 'Bamb*** "Bams" Kurnia***',
+                role: 'Owner & Head Barber',
+                company: 'Bams Barbershop',
+                content: 'Sistem antrean online dan booking jadwal Bams Barbershop membuat ruang tunggu kami bebas dari kerumunan tidak menentu. Pelanggan sangat senang karena bisa memantau giliran potong langsung dari HP mereka.',
+                rating: 5,
+                isPublished: true
+            },
+            {
+                id: 'testi_18',
+                name: 'Siti Rahm****, M.Pd.',
+                role: 'Koordinator Kurikulum Sekolah Penggerak',
+                company: 'Smart RPP Modul Ajar',
+                content: 'Platform AI Smart RPP ini adalah anugerah bagi rekan-rekan guru. Pembuatan modul ajar dan rubrik asesmen Kurikulum Merdeka yang biasanya berhari-hari kini tuntas dalam beberapa menit dengan mutu terstandar!',
+                rating: 5,
+                isPublished: true
+            },
+            {
+                id: 'testi_19',
+                name: 'Alex Pra****, S.Psi.',
+                role: 'People Operations Manager',
+                company: 'PT Nusantara Global Solusindo',
+                content: 'Portal NGS StaffFlow memangkas alur birokrasi izin cuti dan klaim bon kantor kami menjadi serba otomatis. Rekapitulasi bulanan tim HRD kini 100% bebas dari berkas kertas tercecer.',
+                rating: 5,
+                isPublished: true
+            },
+            {
+                id: 'testi_20',
+                name: 'Dim** Prasety*, B.B.A.',
+                role: 'VP of Business Development',
+                company: 'FlowSales CRM Solutions',
+                content: 'Papan Kanban visual deals FlowSales CRM memudahkan tim account executive kami memantau setiap tahapan follow-up prospek. Tingkat closing proyek enterprise kami melonjak lebih dari 45%!',
+                rating: 5,
+                isPublished: true
+            }
+        ];
+
+        const MIGRATION_VERSION = 'v3_20_portfolio_real';
+        const currentMigration = await redis.get('dents:migration:portfolio');
+        if (currentMigration !== MIGRATION_VERSION) {
+            console.log('[MIGRATION] Syncing 20 real portfolio projects & 20 masked testimonials to Redis...');
+            await redis.set('dents:portfolio', REAL_PORTFOLIO_PROJECTS);
+            await redis.set('dents:testimonials', MASKED_TESTIMONIALS);
+            await redis.set('dents:migration:portfolio', MIGRATION_VERSION);
+            console.log('[MIGRATION] Sync complete: 20 real projects & 20 masked testimonials updated.');
+        }
+
         if (!testimonials || !testimonials.length) {
-            await redis.set('dents:testimonials', [
-                {
-                    id: 'testi_1',
-                    name: 'Budi Santoso',
-                    role: 'Managing Director',
-                    company: 'Nusantara Retail',
-                    content: 'Website baru kami loadingnya kencang banget dan closing dari iklan naik hampir 2x lipat. Sangat puas dengan kinerjanya!',
-                    rating: 5,
-                    isPublished: true
-                },
-                {
-                    id: 'testi_2',
-                    name: 'Sarah Wijaya',
-                    role: 'Founder',
-                    company: 'Beresin Tech',
-                    content: 'Komunikasi timnya asik, nggak kaku, dan eksekusi kodenya beneran rapi. Bukan template murahan!',
-                    rating: 5,
-                    isPublished: true
-                },
-                {
-                    id: 'testi_3',
-                    name: 'Dimas Pratama',
-                    role: 'Head of Growth',
-                    company: 'Anggana Logistik',
-                    content: 'SEO-nya langsung naik di halaman 1 Google dalam waktu 3 minggu setelah rilis. Rekomendasi buat agensi yang butuh web performa tinggi.',
-                    rating: 5,
-                    isPublished: true
-                },
-                {
-                    id: 'testi_4',
-                    name: 'Citra Amelia',
-                    role: 'Brand Owner',
-                    company: 'Dapoer Niknik',
-                    content: 'Tampilannya clean, estetik, dan responsif banget di iPhone. Klien korporat kami jadi jauh lebih percaya.',
-                    rating: 5,
-                    isPublished: true
-                }
-            ]);
+            await redis.set('dents:testimonials', MASKED_TESTIMONIALS);
         }
 
         if (!portfolio || !portfolio.length) {
-            await redis.set('dents:portfolio', [
-                {
-                    id: 'port_1',
-                    title: 'Beresin Services Platform',
-                    slug: 'beresin-platform',
-                    client: 'Beresin Tech Indonesia',
-                    category: 'Web Application',
-                    year: 2026,
-                    image: '/public/img/axalogo.png',
-                    tools: ['html5', 'javascript', 'nodejs', 'express', 'redis', 'tailwindcss'],
-                    shortDescription: 'Platform digital on-demand dengan sistem booking realtime dan notifikasi WhatsApp otomatis.',
-                    description: 'Membangun arsitektur web aplikasi skalabel yang memangkas waktu pemesanan dari 10 menit menjadi di bawah 60 detik.',
-                    challenge: 'Trafik tinggi pada jam sibuk sering membuat website lama down dan konversi terbuang sia-sia.',
-                    solution: 'Implementasi arsitektur serverless Node.js dengan caching Redis berkecepatan ultra tinggi.',
-                    projectUrl: 'https://dentsweb.my.id',
-                    isFeatured: true,
-                    isPublished: true
-                },
-                {
-                    id: 'port_2',
-                    title: 'Anggana Global Logistics',
-                    slug: 'anggana-logistics',
-                    client: 'Anggana Cargo',
-                    category: 'Company Profile Pro',
-                    year: 2026,
-                    image: '/public/img/axalogo.png',
-                    tools: ['html5', 'typescript', 'nextjs', 'postgresql', 'docker', 'vercel'],
-                    shortDescription: 'Company profile korporat dengan pelacakan resi instan dan skor Core Web Vitals 99.',
-                    description: 'Transformasi identitas digital korporat untuk memenangkan tender logistik nasional dan regional.',
-                    challenge: 'Perusahaan membutuhkan portal yang merefleksikan kredibilitas kelas dunia untuk presentasi ke klien internasional.',
-                    solution: 'Desain neo-modern dengan micro-animations halus dan integrasi API tracking otomatis.',
-                    projectUrl: 'https://dentsweb.my.id',
-                    isFeatured: true,
-                    isPublished: true
-                }
-            ]);
-        } else {
-            let modified = false;
-            const updated = portfolio.map(item => {
-                if (!item.tools || !item.tools.length) {
-                    modified = true;
-                    if (item.id === 'port_1' || item.slug === 'beresin-platform') {
-                        return { ...item, tools: ['html5', 'javascript', 'nodejs', 'express', 'redis', 'tailwindcss'] };
-                    } else {
-                        return { ...item, tools: ['html5', 'typescript', 'nextjs', 'postgresql', 'docker', 'vercel'] };
-                    }
-                }
-                return item;
-            });
-            if (modified) {
-                await redis.set('dents:portfolio', updated);
-            }
+            await redis.set('dents:portfolio', REAL_PORTFOLIO_PROJECTS);
         }
 
         if (!articles || !articles.length) {
@@ -822,13 +1321,13 @@ app.get('/', async (req, res) => {
     const rawTestimonials = await redis.get('dents:testimonials') || []; 
     
     const featuredServices = rawServices.filter(s => s.isPublished && s.isFeatured).slice(0, 3);
-    const featuredPortfolio = rawPortfolio.filter(p => p.isPublished && p.isFeatured).slice(0, 4);
+    const featuredPortfolio = rawPortfolio.filter(p => p.isPublished && p.isFeatured);
     const activeTestimonials = rawTestimonials.filter(t => t.isPublished !== false); 
 
     res.render('index', { 
         settings, 
         services: featuredServices.length ? featuredServices : rawServices.slice(0, 3),
-        portfolio: featuredPortfolio.length ? featuredPortfolio : rawPortfolio.slice(0, 4),
+        portfolio: featuredPortfolio.length ? featuredPortfolio : rawPortfolio,
         testimonials: activeTestimonials,
         seo: buildSEO(settings, { title: "", desc: settings.defaultSeoDescription, path: '/' }, { testimonials: activeTestimonials, services: rawServices, portfolio: rawPortfolio }) 
     });
@@ -891,7 +1390,16 @@ app.get('/portfolio/:slug', async (req, res) => {
     const portfolioList = await redis.get('dents:portfolio') || [];
     const project = portfolioList.find(p => p.slug === req.params.slug && p.isPublished);
 
-    if (!project) return res.status(404).send('404 - Portfolio tidak ditemukan');
+    if (!project) {
+        return res.status(404).render('404', {
+            settings,
+            seo: buildSEO(settings, {
+                title: '404 - Portofolio Tidak Ditemukan | Dents Web',
+                desc: 'Studi kasus portofolio yang Anda tuju tidak ditemukan atau telah dipindahkan.',
+                path: req.originalUrl || req.path
+            })
+        });
+    }
 
     res.render('portfolio-detail', {
         settings,
