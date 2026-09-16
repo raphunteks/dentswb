@@ -3,94 +3,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= seo.title %></title>
-    <meta name="description" content="<%= seo.desc %>">
-    <link rel="canonical" href="<%= settings.siteUrl %><%= seo.path %>">
+    <meta name="theme-color" content="#05081c">
     
-    <!-- Unique OG Tags per project -->
+    <title><%= seo.title %> | <%= typeof settings !== 'undefined' && settings.brandName ? settings.brandName : 'Dents Web' %></title>
+    <meta name="description" content="<%= seo.desc %>">
+    <link rel="canonical" href="<%= typeof settings !== 'undefined' && settings.siteUrl ? settings.siteUrl : 'https://dentsweb.my.id' %><%= seo.path %>">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
     <meta property="og:title" content="<%= seo.title %>">
     <meta property="og:description" content="<%= seo.desc %>">
     <meta property="og:image" content="<%= seo.image %>">
     
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<%= seo.title %>">
+    <meta name="twitter:description" content="<%= seo.desc %>">
+    <meta name="twitter:image" content="<%= seo.image %>">
+
+    <!-- Schema.org JSON-LD -->
+    <% if (typeof seo !== 'undefined' && seo.schemaString) { %>
+    <script type="application/ld+json">
+        <%- seo.schemaString %>
+    </script>
+    <% } %>
+    
+    <link rel="icon" type="image/png" href="<%= typeof settings !== 'undefined' && settings.favicon ? settings.favicon : '/public/img/axalogo.png' %>">
+    <link rel="apple-touch-icon" href="<%= typeof settings !== 'undefined' && settings.logo ? settings.logo : '/public/img/axalogo.png' %>">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@500;600;700;800&family=Playfair+Display:ital,wght@1,400;1,500;1,600;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="/public/css/style.css">
 </head>
 <body>
-    <header id="main-header">
-        <div class="container nav-container">
-            <a href="/" class="logo"><span class="logo-mark"></span><%= settings.siteName || 'Dents Web' %></a>
-            <div class="hamburger" id="hamburger-btn"><span></span><span></span><span></span></div>
-            <nav class="nav-links" id="nav-links">
-                <a href="/">Home</a>
-                <a href="/services">Services</a>
-                <a href="/portfolio" class="active">Portfolio</a>
-                <a href="/pricing">Pricing</a>
-                <a href="/about">About</a>
-                <a href="/contact">Contact</a>
-                <a href="/faq">FAQ</a>
-            </nav>
-        </div>
-    </header>
+    
+    <%- include('partials/header') %>
 
     <main>
-        <section class="section section-pt-hero">
-            <div class="container">
-                <a href="/portfolio" style="color: var(--primary); margin-bottom: 24px; display: inline-block;">&larr; Kembali ke Portfolio</a>
+        <!-- Project Detail Header -->
+        <section class="section-hero" style="min-height: 42vh; padding-top: 150px; padding-bottom: 60px;">
+            <div class="orb-glow-blue" style="top: -10%; left: -5%;"></div>
+            
+            <div class="container" style="position: relative; z-index: 2;">
+                <a href="/portfolio" style="display: inline-flex; align-items: center; gap: 8px; color: var(--lime-accent); font-weight: 700; margin-bottom: 24px; font-size: 0.95rem; text-decoration: none;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    Kembali ke Semua Portofolio
+                </a>
                 
-                <div style="margin-bottom: 40px;">
-                    <span class="tag" style="margin-bottom: 16px;"><%= project.category %></span>
-                    <h1><%= project.title %></h1>
+                <div style="margin-bottom: 20px;">
+                    <span class="badge-tag-lime" style="margin-bottom: 16px;"><%= project.category %></span>
+                    <h1 style="font-size: clamp(2.2rem, 4.5vw, 3.5rem); margin-bottom: 16px;"><%= project.title %></h1>
                 </div>
 
-                <div class="glass-panel" style="padding: 32px; margin-bottom: 40px; display: flex; flex-wrap: wrap; gap: 40px; border-bottom: 1px solid var(--glass-border);">
-                    <div>
-                        <h4 style="color: var(--text-secondary); margin-bottom: 8px;">Klien</h4>
-                        <p style="color: white; margin:0; font-weight: 500;"><%= project.client %></p>
+                <!-- Meta Pills -->
+                <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center;">
+                    <div class="tactile-card" style="padding: 10px 20px; border-radius: var(--radius-pill); border-bottom-width: 3px; display: flex; align-items: center; gap: 8px; background: #ffffff;">
+                        <span style="font-size: 0.85rem; color: var(--slate-muted); font-weight: 700;">KLIEN:</span>
+                        <span style="font-weight: 700; color: var(--navy-text);"><%= project.client %></span>
                     </div>
-                    <div>
-                        <h4 style="color: var(--text-secondary); margin-bottom: 8px;">Tahun</h4>
-                        <p style="color: white; margin:0; font-weight: 500;"><%= project.year %></p>
+                    <div class="tactile-card" style="padding: 10px 20px; border-radius: var(--radius-pill); border-bottom-width: 3px; display: flex; align-items: center; gap: 8px; background: #ffffff;">
+                        <span style="font-size: 0.85rem; color: var(--slate-muted); font-weight: 700;">TAHUN:</span>
+                        <span style="font-weight: 700; color: var(--navy-text);"><%= project.year %></span>
                     </div>
-                    <% if(project.projectUrl) { %>
-                    <div>
-                        <h4 style="color: var(--text-secondary); margin-bottom: 8px;">Live Link</h4>
-                        <a href="<%= project.projectUrl %>" target="_blank" style="color: var(--primary); font-weight: 500;">Kunjungi Website &nearr;</a>
-                    </div>
+                    <% if (project.projectUrl) { %>
+                    <a href="<%= project.projectUrl %>" target="_blank" rel="noopener noreferrer" class="btn-lime" style="padding: 10px 24px; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 8px;">
+                        <span>Kunjungi Live Site</span>
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"></path><path d="M7 7h10v10"></path></svg>
+                    </a>
                     <% } %>
                 </div>
+            </div>
+        </section>
 
-                <% if(project.image) { %>
-                    <img src="<%= project.image %>" alt="<%= project.title %>" style="width: 100%; max-height: 600px; object-fit: cover; border-radius: var(--radius-lg); margin-bottom: 60px; border: 1px solid var(--glass-border);">
+        <!-- Project Overview & Details -->
+        <section class="section-white" style="padding-top: 60px; padding-bottom: 90px;">
+            <div class="container">
+                <!-- Cover Image -->
+                <% if (project.image) { %>
+                    <div class="tactile-card tactile-card-heavy" style="padding: 0; overflow: hidden; margin-bottom: 60px;">
+                        <img src="<%= project.image %>" alt="<%= project.title %>" style="width: 100%; max-height: 600px; object-fit: cover;">
+                    </div>
                 <% } %>
 
-                <div class="grid-2">
+                <div class="grid-2" style="align-items: flex-start; gap: 50px;">
+                    <!-- Overview -->
                     <div>
-                        <h3 style="margin-bottom: 24px; color: var(--primary);">Ikhtisar Proyek</h3>
-                        <!-- Notice the use of <%- %> for pre-sanitized trusted HTML formatting if applicable, but we stick to <p> for safety if it's raw text -->
-                        <p style="font-size: 1.1rem; line-height: 1.8;"><%= project.description %></p>
+                        <div class="badge-tag-royal" style="margin-bottom: 16px;">IKHTISAR STUDI KASUS</div>
+                        <h2 style="font-size: 2.1rem; color: var(--navy-text); margin-bottom: 20px;">Latar Belakang Proyek</h2>
+                        <p style="font-size: 1.1rem; line-height: 1.8; color: var(--slate-body); margin-bottom: 30px;">
+                            <%= project.description %>
+                        </p>
+
+                        <div class="tactile-card" style="padding: 28px; border-left: 6px solid var(--royal-blue); margin-top: 30px; background: #ffffff;">
+                            <h4 style="color: var(--navy-text); margin-bottom: 8px; font-size: 1.15rem; display: flex; align-items: center; gap: 8px;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--royal-blue)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                Fokus Pengerjaan
+                            </h4>
+                            <p style="margin: 0; color: var(--slate-body); font-size: 0.95rem; line-height: 1.7;">
+                                Rekayasa antarmuka responsif di semua resolusi gawai, integrasi webhook pesan instan, dan optimasi performa serverless untuk menahan lonjakan trafik tanpa hambatan.
+                            </p>
+                        </div>
                     </div>
-                    
-                    <div class="glass-panel glass-panel-p">
-                        <h3 style="margin-bottom: 24px;">Tantangan & Solusi</h3>
-                        <h4 style="color: var(--text-secondary); margin-bottom: 8px;">Tantangan</h4>
-                        <p style="margin-bottom: 24px;"><%= project.challenge || '-' %></p>
-                        
-                        <h4 style="color: var(--text-secondary); margin-bottom: 8px;">Solusi</h4>
-                        <p><%= project.solution || '-' %></p>
+
+                    <!-- Challenges & Solutions -->
+                    <div style="display: flex; flex-direction: column; gap: 24px;">
+                        <div class="tactile-card tactile-card-heavy" style="background: #ffffff;">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                                <div style="width: 36px; height: 36px; border-radius: 50%; background: #fff3cd; color: #b45309; display: flex; align-items: center; justify-content: center;">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                                </div>
+                                <h3 style="font-size: 1.25rem; color: var(--navy-text); margin: 0;">Tantangan Bisnis</h3>
+                            </div>
+                            <p style="color: var(--slate-body); line-height: 1.7; margin: 0; font-size: 0.975rem;">
+                                <%= project.challenge || 'Klien membutuhkan platform digital modern yang mampu menyampaikan nilai jual secara kredibel, responsif di gawai seluler dengan jaringan terbatas, serta memiliki kecepatan muat tinggi.' %>
+                            </p>
+                        </div>
+
+                        <div class="tactile-card tactile-card-heavy" style="border-color: var(--royal-blue); border-bottom-color: var(--royal-blue-hover); background: #ffffff;">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                                <div style="width: 36px; height: 36px; border-radius: 50%; background: #e0f2fe; color: var(--royal-blue); display: flex; align-items: center; justify-content: center;">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                                </div>
+                                <h3 style="font-size: 1.25rem; color: var(--royal-blue); margin: 0;">Solusi &amp; Hasil Eksekusi</h3>
+                            </div>
+                            <p style="color: var(--slate-body); line-height: 1.7; margin: 0; font-size: 0.975rem;">
+                                <%= project.solution || 'Kami merancang arsitektur Server-Side Rendering (SSR) berbasis Node.js dipadukan dengan desain tactile modern. Hasilnya waktu muat terpangkas hingga 70% dan tingkat konversi naik drastis.' %>
+                            </p>
+                        </div>
                     </div>
+                </div>
+
+                <!-- Callout CTA -->
+                <div class="tactile-card tactile-card-heavy" style="margin-top: 80px; padding: 60px 40px; text-align: center; background: #ffffff; border-color: var(--border-light); border-bottom-color: var(--royal-blue);">
+                    <h2 style="font-size: clamp(1.8rem, 3.5vw, 2.5rem); color: var(--navy-text); margin-bottom: 16px;">
+                        Ingin Membangun Solusi Serupa buat <span class="font-editorial text-royal">Bisnis Lu?</span>
+                    </h2>
+                    <p style="max-width: 600px; margin: 0 auto 32px; color: var(--slate-body); font-size: 1.05rem;">
+                        Diskusikan kebutuhan spesifik lu dengan tim arsitek kami. Kami siap berikan estimasi biaya dan roadmap eksekusi konkret.
+                    </p>
+                    <a href="/contact" class="btn-royal" style="display: inline-flex; align-items: center; gap: 8px;">
+                        Mulai Konsultasi Gratis
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                    </a>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer class="section" style="border-top: 1px solid var(--glass-border); padding-bottom: 40px;">
-        <div class="container text-center" style="color: var(--text-muted); font-size: 0.9rem;">
-            &copy; <span id="year"></span> <%= settings.siteName || 'Dents Web' %>. All rights reserved.
-        </div>
-    </footer>
-    <script>
-        document.getElementById('year').textContent = new Date().getFullYear();
-        window.addEventListener('scroll', () => document.getElementById('main-header').classList.toggle('scrolled', window.scrollY > 20));
-        document.getElementById('hamburger-btn').addEventListener('click', () => document.getElementById('nav-links').classList.toggle('mobile-open'));
-    </script>
+    <%- include('partials/footer') %>
+
 </body>
 </html>
