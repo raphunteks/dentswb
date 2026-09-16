@@ -973,6 +973,243 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* --------------------------------------------------------------------------
+   15b. Portfolio Style Tahoe macOS (3-Column Luxury Desktop Grid)
+   -------------------------------------------------------------------------- */
+.portfolio-section-tahoe {
+  background: radial-gradient(circle at 50% 0%, #0e1942 0%, #05081c 70%, #030514 100%);
+  position: relative;
+  overflow: hidden;
+  padding: 90px 0 110px;
+}
+
+.portfolio-grid-tahoe {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  align-items: stretch;
+}
+
+@media (max-width: 1120px) {
+  .portfolio-grid-tahoe {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+}
+
+@media (max-width: 680px) {
+  .portfolio-grid-tahoe {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+.portfolio-card-tahoe {
+  background: rgba(16, 26, 61, 0.75);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.4);
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  position: relative;
+}
+
+.portfolio-card-tahoe:hover {
+  transform: translateY(-6px);
+  border-color: rgba(56, 189, 248, 0.45);
+  box-shadow: 0 22px 50px rgba(0, 0, 0, 0.55), 0 0 28px rgba(56, 189, 248, 0.18);
+}
+
+/* Authentic Tahoe macOS Browser Frame */
+.macos-browser-window {
+  background: #090e24;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.macos-window-header {
+  background: rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.macos-traffic-lights {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.traffic-light {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.25);
+}
+
+.traffic-light.red {
+  background: #ff5f56;
+  border: 1px solid #e0443e;
+}
+
+.traffic-light.yellow {
+  background: #ffbd2e;
+  border: 1px solid #dea123;
+}
+
+.traffic-light.green {
+  background: #27c93f;
+  border: 1px solid #1aab29;
+}
+
+.macos-address-pill {
+  background: rgba(0, 0, 0, 0.38);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  padding: 3px 12px;
+  font-size: 0.72rem;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 180px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.macos-window-body {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  background: #060a1d;
+  overflow: hidden;
+}
+
+.macos-window-body img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.portfolio-card-tahoe:hover .macos-window-body img {
+  transform: scale(1.04);
+}
+
+/* Tahoe Card Content Body */
+.portfolio-tahoe-body {
+  padding: 22px 22px 24px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 10px;
+}
+
+.portfolio-tahoe-category {
+  color: #38bdf8;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.portfolio-tahoe-year {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.portfolio-tahoe-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.35;
+  margin: 0;
+  transition: color 0.2s ease;
+}
+
+.portfolio-card-tahoe:hover .portfolio-tahoe-title {
+  color: #38bdf8;
+}
+
+.portfolio-tahoe-desc {
+  font-size: 0.88rem;
+  color: #cbd5e1;
+  line-height: 1.65;
+  margin: 0;
+  white-space: normal;
+  display: block;
+  flex-grow: 1;
+}
+
+.portfolio-tahoe-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.tahoe-tag-pill {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(56, 189, 248, 0.12);
+  color: #7dd3fc;
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  display: inline-flex;
+  align-items: center;
+}
+
+.portfolio-tahoe-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.portfolio-tahoe-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--lime-accent);
+}
+
+.portfolio-tahoe-footer svg {
+  transition: transform 0.2s ease;
+}
+
+.portfolio-card-tahoe:hover .portfolio-tahoe-footer svg {
+  transform: translateX(4px);
+}
+
+
+/* --------------------------------------------------------------------------
    16. Pricing Cards & Packages (Soft Modern Style)
    -------------------------------------------------------------------------- */
 .pricing-card-kalana {
@@ -1814,7 +2051,7 @@ h1, h2, h3, h4, h5, h6 {
   overflow: hidden;
   border: 1px solid var(--navy-surface-border);
   background: #080c24;
-  max-height: 220px;
+  max-height: 480px;
   display: none;
 }
 
@@ -1824,8 +2061,10 @@ h1, h2, h3, h4, h5, h6 {
 
 .upload-preview-img {
   width: 100%;
-  height: 200px;
-  object-fit: cover;
+  height: auto;
+  max-height: 460px;
+  object-fit: contain;
+  background: #05081c;
   display: block;
 }
 
