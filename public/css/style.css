@@ -1,9 +1,7 @@
 /* ==========================================================================
-   DENTS WEB — MASTER DESIGN SYSTEM (KALANA LABS PREMIUM STANDARD)
-   Hybrid Deep Midnight Navy & Architectural White Aesthetic
+   DENTS WEB — MASTER DESIGN SYSTEM (SOFT MODERN HIGH-PERFORMANCE)
+   Hybrid Deep Midnight Navy & Soft Architectural Minimalist Aesthetic
    ========================================================================== */
-
-@import url('https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@500;600;700;800&family=Playfair+Display:ital,wght@1,400;1,500;1,600;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
 
 /* --------------------------------------------------------------------------
    1. CSS Variables & Design Tokens
@@ -61,6 +59,13 @@
   --radius-lg: 24px;
   --radius-xl: 32px;
   --radius-pill: 9999px;
+
+  /* Soft UI Elevations & Ambient Shadows */
+  --shadow-soft-sm: 0 2px 8px -2px rgba(15, 23, 42, 0.05);
+  --shadow-card: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
+  --shadow-soft: 0 10px 30px -5px rgba(15, 23, 42, 0.06), 0 4px 10px -2px rgba(15, 23, 42, 0.03);
+  --shadow-soft-hover: 0 20px 40px -10px rgba(15, 23, 42, 0.1), 0 8px 16px -4px rgba(15, 23, 42, 0.04);
+  --shadow-pill: 0 2px 10px rgba(0, 0, 0, 0.04);
 
   /* Layout */
   --container-max: 1240px;
@@ -482,48 +487,50 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* --------------------------------------------------------------------------
-   8. Tactile 3D Cards (Kalana Hallmark: border-b-[6px] / border-b-[8px])
+   8. Soft Modern Cards (Refined Tactile: Sleek Borders & Ambient Elevation)
    -------------------------------------------------------------------------- */
 .tactile-card {
   background: #ffffff;
-  border: 2px solid #e2e8f0;
-  border-bottom: 6px solid #cbd5e1;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-bottom: 3px solid #cbd5e1;
   border-radius: var(--radius-lg);
-  padding: 32px;
+  padding: 30px;
   transition: var(--transition);
-  box-shadow: 0 4px 10px -2px rgba(13, 18, 48, 0.04);
+  box-shadow: var(--shadow-card);
   position: relative;
 }
 
 .tactile-card:hover {
-  border-color: var(--royal-blue);
-  border-bottom-color: var(--royal-blue-hover);
-  transform: translateY(-4px);
-  box-shadow: 0 24px 45px -12px rgba(33, 82, 207, 0.16);
+  border-color: rgba(33, 82, 207, 0.45);
+  border-bottom-color: var(--royal-blue);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-soft-hover);
 }
 
 .tactile-card-heavy {
-  border-bottom-width: 8px;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-bottom: 3.5px solid #cbd5e1;
   border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-soft);
 }
 
 .tactile-card-dark {
   background: var(--navy-surface);
-  border: 2px solid #1e2547;
-  border-bottom: 6px solid #1441a5;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 3px solid #1441a5;
   color: #ffffff;
 }
 
 .tactile-card-dark:hover {
   border-color: var(--lime-accent);
   border-bottom-color: var(--lime-accent-hover);
-  box-shadow: 0 20px 40px -10px rgba(217, 255, 66, 0.12);
+  box-shadow: 0 16px 36px -8px rgba(217, 255, 66, 0.15);
 }
 
 .tactile-card-featured {
-  border-color: var(--royal-blue);
-  border-bottom: 8px solid var(--royal-blue-hover);
-  box-shadow: 0 20px 50px -10px rgba(33, 82, 207, 0.2);
+  border-color: rgba(33, 82, 207, 0.5);
+  border-bottom: 4px solid var(--royal-blue);
+  box-shadow: var(--shadow-soft-hover);
   transform: scale(1.02);
 }
 
@@ -680,19 +687,21 @@ h1, h2, h3, h4, h5, h6 {
 .step-card {
   display: flex;
   gap: 24px;
-  padding: 28px;
+  padding: 26px;
   background: #ffffff;
-  border: 2px solid var(--border-light);
-  border-bottom: 6px solid var(--border-slate);
+  border: 1px solid rgba(226, 232, 240, 0.85);
+  border-bottom: 3px solid #cbd5e1;
   border-radius: var(--radius-lg);
-  margin-bottom: 20px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-card);
   transition: var(--transition);
 }
 
 .step-card:hover {
-  border-color: var(--royal-blue);
-  border-bottom-color: var(--royal-blue-hover);
-  transform: translateX(6px);
+  border-color: rgba(33, 82, 207, 0.4);
+  border-bottom-color: var(--royal-blue);
+  transform: translateX(4px);
+  box-shadow: var(--shadow-soft);
 }
 
 .step-number {
@@ -916,21 +925,22 @@ h1, h2, h3, h4, h5, h6 {
    -------------------------------------------------------------------------- */
 .portfolio-card-kalana {
   background: #ffffff;
-  border: 2px solid #e2e8f0;
-  border-bottom: 8px solid #cbd5e1;
+  border: 1px solid rgba(226, 232, 240, 0.85);
+  border-bottom: 3.5px solid #cbd5e1;
   border-radius: var(--radius-xl);
   overflow: hidden;
   transition: var(--transition);
   cursor: pointer;
   display: flex;
   flex-direction: column;
+  box-shadow: var(--shadow-card);
 }
 
 .portfolio-card-kalana:hover {
-  border-color: var(--royal-blue);
-  border-bottom-color: var(--royal-blue-hover);
-  transform: translateY(-6px);
-  box-shadow: 0 25px 50px -15px rgba(33, 82, 207, 0.18);
+  border-color: rgba(33, 82, 207, 0.4);
+  border-bottom-color: var(--royal-blue);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-soft-hover);
 }
 
 .portfolio-img-cover {
@@ -939,7 +949,7 @@ h1, h2, h3, h4, h5, h6 {
   background-size: cover;
   background-position: center;
   background-color: #f1f4fa;
-  border-bottom: 2px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
   overflow: hidden;
 }
 
@@ -956,32 +966,33 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .portfolio-body {
-  padding: 28px;
+  padding: 26px;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 }
 
 /* --------------------------------------------------------------------------
-   16. Pricing Cards & Packages
+   16. Pricing Cards & Packages (Soft Modern Style)
    -------------------------------------------------------------------------- */
 .pricing-card-kalana {
   background: #ffffff;
-  border: 2px solid #e2e8f0;
-  border-bottom: 6px solid #cbd5e1;
+  border: 1px solid rgba(226, 232, 240, 0.85);
+  border-bottom: 3.5px solid #cbd5e1;
   border-radius: var(--radius-xl);
-  padding: 36px;
+  padding: 34px 28px;
   display: flex;
   flex-direction: column;
   transition: var(--transition);
   position: relative;
+  box-shadow: var(--shadow-card);
 }
 
 .pricing-card-kalana.featured {
-  border-color: var(--royal-blue);
-  border-bottom: 8px solid var(--royal-blue-hover);
-  box-shadow: 0 25px 60px -15px rgba(33, 82, 207, 0.22);
-  transform: scale(1.03);
+  border-color: rgba(33, 82, 207, 0.5);
+  border-bottom: 4px solid var(--royal-blue);
+  box-shadow: var(--shadow-soft-hover);
+  transform: scale(1.02);
   z-index: 2;
 }
 
@@ -1327,36 +1338,141 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media (max-width: 768px) {
+  /* Prevent horizontal overflow and enable smooth text wrapping */
+  body, html {
+    overflow-x: hidden;
+  }
+
+  /* GPU Rendering Optimization: Disable heavy blur filters on mobile to prevent tile drop */
+  .orb-glow-blue, .orb-glow-lime {
+    filter: none !important;
+    opacity: 0.65;
+    pointer-events: none;
+  }
+  .orb-glow-blue {
+    background: radial-gradient(circle, rgba(33, 82, 207, 0.2) 0%, transparent 70%) !important;
+    width: 320px !important;
+    height: 320px !important;
+  }
+  .orb-glow-lime {
+    background: radial-gradient(circle, rgba(217, 255, 66, 0.12) 0%, transparent 70%) !important;
+    width: 260px !important;
+    height: 260px !important;
+  }
+
+  /* Header Island: Mask to prevent scroll bleed-through behind status bar */
+  .kalana-header-wrapper {
+    padding: 10px 14px !important;
+    background: transparent;
+    transition: background 0.25s ease, backdrop-filter 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+  .kalana-header-wrapper.scrolled {
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.7) !important;
+    box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.05) !important;
+  }
+  .kalana-nav-capsule {
+    height: 54px !important;
+    padding: 0 12px 0 16px !important;
+    background: rgba(255, 255, 255, 0.98) !important;
+    box-shadow: 0 4px 18px -4px rgba(0, 0, 0, 0.08) !important;
+  }
+  .nav-brand-name {
+    font-size: 1.1rem !important;
+  }
   .nav-links-desktop, .nav-cta-btn {
     display: none;
   }
   .nav-hamburger {
     display: flex;
+    width: 40px;
+    height: 40px;
   }
+
+  /* Grid: 1 Column on mobile with tight natural gap */
   .grid-2, .grid-3, .grid-4 {
-    grid-template-columns: 1fr;
-    gap: 24px;
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
   }
   .footer-grid {
-    grid-template-columns: 1fr;
-    gap: 32px;
+    grid-template-columns: 1fr !important;
+    gap: 28px !important;
   }
+
+  /* Section Hero Reset: Flow naturally without rigid 90vh flex centering */
   .section-hero {
-    padding-top: 120px;
-    padding-bottom: 60px;
+    display: block !important;
+    min-height: auto !important;
+    padding-top: 105px !important;
+    padding-bottom: 40px !important;
     text-align: center;
   }
-  .section-hero .btn-lime, .section-hero .btn-ghost-white {
-    width: 100%;
+  .section-hero h1 {
+    font-size: clamp(1.85rem, 6.5vw, 2.35rem) !important;
+    line-height: 1.22 !important;
+    margin-bottom: 16px !important;
+    overflow-wrap: break-word;
+    word-break: break-word;
   }
+  .section-hero p {
+    font-size: 0.98rem !important;
+    line-height: 1.65 !important;
+    margin-bottom: 24px !important;
+  }
+  .section-hero .btn-lime, .section-hero .btn-ghost-white {
+    width: 100% !important;
+  }
+
+  /* Compact Section Spacing: Eliminate the 160px White Void on Mobile */
+  .section-white, .section-soft, .section-dark {
+    padding: 52px 0 !important;
+  }
+  .section-header {
+    margin-bottom: 28px !important;
+  }
+  .section-header h2 {
+    font-size: clamp(1.65rem, 5.5vw, 2.15rem) !important;
+    line-height: 1.25 !important;
+    margin-bottom: 12px !important;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+  .section-header p {
+    font-size: 0.95rem !important;
+    line-height: 1.6 !important;
+  }
+  .container {
+    padding-left: 18px !important;
+    padding-right: 18px !important;
+  }
+
+  /* Soft Mobile Cards */
   .tactile-card {
-    padding: 24px;
+    padding: 22px 18px !important;
+  }
+  .step-card {
+    padding: 20px 16px !important;
+    gap: 16px !important;
+  }
+  .step-number {
+    width: 44px !important;
+    height: 44px !important;
+    font-size: 1.2rem !important;
+  }
+  .portfolio-body {
+    padding: 20px 18px !important;
+  }
+  .pricing-card-kalana {
+    padding: 26px 20px !important;
   }
   .pricing-card-kalana.featured {
-    transform: none;
+    transform: none !important;
   }
   .testimonial-card-kalana {
-    width: 300px;
+    width: 290px !important;
+    padding: 22px 18px !important;
   }
 }
 
@@ -1912,6 +2028,7 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: 4px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -2087,6 +2204,7 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 18px;
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
   flex: 1;
@@ -2319,6 +2437,7 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: -0.04em;
   background: linear-gradient(135deg, var(--lime-accent) 0%, #38bdf8 50%, var(--royal-blue) 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-bottom: 16px;
   display: inline-block;
