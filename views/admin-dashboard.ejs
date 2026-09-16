@@ -386,6 +386,14 @@
                     <label class="form-label" style="color: #ffffff;">Kategori *</label>
                     <input type="text" class="form-control" name="category" placeholder="Cth: Web Application / Company Profile" required style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
                 </div>
+                <div class="form-group">
+                    <label class="form-label" style="color: #ffffff; display: flex; justify-content: space-between; align-items: center;">
+                        <span>Tags / Label Singkat (Style Tahoe macOS)</span>
+                        <span style="font-size: 0.72rem; color: #38bdf8;">Pisahkan dengan koma</span>
+                    </label>
+                    <input type="text" class="form-control" name="tags" placeholder="Cth: Landing Page, F&B, Responsive" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                    <small style="color: #94a3b8; font-size: 0.75rem; margin-top: 4px; display: block;">Ditampilkan sebagai chip tags di style Tahoe macOS (cth: Landing Page, F&amp;B, Responsive)</small>
+                </div>
 
                 <!-- Image Upload Dropzone with Canvas auto-compression + URL fallback -->
                 <div class="form-group">
@@ -1121,6 +1129,7 @@
                 setVal('client', item.client);
                 setVal('year', item.year);
                 setVal('category', item.category);
+                setVal('tags', Array.isArray(item.tags) ? item.tags.join(', ') : (item.tags || ''));
                 setVal('image', item.image);
                 setVal('projectUrl', item.projectUrl);
                 setVal('shortDescription', item.shortDescription);
