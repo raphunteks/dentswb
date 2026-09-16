@@ -52,12 +52,16 @@
         const hamburger = document.getElementById('hamburger-btn');
         const drawer = document.getElementById('mobile-drawer');
 
+        const wrapper = document.getElementById('main-header');
+
         if (capsule) {
             window.addEventListener('scroll', () => {
                 if (window.scrollY > 20) {
                     capsule.classList.add('scrolled');
+                    if (wrapper) wrapper.classList.add('scrolled');
                 } else {
                     capsule.classList.remove('scrolled');
+                    if (wrapper) wrapper.classList.remove('scrolled');
                 }
             }, { passive: true });
         }
