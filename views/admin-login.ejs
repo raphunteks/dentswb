@@ -3,42 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login | Secure Area</title>
-    <!-- Noindex for security -->
+    <meta name="theme-color" content="#05081c">
+    <title>Admin Login | Dents Web Console</title>
+    <link rel="icon" type="image/png" href="/public/img/axalogo.png">
     <meta name="robots" content="noindex, nofollow">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="/public/css/style.css">
 </head>
-<body>
-    <section class="section" style="min-height: 100vh; display: flex; align-items: center; justify-content: center;">
-        <div class="glass-panel glass-panel-p" style="width: 100%; max-width: 400px;">
-            <div class="text-center" style="margin-bottom: 32px;">
-                <div class="logo-mark" style="margin: 0 auto 16px; display: block;"></div>
-                <h3>System Access</h3>
-                <p style="font-size: 0.85rem; margin-top: 8px;">Dents Web Infrastructure Console</p>
+<body style="background: var(--navy-deep); min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; padding: 24px;">
+
+    <!-- Background Orbs -->
+    <div class="orb-glow-blue" style="top: -150px; left: -100px; opacity: 0.4;"></div>
+    <div class="orb-glow-lime" style="bottom: -150px; right: -100px; opacity: 0.1;"></div>
+
+    <div class="tactile-card-dark tactile-card-heavy" style="width: 100%; max-width: 430px; position: relative; z-index: 10; padding: 42px 34px;">
+        <div class="text-center" style="margin-bottom: 32px;">
+            <div style="display: inline-flex; align-items: center; gap: 4px; margin-bottom: 16px;">
+                <img src="/public/img/axalogo.png" alt="Dents Logo" style="height: 38px; width: auto; object-fit: contain;">
+                <span style="font-family: 'Lexend Deca', sans-serif; font-size: 1.4rem; font-weight: 800; color: #ffffff; letter-spacing: -0.5px;">ents Web</span>
             </div>
-            
-            <form id="login-form">
-                <div id="login-alert" style="display:none; padding: 12px; border-radius: 8px; margin-bottom: 16px; font-size: 0.9rem; font-weight:500;"></div>
-                
-                <div class="form-group">
-                    <label class="form-label">Username</label>
-                    <input type="text" class="form-control" name="username" required autocomplete="username">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Password</label>
-                    <input type="password" class="form-control" name="password" required autocomplete="current-password">
-                </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;" id="btn-login">Secure Login</button>
-            </form>
+            <h2 style="color: #ffffff; font-size: 1.5rem; font-family: 'Lexend Deca', sans-serif;">Command Console</h2>
+            <p style="font-size: 0.85rem; color: var(--slate-muted); margin-top: 6px;">Autentikasi Administrator Resmi</p>
         </div>
-    </section>
+
+        <form id="login-form">
+            <div id="login-alert" style="display:none; padding: 12px 16px; border-radius: var(--radius-sm); margin-bottom: 20px; font-size: 0.9rem; font-weight: 600;"></div>
+
+            <div class="form-group">
+                <label class="form-label" style="color: #ffffff;">Username</label>
+                <input type="text" class="form-control" name="username" placeholder="Masukkan username admin" required autocomplete="username" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 28px;">
+                <label class="form-label" style="color: #ffffff;">Password</label>
+                <input type="password" class="form-control" name="password" placeholder="••••••••" required autocomplete="current-password" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+            </div>
+
+            <button type="submit" class="btn-lime" style="width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 8px;" id="btn-login">
+                <span>Masuk ke Konsol</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </button>
+        </form>
+
+        <div style="margin-top: 28px; text-align: center;">
+            <a href="/" style="font-size: 0.875rem; color: var(--slate-muted); text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                Kembali ke Beranda Publik
+            </a>
+        </div>
+    </div>
 
     <script>
         document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btn-login');
             const alertBox = document.getElementById('login-alert');
-            btn.textContent = 'Authenticating...';
+            const originalText = btn.innerHTML;
+
+            btn.innerHTML = '<span>Mengautentikasi...</span>';
             btn.disabled = true;
 
             const payload = Object.fromEntries(new FormData(e.target).entries());
@@ -51,19 +77,19 @@
                 });
                 const data = await res.json();
 
-                if(res.ok && data.success) {
-                    window.location.href = data.redirect;
+                if (res.ok && data.success) {
+                    window.location.href = data.redirect || '/admin-dashboard';
                 } else {
                     throw new Error(data.message || 'Kredensial tidak valid');
                 }
             } catch (err) {
                 alertBox.style.display = 'block';
-                alertBox.style.backgroundColor = 'rgba(239, 68, 68, 0.1)';
+                alertBox.style.backgroundColor = 'rgba(239, 68, 68, 0.15)';
                 alertBox.style.color = 'var(--danger)';
                 alertBox.style.border = '1px solid var(--danger)';
                 alertBox.textContent = err.message;
             } finally {
-                btn.textContent = 'Secure Login';
+                btn.innerHTML = originalText;
                 btn.disabled = false;
             }
         });
