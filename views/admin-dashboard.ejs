@@ -13,76 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="/public/css/style.css">
-    <style>
-        .admin-stat-card {
-            background: var(--navy-surface);
-            border: 2px solid var(--navy-surface-border);
-            border-bottom: 5px solid #1441a5;
-            border-radius: var(--radius-lg);
-            padding: 24px;
-        }
-        .toast-box {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .toast-item {
-            padding: 14px 20px;
-            border-radius: var(--radius-md);
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #ffffff;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-            animation: slideInToast 0.3s ease;
-        }
-        .toast-success { background: #00c853; }
-        .toast-error { background: #ef4444; }
-        @keyframes slideInToast {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .btn-action-edit {
-            background: rgba(33, 82, 207, 0.2);
-            color: #60a5fa;
-            border: 1px solid #3b82f6;
-            padding: 5px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            margin-right: 6px;
-            transition: all 0.2s ease;
-        }
-        .btn-action-edit:hover {
-            background: #2563eb;
-            color: #ffffff;
-        }
-        .btn-action-delete {
-            background: rgba(239, 68, 68, 0.2);
-            color: var(--danger);
-            border: 1px solid var(--danger);
-            padding: 5px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            transition: all 0.2s ease;
-        }
-        .btn-action-delete:hover {
-            background: var(--danger);
-            color: #ffffff;
-        }
-    </style>
+    <script src="/public/js/tech-icons.js"></script>
 </head>
 <body>
 
@@ -120,6 +51,10 @@
                 <div class="admin-nav-item" data-tab="portfolio">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
                     <span>Portofolio</span>
+                </div>
+                <div class="admin-nav-item" data-tab="articles">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                    <span>Artikel &amp; Materi</span>
                 </div>
                 <div class="admin-nav-item" data-tab="services">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 12 22 12"></polyline></svg>
@@ -209,6 +144,35 @@
                         </thead>
                         <tbody>
                             <tr><td colspan="6" style="text-align: center; color: var(--slate-muted); padding: 30px;">Memuat data portofolio...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB ARTICLES & MATERI -->
+            <div id="panel-articles" class="admin-panel" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; flex-wrap: wrap; gap: 16px;">
+                    <div>
+                        <h2 style="font-size: 1.8rem; color: #ffffff; margin-bottom: 6px;">Manajemen Artikel &amp; Materi</h2>
+                        <p style="color: var(--slate-muted); font-size: 0.95rem;">Publikasikan materi teknis, tutorial pemrograman, dan wawasan industri web modern.</p>
+                    </div>
+                    <button class="btn-royal" onclick="openModal('modal-articles')">+ Tulis Artikel Baru</button>
+                </div>
+
+                <div class="tactile-card-dark admin-table-responsive" style="padding: 0;">
+                    <table class="admin-table" id="table-articles">
+                        <thead>
+                            <tr>
+                                <th>Cover</th>
+                                <th>Judul Artikel</th>
+                                <th>Kategori</th>
+                                <th>Waktu Baca</th>
+                                <th>Status</th>
+                                <th style="text-align: right;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td colspan="6" style="text-align: center; color: var(--slate-muted); padding: 30px;">Memuat data artikel...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -393,7 +357,7 @@
 
     <!-- Modal Portfolio -->
     <div class="modal-overlay-kalana" id="modal-portfolio">
-        <div class="modal-card-kalana">
+        <div class="modal-card-kalana" style="max-width: 800px;">
             <div class="modal-header-kalana">
                 <h3 id="modal-title-portfolio" style="color: #ffffff; font-size: 1.35rem; margin: 0;">Form Portofolio Proyek</h3>
                 <button type="button" class="modal-close-btn" onclick="closeModal('modal-portfolio')" aria-label="Tutup">&times;</button>
@@ -402,11 +366,11 @@
                 <input type="hidden" name="id">
                 <div class="form-group">
                     <label class="form-label" style="color: #ffffff;">Judul Proyek *</label>
-                    <input type="text" class="form-control" name="title" required style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                    <input type="text" class="form-control" name="title" id="port-title" required style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
                 </div>
                 <div class="form-group">
                     <label class="form-label" style="color: #ffffff;">Slug URL (cth: beresin-app) *</label>
-                    <input type="text" class="form-control" name="slug" required style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                    <input type="text" class="form-control" name="slug" id="port-slug" required style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
                 </div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                     <div class="form-group">
@@ -420,12 +384,77 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label" style="color: #ffffff;">Kategori *</label>
-                    <input type="text" class="form-control" name="category" placeholder="Cth: Web Development" required style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                    <input type="text" class="form-control" name="category" placeholder="Cth: Web Application / Company Profile" required style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
                 </div>
+
+                <!-- Image Upload Dropzone with Canvas auto-compression + URL fallback -->
                 <div class="form-group">
-                    <label class="form-label" style="color: #ffffff;">URL Gambar Cover *</label>
-                    <input type="text" class="form-control" name="image" placeholder="https://... atau /public/img/..." required style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                    <label class="form-label" style="color: #ffffff; display: flex; justify-content: space-between; align-items: center;">
+                        <span>Upload Gambar Cover Portofolio *</span>
+                        <span style="font-size: 0.72rem; color: #94a3b8;">PNG, JPG, WEBP, HEIC (Maks 10MB)</span>
+                    </label>
+
+                    <!-- Dropzone -->
+                    <div class="upload-dropzone" id="dropzone-portfolio">
+                        <input type="file" id="file-portfolio" accept="image/*">
+                        <div class="upload-dropzone-content">
+                            <div class="upload-icon-circle">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                            </div>
+                            <div style="font-size: 0.88rem; font-weight: 700; color: #f1f5f9;">Tarik &amp; Lepaskan Gambar ke Sini</div>
+                            <div style="font-size: 0.75rem; color: #94a3b8;">atau <span style="color: #38bdf8; text-decoration: underline;">Pilih File dari Perangkat</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Image Preview Container -->
+                    <div class="upload-preview-box" id="preview-box-portfolio">
+                        <img id="preview-img-portfolio" src="" alt="Preview Cover" class="upload-preview-img">
+                        <button type="button" class="upload-remove-btn" id="remove-img-portfolio" title="Hapus Gambar">&times;</button>
+                    </div>
+
+                    <!-- Hidden/Direct URL Input -->
+                    <input type="text" class="form-control" name="image" id="input-img-portfolio" placeholder="Atau tempel URL gambar langsung (https://...)" required style="margin-top: 10px; background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border); font-size: 0.8rem;">
                 </div>
+
+                <!-- Tools & Tech Stack Multi-Selector (116 Authentic Brand SVGs) -->
+                <div class="form-group">
+                    <label class="form-label" style="color: #ffffff; display: flex; justify-content: space-between; align-items: center;">
+                        <span>Teknologi &amp; Tools yang Digunakan</span>
+                        <span style="font-size: 0.72rem; color: var(--lime-accent);">Pilih dari 116+ Tools Dunia</span>
+                    </label>
+
+                    <!-- Hidden input to store comma-separated IDs -->
+                    <input type="hidden" name="tools" id="input-tools-portfolio">
+
+                    <div class="tech-tools-wrapper">
+                        <!-- Toolbar (Tabs + Search) -->
+                        <div class="tech-tools-toolbar">
+                            <div class="tech-tools-tabs" id="tech-tabs-portfolio">
+                                <button type="button" class="tech-tab-btn active" data-cat="all">Semua (116)</button>
+                                <button type="button" class="tech-tab-btn" data-cat="frontend">Frontend (33)</button>
+                                <button type="button" class="tech-tab-btn" data-cat="backend">Backend (30)</button>
+                                <button type="button" class="tech-tab-btn" data-cat="database">Database (24)</button>
+                                <button type="button" class="tech-tab-btn" data-cat="devops">DevOps (29)</button>
+                            </div>
+                            <input type="text" class="tech-tools-search" id="tech-search-portfolio" placeholder="Cari tool (e.g. React, Docker)...">
+                        </div>
+
+                        <!-- 116 Tools Interactive Grid -->
+                        <div class="tech-tools-grid" id="tech-grid-portfolio"></div>
+
+                        <!-- Selected Chips Display -->
+                        <div class="tech-selected-chips-wrapper">
+                            <div class="tech-selected-chips-title">
+                                <span>Tools Terpilih:</span>
+                                <span id="tech-count-portfolio" style="color: var(--lime-accent);">0 dipilih</span>
+                            </div>
+                            <div class="tech-selected-chips" id="tech-chips-portfolio">
+                                <span style="font-size: 0.75rem; color: #64748b; font-style: italic;">Belum ada teknologi yang dipilih.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <label class="form-label" style="color: #ffffff;">URL Live Website (Opsional)</label>
                     <input type="url" class="form-control" name="projectUrl" placeholder="https://..." style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
@@ -448,6 +477,106 @@
                 <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 28px;">
                     <button type="button" class="btn-ghost-white" onclick="closeModal('modal-portfolio')">Batal</button>
                     <button type="submit" class="btn-royal">Simpan Portofolio</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Articles -->
+    <div class="modal-overlay-kalana" id="modal-articles">
+        <div class="modal-card-kalana" style="max-width: 760px;">
+            <div class="modal-header-kalana">
+                <h3 id="modal-title-articles" style="color: #ffffff; font-size: 1.35rem; margin: 0;">Tulis Artikel &amp; Materi</h3>
+                <button type="button" class="modal-close-btn" onclick="closeModal('modal-articles')" aria-label="Tutup">&times;</button>
+            </div>
+            <form onsubmit="handleFormSubmit(event, 'articles')">
+                <input type="hidden" name="id">
+                
+                <div class="form-group">
+                    <label class="form-label" style="color: #ffffff;">Judul Artikel *</label>
+                    <input type="text" class="form-control" name="title" id="art-title" placeholder="Cth: Panduan Lengkap Docker untuk Pengembang Pemula" required style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div class="form-group">
+                        <label class="form-label" style="color: #ffffff;">Slug URL *</label>
+                        <input type="text" class="form-control" name="slug" id="art-slug" placeholder="panduan-lengkap-docker" required style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" style="color: #ffffff;">Kategori Materi *</label>
+                        <select class="form-control" name="category" required style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                            <option value="Frontend">Frontend</option>
+                            <option value="Backend">Backend</option>
+                            <option value="Database">Database</option>
+                            <option value="DevOps">DevOps &amp; Cloud</option>
+                            <option value="Security">Security &amp; Best Practices</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Cover Image Dropzone -->
+                <div class="form-group">
+                    <label class="form-label" style="color: #ffffff; display: flex; justify-content: space-between; align-items: center;">
+                        <span>Upload Cover Artikel *</span>
+                        <span style="font-size: 0.72rem; color: #94a3b8;">PNG, JPG, WEBP (Otomatis Kompres)</span>
+                    </label>
+
+                    <div class="upload-dropzone" id="dropzone-articles">
+                        <input type="file" id="file-articles" accept="image/*">
+                        <div class="upload-dropzone-content">
+                            <div class="upload-icon-circle">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                            </div>
+                            <div style="font-size: 0.88rem; font-weight: 700; color: #f1f5f9;">Tarik &amp; Lepaskan Gambar Cover</div>
+                            <div style="font-size: 0.75rem; color: #94a3b8;">atau <span style="color: #38bdf8; text-decoration: underline;">Pilih File</span></div>
+                        </div>
+                    </div>
+
+                    <div class="upload-preview-box" id="preview-box-articles">
+                        <img id="preview-img-articles" src="" alt="Preview Cover" class="upload-preview-img">
+                        <button type="button" class="upload-remove-btn" id="remove-img-articles" title="Hapus Gambar">&times;</button>
+                    </div>
+
+                    <input type="text" class="form-control" name="coverImage" id="input-img-articles" placeholder="Atau masukkan URL gambar langsung..." required style="margin-top: 10px; background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border); font-size: 0.8rem;">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" style="color: #ffffff;">Ringkasan / Excerpt Singkat *</label>
+                    <textarea class="form-control" name="excerpt" rows="2" placeholder="Ringkasan 1-2 kalimat untuk kartu artikel dan Google SERP snippet..." required style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);"></textarea>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div class="form-group">
+                        <label class="form-label" style="color: #ffffff;">Estimasi Waktu Baca</label>
+                        <input type="text" class="form-control" name="readingTime" value="5 menit baca" placeholder="5 menit baca" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" style="color: #ffffff;">Penulis (Author)</label>
+                        <input type="text" class="form-control" name="author" value="Dents Web Engineering" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" style="color: #ffffff;">Tag / Kata Kunci (Pisahkan dengan koma)</label>
+                    <input type="text" class="form-control" name="tags" placeholder="Docker, Containers, DevOps, Deployment" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" style="color: #ffffff;">Konten Lengkap Materi (Mendukung HTML &amp; Format Kode) *</label>
+                    <textarea class="form-control" name="content" rows="10" placeholder="Tulis materi artikel lengkap di sini menggunakan tag HTML seperti &lt;h2&gt;, &lt;p&gt;, &lt;pre&gt;&lt;code&gt;...&lt;/code&gt;&lt;/pre&gt;, &lt;ul&gt;, dll..." required style="background: #080c24; color: #f1f5f9; font-family: 'Fira Code', monospace; font-size: 0.88rem; border-color: var(--navy-surface-border); line-height: 1.6;"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" style="color: #ffffff;">Status Publikasi</label>
+                    <select class="form-control" name="isPublished" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                        <option value="true">Published (Tampil di Publik &amp; Sitemap)</option>
+                        <option value="false">Draft (Hanya Tersimpan di Dashboard)</option>
+                    </select>
+                </div>
+
+                <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 28px;">
+                    <button type="button" class="btn-ghost-white" onclick="closeModal('modal-articles')">Batal</button>
+                    <button type="submit" class="btn-royal">Simpan &amp; Publikasikan Artikel</button>
                 </div>
             </form>
         </div>
@@ -638,6 +767,7 @@
         window.cacheData = {
             leads: [],
             portfolio: [],
+            articles: [],
             services: [],
             pricing: [],
             testimonials: [],
@@ -654,6 +784,252 @@
             setTimeout(() => toast.remove(), 3500);
         }
 
+        // Client-side Canvas Image Compressor (PNG, JPG, WEBP, HEIC to WebP/JPEG Base64)
+        function compressImage(file, maxWidth = 1600, quality = 0.82) {
+            return new Promise((resolve, reject) => {
+                if (!file || !file.type.startsWith('image/')) {
+                    return reject(new Error('File yang dipilih bukan berkas gambar valid.'));
+                }
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        let width = img.width;
+                        let height = img.height;
+                        if (width > maxWidth) {
+                            height = Math.round((height * maxWidth) / width);
+                            width = maxWidth;
+                        }
+                        const canvas = document.createElement('canvas');
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        let dataUrl = canvas.toDataURL('image/webp', quality);
+                        if (!dataUrl.startsWith('data:image/webp')) {
+                            dataUrl = canvas.toDataURL('image/jpeg', quality);
+                        }
+                        resolve(dataUrl);
+                    };
+                    img.onerror = () => reject(new Error('Gagal memproses berkas gambar.'));
+                    img.src = e.target.result;
+                };
+                reader.onerror = () => reject(new Error('Gagal membaca berkas.'));
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Image Dropzone Setup
+        function setupDropzone(dropzoneId, fileInputId, previewBoxId, previewImgId, hiddenInputId, removeBtnId) {
+            const dropzone = document.getElementById(dropzoneId);
+            const fileInput = document.getElementById(fileInputId);
+            const previewBox = document.getElementById(previewBoxId);
+            const previewImg = document.getElementById(previewImgId);
+            const hiddenInput = document.getElementById(hiddenInputId);
+            const removeBtn = document.getElementById(removeBtnId);
+
+            if (!dropzone || !fileInput || !previewBox || !previewImg || !hiddenInput) return;
+
+            function handleFile(file) {
+                if (!file) return;
+                showToast('Mengompres gambar ke format WebP...', 'success');
+                compressImage(file)
+                    .then(dataUrl => {
+                        hiddenInput.value = dataUrl;
+                        previewImg.src = dataUrl;
+                        previewBox.classList.add('active');
+                        showToast('Gambar berhasil diunggah & dikompres!', 'success');
+                    })
+                    .catch(err => {
+                        showToast(err.message, 'error');
+                    });
+            }
+
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files && e.target.files[0]) {
+                    handleFile(e.target.files[0]);
+                }
+            });
+
+            ['dragenter', 'dragover'].forEach(evt => {
+                dropzone.addEventListener(evt, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    dropzone.classList.add('dragover');
+                });
+            });
+
+            ['dragleave', 'drop'].forEach(evt => {
+                dropzone.addEventListener(evt, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    dropzone.classList.remove('dragover');
+                });
+            });
+
+            dropzone.addEventListener('drop', (e) => {
+                if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                    handleFile(e.dataTransfer.files[0]);
+                }
+            });
+
+            if (removeBtn) {
+                removeBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    hiddenInput.value = '';
+                    previewImg.src = '';
+                    previewBox.classList.remove('active');
+                    fileInput.value = '';
+                });
+            }
+
+            hiddenInput.addEventListener('input', (e) => {
+                const val = e.target.value.trim();
+                if (val) {
+                    previewImg.src = val;
+                    previewBox.classList.add('active');
+                } else {
+                    previewBox.classList.remove('active');
+                }
+            });
+        }
+
+        // Tech Stack Multi-Selector Controller (116 Authentic Brand SVGs)
+        let selectedTechTools = new Set();
+
+        function initTechSelector() {
+            const grid = document.getElementById('tech-grid-portfolio');
+            const searchInput = document.getElementById('tech-search-portfolio');
+            const tabBtns = document.querySelectorAll('#tech-tabs-portfolio .tech-tab-btn');
+            const countEl = document.getElementById('tech-count-portfolio');
+            const chipsEl = document.getElementById('tech-chips-portfolio');
+            const hiddenInput = document.getElementById('input-tools-portfolio');
+
+            if (!grid || !window.TECH_CATALOG) return;
+
+            let currentCategory = 'all';
+            let searchQuery = '';
+
+            function renderTools() {
+                const filtered = window.TECH_CATALOG.filter(t => {
+                    const matchesCat = (currentCategory === 'all' || t.category === currentCategory);
+                    const matchesSearch = (!searchQuery || 
+                        t.name.toLowerCase().includes(searchQuery) || 
+                        t.desc.toLowerCase().includes(searchQuery)
+                    );
+                    return matchesCat && matchesSearch;
+                });
+
+                if (!filtered.length) {
+                    grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 20px; font-size: 0.85rem;">Tidak ada tools yang cocok dengan pencarian.</div>';
+                    return;
+                }
+
+                grid.innerHTML = filtered.map(t => {
+                    const isSelected = selectedTechTools.has(t.id);
+                    return `
+                        <div class="tech-tool-card ${isSelected ? 'selected' : ''}" data-id="${t.id}" title="${t.name}: ${t.desc}">
+                            <input type="checkbox" class="tech-tool-checkbox" ${isSelected ? 'checked' : ''} onclick="event.stopPropagation(); toggleTool('${t.id}')">
+                            <div class="tech-tool-card-icon" style="color: ${t.color};">
+                                ${t.svg}
+                            </div>
+                            <div class="tech-tool-card-info">
+                                <div class="tech-tool-card-name">${t.name}</div>
+                                <div class="tech-tool-card-desc">${t.desc}</div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                grid.querySelectorAll('.tech-tool-card').forEach(card => {
+                    card.addEventListener('click', () => {
+                        const id = card.getAttribute('data-id');
+                        toggleTool(id);
+                    });
+                });
+            }
+
+            function updateChips() {
+                const arr = Array.from(selectedTechTools);
+                if (hiddenInput) hiddenInput.value = arr.join(',');
+                if (countEl) countEl.textContent = `${arr.length} dipilih`;
+
+                if (!arr.length) {
+                    chipsEl.innerHTML = '<span style="font-size: 0.75rem; color: #64748b; font-style: italic;">Belum ada teknologi yang dipilih.</span>';
+                    return;
+                }
+
+                chipsEl.innerHTML = arr.map(id => {
+                    const tool = window.getTechTool ? window.getTechTool(id) : null;
+                    const name = tool ? tool.name : id;
+                    return `
+                        <span class="tech-chip-item">
+                            <span>${name}</span>
+                            <button type="button" class="tech-chip-remove" onclick="toggleTool('${id}')">&times;</button>
+                        </span>
+                    `;
+                }).join('');
+            }
+
+            window.toggleTool = function(id) {
+                if (selectedTechTools.has(id)) {
+                    selectedTechTools.delete(id);
+                } else {
+                    selectedTechTools.add(id);
+                }
+                updateChips();
+                renderTools();
+            };
+
+            window.setPortfolioTools = function(toolIds) {
+                selectedTechTools.clear();
+                if (toolIds) {
+                    const arr = Array.isArray(toolIds) ? toolIds : String(toolIds).split(',');
+                    arr.map(s => s.trim().toLowerCase()).filter(Boolean).forEach(id => selectedTechTools.add(id));
+                }
+                updateChips();
+                renderTools();
+            };
+
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentCategory = btn.getAttribute('data-cat');
+                    renderTools();
+                });
+            });
+
+            searchInput.addEventListener('input', (e) => {
+                searchQuery = e.target.value.trim().toLowerCase();
+                renderTools();
+            });
+
+            renderTools();
+            updateChips();
+        }
+
+        // Slug Auto Generator Helper
+        function setupSlugAutoGenerator(titleId, slugId) {
+            const titleEl = document.getElementById(titleId);
+            const slugEl = document.getElementById(slugId);
+            if (!titleEl || !slugEl) return;
+            titleEl.addEventListener('input', () => {
+                if (!slugEl.dataset.manual) {
+                    slugEl.value = titleEl.value
+                        .toLowerCase()
+                        .trim()
+                        .replace(/[^\w\s-]/g, '')
+                        .replace(/[\s_-]+/g, '-')
+                        .replace(/^-+|-+$/g, '');
+                }
+            });
+            slugEl.addEventListener('input', () => {
+                slugEl.dataset.manual = 'true';
+            });
+        }
+
         function openModal(id) { 
             const m = document.getElementById(id);
             if (!m) return;
@@ -664,12 +1040,27 @@
                 if (idInput) idInput.value = '';
             }
             
+            // Clear dropzone previews & tools on new create
+            if (id === 'modal-portfolio') {
+                const previewBox = document.getElementById('preview-box-portfolio');
+                if (previewBox) previewBox.classList.remove('active');
+                if (window.setPortfolioTools) window.setPortfolioTools([]);
+                const slugInput = document.getElementById('port-slug');
+                if (slugInput) delete slugInput.dataset.manual;
+            } else if (id === 'modal-articles') {
+                const previewBox = document.getElementById('preview-box-articles');
+                if (previewBox) previewBox.classList.remove('active');
+                const slugInput = document.getElementById('art-slug');
+                if (slugInput) delete slugInput.dataset.manual;
+            }
+
             // Set title back to Add
             const entity = id.replace('modal-', '');
             const titleEl = document.getElementById(`modal-title-${entity}`);
             if (titleEl) {
                 const entityNames = {
                     portfolio: 'Portofolio Proyek',
+                    articles: 'Artikel & Materi',
                     services: 'Layanan',
                     pricing: 'Paket Harga',
                     testimonials: 'Testimoni Klien',
@@ -735,6 +1126,42 @@
                 setVal('shortDescription', item.shortDescription);
                 setVal('description', item.description);
                 setVal('isPublished', item.isPublished ? 'true' : 'false');
+
+                // Update Image Preview
+                const previewBox = document.getElementById('preview-box-portfolio');
+                const previewImg = document.getElementById('preview-img-portfolio');
+                if (item.image && previewBox && previewImg) {
+                    previewImg.src = item.image;
+                    previewBox.classList.add('active');
+                } else if (previewBox) {
+                    previewBox.classList.remove('active');
+                }
+
+                // Update Tech Tools
+                if (window.setPortfolioTools) {
+                    window.setPortfolioTools(item.tools || item.techStack || []);
+                }
+            } else if (entity === 'articles') {
+                setVal('title', item.title);
+                setVal('slug', item.slug);
+                setVal('category', item.category);
+                setVal('coverImage', item.coverImage);
+                setVal('excerpt', item.excerpt);
+                setVal('readingTime', item.readingTime || '5 menit baca');
+                setVal('author', item.author || 'Dents Web Engineering');
+                setVal('tags', Array.isArray(item.tags) ? item.tags.join(', ') : (item.tags || ''));
+                setVal('content', item.content);
+                setVal('isPublished', item.isPublished !== false ? 'true' : 'false');
+
+                // Update Cover Preview
+                const previewBox = document.getElementById('preview-box-articles');
+                const previewImg = document.getElementById('preview-img-articles');
+                if (item.coverImage && previewBox && previewImg) {
+                    previewImg.src = item.coverImage;
+                    previewBox.classList.add('active');
+                } else if (previewBox) {
+                    previewBox.classList.remove('active');
+                }
             } else if (entity === 'services') {
                 setVal('title', item.title);
                 setVal('slug', item.slug);
@@ -767,6 +1194,7 @@
             if (titleEl) {
                 const entityNames = {
                     portfolio: 'Portofolio Proyek',
+                    articles: 'Artikel & Materi',
                     services: 'Layanan',
                     pricing: 'Paket Harga',
                     testimonials: 'Testimoni Klien',
@@ -836,19 +1264,51 @@
                 const res = await api('/api/admin/portfolio');
                 window.cacheData.portfolio = res.data || [];
                 const tb = document.querySelector('#table-portfolio tbody');
-                tb.innerHTML = (res.data && res.data.length) ? res.data.map(p => `
+                tb.innerHTML = (res.data && res.data.length) ? res.data.map(p => {
+                    const toolsCount = p.tools ? (Array.isArray(p.tools) ? p.tools.length : p.tools.split(',').length) : 0;
+                    return `
                     <tr>
-                        <td style="font-weight: 700; color: #ffffff;">${escapeHtml(p.title)}</td>
+                        <td style="font-weight: 700; color: #ffffff;">
+                            ${escapeHtml(p.title)}
+                            ${toolsCount > 0 ? `<div style="font-size:0.72rem;color:var(--lime-accent);font-weight:normal;">${toolsCount} tools terpasang</div>` : ''}
+                        </td>
                         <td style="color: var(--slate-muted);">${escapeHtml(p.client)}</td>
                         <td><span class="badge-tag-royal" style="font-size: 0.75rem;">${escapeHtml(p.category)}</span></td>
                         <td style="color: var(--slate-muted);">${p.year}</td>
                         <td><span class="badge-tag-lime" style="font-size: 0.75rem;">${p.isPublished ? 'Published' : 'Draft'}</span></td>
                         <td style="text-align: right; white-space: nowrap;">
+                            <a href="/portfolio/${p.slug}" target="_blank" class="btn-action-edit" style="background: rgba(33,82,207,0.15); border-color: rgba(59,130,246,0.3); text-decoration: none;" title="Lihat Publik">&#128065;</a>
                             <button class="btn-action-edit" data-action="edit" data-entity="portfolio" data-id="${p.id}" onclick="openEditModal('portfolio', '${p.id}')">Edit</button>
                             <button class="btn-action-delete" data-action="delete" data-entity="portfolio" data-id="${p.id}" onclick="deleteRecord('portfolio', '${p.id}')">Hapus</button>
                         </td>
                     </tr>
-                `).join('') : '<tr><td colspan="6" style="text-align: center; padding: 30px; color: var(--slate-muted);">Belum ada portofolio di database.</td></tr>';
+                    `;
+                }).join('') : '<tr><td colspan="6" style="text-align: center; padding: 30px; color: var(--slate-muted);">Belum ada portofolio di database.</td></tr>';
+            }
+
+            if (tab === 'articles') {
+                const res = await api('/api/admin/articles');
+                window.cacheData.articles = res.data || [];
+                const tb = document.querySelector('#table-articles tbody');
+                tb.innerHTML = (res.data && res.data.length) ? res.data.map(a => `
+                    <tr>
+                        <td style="width: 60px;">
+                            <img src="${a.coverImage || '/public/img/axalogo.png'}" alt="Cover" style="width: 48px; height: 36px; object-fit: cover; border-radius: 4px; border: 1px solid var(--navy-surface-border);">
+                        </td>
+                        <td style="font-weight: 700; color: #ffffff;">
+                            ${escapeHtml(a.title)}
+                            <div style="font-size: 0.72rem; color: #64748b; font-weight: normal;">/${escapeHtml(a.slug)}</div>
+                        </td>
+                        <td><span class="badge-tag-royal" style="font-size: 0.75rem;">${escapeHtml(a.category || 'Materi')}</span></td>
+                        <td style="color: var(--slate-muted); font-size: 0.85rem;">${escapeHtml(a.readingTime || '5 mnt')}</td>
+                        <td><span class="badge-tag-lime" style="font-size: 0.75rem;">${a.isPublished !== false ? 'Published' : 'Draft'}</span></td>
+                        <td style="text-align: right; white-space: nowrap;">
+                            <a href="/article/${a.slug}" target="_blank" class="btn-action-edit" style="background: rgba(33,82,207,0.15); border-color: rgba(59,130,246,0.3); text-decoration: none;" title="Lihat Publik">&#128065;</a>
+                            <button class="btn-action-edit" data-action="edit" data-entity="articles" data-id="${a.id}" onclick="openEditModal('articles', '${a.id}')">Edit</button>
+                            <button class="btn-action-delete" data-action="delete" data-entity="articles" data-id="${a.id}" onclick="deleteRecord('articles', '${a.id}')">Hapus</button>
+                        </td>
+                    </tr>
+                `).join('') : '<tr><td colspan="6" style="text-align: center; padding: 30px; color: var(--slate-muted);">Belum ada artikel atau materi di database.</td></tr>';
             }
 
             if (tab === 'services') {
@@ -958,6 +1418,16 @@
                 payload.features = payload.features.split(',').map(f => f.trim()).filter(Boolean);
             }
 
+            // If tags string, split into clean array
+            if (payload.tags && typeof payload.tags === 'string') {
+                payload.tags = payload.tags.split(',').map(t => t.trim()).filter(Boolean);
+            }
+
+            // If tools string, split into clean array
+            if (payload.tools && typeof payload.tools === 'string') {
+                payload.tools = payload.tools.split(',').map(t => t.trim()).filter(Boolean);
+            }
+
             const method = id ? 'PUT' : 'POST';
             const url = id ? `/api/admin/${endpoint}/${id}` : `/api/admin/${endpoint}`;
 
@@ -1015,6 +1485,17 @@
         // Initialize & Event Bindings
         document.addEventListener('DOMContentLoaded', () => {
             loadData('leads');
+
+            // Initialize 116 Tools Selector
+            initTechSelector();
+
+            // Initialize Dropzones for Portfolio & Articles
+            setupDropzone('dropzone-portfolio', 'file-portfolio', 'preview-box-portfolio', 'preview-img-portfolio', 'input-img-portfolio', 'remove-img-portfolio');
+            setupDropzone('dropzone-articles', 'file-articles', 'preview-box-articles', 'preview-img-articles', 'input-img-articles', 'remove-img-articles');
+
+            // Initialize Slug Auto Generators
+            setupSlugAutoGenerator('port-title', 'port-slug');
+            setupSlugAutoGenerator('art-title', 'art-slug');
 
             // Mobile Drawer Toggle
             const menuToggle = document.getElementById('admin-menu-toggle');
