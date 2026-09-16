@@ -1,20 +1,78 @@
-<header id="main-header">
-    <div class="container nav-container">
-        <a href="/" class="logo">
-            <img src="/public/img/axalogo.png" alt="Logo" style="width: 32px; height: 32px; object-fit: contain; border-radius: 8px;">
-            <%= settings && settings.siteName ? settings.siteName : 'Dents Web' %>
+<div class="kalana-header-wrapper" id="main-header">
+    <header class="kalana-nav-capsule" id="nav-capsule">
+        <!-- Brand / Logo (Tightly Unified) -->
+        <a href="/" class="nav-brand" aria-label="<%= typeof settings !== 'undefined' && settings.brandName ? settings.brandName : 'Dents Web' %>" style="display: inline-flex; align-items: center; gap: 4px;">
+            <img src="<%= typeof settings !== 'undefined' && settings.logo ? settings.logo : '/public/img/axalogo.png' %>" alt="Logo" class="nav-brand-logo" width="32" height="32">
+            <span class="nav-brand-name"><%= typeof settings !== 'undefined' && settings.siteName ? settings.siteName : 'ents Web' %></span>
         </a>
-        <div class="hamburger" id="hamburger-btn">
-            <span></span><span></span><span></span>
-        </div>
-        <nav class="nav-links" id="nav-links">
-            <a href="/" class="<%= (typeof seo !== 'undefined' && seo.path === '/') ? 'active' : '' %>">Home</a>
-            <a href="/services" class="<%= (typeof seo !== 'undefined' && seo.path === '/services') ? 'active' : '' %>">Services</a>
-            <a href="/portfolio" class="<%= (typeof seo !== 'undefined' && seo.path && seo.path.startsWith('/portfolio')) ? 'active' : '' %>">Portfolio</a>
-            <a href="/pricing" class="<%= (typeof seo !== 'undefined' && seo.path === '/pricing') ? 'active' : '' %>">Pricing</a>
-            <a href="/about" class="<%= (typeof seo !== 'undefined' && seo.path === '/about') ? 'active' : '' %>">About</a>
-            <a href="/faq" class="<%= (typeof seo !== 'undefined' && seo.path === '/faq') ? 'active' : '' %>">FAQ</a>
-            <a href="/contact" class="btn btn-primary" style="padding: 8px 16px; font-size: 0.85rem;">Mulai Project</a>
+
+        <!-- Desktop Pill Navigation -->
+        <nav class="nav-links-desktop" aria-label="Navigasi Utama">
+            <a href="/" class="nav-pill-link <%= (typeof seo !== 'undefined' && seo.path === '/') ? 'active' : '' %>">Home</a>
+            <a href="/services" class="nav-pill-link <%= (typeof seo !== 'undefined' && seo.path === '/services') ? 'active' : '' %>">Services</a>
+            <a href="/portfolio" class="nav-pill-link <%= (typeof seo !== 'undefined' && seo.path && seo.path.startsWith('/portfolio')) ? 'active' : '' %>">Portfolio</a>
+            <a href="/pricing" class="nav-pill-link <%= (typeof seo !== 'undefined' && seo.path === '/pricing') ? 'active' : '' %>">Pricing</a>
+            <a href="/about" class="nav-pill-link <%= (typeof seo !== 'undefined' && seo.path === '/about') ? 'active' : '' %>">About</a>
+            <a href="/faq" class="nav-pill-link <%= (typeof seo !== 'undefined' && seo.path === '/faq') ? 'active' : '' %>">FAQ</a>
         </nav>
-    </div>
-</header>
+
+        <!-- CTA Action -->
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <a href="/contact" class="nav-cta-btn" aria-label="Mulai Konsultasi Project">
+                <span>Mulai Project</span>
+                <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+            </a>
+            <!-- Mobile Toggle -->
+            <button class="nav-hamburger" id="hamburger-btn" aria-label="Toggle Buka Menu Mobile">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+</div>
+
+<!-- Mobile Dropdown Drawer -->
+<nav class="mobile-nav-drawer" id="mobile-drawer" aria-label="Navigasi Mobile">
+    <a href="/" class="<%= (typeof seo !== 'undefined' && seo.path === '/') ? 'active' : '' %>">Home</a>
+    <a href="/services" class="<%= (typeof seo !== 'undefined' && seo.path === '/services') ? 'active' : '' %>">Services</a>
+    <a href="/portfolio" class="<%= (typeof seo !== 'undefined' && seo.path && seo.path.startsWith('/portfolio')) ? 'active' : '' %>">Portfolio</a>
+    <a href="/pricing" class="<%= (typeof seo !== 'undefined' && seo.path === '/pricing') ? 'active' : '' %>">Pricing</a>
+    <a href="/about" class="<%= (typeof seo !== 'undefined' && seo.path === '/about') ? 'active' : '' %>">About</a>
+    <a href="/faq" class="<%= (typeof seo !== 'undefined' && seo.path === '/faq') ? 'active' : '' %>">FAQ</a>
+    <a href="/contact" class="mobile-cta">
+        <span>Mulai Project</span>
+        <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+    </a>
+</nav>
+
+<script>
+    (function() {
+        const capsule = document.getElementById('nav-capsule');
+        const hamburger = document.getElementById('hamburger-btn');
+        const drawer = document.getElementById('mobile-drawer');
+
+        if (capsule) {
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 20) {
+                    capsule.classList.add('scrolled');
+                } else {
+                    capsule.classList.remove('scrolled');
+                }
+            }, { passive: true });
+        }
+
+        if (hamburger && drawer) {
+            hamburger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                drawer.classList.toggle('active');
+                hamburger.classList.toggle('open');
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!drawer.contains(e.target) && !hamburger.contains(e.target)) {
+                    drawer.classList.remove('active');
+                    hamburger.classList.remove('open');
+                }
+            });
+        }
+    })();
+</script>
