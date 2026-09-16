@@ -75,29 +75,23 @@
         console.log(warningMessage, messageStyle);
     }, 1000);
 
-    // 4. Basic DevTools Detection Trap (Deterrent Ringan)
-    // Jika DevTools terbuka, debugger akan terus-menerus mem-pause eksekusi.
-    const debuggerTrap = function() {
-        const start = new Date().getTime();
-        
-        // Anti-deobfuscation simple trap
-        eval('debugger');
-        
-        const end = new Date().getTime();
-        
-        // Jika jeda eksekusi memakan waktu lebih dari 100ms, berarti debugger sedang aktif
-        if (end - start > 100) {
-            // Optional: Mengosongkan halaman jika DevTools dibuka
-            document.body.innerHTML = `
-                <div style="display:flex; justify-content:center; align-items:center; height:100vh; background:#09090b; flex-direction:column; gap:16px;">
-                    <h1 style="color:#ef4444; font-family:sans-serif; text-align:center;">Tindakan Tidak Diizinkan</h1>
-                    <p style="color:#a1a1aa; font-family:sans-serif; text-align:center;">Silakan tutup DevTools dan muat ulang halaman.</p>
-                </div>
-            `;
+    // 4. Lightweight Console Deterrent (Non-blocking & Mobile Safe)
+    try {
+        const element = new Image();
+        Object.defineProperty(element, 'id', {
+            get: function() {
+                // Triggered if devtools inspects console objects
+                console.clear();
+                console.log(warningTitle, titleStyle);
+                console.log(warningMessage, messageStyle);
+            }
+        });
+        // Non-blocking log check after full idle
+        if (typeof requestIdleCallback !== 'undefined') {
+            requestIdleCallback(function() {
+                console.log('%c', element);
+            });
         }
-    };
-
-    // Jalankan trap setiap 2 detik
-    setInterval(debuggerTrap, 2000);
+    } catch(err) {}
 
 })();
