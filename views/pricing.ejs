@@ -89,7 +89,7 @@
                                 
                                 <div style="margin: 24px 0; border-bottom: 2px solid var(--border-light); padding-bottom: 24px;">
                                     <span style="font-size: 0.78rem; color: var(--slate-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;">Mulai Investasi</span>
-                                    <div style="font-size: 2.2rem; font-weight: 900; color: <%= pkg.isFeatured ? 'var(--royal-blue)' : 'var(--navy-text)' %>; line-height: 1.1; margin-top: 4px;">
+                                    <div class="<%= pkg.isFeatured ? 'text-royal' : 'text-navy' %>" style="font-size: 2.2rem; font-weight: 900; line-height: 1.1; margin-top: 4px;">
                                         <%= pkg.price %>
                                     </div>
                                 </div>
