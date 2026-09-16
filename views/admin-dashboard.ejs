@@ -826,7 +826,7 @@
                         <td style="max-width: 260px; font-size: 0.85rem; line-height: 1.5;">${escapeHtml(l.message)}</td>
                         <td><span class="badge-tag-royal" style="font-size: 0.75rem;">${escapeHtml(l.status || 'Baru')}</span></td>
                         <td style="text-align: right; white-space: nowrap;">
-                            <button class="btn-action-delete" onclick="deleteRecord('leads', '${l.id}')">Hapus</button>
+                            <button class="btn-action-delete" data-action="delete" data-entity="leads" data-id="${l.id}" onclick="deleteRecord('leads', '${l.id}')">Hapus</button>
                         </td>
                     </tr>
                 `).join('') : '<tr><td colspan="7" style="text-align: center; padding: 30px; color: var(--slate-muted);">Belum ada pesan leads masuk.</td></tr>';
@@ -844,8 +844,8 @@
                         <td style="color: var(--slate-muted);">${p.year}</td>
                         <td><span class="badge-tag-lime" style="font-size: 0.75rem;">${p.isPublished ? 'Published' : 'Draft'}</span></td>
                         <td style="text-align: right; white-space: nowrap;">
-                            <button class="btn-action-edit" onclick="openEditModal('portfolio', '${p.id}')">Edit</button>
-                            <button class="btn-action-delete" onclick="deleteRecord('portfolio', '${p.id}')">Hapus</button>
+                            <button class="btn-action-edit" data-action="edit" data-entity="portfolio" data-id="${p.id}" onclick="openEditModal('portfolio', '${p.id}')">Edit</button>
+                            <button class="btn-action-delete" data-action="delete" data-entity="portfolio" data-id="${p.id}" onclick="deleteRecord('portfolio', '${p.id}')">Hapus</button>
                         </td>
                     </tr>
                 `).join('') : '<tr><td colspan="6" style="text-align: center; padding: 30px; color: var(--slate-muted);">Belum ada portofolio di database.</td></tr>';
@@ -866,8 +866,8 @@
                         <td style="color: var(--lime-accent); font-weight: 700;">${escapeHtml(s.startingPrice || '-')}</td>
                         <td><span class="badge-tag-lime" style="font-size: 0.75rem;">${s.isPublished !== false ? 'Published' : 'Draft'}</span></td>
                         <td style="text-align: right; white-space: nowrap;">
-                            <button class="btn-action-edit" onclick="openEditModal('services', '${s.id}')">Edit</button>
-                            <button class="btn-action-delete" onclick="deleteRecord('services', '${s.id}')">Hapus</button>
+                            <button class="btn-action-edit" data-action="edit" data-entity="services" data-id="${s.id}" onclick="openEditModal('services', '${s.id}')">Edit</button>
+                            <button class="btn-action-delete" data-action="delete" data-entity="services" data-id="${s.id}" onclick="deleteRecord('services', '${s.id}')">Hapus</button>
                         </td>
                     </tr>
                 `).join('') : '<tr><td colspan="5" style="text-align: center; padding: 30px; color: var(--slate-muted);">Belum ada data layanan di database.</td></tr>';
@@ -884,8 +884,8 @@
                         <td>${pkg.isFeatured ? '<span class="badge-tag-lime" style="font-size: 0.75rem;">Populer</span>' : '<span style="color: var(--slate-muted); font-size: 0.85rem;">Standar</span>'}</td>
                         <td><span class="badge-tag-lime" style="font-size: 0.75rem;">${pkg.isPublished !== false ? 'Published' : 'Draft'}</span></td>
                         <td style="text-align: right; white-space: nowrap;">
-                            <button class="btn-action-edit" onclick="openEditModal('pricing', '${pkg.id}')">Edit</button>
-                            <button class="btn-action-delete" onclick="deleteRecord('pricing', '${pkg.id}')">Hapus</button>
+                            <button class="btn-action-edit" data-action="edit" data-entity="pricing" data-id="${pkg.id}" onclick="openEditModal('pricing', '${pkg.id}')">Edit</button>
+                            <button class="btn-action-delete" data-action="delete" data-entity="pricing" data-id="${pkg.id}" onclick="deleteRecord('pricing', '${pkg.id}')">Hapus</button>
                         </td>
                     </tr>
                 `).join('') : '<tr><td colspan="5" style="text-align: center; padding: 30px; color: var(--slate-muted);">Belum ada paket harga di database.</td></tr>';
@@ -903,8 +903,8 @@
                         <td style="max-width: 300px; font-size: 0.85rem; line-height: 1.5; color: var(--slate-body);">${escapeHtml(t.content)}</td>
                         <td><span class="badge-tag-lime" style="font-size: 0.75rem;">${t.isPublished !== false ? 'Published' : 'Draft'}</span></td>
                         <td style="text-align: right; white-space: nowrap;">
-                            <button class="btn-action-edit" onclick="openEditModal('testimonials', '${t.id}')">Edit</button>
-                            <button class="btn-action-delete" onclick="deleteRecord('testimonials', '${t.id}')">Hapus</button>
+                            <button class="btn-action-edit" data-action="edit" data-entity="testimonials" data-id="${t.id}" onclick="openEditModal('testimonials', '${t.id}')">Edit</button>
+                            <button class="btn-action-delete" data-action="delete" data-entity="testimonials" data-id="${t.id}" onclick="deleteRecord('testimonials', '${t.id}')">Hapus</button>
                         </td>
                     </tr>
                 `).join('') : '<tr><td colspan="6" style="text-align: center; padding: 30px; color: var(--slate-muted);">Belum ada testimoni klien di database.</td></tr>';
@@ -919,8 +919,8 @@
                         <td style="font-weight: 700; color: #ffffff;">${escapeHtml(f.question)}</td>
                         <td style="color: var(--slate-muted); font-size: 0.85rem; max-width: 320px;">${escapeHtml(f.answer)}</td>
                         <td style="text-align: right; white-space: nowrap;">
-                            <button class="btn-action-edit" onclick="openEditModal('faq', '${f.id}')">Edit</button>
-                            <button class="btn-action-delete" onclick="deleteRecord('faq', '${f.id}')">Hapus</button>
+                            <button class="btn-action-edit" data-action="edit" data-entity="faq" data-id="${f.id}" onclick="openEditModal('faq', '${f.id}')">Edit</button>
+                            <button class="btn-action-delete" data-action="delete" data-entity="faq" data-id="${f.id}" onclick="deleteRecord('faq', '${f.id}')">Hapus</button>
                         </td>
                     </tr>
                 `).join('') : '<tr><td colspan="3" style="text-align: center; padding: 30px; color: var(--slate-muted);">Belum ada data FAQ di database.</td></tr>';
@@ -1052,6 +1052,23 @@
                 });
             });
 
+            // Delegated click handler for Edit and Delete action buttons
+            document.addEventListener('click', (e) => {
+                const btn = e.target.closest('button[data-action]');
+                if (!btn) return;
+                const action = btn.getAttribute('data-action');
+                const entity = btn.getAttribute('data-entity');
+                const id = btn.getAttribute('data-id');
+
+                if (action === 'edit' && entity && id) {
+                    e.preventDefault();
+                    openEditModal(entity, id);
+                } else if (action === 'delete' && entity && id) {
+                    e.preventDefault();
+                    deleteRecord(entity, id);
+                }
+            });
+
             // Escape key closes modals & drawer
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
@@ -1063,6 +1080,16 @@
                 }
             });
         });
+
+        // Global functions exposure
+        window.openModal = openModal;
+        window.closeModal = closeModal;
+        window.openEditModal = openEditModal;
+        window.deleteRecord = deleteRecord;
+        window.handleLogout = handleLogout;
+        window.handleFormSubmit = handleFormSubmit;
+        window.showToast = showToast;
+        window.loadData = loadData;
     </script>
 </body>
 </html>
