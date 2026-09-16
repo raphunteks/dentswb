@@ -13,6 +13,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="/public/css/style.css">
+    <script>
+        if (document.cookie.indexOf('admin_session=') !== -1) {
+            window.location.replace('/admin-dashboard');
+        }
+    </script>
 </head>
 <body style="background: var(--navy-deep); min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; padding: 24px;">
 
