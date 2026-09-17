@@ -7,7 +7,17 @@
     
     <title><%= seo.title %> | <%= typeof settings !== 'undefined' && settings.brandName ? settings.brandName : 'Dents Web' %></title>
     <meta name="description" content="<%= seo.desc %>">
-    <link rel="canonical" href="<%= typeof settings !== 'undefined' && settings.siteUrl ? settings.siteUrl : 'https://dentsweb.my.id' %><%= seo.path %>">
+    <link rel="canonical" href="<%= typeof seo !== 'undefined' && seo.url ? seo.url : ((typeof settings !== 'undefined' && settings.siteUrl ? settings.siteUrl : 'https://www.dentsweb.my.id') + (seo.path || '')) %>">
+    <meta name="referrer" content="origin-when-cross-origin">
+    <% if (typeof settings !== 'undefined' && settings.analyticsId) { %>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=<%= settings.analyticsId %>"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '<%= settings.analyticsId %>');
+    </script>
+    <% } %>
     
     <!-- Open Graph -->
     <meta property="og:type" content="article">
@@ -47,7 +57,7 @@
         <section class="section-hero" style="min-height: 42vh; padding-top: 150px; padding-bottom: 60px;">
             <div class="orb-glow-blue" style="top: -10%; left: -5%;"></div>
             
-            <div class="container" style="position: relative; z-index: 2;">
+            <div class="container pptx-slide-up" style="position: relative; z-index: 2;">
                 <a href="/portfolio" style="display: inline-flex; align-items: center; gap: 8px; color: var(--lime-accent); font-weight: 700; margin-bottom: 24px; font-size: 0.95rem; text-decoration: none;">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
                     Kembali ke Semua Portofolio
@@ -88,7 +98,7 @@
             <div class="container">
                 <!-- Cover Image (macOS Tahoe Browser Window) -->
                 <% if (project.image) { %>
-                    <div class="macos-browser-window" style="border-radius: 20px; border: 1px solid rgba(0,0,0,0.12); box-shadow: 0 20px 50px rgba(0,0,0,0.12); margin-bottom: 60px; overflow: hidden;">
+                    <div class="macos-browser-window pptx-scale-in" style="border-radius: 20px; border: 1px solid rgba(0,0,0,0.12); box-shadow: 0 20px 50px rgba(0,0,0,0.12); margin-bottom: 60px; overflow: hidden;">
                         <div class="macos-window-header" style="background: #f1f5f9; border-bottom: 1px solid #e2e8f0;">
                             <div class="macos-traffic-lights" aria-hidden="true">
                                 <span class="traffic-light red"></span>
@@ -109,7 +119,7 @@
 
                 <div class="grid-2" style="align-items: flex-start; gap: 50px;">
                     <!-- Overview -->
-                    <div>
+                    <div class="pptx-swift-right">
                         <div class="badge-tag-royal" style="margin-bottom: 16px;">IKHTISAR STUDI KASUS</div>
                         <h2 style="font-size: 2.1rem; color: var(--navy-text); margin-bottom: 20px;">Latar Belakang Proyek</h2>
                         <p style="font-size: 1.1rem; line-height: 1.8; color: var(--slate-body); margin-bottom: 30px;">
@@ -128,7 +138,7 @@
                     </div>
 
                     <!-- Challenges & Solutions -->
-                    <div style="display: flex; flex-direction: column; gap: 24px;">
+                    <div class="pptx-swift-left" style="display: flex; flex-direction: column; gap: 24px;">
                         <div class="tactile-card tactile-card-heavy" style="background: #ffffff;">
                             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
                                 <div style="width: 36px; height: 36px; border-radius: 50%; background: #fff3cd; color: #b45309; display: flex; align-items: center; justify-content: center;">
@@ -157,7 +167,7 @@
 
                 <!-- Tech Stack Section -->
                 <% if (project.tools && project.tools.length > 0) { %>
-                <div class="tactile-card tactile-card-heavy" style="margin-top: 50px; padding: 36px 32px; background: #ffffff;">
+                <div class="tactile-card tactile-card-heavy pptx-slide-up" style="margin-top: 50px; padding: 36px 32px; background: #ffffff;">
                     <div class="badge-tag-royal" style="margin-bottom: 12px;">ARSITEKTUR TEKNOLOGI</div>
                     <h3 style="font-size: 1.5rem; color: var(--navy-text); margin-bottom: 8px;">Stack &amp; Tools yang Digunakan</h3>
                     <p style="color: var(--slate-muted); font-size: 0.95rem; margin-bottom: 24px;">Teknologi industri yang kami kombinasikan untuk membangun sistem ini secara handal, aman, dan berkecepatan tinggi.</p>
@@ -170,7 +180,7 @@
                 <% } %>
 
                 <!-- Callout CTA -->
-                <div class="tactile-card tactile-card-heavy" style="margin-top: 60px; padding: 60px 40px; text-align: center; background: #ffffff; border-color: var(--border-light); border-bottom-color: var(--royal-blue);">
+                <div class="tactile-card tactile-card-heavy pptx-scale-in" style="margin-top: 60px; padding: 60px 40px; text-align: center; background: #ffffff; border-color: var(--border-light); border-bottom-color: var(--royal-blue);">
                     <h2 style="font-size: clamp(1.8rem, 3.5vw, 2.5rem); color: var(--navy-text); margin-bottom: 16px;">
                         Ingin Membangun Solusi Serupa buat <span class="font-editorial text-royal">Bisnis Lu?</span>
                     </h2>
