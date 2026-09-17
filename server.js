@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 const compression = require('compression');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
@@ -84,9 +85,22 @@ app.use(helmet({
 }));
 
 // Rate Limiters
-const publicLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 200, message: 'Terlalu banyak permintaan.' });
-const loginLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 15, message: 'Terlalu banyak percobaan login.' });
-const leadLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 15, message: 'Terlalu banyak form yang dikirim.' });
+const isLocalOrInternal = (req) => {
+    const ip = req.ip || req.connection?.remoteAddress || req.socket?.remoteAddress || '';
+    if (ip === '127.0.0.1' || ip === '::1' || ip.includes('127.0.0.1')) return true;
+    const p = req.path || req.url || '';
+    if (p.startsWith('/admin') || p.startsWith('/api/admin') || p.startsWith('/api/chat/messages')) return true;
+    return false;
+};
+
+const publicLimiter = rateLimit({ 
+    windowMs: 15 * 60 * 1000, 
+    max: 2500, 
+    message: 'Terlalu banyak permintaan.',
+    skip: isLocalOrInternal
+});
+const loginLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 20, message: 'Terlalu banyak percobaan login.' });
+const leadLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 30, message: 'Terlalu banyak form yang dikirim.' });
 app.use(publicLimiter); 
 
 // Global Initial Seed Data
@@ -101,475 +115,572 @@ async function ensureSeedData() {
             redis.get('dents:articles')
         ]);
 
+        const INITIAL_SERVICES_4_TIERS = [
+            {
+                id: 'srv_1',
+                title: 'Starter — Web Form & Otomasi Google Apps Script',
+                slug: 'starter-web-automation',
+                icon: 'cpu',
+                shortDescription: 'Website 1-3 halaman terintegrasi Google Sheets tanpa biaya sewa hosting bulanan.',
+                description: 'Solusi digitalisasi hemat biaya memanfaatkan infrastruktur cloud Google. Data formulir pendaftaran, pesanan, atau inventaris langsung masuk ke Google Sheets Anda secara real-time.',
+                features: ['1 - 3 Halaman & 1 - 4 Section', 'Database Realtime Google Sheets', 'Notifikasi Email Otomatis', 'Zero Server Fee Selamanya', 'Pengerjaan Cepat 2 - 4 Hari'],
+                startingPrice: 'Rp 500.000',
+                order: 1,
+                isFeatured: false,
+                isPublished: true
+            },
+            {
+                id: 'srv_2',
+                title: 'Business — High-Converting Landing Page',
+                slug: 'landing-page',
+                icon: 'globe',
+                shortDescription: 'Halaman penjualan fokus closing tinggi yang siap dihubungkan ke iklan Meta Ads dan Google Ads.',
+                description: 'Landing page 1 halaman panjang dengan copywriting persuasif dan kecepatan loading di bawah 1 detik untuk memaksimalkan hasil belanja iklan Anda.',
+                features: ['1 Halaman Penjualan (Sales Page)', 'Core Web Vitals Skor 95+', 'Integrasi Tracking Pixel Lengkap', 'Domain, Hosting & SSL Gratis', 'WhatsApp Direct Click'],
+                startingPrice: 'Rp 1.500.000',
+                order: 2,
+                isFeatured: false,
+                isPublished: true
+            },
+            {
+                id: 'srv_3',
+                title: 'Pro — Corporate Company Profile',
+                slug: 'company-profile',
+                icon: 'layers',
+                shortDescription: 'Website profil perusahaan multi-halaman berwibawa dengan CMS mandiri dan optimasi SEO Google.',
+                description: 'Bangun otoritas bisnis Anda di hadapan klien dan investor dengan website 5-8 halaman berstandar internasional, dilengkapi CMS mandiri dan email bisnis resmi.',
+                features: ['5 - 8 Halaman Dinamis', 'Panel Admin / CMS Mandiri', 'Google SEO Schema Gold Standard', 'Email Bisnis Resmi (@domain)', 'Garansi 30 Hari & Tutorial Admin'],
+                startingPrice: 'Rp 3.500.000',
+                order: 3,
+                isFeatured: true,
+                isPublished: true
+            },
+            {
+                id: 'srv_4',
+                title: 'Custom+ — Web Application & Sistem Bisnis',
+                slug: 'web-app',
+                icon: 'cpu',
+                shortDescription: 'Aplikasi web khusus sesuai alur SOP bisnis dengan database cloud dan multi-role user.',
+                description: 'Solusi rekayasa perangkat lunak 10-12 halaman terintegrasi untuk kasir web, sistem reservasi, portal karyawan, atau dashboard analitik operasional perusahaan.',
+                features: ['10 - 12 Halaman Alur Khusus', 'Multi-Role User & Hak Akses', 'Database Cloud PostgreSQL/Redis', 'Integrasi API & Payment Gateway', '100% Hak Milik Source Code'],
+                startingPrice: 'Rp 7.500.000+',
+                order: 4,
+                isFeatured: false,
+                isPublished: true
+            }
+        ];
+
+        const INITIAL_PRICING_4_TIERS = [
+            {
+                id: 'price_1',
+                name: 'Starter — Web Form & Otomasi (GAS)',
+                price: 'Rp 500.000',
+                description: 'Website 1 - 3 halaman dan 1 - 4 section ringkas dengan integrasi database Google Sheets tanpa biaya hosting selamanya.',
+                features: [
+                    '1 - 3 Halaman Responsif',
+                    '1 - 4 Section Fokus Konversi',
+                    'Database Realtime Google Sheets',
+                    'Notifikasi Email Otomatis',
+                    'Integrasi Direct WhatsApp & Maps',
+                    'Nol Biaya Server / Hosting Selamanya',
+                    'Pengerjaan Cepat 2 - 4 Hari Kerja'
+                ],
+                limitations: [
+                    'Cold Start: Butuh 1-2 detik saat dibuka pertama kali',
+                    'Batas Kuota Google: Eksekusi maks. 6 menit per proses',
+                    'Bukan untuk checkout ribuan user bersamaan'
+                ],
+                isFeatured: false,
+                isPublished: true,
+                order: 1
+            },
+            {
+                id: 'price_2',
+                name: 'Business — High-Converting Landing Page',
+                price: 'Rp 1.500.000',
+                description: 'Landing page 1 halaman panjang (sales page) yang dirancang khusus untuk mengubah pengunjung iklan menjadi pembeli.',
+                features: [
+                    '1 Halaman Penjualan Panjang (Sales Page)',
+                    'Struktur Psikologi Closing & Copywriting',
+                    'Core Web Vitals Skor 95+ (Super Cepat)',
+                    'Gratis Domain (.com/.my.id) & SSL 1 Tahun',
+                    'High-Speed SSD Cloud Hosting 1 Tahun',
+                    'Integrasi Meta Pixel, TikTok & GTM',
+                    'Direct WhatsApp Button Teks Otomatis',
+                    'Pengerjaan 3 - 5 Hari Kerja (Garansi 14 Hari)'
+                ],
+                isFeatured: false,
+                isPublished: true,
+                order: 2
+            },
+            {
+                id: 'price_3',
+                name: 'Pro — Corporate Company Profile',
+                price: 'Rp 3.500.000',
+                description: 'Website profil bisnis multi-halaman berwibawa dengan CMS mandiri dan optimasi SEO Google untuk reputasi perusahaan.',
+                features: [
+                    '5 - 8 Halaman Dinamis Premium',
+                    'Panel Admin / CMS Mandiri (Edit Tanpa Koding)',
+                    'Gratis Domain (.com/.id/.co.id) & Cloud Host 1 Thn',
+                    'Hingga 3 Email Bisnis Resmi (@perusahaan.com)',
+                    'Dynamic Schema Google SEO & Sitemap XML',
+                    'Formulir Leads Masuk & Google Maps Interaktif',
+                    'Proteksi Keamanan SSL & Firewall Tingkat Lanjut',
+                    'Garansi Bug-Free 30 Hari & Video Tutorial Admin'
+                ],
+                isFeatured: true,
+                isPublished: true,
+                order: 3
+            },
+            {
+                id: 'price_4',
+                name: 'Custom+ — Web Application & Sistem Bisnis',
+                price: 'Rp 7.500.000+',
+                description: 'Sistem web aplikasi khusus untuk operasional bisnis, kasir web, reservasi, portal data, dan integrasi database cloud.',
+                features: [
+                    '10 - 12 Halaman Terintegrasi Sesuai SOP',
+                    'Full-Stack Software Architecture (Node.js/Cloud DB)',
+                    'Database Terdedikasi (PostgreSQL / Redis / MySQL)',
+                    'Multi-Role User Privilege (Admin, Staf, Klien)',
+                    'Integrasi API Pihak Ketiga (Payment Gateway/WA API)',
+                    'Laporan Otomatis & Ekspor Data (PDF/Excel)',
+                    '100% Hak Milik Source Code & Dokumentasi',
+                    'Dedicated Developer SLA Prioritas 60 Hari'
+                ],
+                isFeatured: false,
+                isPublished: true,
+                order: 4
+            }
+        ];
+
         if (!services || !services.length) {
-            await redis.set('dents:services', [
-                {
-                    id: 'srv_1',
-                    title: 'Landing Page & Company Profile',
-                    slug: 'landing-page',
-                    icon: 'globe',
-                    shortDescription: 'Website kustom konversi tinggi untuk ningkatin kredibilitas brand dan closing bisnis Anda.',
-                    description: 'Website profesional super kencang, responsif di semua device, dan SEO-ready dari baris kode pertama.',
-                    features: ['Design Eksklusif (Zero Template)', 'Core Web Vitals Skor 95+', 'Integrasi Direct WhatsApp', 'Domain, Hosting & SSL Gratis', 'Setup Google Search Console'],
-                    startingPrice: 'Rp 1.500.000',
-                    order: 1,
-                    isFeatured: true,
-                    isPublished: true
-                },
-                {
-                    id: 'srv_2',
-                    title: 'Sistem Informasi & Web App',
-                    slug: 'web-app',
-                    icon: 'cpu',
-                    shortDescription: 'Dashboard operasional, portal pelanggan, dan manajemen data bisnis berbasis cloud.',
-                    description: 'Solusi web aplikasi custom sesuai alur kerja bisnis Anda. Skalabel, aman, dan mempermudah otomasi SOP.',
-                    features: ['Multi-User Role & Hak Akses', 'Database Realtime Cloud', 'Dashboard Analytics Responsif', 'Ekspor Laporan PDF/Excel', 'Garansi Dukungan Prioritas'],
-                    startingPrice: 'Rp 4.500.000',
-                    order: 2,
-                    isFeatured: true,
-                    isPublished: true
-                },
-                {
-                    id: 'srv_3',
-                    title: 'UI/UX Design & Rebranding',
-                    slug: 'ui-ux',
-                    icon: 'layers',
-                    shortDescription: 'Desain visual berstandar internasional yang memikat pengunjung dan mudah digunakan.',
-                    description: 'Riset antarmuka pengguna, wireframing, dan desain interaktif modern dengan pendekatan konversi terukur.',
-                    features: ['High-Fidelity Figma Source', 'Design System & Component Kit', 'Interactive Prototype', 'Riset Audiens & UX Flow', 'Revisi Fleksibel'],
-                    startingPrice: 'Rp 2.000.000',
-                    order: 3,
-                    isFeatured: true,
-                    isPublished: true
-                }
-            ]);
+            await redis.set('dents:services', INITIAL_SERVICES_4_TIERS);
         }
 
         if (!pricing || !pricing.length) {
-            await redis.set('dents:pricing', [
-                {
-                    id: 'price_1',
-                    name: 'Starter Landing Page',
-                    price: 'Rp 1.500.000',
-                    description: 'Cocok buat validasi produk baru, peluncuran kampanye, atau personal branding yang butuh tampil instan.',
-                    features: ['1 Halaman Panjang Responsif', 'Desain Modern Kustom (Zero Template)', 'Integrasi Direct WhatsApp Chat', 'Domain (.my.id/.com) & SSL Gratis', 'Pengerjaan 3-5 Hari Kerja'],
-                    isFeatured: false,
-                    isPublished: true,
-                    order: 1
-                },
-                {
-                    id: 'price_2',
-                    name: 'Company Profile Pro',
-                    price: 'Rp 3.500.000',
-                    description: 'Paling populer untuk bisnis & perusahaan yang mau bangun reputasi kredibel di Google.',
-                    features: ['Hingga 7 Halaman Dinamis', 'Panel Admin / CMS Mandiri', 'Dynamic Schema SEO Google (Gold Standard)', 'Optimasi PageSpeed & Core Web Vitals', 'Garansi Bug-Free 30 Hari'],
-                    isFeatured: true,
-                    isPublished: true,
-                    order: 2
-                },
-                {
-                    id: 'price_3',
-                    name: 'Custom Web Application',
-                    price: 'Rp 7.500.000+',
-                    description: 'Untuk sistem operasional bisnis, portal data, SaaS MVP, atau integrasi API kompleks.',
-                    features: ['Arsitektur Sistem Khusus Sesuai SOP', 'Database Cloud Terintegrasi', 'Multi-role User & Authentication', 'Dokumentasi & 100% Hak Akses Source Code', 'Dedicated Support Prioritas'],
-                    isFeatured: false,
-                    isPublished: true,
-                    order: 3
-                }
-            ]);
+            await redis.set('dents:pricing', INITIAL_PRICING_4_TIERS);
         }
 
+        const INITIAL_8_FAQS = [
+            {
+                id: 'faq_1',
+                question: 'Berapa lama waktu pengerjaan proyek?',
+                answer: 'Untuk tier Starter (Web Form GAS) pengerjaan berkisar 2–4 hari kerja. Business (Landing Page) memakan waktu 3–5 hari kerja. Pro (Company Profile) membutuhkan 7–14 hari kerja, dan Custom+ (Web Application) berkisar 2–4 minggu kerja tergantung pada kompleksitas fitur dan kesiapan materi brief.',
+                order: 1,
+                isPublished: true
+            },
+            {
+                id: 'faq_2',
+                question: 'Apakah ada biaya revisi?',
+                answer: 'Tidak ada biaya tambahan selama revisi masih dalam koridor ruang lingkup (scope) paket yang disepakati di awal. Kami memberikan garansi revisi minor gratis (1–2 kali putaran) hingga desain dan fungsionalitas disetujui.',
+                order: 2,
+                isPublished: true
+            },
+            {
+                id: 'faq_3',
+                question: 'Domain dan hosting sudah termasuk dalam paket?',
+                answer: 'Ya, untuk paket Business, Pro, dan Custom+, domain kustom (.com / .id / .my.id) dan cloud hosting berkecepatan tinggi dengan proteksi sertifikat SSL sudah termasuk gratis untuk 1 tahun pertama. Untuk Starter GAS, gratis hosting via Google Cloud / Vercel selamanya tanpa biaya server.',
+                order: 3,
+                isPublished: true
+            },
+            {
+                id: 'faq_4',
+                question: 'Bagaimana cara memulai proyek bersama DentsWeb?',
+                answer: 'Cukup hubungi kami melalui tombol WhatsApp atau form Live Chat di pojok kiri bawah. Tim DentsWeb akan mendengarkan kebutuhan bisnis Anda, memberikan estimasi harga transparan, lalu memulai tahap perancangan setelah kesepakatan DP.',
+                order: 4,
+                isPublished: true
+            },
+            {
+                id: 'faq_5',
+                question: 'Apakah bisa request fitur di luar paket yang ada?',
+                answer: 'Tentu saja bisa. Anda dapat memilih paket terdekat lalu menambahkan fitur kustom (add-ons), atau langsung memesan paket Custom+ untuk membangun arsitektur sistem bisnis spesifik sesuai Standar Operasional Prosedur (SOP) perusahaan Anda.',
+                order: 5,
+                isPublished: true
+            },
+            {
+                id: 'faq_6',
+                question: 'Metode pembayaran apa yang tersedia?',
+                answer: 'Kami menerima transfer bank lokal (BCA, Mandiri, BNI, BRI), QRIS, serta e-wallet. Skema pembayaran pada umumnya adalah sistem DP 50% di awal sebagai tanda jadi pengerjaan dan pelunasan 50% setelah website selesai diuji dan siap serah terima (live).',
+                order: 6,
+                isPublished: true
+            },
+            {
+                id: 'faq_7',
+                question: 'Apakah saya akan mendapatkan source code proyeknya?',
+                answer: 'Ya, 100% hak milik penuh atas source code, basis data, dan akun domain menjadi milik Anda setelah pelunasan. Kami tidak menerapkan sistem sewa atau vendor lock-in yang mengikat klien.',
+                order: 7,
+                isPublished: true
+            },
+            {
+                id: 'faq_8',
+                question: 'Apakah DentsWeb melayani klien dari luar kota / seluruh Indonesia?',
+                answer: 'Ya, kami melayani klien dari seluruh Indonesia hingga mancanegara. Seluruh proses komunikasi, konsultasi desain, presentasi progres pengerjaan, hingga serah terima dapat dilakukan secara efisien melalui WhatsApp, Google Meet, atau Zoom.',
+                order: 8,
+                isPublished: true
+            }
+        ];
+
         if (!faq || !faq.length) {
-            await redis.set('dents:faq', [
-                {
-                    id: 'faq_1',
-                    question: 'Berapa lama proses pengerjaan website?',
-                    answer: 'Landing page selesai dalam 3-5 hari kerja. Company profile 7-14 hari kerja. Sistem web custom 2-4 minggu kerja, tergantung kompleksitas fitur.',
-                    order: 1,
-                    isPublished: true
-                },
-                {
-                    id: 'faq_2',
-                    question: 'Apakah website dijamin cepat dan SEO-friendly?',
-                    answer: 'Pasti. Kami bangun menggunakan SSR Node.js dengan skor Google PageSpeed rata-rata 95+ dan Schema JSON-LD terverifikasi agar cepat terindeks di Google.',
-                    order: 2,
-                    isPublished: true
-                },
-                {
-                    id: 'faq_3',
-                    question: 'Apakah saya dapat akses penuh ke source code dan domain?',
-                    answer: 'Ya, 100% kepemilikan menjadi milik Anda setelah serah terima tanpa ada biaya berlangganan sistem tersembunyi.',
-                    order: 3,
-                    isPublished: true
-                },
-                {
-                    id: 'faq_4',
-                    question: 'Bagaimana cara berkonsultasi mengenai proyek saya?',
-                    answer: 'Cukup klik tombol WhatsApp di pojok kanan bawah atau kunjungi halaman kontak. Tim kami siap memberikan konsultasi gratis tanpa komitmen.',
-                    order: 4,
-                    isPublished: true
-                }
-            ]);
+            await redis.set('dents:faq', INITIAL_8_FAQS);
         }
 
         const REAL_PORTFOLIO_PROJECTS = [
             {
                 id: 'port_1',
-                title: 'BEM KBMFKG UMI — Portal Organisasi & Informasi Kabinet Ananta Anardhaya',
+                title: 'BEM KBMFKG UMI — Portal Organisasi & Aspirasi Mahasiswa',
                 slug: 'bem-kbmfkg-umi',
                 client: 'BEM KBMFKG UMI',
-                category: 'PORTAL ORGANISASI & KEMAHASISWAAN',
+                category: 'PORTAL ORGANISASI & KAMPUS',
                 year: 2026,
-                image: '/public/img/axalogo.png',
+                image: '/public/img/portfolio/port_1.webp',
                 tags: ['Portal Organisasi', 'Kemahasiswaan', 'Public Information', 'Responsive Web'],
                 tools: ['html5', 'javascript', 'css3', 'bootstrap', 'vercel'],
-                shortDescription: 'Portal resmi Badan Eksekutif Mahasiswa Keluarga Besar Mahasiswa Fakultas Kedokteran Gigi Universitas Muslim Indonesia sebagai pusat transparansi informasi, publikasi birokrasi, aspirasi mahasiswa, serta kalender program kerja kabinet aktif.',
-                description: 'Portal web modern berstandar enterprise yang dirancang khusus untuk memfasilitasi kebutuhan publikasi informasi, penyaluran aspirasi mahasiswa FKG UMI secara aman, serta dokumentasi seluruh program kerja Badan Eksekutif Mahasiswa dalam satu ekosistem digital terpadu dan responsif di seluruh perangkat.',
-                challenge: 'Penyebaran informasi program kerja dan penyaluran aspirasi mahasiswa sebelumnya tersebar di berbagai kanal media sosial yang tidak terpusat, menyebabkan distorsi informasi dan lambatnya respon organisasi terhadap kebutuhan mahasiswa.',
-                solution: 'Mengembangkan arsitektur portal terpusat dengan sistem manajemen konten dinamis, formulir aspirasi terenkripsi, serta integrasi visual timeline program kerja kabinet berbasis mobile-first responsive design.',
+                shortDescription: 'Website resmi BEM FKG UMI untuk transparansi kegiatan kabinet, kalender acara kampus, dan saluran penyampaian aspirasi mahasiswa yang mudah diakses dari HP.',
+                description: 'Portal terpadu yang menyatukan publikasi birokrasi kampus, dokumentasi program kerja, dan formulir aspirasi online agar komunikasi antara pengurus BEM dan mahasiswa berlangsung terbuka dan cepat.',
+                challenge: 'Informasi kegiatan kampus sebelumnya tercecer di berbagai grup chat dan media sosial, sehingga mahasiswa sering terlewat agenda penting dan aspirasi lambat direspons.',
+                solution: 'Merancang portal satu pintu berbasis mobile-first dengan kalender kegiatan interaktif dan form aspirasi yang langsung terhubung ke pengurus.',
                 projectUrl: 'https://www.bemkbmfkgumi.com/',
                 isFeatured: true,
                 isPublished: true
             },
             {
                 id: 'port_2',
-                title: 'HMI KOMKG UMI — Sistem Informasi Kader & Portal Perjuangan Insan Cita',
+                title: 'HMI Kedokteran Gigi UMI — Pusat Arsip & Database Kader',
                 slug: 'hmi-komkg-umi',
                 client: 'HMI Komisariat Kedokteran Gigi UMI',
-                category: 'SISTEM INFORMASI KADER & ORGANISASI',
+                category: 'SISTEM INFORMASI & ARSIP DIGITAL',
                 year: 2026,
-                image: '/public/img/axalogo.png',
+                image: '/public/img/portfolio/port_2.webp',
                 tags: ['Sistem Informasi', 'Database Kader', 'Digital Archive', 'Responsive Design'],
                 tools: ['html5', 'javascript', 'css3', 'tailwindcss', 'vercel'],
-                shortDescription: 'Pusat data digital dan sistem informasi kader HMI Komisariat Kedokteran Gigi UMI untuk mendokumentasikan rekam jejak pengkaderan, materi perkaderan, serta literasi intelektual pergerakan mahasiswa Islam.',
-                description: 'Platform digital kelembagaan yang mengintegrasikan basis data kader, modul pembelajaran Basic Training (LK 1), arsip konstitusi himpunan, serta artikel opini mahasiswa demi mewujudkan tata kelola organisasi yang transparan dan adaptif terhadap transformasi digital era modern.',
-                challenge: 'Pendataan riwayat jenjang perkaderan serta inventarisasi arsip sejarah komisariat yang masih manual dan rentan tercecer saat pergantian kepengurusan periode baru.',
-                solution: 'Pembangunan platform digital arsip dengan repositori materi tersentralisasi, direktori profil kader, serta sistem navigasi interaktif yang memudahkan anggota mengakses materi perkaderan kapan saja.',
+                shortDescription: 'Sistem informasi kader dan perpustakaan digital materi perkaderan HMI Komisariat Kedokteran Gigi UMI yang dapat diakses kapan saja oleh anggota.',
+                description: 'Platform kelembagaan yang mengarsipkan data kader, materi pelatihan Basic Training (LK 1), serta artikel pemikiran mahasiswa untuk menjaga rekam jejak organisasi tetap rapi dari generasi ke generasi.',
+                challenge: 'Berkas materi perkaderan dan data anggota sering hilang atau tercecer setiap kali terjadi pergantian periode kepengurusan.',
+                solution: 'Membangun sistem arsip digital berbasis web yang tersentralisasi dengan navigasi sederhana dan modul yang siap diunduh anggota.',
                 projectUrl: 'https://www.hmikomkgumi.xyz/',
                 isFeatured: true,
                 isPublished: true
             },
             {
                 id: 'port_3',
-                title: 'Estaka Dental Clinic — Smart Clinic & AI Queue Monitor Platform',
+                title: 'Estaka Dental Clinic — Web Klinik & Booking WhatsApp',
                 slug: 'estaka-dental-clinic',
                 client: 'Estaka Dental Care & Aesthetics',
-                category: 'HEALTHCARE & SMART CLINIC WEB APP',
+                category: 'LAYANAN KESEHATAN & BOOKING ONLINE',
                 year: 2026,
-                image: '/public/img/axalogo.png',
+                image: '/public/img/portfolio/port_3.webp',
                 tags: ['Healthcare', 'Dental Clinic', 'Patient Booking', 'WhatsApp Gateway'],
                 tools: ['html5', 'javascript', 'css3', 'tailwindcss', 'vite', 'vercel'],
-                shortDescription: 'Aplikasi profil klinik gigi modern dan pemesanan jadwal dokter gigi berbasis sistem notifikasi otomatis WhatsApp yang efisien dan ramah pasien.',
-                description: 'Platform kesehatan dental holistik yang dirancang dengan estetika premium medis, memberikan pengalaman reservasi konsultasi dokter gigi spesialis tanpa hambatan, dilengkapi katalog perawatan gigi interaktif, simulasi biaya estimasi, dan verifikasi jadwal otomatis via bot chat.',
-                challenge: 'Tingginya angka pasien yang membatalkan jadwal konsultasi (no-show) karena alur pendaftaran manual via telepon yang memakan waktu dan tanpa adanya sistem pengingat otomatis.',
-                solution: 'Merancang web app reservasi instan dengan kalender interaktif dokter, penghitungan kuota pasien per sesi secara realtime, dan integrasi WhatsApp auto-confirmation trigger.',
+                shortDescription: 'Website profil klinik gigi modern yang dilengkapi jadwal dokter, estimasi biaya perawatan, dan tombol reservasi instan via WhatsApp resepsionis.',
+                description: 'Menghadirkan wajah digital klinik gigi yang ramah dan menenangkan bagi calon pasien. Pasien dapat melihat profil dokter gigi, jenis perawatan, dan memilih jam kunjungan dengan mudah tanpa perlu mengantre lama.',
+                challenge: 'Banyak pasien batal periksa karena proses pendaftaran lewat telepon sering sibuk dan tidak ada konfirmasi jadwal yang jelas.',
+                solution: 'Mengintegrasikan kalender jadwal dokter dengan alur booking WhatsApp langsung yang otomatis mengisi format pendaftaran pasien.',
                 projectUrl: 'https://estakadentalclinic.vercel.app/',
                 isFeatured: true,
                 isPublished: true
             },
             {
                 id: 'port_4',
-                title: 'Klinik Fahri Dental Care — PWA Kuesioner Riset Karies Gigi Anak Usia Dini',
+                title: 'Fahri Dental Care — Skrining Risiko Karies Gigi Anak',
                 slug: 'fahri-dental-care',
                 client: 'drg. Fahri Dental Care',
-                category: 'PWA CLINICAL RESEARCH & SCREENING',
+                category: 'SKRINING KESEHATAN & KUESIONER',
                 year: 2026,
-                image: '/public/img/axalogo.png',
+                image: '/public/img/portfolio/port_4.webp',
                 tags: ['PWA', 'Clinical Screening', 'Dental Health', 'Pediatric Dentistry'],
                 tools: ['html5', 'javascript', 'css3', 'tailwindcss', 'vite', 'vercel'],
-                shortDescription: 'Aplikasi skrining dan pengumpulan data kesehatan gigi balita dan anak interaktif untuk deteksi dini risiko Early Childhood Caries (ECC).',
-                description: 'Progressive Web App klinis yang menggabungkan instrumen edukasi interaktif bagi orang tua tentang kebersihan gigi anak dengan sistem surveilans karies gigi balita yang menghasilkan skor risiko langsung bagi praktisi medis gigi di klinik.',
-                challenge: 'Kurangnya kesadaran orang tua mendeteksi tanda karies dini pada balita dan sulitnya mengumpulkan kuesioner klinis terstandar secara manual di ruang tunggu klinik.',
-                solution: 'Implementasi PWA mobile-responsive dengan visualisasi indeks risiko gigi warna-warni ramah orang tua, kuesioner dinamis bercabang, dan penyimpanan data terstruktur.',
+                shortDescription: 'Aplikasi kuesioner interaktif bagi orang tua untuk memeriksa risiko gigi berlubang pada balita sejak dini langsung dari browser HP.',
+                description: 'Progressive Web App (PWA) edukasi kesehatan gigi anak yang memandu orang tua menjawab pertanyaan sederhana mengenai pola makan dan sikat gigi anak, lalu memberikan skor risiko kesehatan gigi secara langsung.',
+                challenge: 'Orang tua sering terlambat menyadari kerusakan gigi balita dan kuesioner klinis manual di ruang tunggu klinik sering diabaikan.',
+                solution: 'Membuat aplikasi survei visual warna-warni yang ringan, mudah diisi dalam 2 menit, dan langsung memunculkan saran tindak lanjut.',
                 projectUrl: 'https://fahridental-care.vercel.app/',
                 isFeatured: true,
                 isPublished: true
             },
             {
                 id: 'port_5',
-                title: 'NovaCare.AI — Autonomous Patient Care & WhatsApp Gateway Engine',
+                title: 'NovaCare.AI — Otomasi Notifikasi & Jadwal Pasien Klinik',
                 slug: 'novacare-ai',
                 client: 'NovaCare Health Solutions',
-                category: 'AI SAAS & HEALTHCARE AUTOMATION',
+                category: 'SISTEM INFORMASI & OTOMASI KLINIK',
                 year: 2026,
-                image: '/public/img/axalogo.png',
+                image: '/public/img/portfolio/port_5.webp',
                 tags: ['AI Engine', 'SaaS', 'Healthcare Workflow', 'Multi-Agent Bot'],
                 tools: ['html5', 'javascript', 'react', 'nodejs', 'express', 'redis', 'vercel'],
-                shortDescription: 'Sistem operasional fasilitas kesehatan cerdas yang mengautomasi penjadwalan pasien, followup pengobatan, dan broadcast pengingat berkala terintegrasi WhatsApp API.',
-                description: 'Platform SaaS manajemen komunikasi pasien berbasis AI yang memotong beban kerja front office klinik hingga 70%. Dilengkapi sistem triage gejala awal, pengingat kontrol dokter otomatis, dan dashboard analitik retensi pasien realtime.',
-                challenge: 'Staf admin klinik kewalahan menangani ratusan pesan masuk WhatsApp setiap hari, menyebabkan antrean respons lambat dan keluhan pasien terkait kepastian jadwal.',
-                solution: 'Pengembangan arsitektur event-driven Node.js dengan antrean Redis yang mengotomasi alur pesan WhatsApp, sinkronisasi kalender dokter, dan pencatatan riwayat konsultasi.',
+                shortDescription: 'Sistem pengingat jadwal kontrol dan konfirmasi kedatangan pasien otomatis via WhatsApp untuk meringankan tugas admin klinik.',
+                description: 'Platform otomasi komunikasi pasien yang membantu klinik mengurangi tingkat ketidakhadiran (no-show). Sistem secara terjadwal mengirimkan pesan konfirmasi kedatangan dan instruksi perawatan tanpa perlu staf mengetik satu per satu.',
+                challenge: 'Staf pendaftaran kewalahan membalas chat dan menelepon puluhan pasien setiap hari untuk memastikan jadwal kontrol besok.',
+                solution: 'Membangun sistem antrean pesan otomatis berbasis server ringan yang sinkron dengan kalender dokter dan riwayat janji temu pasien.',
                 projectUrl: 'https://novacare-azure.vercel.app/',
                 isFeatured: true,
                 isPublished: true
             },
             {
                 id: 'port_6',
-                title: 'E-Form Kuesioner Herlinda — Digital Survey & Prevalensi Karies Gigi Balita',
+                title: 'Kuesioner Herlinda — E-Form Riset Kesehatan Gigi Balita',
                 slug: 'kuesioner-herlinda',
                 client: 'Riset Kesehatan Gigi Masyarakat FKG',
-                category: 'ACADEMIC SURVEY & EPIDEMIOLOGY',
+                category: 'RISET MEDIS & PENGUMPULAN DATA',
                 year: 2026,
-                image: '/public/img/axalogo.png',
+                image: '/public/img/portfolio/port_6.webp',
                 tags: ['E-Form', 'Academic Research', 'Epidemiology', 'Data Collection'],
                 tools: ['html5', 'javascript', 'css3', 'tailwindcss', 'vercel'],
-                shortDescription: 'Platform instrumen pengumpulan data kuesioner penelitian ilmiah kesehatan gigi balita dengan validasi input realtime dan kalkulasi indeks dmf-t otomatis.',
-                description: 'Web app instrumen survei epidemiologi yang dirancang khusus untuk penelitian skripsi/tesis kedokteran gigi, mempermudah enumerator lapangan mengisi kuesioner penelitian di puskesmas/posyandu dengan visualisasi skor def-t/dmf-t otomatis.',
-                challenge: 'Perekaman data penelitian gigi anak secara kertas konvensional sering menimbulkan kesalahan pengisian variabel, lembar survei basah/rusak di lapangan, dan data input manual yang memakan waktu berminggu-minggu.',
-                solution: 'Membangun formulir kuesioner digital berbasis web dengan validasi kolom ketat, scoring instan tanpa kalkulasi manual, dan ekspor dataset siap olah dalam hitungan detik.',
+                shortDescription: 'Formulir digital survei lapangan kedokteran gigi dengan perhitungan otomatis indeks def-t/dmf-t tanpa perlu menghitung manual di kertas.',
+                description: 'Web formulir ramah smartphone untuk peneliti lapangan di posyandu atau puskesmas. Data yang diisi langsung divalidasi dan skor kerusakan gigi langsung terkalkulasi rapi untuk siap diekspor ke Excel.',
+                challenge: 'Lembar survei kertas rawan sobek/rusak di lapangan, rentan salah hitung angka, dan proses entri data ke komputer memakan waktu berminggu-minggu.',
+                solution: 'Formulir web mobile yang bekerja cepat di area jaringan minim, validasi input otomatis, dan sekali klik langsung ekspor dataset rapi.',
                 projectUrl: 'https://kuesionerherlinda.vercel.app/',
                 isFeatured: true,
                 isPublished: true
             },
             {
                 id: 'port_7',
-                title: 'AxaBOT Portal — Dual Backend Multi-Client WhatsApp Financial Automation',
+                title: 'AxaBOT Portal — Rekap Kas & Nota Usaha via WhatsApp',
                 slug: 'portal-finance-multiclient',
                 client: 'Axa Enterprise Financial Services',
-                category: 'FINTECH & MULTI-TENANT AUTOMATION',
+                category: 'OTOMASI FINANSIAL & KASIR',
                 year: 2026,
-                image: '/public/img/axalogo.png',
+                image: '/public/img/portfolio/port_7.webp',
                 tags: ['Fintech', 'WhatsApp Bot', 'Multi-Client', 'Realtime Accounting'],
                 tools: ['html5', 'javascript', 'nodejs', 'express', 'postgresql', 'redis', 'docker', 'vercel'],
-                shortDescription: 'Portal keuangan korporat multi-klien dengan arsitektur dual backend yang mengintegrasikan bot WhatsApp interaktif untuk pencatatan kas, invoice otomatis, dan rekonsiliasi realtime.',
-                description: 'Arsitektur fintech tingkat tinggi dengan sistem multi-tenant yang memungkinkan puluhan cabang bisnis mengelola pencatatan pemasukan, pengeluaran, konfirmasi mutasi bank, dan penerbitan nota transaksi langsung dari obrolan WhatsApp tanpa membuka software akuntansi rumit.',
-                challenge: 'Karyawan dan tim lapangan sering lupa merekap bon transaksi operasional, menyebabkan selisih buku kas yang signifikan pada akhir bulan pelaporan.',
-                solution: 'Membangun bot WhatsApp dengan microservice backend ganda yang memproses bukti foto nota melalui OCR, mencatat pembukuan otomatis ke database terpusat, dan mengirimkan alert limit saldo secara berkala.',
+                shortDescription: 'Bot WhatsApp untuk mencatat pengeluaran harian dan foto nota belanja toko yang otomatis terangkum dalam laporan keuangan realtime.',
+                description: 'Solusi praktis pembukuan bagi pemilik bisnis yang memiliki banyak cabang. Karyawan cukup mengirimkan teks pemasukan atau foto kuitansi ke nomor WhatsApp khusus, dan sistem akan mencatatnya langsung ke rekap keuangan pusat.',
+                challenge: 'Karyawan di cabang sering lupa merekap nota belanja harian, menyebabkan selisih uang kas yang sulit dilacak di akhir bulan.',
+                solution: 'Memanfaatkan bot WhatsApp pintar yang membaca bukti transaksi dan menyimpannya langsung ke database laporan kas harian.',
                 projectUrl: 'https://prtal-wa-finance.vercel.app/',
                 isFeatured: true,
                 isPublished: true
             },
             {
                 id: 'port_8',
-                title: 'Joki Borang PIDGI — Platform Asistensi Logbook Dokter Gigi Internsip No. 1',
+                title: 'PIDGI Assist — Panduan & Logbook Dokter Gigi Internsip',
                 slug: 'joki-borang-pidgi',
                 client: 'DentisLog Indonesia',
-                category: 'EDUTECH & PROFESSIONAL ASSISTANCE',
+                category: 'PORTAL EDUKASI & ASISTENSI PROFESI',
                 year: 2026,
-                image: '/public/img/axalogo.png',
+                image: '/public/img/portfolio/port_8.webp',
                 tags: ['Edutech', 'Internship Tool', 'Logbook Automation', 'Dental Care'],
                 tools: ['html5', 'javascript', 'css3', 'tailwindcss', 'vite', 'vercel'],
-                shortDescription: 'Layanan web komprehensif pendampingan pengisian e-borang logbook Program Internsip Dokter Gigi Indonesia (PIDGI) terstruktur, tepat waktu, dan bebas stres.',
-                description: 'Platform spesifik kedokteran gigi pertama yang memfasilitasi dokter gigi internsip di seluruh wahana Indonesia dalam menyusun pelaporan kasus klinis, mini project, dan rekapitulasi kinerja harian sesuai format standar KKI dan Kemenkes RI.',
-                challenge: 'Jadwal dinas yang padat di RS dan Puskesmas membuat dokter gigi internsip kekurangan waktu dalam memformat dan menyusun narasi rekam medis borang evaluasi.',
-                solution: 'Menghadirkan portal panduan terstruktur dengan katalog template narasi diagnosis, kalkulator capaian target kasus, dan konsultasi privat 1-on-1 via dashboard interaktif.',
+                shortDescription: 'Portal panduan lengkap penyusunan laporan kasus klinis dan pengisian e-borang harian dokter gigi internsip di seluruh Indonesia.',
+                description: 'Platform pendampingan belajar bagi dokter gigi muda yang sedang menjalani masa internsip. Menyediakan contoh format laporan medis terstandar, panduan diagnosis, dan manajemen tugas harian agar lulus tepat waktu.',
+                challenge: 'Jadwal dinas rumah sakit dan puskesmas yang padat membuat dokter gigi internsip kelelahan merapikan laporan borang evaluasi kinerja.',
+                solution: 'Menghadirkan portal terstruktur dengan katalog template laporan kasus dan panduan ringkas yang bisa dibaca kapan saja dari smartphone.',
                 projectUrl: 'https://jokiborangpidgi.vercel.app/',
                 isFeatured: true,
                 isPublished: true
             },
             {
                 id: 'port_9',
-                title: 'Instrumen OHQE — Oral Health Quality of Life Scale for Endodontic Patients',
+                title: 'Instrumen OHQE — Kuesioner Kualitas Hidup Pasien Gigi',
                 slug: 'instrumen-ohqe',
                 client: 'Riset Departemen Konservasi Gigi FKG',
-                category: 'SCIENTIFIC RESEARCH & CLINICAL METRICS',
+                category: 'APLIKASI RISET & PENGUKURAN KLINIS',
                 year: 2026,
-                image: '/public/img/axalogo.png',
+                image: '/public/img/portfolio/port_9.webp',
                 tags: ['Clinical Scale', 'Endodontics', 'Quality of Life', 'Psychometrics'],
                 tools: ['html5', 'javascript', 'css3', 'tailwindcss', 'vercel'],
-                shortDescription: 'Instrumen digital pengukuran kualitas hidup pasien pasca perawatan saluran akar gigi (Endodontik) berbasis skala psikometrik terstandarisasi internasional.',
-                description: 'Aplikasi klinis riset spesialis konservasi gigi untuk mengukur dampak terapi endodontik terhadap status fungsional, psikologis, dan sosial pasien melalui scoring kuesioner Oral Health-Related Quality of Life (OHRQoL) yang telah divalidasi secara saintifik.',
-                challenge: 'Evaluasi kepuasan dan kualitas hidup pasien pasca perawatan saluran akar selama ini sulit dikuantifikasi secara objektif dan membutuhkan rekonsiliasi manual skala ordinal yang rumit.',
-                solution: 'Digitalisasi kuesioner psikometrik OHQE dengan pembobotan Likert otomatis, deteksi anomali respons, dan visualisasi grafik radar sebelum serta sesudah perawatan.',
+                shortDescription: 'Aplikasi digital pengisian skala kepuasan dan kualitas hidup pasien setelah menjalani perawatan saluran akar gigi.',
+                description: 'Web instrumen penelitian spesialis konservasi gigi untuk mengukur kenyamanan makan, bicara, dan percaya diri pasien pasca tindakan endodontik melalui sistem penskoran digital terstandar ilmiah.',
+                challenge: 'Pengumpulan angket kepuasan pasien secara konvensional sering tidak lengkap dan butuh waktu lama untuk menghitung bobot nilai tiap kriteria.',
+                solution: 'Digitalisasi kuesioner dengan slider nilai intuitif yang langsung menampilkan grafik perbandingan kenyamanan pasien sebelum dan sesudah terapi.',
                 projectUrl: 'https://instrumenohqe.vercel.app/',
                 isFeatured: true,
                 isPublished: true
             },
             {
                 id: 'port_10',
-                title: 'DentsHub Riset — Ekosistem Riset AI Terakreditasi 2026 & Validasi Sitasi DOI',
+                title: 'DentsHub Riset — Portal Pencarian Jurnal & Sitasi Medis',
                 slug: 'dentshub-riset',
                 client: 'DentsHub Academic Research Center',
-                category: 'AI SCHOLAR & ACADEMIC REPOSITORY',
+                category: 'REPOSITORI AKADEMIK & LITERATUR',
                 year: 2026,
-                image: '/public/img/axalogo.png',
+                image: '/public/img/portfolio/port_10.webp',
                 tags: ['AI Scholar', 'Academic Repository', 'DOI Validation', 'Research Ecosystem'],
                 tools: ['html5', 'javascript', 'react', 'nextjs', 'tailwindcss', 'vercel'],
-                shortDescription: 'Platform asisten penelusuran literatur ilmiah kedokteran gigi dengan kurasi jurnal bereputasi (Scopus & Sinta), pengecekan sitasi DOI, dan ringkasan makalah cerdas.',
-                description: 'Ekosistem riset generasi baru bagi akademisi kedokteran gigi yang menggabungkan kecerdasan buatan untuk menganalisis ratusan jurnal internasional, menyaring literatur berbasis bukti (Evidence-Based Dentistry), memvalidasi keaslian DOI CrossRef, dan menyusun tinjauan pustaka secara etis.',
-                challenge: 'Waktu yang terbuang sia-sia oleh mahasiswa dan peneliti dalam mencari jurnal relevan di antara jutaan database tanpa filter kredibilitas indeks saintifik yang ketat.',
-                solution: 'Arsitektur pencarian semantik dengan integrasi API DOI resolver, klasifikasi kuartil jurnal instan, dan generator sitasi otomatis berformat Vancouver serta APA 7th Edition.',
+                shortDescription: 'Platform penelusuran referensi jurnal kedokteran gigi terakreditasi lengkap dengan verifikasi DOI dan generator format sitasi otomatis.',
+                description: 'Asisten pintar bagi mahasiswa dan dosen kedokteran gigi untuk menemukan literatur ilmiah berbasis bukti (Evidence-Based Dentistry). Dilengkapi pembuat daftar pustaka otomatis format Vancouver dan APA.',
+                challenge: 'Menghabiskan waktu berjam-jam menyortir jurnal yang valid dan sering terjadi kesalahan ketik pada penulisan daftar pustaka skripsi/jurnal.',
+                solution: 'Portal pencarian literatur terpusat yang memverifikasi nomor DOI dan menghasilkan kutipan sitasi yang langsung siap di-copy.',
                 projectUrl: 'https://dentshubriset.vercel.app/',
                 isFeatured: true,
                 isPublished: true
             },
             {
                 id: 'port_11',
-                title: 'FilterCan — Interactive Lightroom Presets & Creative LUTs Marketplace',
+                title: 'FilterCan — Toko Online Preset Foto & Slider Before-After',
                 slug: 'marketplace-filtercan',
                 client: 'FilterCan Creative Studio',
-                category: 'E-COMMERCE & DIGITAL ASSETS',
+                category: 'E-COMMERCE & ASET DIGITAL',
                 year: 2026,
-                image: '/public/img/axalogo.png',
+                image: '/public/img/portfolio/port_11.webp',
                 tags: ['E-Commerce', 'Digital Marketplace', 'Interactive Before-After', 'LUTs'],
                 tools: ['html5', 'javascript', 'css3', 'tailwindcss', 'vite', 'vercel'],
-                shortDescription: 'Toko online interaktif aset kreatif digital preset Lightroom dan Cinematic LUTs dengan fitur komparasi slider before-after foto secara langsung di web.',
-                description: 'Marketplace digital modern yang menyajikan pengalaman belanja aset fotografi dan videografi kelas premium. Dilengkapi komponen split-slider real-time interaktif untuk menguji efektivitas preset warna sebelum membeli, serta sistem unduhan instan berkecepatan tinggi.',
-                challenge: 'Banyak calon pembeli ragu membeli preset foto digital karena tidak bisa melihat hasil grading secara langsung pada objek foto nyata sebelum melakukan transaksi.',
-                solution: 'Membangun slider komparasi interaktif ultra-responsif berbasis Canvas/CSS dengan touch-friendly gesture pada layar smartphone serta pengiriman file digital instan.',
+                shortDescription: 'Website penjualan preset Lightroom dan LUTs video dengan fitur geser before-after interaktif untuk melihat hasil edit foto secara langsung.',
+                description: 'Toko digital aset fotografi modern di mana pengunjung dapat langsung mencoba efek tone warna pada sampel foto nyata menggunakan slider sentuh sebelum memutuskan untuk membeli.',
+                challenge: 'Pembeli sering ragu membeli preset foto karena contoh gambar di media sosial dianggap tidak menampilkan kondisi foto aslinya.',
+                solution: 'Membangun komponen pembanding foto before-after yang mulus di layar sentuh HP dan sistem download file instan setelah checkout.',
                 projectUrl: 'https://filterbycan.vercel.app/',
                 isFeatured: true,
                 isPublished: true
             },
             {
                 id: 'port_12',
-                title: 'AXA XYZ Exams — AI-Powered Computer Based Test & Live Proctoring Platform',
+                title: 'AXA Exams — Sistem Ujian Online (CBT) Anti-Curang',
                 slug: 'portal-ujian-axa-exams',
                 client: 'AXA Educational Assessment System',
-                category: 'EDUTECH & CBT EXAMINATION SYSTEM',
+                category: 'APLIKASI UJIAN & EVALUASI ONLINE',
                 year: 2026,
-                image: '/public/img/axalogo.png',
+                image: '/public/img/portfolio/port_12.webp',
                 tags: ['CBT Exam', 'Edutech', 'Anti-Cheat Protection', 'Realtime Scoring'],
                 tools: ['html5', 'javascript', 'react', 'nodejs', 'express', 'postgresql', 'vercel'],
-                shortDescription: 'Sistem ujian online Computer Based Test (CBT) berkemampuan tinggi dengan proteksi kecurangan tab-switching, pengacakan soal algoritmik, dan rekap nilai instan.',
-                description: 'Platform evaluasi akademik dan sertifikasi online berstandar industri dengan teknologi anti-cheat berlapis (deteksi perpindahan jendela browser, penonaktifan klik kanan & screenshot), bank soal dinamis, serta analitik butir soal realtime.',
-                challenge: 'Kerentanan kecurangan pada ujian daring konvensional dan seringnya server ujian drop ketika diakses ribuan peserta secara serentak pada detik yang sama.',
-                solution: 'Pengembangan frontend anti-tamper yang memantau fokus jendela peramban, didukung arsitektur load balancing backend yang sanggup menangani concurrent users dengan latensi rendah.',
+                shortDescription: 'Platform ujian Computer Based Test (CBT) berbasis web dengan deteksi ganti tab browser, acak soal otomatis, dan nilai keluar seketika.',
+                description: 'Sistem ujian daring stabil yang mampu menampung ratusan peserta ujian secara serentak. Dilengkapi sistem pengawasan otomatis yang mencatat jika peserta mencoba membuka jendela lain atau melakukan copy-paste jawaban.',
+                challenge: 'Ujian online biasa sangat rawan kecurangan (peserta browsing jawaban) dan server sering lambat ketika seluruh peserta mengklik submit bersamaan.',
+                solution: 'Membangun sistem ujian dengan proteksi fokus layar, pengacakan nomor soal, serta penyimpanan jawaban berkala agar tidak hilang jika koneksi putus.',
                 projectUrl: 'https://axa-exams.vercel.app/',
                 isFeatured: true,
                 isPublished: true
             },
             {
                 id: 'port_13',
-                title: 'drg. M. Rakhmat Ersyad Muchlis, S.H., Sp.RKG — Executive Radiologist Portfolio',
+                title: 'drg. M. Rakhmat Ersyad, Sp.RKG — Portofolio Dokter Gigi Spesialis',
                 slug: 'drg-rakhmat-ersyad-portfolio',
                 client: 'drg. M. Rakhmat Ersyad Muchlis, S.H., Sp.RKG',
-                category: 'PERSONAL PORTFOLIO & PROFESSIONAL CV',
+                category: 'PORTOFOLIO PRIBADI & BRANDING PROFESIONAL',
                 year: 2026,
-                image: '/public/img/axalogo.png',
+                image: '/public/img/portfolio/port_13.webp',
                 tags: ['Medical Executive', 'Radiology', 'Personal Branding', 'Tahoe Style'],
                 tools: ['html5', 'javascript', 'css3', 'tailwindcss', 'vite', 'vercel'],
-                shortDescription: 'Portofolio digital eksekutif dan resume interaktif Dokter Gigi Spesialis Radiologi Kedokteran Gigi (Sp.RKG) merangkap Sarjana Hukum dengan visualisasi keahlian klinis tingkat tinggi.',
-                description: 'Showcase representasi reputasi profesional medis dan hukum medikolegal terdepan. Menampilkan rekam jejak riset radiologi panoramik/CBCT 3D, publikasi ilmiah, keterlibatan simposium nasional-internasional, serta layanan konsultasi keahlian medis yang terintegrasi secara elegan.',
-                challenge: 'Membangun persona profesional terpercaya yang menggabungkan dua bidang kompetensi langka (Spesialis Radiologi Gigi dan Hukum Kesehatan) dalam satu identitas digital yang berkelas dan modern.',
-                solution: 'Desain estetika Tahoe macOS dengan tipografi tipikal korporat, showcase sertifikasi berlisensi, dan navigasi CV interaktif berkecepatan 100/100 pada Lighthouse.',
+                shortDescription: 'Website portofolio profesional dan profil keahlian klinis Dokter Gigi Spesialis Radiologi Kedokteran Gigi (Sp.RKG) berbalut desain elegan.',
+                description: 'Profil digital representatif yang merangkum keahlian analisis radiografi gigi 3D (CBCT), riwayat pendidikan, publikasi ilmiah, dan layanan konsultasi medikolegal dalam tampilan yang berkelas dan bersih.',
+                challenge: 'Perlunya wadah digital yang kredibel untuk menampilkan rekam jejak dua bidang keahlian (Radiologi Gigi & Hukum Kesehatan) yang mudah diakses mitra rumah sakit.',
+                solution: 'Mendesain website portofolio modern bergaya Tahoe dengan navigasi cepat, tata letak resume yang rapi, dan tombol kontak langsung.',
                 projectUrl: 'https://mrakhmatersyad.vercel.app/',
                 isFeatured: true,
                 isPublished: true
             },
             {
                 id: 'port_14',
-                title: 'Anomaly Space — Cloud Cafe POS, Kitchen Display & Customer Screen System',
+                title: 'Anomaly Space — Kasir Web & Layanan Dapur Kafe (POS)',
                 slug: 'anomaly-space-pos',
                 client: 'Anomaly Space Specialty Coffee',
-                category: 'F&B POS & CLOUD MANAGEMENT',
+                category: 'SISTEM KASIR KAFE (F&B POS)',
                 year: 2026,
-                image: '/public/img/axalogo.png',
+                image: '/public/img/portfolio/port_14.webp',
                 tags: ['POS System', 'F&B Tech', 'Cloud Database', 'Kitchen Display'],
                 tools: ['html5', 'javascript', 'css3', 'gcp'],
-                shortDescription: 'Aplikasi Point of Sale (POS) cloud untuk kafe modern dengan integrasi Kitchen Display System (KDS), split bill cepat, dan pelaporan omzet harian otomatis.',
-                description: 'Solusi kasir digital berbasis cloud web application untuk kafe dan coffee shop sibuk. Memangkas antrean kasir dengan navigasi sentuh kilat, transmisi pesanan instan ke layar barista dapur (KDS), serta kalkulasi persediaan bahan baku biji kopi realtime.',
-                challenge: 'Keterlambatan penyampaian pesanan dari kasir ke barista dan selisih stok persediaan bahan kopi akibat kasir offline konvensional yang tidak sinkron secara realtime.',
-                solution: 'Pembangunan web POS interaktif yang terhubung langsung ke basis data Google Cloud Apps Script realtime dengan antarmuka dual display (layar kasir & layar barista).',
+                shortDescription: 'Aplikasi kasir kafe berbasis web yang langsung mengirim pesanan meja kasir ke layar barista dapur tanpa kertas struk manual.',
+                description: 'Sistem kasir ringkas untuk coffee shop yang mempercepat antrean pelanggan. Kasir menginput pesanan di tablet, barista langsung melihat daftar kopi yang harus dibuat, dan laporan penjualan harian terekam otomatis.',
+                challenge: 'Pesanan kopi sering salah atau terlambat dibuat saat jam ramai karena kasir menggunakan nota kertas yang tercecer.',
+                solution: 'Membuat sistem kasir web dua layar (layar kasir & layar barista) yang terhubung realtime tanpa perlu langganan software kasir mahal.',
                 projectUrl: 'https://script.google.com/macros/s/AKfycbw5LzOU5HJzGRhpouhF_b3ft-DelJY273xagO57W-IkBtF4-TNjX7F2ZYCtakk31Eht/exec',
                 isFeatured: true,
                 isPublished: true
             },
             {
                 id: 'port_15',
-                title: 'E-Pilketos Smaga — Realtime Digital Voting System SMAN 3 Makassar',
+                title: 'E-Pilketos Smaga — E-Voting Pemilihan Ketua OSIS SMAN 3',
                 slug: 'e-pilketos-smaga',
                 client: 'MPK & OSIS SMAN 3 Makassar',
-                category: 'E-VOTING & DEMOCRACY SYSTEM',
+                category: 'E-VOTING & PEMUNGUTAN SUARA',
                 year: 2026,
-                image: '/public/img/axalogo.png',
+                image: '/public/img/portfolio/port_15.webp',
                 tags: ['E-Voting', 'Realtime Quick Count', 'Token Authentication', 'Student Governance'],
                 tools: ['html5', 'javascript', 'css3', 'gcp'],
-                shortDescription: 'Sistem pemungutan suara elektronik (E-Voting) pemilihan Ketua & Wakil Ketua OSIS SMA Negeri 3 Makassar dengan verifikasi token sekali pakai dan quick count langsung.',
-                description: 'Aplikasi demokrasi digital sekolah ramah lingkungan bebas kertas yang melayani ribuan pemilih siswa-siswi secara serempak. Menjamin kerahasiaan hak suara dengan token enkripsi satu kali pakai (OTP-like) dan menampilkan persentase suara masuk secara langsung di proyektor aula.',
-                challenge: 'Proses pemilihan ketua OSIS manual dengan kertas suara memakan biaya tinggi, penghitungan surat suara hingga larut malam, serta risiko manipulasi suara.',
-                solution: 'Merancang sistem e-voting web dengan bilik suara digital terautentikasi token unik, pencegahan suara ganda (anti-double voting), dan siaran grafik quick count transparan realtime.',
+                shortDescription: 'Sistem pemungutan suara online pemilihan OSIS dengan token unik sekali pakai dan grafik perolehan suara (quick count) langsung transparan.',
+                description: 'Platform pemilu digital sekolah yang ramah lingkungan dan bebas kertas. Ribuan siswa memilih kandidat di bilik suara komputer secara rahasia, cepat, dan hasilnya langsung tampil di layar aula tanpa hitung suara manual.',
+                challenge: 'Pemilihan manual menghabiskan banyak kertas suara, biaya cetak tinggi, dan penghitungan suara sering memakan waktu hingga malam hari.',
+                solution: 'Mengembangkan sistem e-voting web yang memverifikasi token khusus pemilih, mencegah voting ganda, dan menghitung hasil suara secara otomatis.',
                 projectUrl: 'https://script.google.com/macros/s/AKfycbzG-WjY-bsx5I12ynk1_6ilclVM4Pli37vmpytqeaeJkESCkQqX5D9IZkBzaM6vCmcC/exec',
                 isFeatured: true,
                 isPublished: true
             },
             {
                 id: 'port_16',
-                title: 'Gria Efata Permai – Interactive Real Estate & Digital Site Plan Portal',
+                title: 'Gria Efata Permai — Peta Kavling Interaktif & Brosur Properti',
                 slug: 'gria-efata-permai',
                 client: 'PT Efata Jaya Raya',
-                category: 'REAL ESTATE & INTERACTIVE SITE PLAN',
+                category: 'PROPERTI & MASTERPLAN DIGITAL',
                 year: 2026,
-                image: '/public/img/axalogo.png',
+                image: '/public/img/portfolio/port_16.webp',
                 tags: ['Real Estate', 'Digital Site Plan', 'Unit Booking', 'Interactive Map'],
                 tools: ['html5', 'javascript', 'css3', 'gcp'],
-                shortDescription: 'Portal perumahan modern dengan denah site plan interaktif untuk memeriksa status kavling (tersedia, terpesan, terjual) dan simulasi estimasi cicilan KPR.',
-                description: 'Web app pemasaran properti digital yang mentransformasikan brosur fisik menjadi pengalaman eksplorasi interaktif. Pengunjung dapat mengeklik kavling unit pada peta masterplan secara visual, melihat spesifikasi tipe rumah, mengunduh brosur PDF, dan langsung menghubungi agen pemasaran via WhatsApp.',
-                challenge: 'Konsumen properti kesulitan memvisualisasikan posisi kavling strategis dari brosur cetak 2D, sehingga tim sales kesulitan mengonfirmasi ketersediaan unit yang masih kosong.',
-                solution: 'Membangun peta interaktif SVG site plan berbasis vektor responsif dengan indikator warna status unit realtime yang tersinkronisasi dengan database penjualan pengembang.',
+                shortDescription: 'Website perumahan dengan denah interaktif untuk mengecek nomor kavling yang masih kosong dan simulasi cicilan rumah.',
+                description: 'Media promosi perumahan modern yang memudahkan calon pembeli mengeklik denah unit rumah secara visual. Pembeli dapat langsung melihat tipe rumah, harga, status ketersediaan unit, dan mengunduh brosur via WhatsApp agen.',
+                challenge: 'Pembeli kesulitan membayangkan lokasi rumah dari brosur kertas biasa dan staf sales sering salah info mengenai kavling yang sudah laku.',
+                solution: 'Membuat peta denah perumahan interaktif berbasis web dengan warna penanda ketersediaan unit yang diperbarui langsung dari smartphone tim sales.',
                 projectUrl: 'https://script.google.com/macros/s/AKfycbz-QT1iuDrZEf5OlTRtuAeQGOwE4pxZ_b1DmBHbYz3R-IAnOlT6BuVyZxO67cuvHG8/exec',
                 isFeatured: true,
                 isPublished: true
             },
             {
                 id: 'port_17',
-                title: 'Bams Barbershop – Online Queue & Service Appointment Booking',
+                title: 'Bams Barbershop — Booking Jadwal & Antrean Online',
                 slug: 'bams-barbershop-booking',
                 client: 'Bams Barbershop & Grooming',
-                category: 'LIFESTYLE & ONLINE QUEUE SYSTEM',
+                category: 'ANTREAN ONLINE & RESERVASI JASA',
                 year: 2026,
-                image: '/public/img/axalogo.png',
+                image: '/public/img/portfolio/port_17.webp',
                 tags: ['Barbershop', 'Online Queue', 'Appointment System', 'SMS/WA Reminder'],
                 tools: ['html5', 'javascript', 'css3', 'gcp'],
-                shortDescription: 'Sistem antrean cerdas dan pemesanan layanan potong rambut secara daring untuk menghindari kerumunan ruang tunggu dengan notifikasi estimasi giliran realtime.',
-                description: 'Solusi pemesanan antrean barbershop modern yang memungkinkan pelanggan memilih kapster favorit, memilih paket grooming, dan memantau posisi antrean berjalan dari rumah atau kafe, lengkap dengan estimasi menit tunggu yang akurat.',
-                challenge: 'Pelanggan sering berbalik pulang karena antrean di kursi tunggu barbershop terlalu padat dan waktu tunggu tidak dapat diprediksi.',
-                solution: 'Aplikasi antrean online dengan penomoran virtual otomatis, pemantauan status kursi aktif, serta tombol appointment yang ramah pengguna smartphone.',
+                shortDescription: 'Web pemesanan jadwal pangkas rambut untuk memilih kapster dan memantau antrean dari rumah tanpa perlu menunggu lama di kursi barbershop.',
+                description: 'Solusi antrean bagi pelanggan barbershop. Pelanggan dapat melihat jadwal kapster yang bertugas, memesan jam potong rambut, dan datang tepat waktu sesuai estimasi giliran.',
+                challenge: 'Pelanggan sering batal potong rambut karena ruang tunggu penuh sesak dan waktu tunggu giliran tidak pasti.',
+                solution: 'Membangun aplikasi antrean web dengan nomor tiket virtual dan perkiraan waktu giliran yang bisa dipantau langsung lewat HP pelanggan.',
                 projectUrl: 'https://script.google.com/macros/s/AKfycbxgGdUfpjnODbdUDdwL9hGwjJeecMflQWKoZHFaN4Wm9-b7iTI9wNozsIM3LsKT3W0/exec',
                 isFeatured: true,
                 isPublished: true
             },
             {
                 id: 'port_18',
-                title: 'Smart RPP – AI-Powered Curriculum Generator & Modul Ajar Terotomasi',
+                title: 'Smart RPP — Generator Modul Ajar Kurikulum Merdeka',
                 slug: 'smart-rpp-kurikulum-merdeka',
                 client: 'Komunitas Guru Inovatif Nusantara',
-                category: 'EDUTECH & AI PRODUCTIVITY',
+                category: 'APLIKASI PENDIDIKAN & ADMINISTRASI GURU',
                 year: 2026,
-                image: '/public/img/axalogo.png',
+                image: '/public/img/portfolio/port_18.webp',
                 tags: ['AI Generator', 'Kurikulum Merdeka', 'Edutech', 'Modul Ajar'],
                 tools: ['html5', 'javascript', 'css3', 'gcp'],
-                shortDescription: 'Platform asisten guru cerdas bertenaga AI untuk menyusun Rencana Pelaksanaan Pembelajaran (RPP) dan Modul Ajar Kurikulum Merdeka dalam hitungan detik.',
-                description: 'Aplikasi produktivitas pendidikan revolusioner yang membantu para guru dari tingkat SD hingga SMA menyusun modul ajar, asesmen diagnostik, rubrik penilaian, dan profil pelajar pancasila sesuai capaian pembelajaran (CP) secara otomatis dan terstandarisasi Kemendikbudristek.',
-                challenge: 'Beban administrasi pembuatan dokumen RPP yang sangat banyak menyita waktu tenaga pendidik hingga mengurangi fokus utama dalam mendampingi murid di kelas.',
-                solution: 'Mengembangkan formulir cerdas yang menghubungkan data mata pelajaran dengan prompt AI terstruktur, menghasilkan dokumen modul ajar komprehensif yang siap unduh dan cetak.',
+                shortDescription: 'Alat bantu guru untuk menyusun modul ajar, rubrik penilaian, dan Rencana Pembelajaran (RPP) Kurikulum Merdeka secara praktis.',
+                description: 'Membantu para guru memangkas waktu pembuatan berkas administrasi mengajar. Cukup memilih mata pelajaran dan capaian pembelajaran, sistem akan menyusun draf modul ajar terstruktur yang siap cetak dan dipakai di kelas.',
+                challenge: 'Guru menghabiskan terlalu banyak waktu malam hari untuk mengetik puluhan halaman RPP, mengurangi energi untuk mengajar murid di kelas.',
+                solution: 'Merancang formulir pembuatan RPP otomatis dengan susunan baku Kemendikbud yang mudah disesuaikan kebutuhan guru.',
                 projectUrl: 'https://script.google.com/macros/s/AKfycbwaLRPdwdUYxzxstqiQUASC19ivpRyZ2oMDiDQks0Ozk9pjrd7Kp1cRgZJqlrpfaXyx/exec',
                 isFeatured: true,
                 isPublished: true
             },
             {
                 id: 'port_19',
-                title: 'NGS StaffFlow – Enterprise Employee Self-Service & Expense Reimbursement',
+                title: 'NGS StaffFlow — Pengajuan Cuti & Klaim Biaya Kantor',
                 slug: 'ngs-staffflow-hr-portal',
                 client: 'PT Nusantara Global Solusindo',
-                category: 'ENTERPRISE HRIS & WORKFLOW',
+                category: 'PORTAL KARYAWAN & ADMINISTRASI KANTOR',
                 year: 2026,
-                image: '/public/img/axalogo.png',
+                image: '/public/img/portfolio/port_19.webp',
                 tags: ['HRIS Portal', 'Staff Management', 'Reimbursement', 'Leave Approval'],
                 tools: ['html5', 'javascript', 'css3', 'gcp'],
-                shortDescription: 'Portal swakelola karyawan untuk pengajuan cuti online, klaim penggantian biaya (reimbursement) instan, dan persetujuan bertingkat manajerial.',
-                description: 'Aplikasi internal perusahaan (Employee Self-Service) untuk memangkas birokrasi perizinan kerja. Karyawan dapat mengunggah struk klaim biaya, memantau sisa kuota cuti tahunan, dan mendapatkan otorisasi persetujuan atasan secara berjenjang melalui notifikasi email otomatis.',
-                challenge: 'Pengajuan cuti dan klaim bon kantor yang masih menggunakan form kertas manual sering hilang di meja atasan dan menyulitkan rekapitulasi tim payroll HRD.',
-                solution: 'Implementasi alur kerja approval digital terpadu dengan validasi sisa saldo cuti otomatis, lampiran dokumen digital, serta audit trail riwayat pengajuan transparan.',
+                shortDescription: 'Portal internal karyawan untuk mengajukan cuti online, klaim uang transport/bon kantor, dan persetujuan atasan tanpa formulir kertas.',
+                description: 'Aplikasi mandiri karyawan kantor yang merapikan alur persetujuan kerja. Karyawan cukup foto bukti kuitansi atau ajukan tanggal libur dari HP, dan atasan bisa langsung menyetujui lewat satu klik notifikasi email.',
+                challenge: 'Berkas klaim uang dan formulir cuti kertas sering hilang di meja manajer dan merepotkan rekapitulasi bagian keuangan di akhir bulan.',
+                solution: 'Mengganti formulir fisik dengan alur persetujuan digital yang mencatat sisa cuti dan riwayat transaksi secara transparan dan rapi.',
                 projectUrl: 'https://script.google.com/macros/s/AKfycbxXO7nf0uRRIx4dGUJzvzBg5_DCG_UmKvpeP5YHf6kQ0PjiuNtIIkpCDlNXwyn8JIav/exec',
                 isFeatured: true,
                 isPublished: true
             },
             {
                 id: 'port_20',
-                title: 'FlowSales CRM – Visual Kanban Pipeline Deals & Sales Conversion Accelerator',
+                title: 'FlowSales CRM — Papan Pantau Prospek & Penjualan Sales',
                 slug: 'flowsales-crm-pipeline',
                 client: 'FlowSales Business Acceleration',
-                category: 'CRM & B2B SALES PIPELINE',
+                category: 'MANAJEMEN PENJUALAN & CRM BISNIS',
                 year: 2026,
-                image: '/public/img/axalogo.png',
+                image: '/public/img/portfolio/port_20.webp',
                 tags: ['CRM', 'Sales Pipeline', 'Kanban Board', 'Lead Scoring'],
                 tools: ['html5', 'javascript', 'css3', 'gcp'],
-                shortDescription: 'Platform Customer Relationship Management (CRM) interaktif dengan papan Kanban drag-and-drop untuk memantau prospek penjualan dari kontak awal hingga deal closing.',
-                description: 'Sistem percepatan konversi penjualan B2B yang dirancang untuk tim sales modern. Memberikan visibilitas menyeluruh terhadap performa deal di setiap tahapan corong penjualan (funnel), rekam histori interaksi prospek, kalkulasi potensi omzet tertimbang, dan metrik konversi tim.',
-                challenge: 'Kehilangan prospek potensial bernilai puluhan juta rupiah karena catatan sales tersebar di buku catatan pribadi staf dan ketiadaan sistem tindak lanjut terorganisir.',
-                solution: 'Pembangunan papan visual Kanban pipeline responsif dengan penanda prioritas prospek (hot/warm/cold), reminder follow-up otomatis, dan rekap metrik penjualan interaktif.',
+                shortDescription: 'Papan visual geser-tarik (Kanban) untuk memantau proses negosiasi tim sales dari chat awal, jadwal presentasi, hingga deal penjualan.',
+                description: 'Membantu pemilik bisnis dan manajer memantau kemajuan setiap calon klien yang sedang dihubungi tim sales. Setiap penawaran dikelompokkan dalam kolom tahapan penjualan sehingga tidak ada prospek yang terlupakan.',
+                challenge: 'Catatan calon klien sering tercecer di WhatsApp pribadi sales dan pimpinan kesulitan mengetahui potensi omzet yang akan masuk bulan ini.',
+                solution: 'Membangun papan pipeline penjualan visual yang mudah digeser antar status, dilengkapi catatan hasil telepon dan pengingat jadwal follow-up.',
                 projectUrl: 'https://script.google.com/macros/s/AKfycbxG5OeF3_ekRRekIQr05xtZZ2hvdA4b5mUFM6CzEYxaiSbwSNO6xD_vJwJbr0R9FTCu/exec',
                 isFeatured: true,
                 isPublished: true
@@ -759,14 +870,43 @@ async function ensureSeedData() {
             }
         ];
 
-        const MIGRATION_VERSION = 'v3_20_portfolio_real';
+        const MIGRATION_VERSION = 'v6_faq_and_base64_webp_portfolio';
         const currentMigration = await redis.get('dents:migration:portfolio');
         if (currentMigration !== MIGRATION_VERSION) {
-            console.log('[MIGRATION] Syncing 20 real portfolio projects & 20 masked testimonials to Redis...');
-            await redis.set('dents:portfolio', REAL_PORTFOLIO_PROJECTS);
+            console.log('[MIGRATION v6] Storing 20 portfolio images directly as Base64 WebP in Redis DB & syncing 8 FAQs...');
+            
+            // Ambil portfolio yang sudah ada di Redis untuk mempertahankan data kustom
+            const existingPortfolio = await redis.get('dents:portfolio') || [];
+            const imageMap = {};
+            if (Array.isArray(existingPortfolio)) {
+                existingPortfolio.forEach(p => {
+                    if (p.id && p.image && p.image !== '/public/img/axalogo.png') imageMap[p.id] = p.image;
+                    if (p.slug && p.image && p.image !== '/public/img/axalogo.png') imageMap[p.slug] = p.image;
+                });
+            }
+
+            const syncedPortfolio = REAL_PORTFOLIO_PROJECTS.map((proj, idx) => {
+                let img = imageMap[proj.id] || imageMap[proj.slug] || proj.image;
+                // If it's a file path, convert to Base64 WebP Data URI so it lives 100% in Redis DB
+                if (!img || img.startsWith('/public/img/portfolio/')) {
+                    const localPath = path.join(process.cwd(), 'public/img/portfolio', `port_${idx + 1}.webp`);
+                    if (fs.existsSync(localPath)) {
+                        try {
+                            const buf = fs.readFileSync(localPath);
+                            img = 'data:image/webp;base64,' + buf.toString('base64');
+                        } catch (e) {}
+                    }
+                }
+                return { ...proj, image: img };
+            });
+
+            await redis.set('dents:portfolio', syncedPortfolio);
+            await redis.set('dents:faq', INITIAL_8_FAQS);
+            await redis.set('dents:pricing', INITIAL_PRICING_4_TIERS);
+            await redis.set('dents:services', INITIAL_SERVICES_4_TIERS);
             await redis.set('dents:testimonials', MASKED_TESTIMONIALS);
             await redis.set('dents:migration:portfolio', MIGRATION_VERSION);
-            console.log('[MIGRATION] Sync complete: 20 real projects & 20 masked testimonials updated.');
+            console.log('[MIGRATION v6] Sync complete: 20 WebP images stored 100% in Redis DB & 8 FAQs updated.');
         }
 
         if (!testimonials || !testimonials.length) {
@@ -1319,16 +1459,25 @@ app.get('/', async (req, res) => {
     const rawServices = await redis.get('dents:services') || [];
     const rawPortfolio = await redis.get('dents:portfolio') || [];
     const rawTestimonials = await redis.get('dents:testimonials') || []; 
+    const rawFaq = await redis.get('dents:faq') || [];
     
-    const featuredServices = rawServices.filter(s => s.isPublished && s.isFeatured).slice(0, 3);
-    const featuredPortfolio = rawPortfolio.filter(p => p.isPublished && p.isFeatured);
-    const activeTestimonials = rawTestimonials.filter(t => t.isPublished !== false); 
+    const publishedServices = (Array.isArray(rawServices) ? rawServices : [])
+        .filter(s => s.isPublished !== false)
+        .sort((a, b) => (a.order || 0) - (b.order || 0));
+    const featuredPortfolio = (Array.isArray(rawPortfolio) ? rawPortfolio : [])
+        .filter(p => p.isPublished && p.isFeatured);
+    const activeTestimonials = (Array.isArray(rawTestimonials) ? rawTestimonials : [])
+        .filter(t => t.isPublished !== false); 
+    const publishedFaq = (Array.isArray(rawFaq) ? rawFaq : [])
+        .filter(f => f.isPublished !== false)
+        .sort((a, b) => (a.order || 0) - (b.order || 0));
 
     res.render('index', { 
         settings, 
-        services: featuredServices.length ? featuredServices : rawServices.slice(0, 3),
+        services: publishedServices.slice(0, 4),
         portfolio: featuredPortfolio.length ? featuredPortfolio : rawPortfolio,
         testimonials: activeTestimonials,
+        faq: publishedFaq.length ? publishedFaq : INITIAL_8_FAQS,
         seo: buildSEO(settings, { title: "", desc: settings.defaultSeoDescription, path: '/' }, { testimonials: activeTestimonials, services: rawServices, portfolio: rawPortfolio }) 
     });
 });
@@ -1357,6 +1506,31 @@ app.get('/services', async (req, res) => {
         services: publishedServices,
         seo: buildSEO(settings, { title: 'Layanan Kami', desc: 'Jelajahi layanan pembuatan website dan aplikasi custom Dents Web.', path: '/services', schema: serviceSchema })
     });
+});
+
+// Serve Portfolio Image Directly from Redis Database (Self-Contained DB-driven)
+app.get('/api/portfolio/:id/image', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const portfolio = await redis.get('dents:portfolio') || [];
+        const item = (Array.isArray(portfolio) ? portfolio : []).find(p => p.id === id || p.slug === id || p.id === 'port_' + id || p.id === `port_0${id}`);
+        if (!item || !item.image) {
+            return res.redirect('/public/img/axalogo.png');
+        }
+        if (item.image.startsWith('data:')) {
+            const matches = item.image.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+            if (matches && matches.length === 3) {
+                const contentType = matches[1];
+                const buffer = Buffer.from(matches[2], 'base64');
+                res.set('Content-Type', contentType);
+                res.set('Cache-Control', 'public, max-age=604800');
+                return res.send(buffer);
+            }
+        }
+        return res.redirect(item.image);
+    } catch (e) {
+        return res.redirect('/public/img/axalogo.png');
+    }
 });
 
 app.get('/portfolio', async (req, res) => {
@@ -1607,6 +1781,156 @@ app.post('/api/leads', leadLimiter, async (req, res) => {
     }
 });
 
+// ==========================================
+// PUBLIC LIVE CHAT CS APIS (TAWK.TO STYLE)
+// ==========================================
+app.post('/api/chat/start', async (req, res) => {
+    try {
+        const { name, email, phone, category, message, sessionId } = req.body;
+        if (!name || !message) {
+            return res.status(400).json({ success: false, message: 'Nama dan pesan wajib diisi.' });
+        }
+
+        const sid = sessionId || `sess_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+        let chats = await redis.get('dents:chats') || [];
+        if (!Array.isArray(chats)) chats = [];
+
+        let existingChat = chats.find(c => c.sessionId === sid);
+        const timestamp = new Date().toISOString();
+        const clientName = name.trim();
+        const clientEmail = email ? email.trim() : '';
+        const clientPhone = phone ? phone.trim() : '';
+        const clientCategory = category || 'Jasa Pembuatan Website Baru';
+
+        const initialMsg = {
+            id: `msg_${Date.now()}`,
+            sender: 'CUSTOMER',
+            senderName: clientName,
+            text: message.trim(),
+            timestamp
+        };
+
+        if (existingChat) {
+            existingChat.name = clientName;
+            existingChat.email = clientEmail || existingChat.email;
+            existingChat.phone = clientPhone || existingChat.phone;
+            existingChat.category = clientCategory || existingChat.category;
+            existingChat.customer = {
+                name: existingChat.name,
+                email: existingChat.email,
+                phone: existingChat.phone,
+                category: existingChat.category
+            };
+            existingChat.status = 'open';
+            existingChat.unreadByAdmin = (existingChat.unreadByAdmin || 0) + 1;
+            existingChat.lastMessage = message.trim();
+            existingChat.lastMessageAt = timestamp;
+            existingChat.messages.push(initialMsg);
+        } else {
+            const newChat = {
+                id: `chat_${Date.now()}`,
+                sessionId: sid,
+                name: clientName,
+                email: clientEmail,
+                phone: clientPhone,
+                category: clientCategory,
+                customer: {
+                    name: clientName,
+                    email: clientEmail,
+                    phone: clientPhone,
+                    category: clientCategory
+                },
+                status: 'open',
+                unreadByAdmin: 1,
+                lastMessage: message.trim(),
+                lastMessageAt: timestamp,
+                createdAt: timestamp,
+                messages: [initialMsg]
+            };
+            chats.unshift(newChat);
+            if (chats.length > 500) chats.pop();
+            existingChat = newChat;
+        }
+
+        await redis.set('dents:chats', chats);
+        res.status(201).json({ 
+            success: true, 
+            sessionId: sid, 
+            chat: existingChat, 
+            messages: existingChat.messages 
+        });
+    } catch (err) {
+        console.error('[CHAT START ERROR]', err);
+        res.status(500).json({ success: false, message: 'Gagal memulai chat.' });
+    }
+});
+
+app.get('/api/chat/messages/:sessionId', async (req, res) => {
+    try {
+        const { sessionId } = req.params;
+        const chats = await redis.get('dents:chats') || [];
+        const chat = Array.isArray(chats) ? chats.find(c => c.sessionId === sessionId || c.id === sessionId) : null;
+        if (chat) {
+            const cust = chat.customer || {};
+            chat.name = chat.name || cust.name || 'Klien';
+            chat.email = chat.email || cust.email || '';
+            chat.phone = chat.phone || cust.phone || '';
+            chat.category = chat.category || cust.category || 'Jasa Pembuatan Website Baru';
+            chat.customer = {
+                name: chat.name,
+                email: chat.email,
+                phone: chat.phone,
+                category: chat.category
+            };
+        }
+        res.json({ 
+            success: true, 
+            chat: chat, 
+            messages: chat ? chat.messages : [] 
+        });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Gagal memuat pesan.' });
+    }
+});
+
+app.post('/api/chat/send', async (req, res) => {
+    try {
+        const { sessionId, message, sender, senderName } = req.body;
+        if (!sessionId || !message || !message.trim()) {
+            return res.status(400).json({ success: false, message: 'Pesan tidak boleh kosong.' });
+        }
+
+        let chats = await redis.get('dents:chats') || [];
+        if (!Array.isArray(chats)) chats = [];
+
+        const chat = chats.find(c => c.sessionId === sessionId || c.id === sessionId);
+        if (!chat) {
+            return res.status(404).json({ success: false, message: 'Sesi chat tidak ditemukan.' });
+        }
+
+        const timestamp = new Date().toISOString();
+        const clientName = (chat.customer && chat.customer.name) || chat.name || senderName || 'Klien';
+        const newMsg = {
+            id: `msg_${Date.now()}`,
+            sender: 'CUSTOMER',
+            senderName: clientName,
+            text: message.trim(),
+            timestamp
+        };
+
+        chat.messages.push(newMsg);
+        chat.lastMessage = newMsg.text;
+        chat.lastMessageAt = timestamp;
+        chat.status = 'open';
+        chat.unreadByAdmin = (chat.unreadByAdmin || 0) + 1;
+
+        await redis.set('dents:chats', chats);
+        res.json({ success: true, message: newMsg, chat });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Gagal mengirim pesan.' });
+    }
+});
+
 // Admin Auth & Endpoints
 app.get('/admin', (req, res) => {
     if (req.cookies.admin_session) return res.redirect('/admin-dashboard');
@@ -1719,6 +2043,132 @@ app.get('/api/admin/testimonials', requireAdmin, (req, res) => handleListGet(req
 app.post('/api/admin/testimonials', requireAdmin, (req, res) => handleListUpdate(req, res, 'dents:testimonials'));
 app.put('/api/admin/testimonials/:id', requireAdmin, (req, res) => handleListUpdate(req, res, 'dents:testimonials'));
 app.delete('/api/admin/testimonials/:id', requireAdmin, (req, res) => handleListUpdate(req, res, 'dents:testimonials'));
+
+// Live Chat Admin API
+app.get('/api/admin/chats', requireAdmin, async (req, res) => {
+    try {
+        let chats = await redis.get('dents:chats') || [];
+        if (!Array.isArray(chats)) chats = [];
+        const normalized = chats.map(c => {
+            const cust = c.customer || {};
+            const name = c.name || cust.name || 'Klien';
+            const email = c.email || cust.email || '-';
+            const phone = c.phone || cust.phone || '-';
+            const category = c.category || cust.category || 'Umum';
+            return {
+                ...c,
+                name,
+                email,
+                phone,
+                category,
+                customer: {
+                    name,
+                    email,
+                    phone,
+                    category
+                }
+            };
+        });
+        res.json({ success: true, data: normalized });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Gagal memuat percakapan.' });
+    }
+});
+
+app.get('/api/admin/chats/:id', requireAdmin, async (req, res) => {
+    try {
+        const { id } = req.params;
+        let chats = await redis.get('dents:chats') || [];
+        if (!Array.isArray(chats)) chats = [];
+        const chat = chats.find(c => c.id === id || c.sessionId === id);
+        if (!chat) return res.status(404).json({ success: false, message: 'Chat tidak ditemukan.' });
+        
+        // Normalize customer info
+        const cust = chat.customer || {};
+        chat.name = chat.name || cust.name || 'Klien';
+        chat.email = chat.email || cust.email || '-';
+        chat.phone = chat.phone || cust.phone || '-';
+        chat.category = chat.category || cust.category || 'Umum';
+        chat.customer = {
+            name: chat.name,
+            email: chat.email,
+            phone: chat.phone,
+            category: chat.category
+        };
+
+        // Mark read by admin
+        chat.unreadByAdmin = 0;
+        await redis.set('dents:chats', chats);
+        res.json({ success: true, data: chat });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Server error.' });
+    }
+});
+
+app.post('/api/admin/chats/:id/reply', requireAdmin, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { message, adminName } = req.body;
+        if (!message || !message.trim()) {
+            return res.status(400).json({ success: false, message: 'Pesan balasan wajib diisi.' });
+        }
+
+        let chats = await redis.get('dents:chats') || [];
+        if (!Array.isArray(chats)) chats = [];
+        const chat = chats.find(c => c.id === id || c.sessionId === id);
+        if (!chat) return res.status(404).json({ success: false, message: 'Chat tidak ditemukan.' });
+
+        const timestamp = new Date().toISOString();
+        const replyMsg = {
+            id: `msg_${Date.now()}`,
+            sender: 'ADMIN',
+            senderName: adminName || 'CS Support (Anda)',
+            text: message.trim(),
+            timestamp
+        };
+
+        if (!Array.isArray(chat.messages)) chat.messages = [];
+        chat.messages.push(replyMsg);
+        chat.lastMessage = `Admin: ${replyMsg.text}`;
+        chat.lastMessageAt = timestamp;
+        chat.unreadByAdmin = 0;
+        chat.unreadByCustomer = (chat.unreadByCustomer || 0) + 1;
+        await redis.set('dents:chats', chats);
+        res.json({ success: true, message: replyMsg });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Gagal mengirim balasan.' });
+    }
+});
+
+app.patch('/api/admin/chats/:id/status', requireAdmin, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { status } = req.body;
+        let chats = await redis.get('dents:chats') || [];
+        if (!Array.isArray(chats)) chats = [];
+        const chat = chats.find(c => c.id === id || c.sessionId === id);
+        if (!chat) return res.status(404).json({ success: false, message: 'Chat tidak ditemukan.' });
+
+        chat.status = status || 'RESOLVED';
+        await redis.set('dents:chats', chats);
+        res.json({ success: true, message: 'Status berhasil diubah.' });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Gagal update status.' });
+    }
+});
+
+app.delete('/api/admin/chats/:id', requireAdmin, async (req, res) => {
+    try {
+        const { id } = req.params;
+        let chats = await redis.get('dents:chats') || [];
+        if (!Array.isArray(chats)) chats = [];
+        chats = chats.filter(c => c.id !== id && c.sessionId !== id);
+        await redis.set('dents:chats', chats);
+        res.json({ success: true, message: 'Percakapan berhasil dihapus.' });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Gagal menghapus percakapan.' });
+    }
+});
 
 // Settings Admin API
 app.get('/api/admin/settings', requireAdmin, async (req, res) => {
