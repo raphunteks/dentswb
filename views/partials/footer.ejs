@@ -46,14 +46,16 @@
                 </ul>
             </div>
 
-            <!-- Direct Contact (SVG Icons) -->
+<!-- Direct Contact (SVG Icons) -->
             <div>
                 <h4 class="footer-col-title">Hubungi Kami</h4>
                 <p style="font-size: 0.9rem; margin-bottom: 14px; color: rgba(255,255,255,0.6);">Konsultasikan roadmap digital Anda langsung dengan engineer kami:</p>
                 <div style="display: flex; flex-direction: column; gap: 12px;">
-                    <!-- WhatsApp -->
-                    <a href="https://wa.me/<%= typeof settings !== 'undefined' && settings.whatsapp ? settings.whatsapp : '6285338922586' %>" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 8px; color: var(--lime-accent); font-weight: 700; font-size: 0.95rem;">
-                        <svg class="svg-icon svg-icon-md" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.112.551 4.095 1.517 5.823l-1.517 5.605 5.748-1.507c1.685.918 3.607 1.442 5.652 1.442 6.627 0 12-5.373 12-12 0-6.627-5.373-12-12-12z"/></svg>
+                    <!-- WhatsApp Official Link -->
+                    <a href="https://wa.me/<%= typeof settings !== 'undefined' && settings.whatsapp ? settings.whatsapp.replace(/[^0-9]/g, '') : '6285338922586' %>" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 8px; color: #25D366; font-weight: 700; font-size: 0.95rem;">
+                        <svg class="svg-icon svg-icon-md" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+                        </svg>
                         <span>WhatsApp Official</span> &nearr;
                     </a>
                     <!-- Email -->
@@ -82,15 +84,16 @@
 </footer>
 
 <!-- ==========================================
-     INTERACTIVE FLOATING WHATSAPP CHAT BUBBLE WIDGET
-     (Sesuai Desain Lampiran Pengguna)
+     FLOATING OFFICIAL WHATSAPP (BOTTOM RIGHT)
      ========================================== -->
-<!-- Popup Dialog Modal -->
+<!-- WhatsApp Popup Dialog Modal -->
 <div class="wa-chat-popup" id="wa-chat-popup" role="dialog" aria-modal="true" aria-labelledby="wa-popup-title">
     <div class="wa-chat-header">
         <div class="wa-chat-title" id="wa-popup-title">
-            <svg class="svg-icon svg-icon-md" viewBox="0 0 24 24" fill="currentColor" style="color: #25D366;" aria-hidden="true"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.112.551 4.095 1.517 5.823l-1.517 5.605 5.748-1.507c1.685.918 3.607 1.442 5.652 1.442 6.627 0 12-5.373 12-12 0-6.627-5.373-12-12-12z"/></svg>
-            <span>Chat Admin <%= typeof settings !== 'undefined' && settings.brandName ? settings.brandName : 'Dents Web' %></span>
+            <svg class="svg-icon svg-icon-md" viewBox="0 0 24 24" fill="currentColor" style="color: #25D366;" aria-hidden="true">
+                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+            </svg>
+            <span>WhatsApp Admin <%= typeof settings !== 'undefined' && settings.brandName ? settings.brandName : 'Dents Web' %></span>
         </div>
         <button class="wa-chat-close" id="wa-close-btn" aria-label="Tutup Chat WhatsApp">&times;</button>
     </div>
@@ -106,13 +109,140 @@
     </div>
 </div>
 
-<!-- Round Trigger Button -->
+<!-- Round Trigger Button (Bottom Right) -->
 <button class="wa-floating-btn" id="wa-floating-trigger" aria-label="Buka Chat WhatsApp Admin" type="button">
-    <svg class="svg-icon svg-icon-xl" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.112.551 4.095 1.517 5.823l-1.517 5.605 5.748-1.507c1.685.918 3.607 1.442 5.652 1.442 6.627 0 12-5.373 12-12 0-6.627-5.373-12-12-12z"/></svg>
+    <svg viewBox="0 0 24 24" width="30" height="30" fill="#ffffff" aria-hidden="true">
+        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+    </svg>
 </button>
 
+<!-- ==========================================
+     FLOATING LIVE CHAT CS WIDGET (BOTTOM LEFT - TAWK.CO STYLE)
+     ========================================== -->
+<!-- Live Chat Floating Trigger Button -->
+<div class="livechat-floating-wrap" id="livechat-wrap">
+    <button class="livechat-floating-btn" id="livechat-trigger" type="button" aria-label="Buka Live Chat Support">
+        <div class="livechat-pulse-ring"></div>
+        <div class="livechat-btn-icon">
+            <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+        </div>
+        <span class="livechat-btn-label">Tanya CS</span>
+        <span class="livechat-unread-badge" id="livechat-unread-badge" style="display: none;">0</span>
+    </button>
+
+    <!-- Live Chat Modal / Window -->
+    <div class="livechat-window" id="livechat-window" role="dialog" aria-modal="true" style="display: none;">
+        <!-- Header -->
+        <div class="livechat-header">
+            <div class="livechat-header-agent">
+                <div class="livechat-avatar">
+                    <span>CS</span>
+                    <span class="livechat-status-dot"></span>
+                </div>
+                <div class="livechat-agent-info">
+                    <h4>Customer Support</h4>
+                    <p><span class="livechat-online-indicator"></span> Online &bull; Dents Web</p>
+                </div>
+            </div>
+            <div class="livechat-header-actions">
+                <button type="button" id="livechat-reset-session-btn" title="Mulai Sesi Baru" class="livechat-btn-icon-sm" style="display: none;">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+                </button>
+                <button type="button" id="livechat-close-btn" class="livechat-btn-icon-sm" aria-label="Tutup Live Chat">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- View 1: Pre-Chat Form (Gambar 5 Match) -->
+        <div class="livechat-body" id="livechat-prechat-view">
+            <div class="livechat-intro">
+                <p>Halo! Silakan lengkapi formulir di bawah ini untuk memulai percakapan langsung dengan konsultan kami.</p>
+            </div>
+            <form id="livechat-start-form" class="livechat-form">
+                <div class="livechat-form-group">
+                    <label for="lc-name">Nama Lengkap <span class="required">*</span></label>
+                    <input type="text" id="lc-name" name="name" placeholder="Nama lengkap Anda" required autocomplete="name">
+                </div>
+
+                <div class="livechat-form-group">
+                    <label for="lc-email">Email Aktif <span class="required">*</span></label>
+                    <input type="email" id="lc-email" name="email" placeholder="contoh@domain.com" required autocomplete="email">
+                </div>
+
+                <div class="livechat-form-group">
+                    <label for="lc-phone">Nomor WhatsApp <span class="required">*</span></label>
+                    <div class="livechat-phone-input">
+                        <span class="livechat-phone-prefix">
+                            <span class="flag-icon">🇮🇩</span> +62
+                        </span>
+                        <input type="tel" id="lc-phone" name="phone" placeholder="81234567890" required pattern="[0-9]{8,14}">
+                    </div>
+                </div>
+
+                <div class="livechat-form-group">
+                    <label>Kategori Kebutuhan <span class="required">*</span></label>
+                    <div class="livechat-radio-group">
+                        <label class="livechat-radio-item">
+                            <input type="radio" name="category" value="Jasa Pembuatan Website Baru" checked>
+                            <span class="radio-custom"></span>
+                            <span class="radio-label">Jasa Pembuatan Website Baru</span>
+                        </label>
+                        <label class="livechat-radio-item">
+                            <input type="radio" name="category" value="Redesign / Optimasi Website">
+                            <span class="radio-custom"></span>
+                            <span class="radio-label">Redesign / Optimasi Website</span>
+                        </label>
+                        <label class="livechat-radio-item">
+                            <input type="radio" name="category" value="Google Apps Script / Otomasi Form">
+                            <span class="radio-custom"></span>
+                            <span class="radio-label">Google Apps Script / Otomasi Form</span>
+                        </label>
+                        <label class="livechat-radio-item">
+                            <input type="radio" name="category" value="Konsultasi Umum / Lainnya">
+                            <span class="radio-custom"></span>
+                            <span class="radio-label">Konsultasi Umum / Lainnya</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="livechat-form-group">
+                    <label for="lc-message">Pertanyaan / Pesan Pertama <span class="required">*</span></label>
+                    <textarea id="lc-message" name="message" rows="3" placeholder="Ceritakan ringkas website atau kebutuhan Anda..." required></textarea>
+                </div>
+
+                <button type="submit" class="livechat-submit-btn" id="lc-submit-btn">
+                    <span>Mulai Percakapan</span>
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                </button>
+            </form>
+        </div>
+
+        <!-- View 2: Active Chat Conversation -->
+        <div class="livechat-body" id="livechat-conversation-view" style="display: none;">
+            <div class="livechat-meta-bar" id="livechat-meta-bar">
+                <span id="livechat-active-category" class="livechat-category-badge">Website Baru</span>
+                <span class="livechat-client-name" id="livechat-active-client-name">Klien</span>
+            </div>
+
+            <div class="livechat-messages-container" id="livechat-messages-list">
+                <!-- Chat messages rendered dynamically -->
+            </div>
+
+            <form id="livechat-send-form" class="livechat-chat-input-bar">
+                <input type="text" id="livechat-input-text" placeholder="Ketik balasan pesan Anda..." autocomplete="off" required>
+                <button type="submit" id="livechat-send-msg-btn" aria-label="Kirim Pesan">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script>
-    // WhatsApp Floating Widget Logic
+    // WhatsApp Floating Widget (Bottom Right)
     (function() {
         const trigger = document.getElementById('wa-floating-trigger');
         const popup = document.getElementById('wa-chat-popup');
@@ -163,7 +293,417 @@
         const yr = document.getElementById('year');
         if (yr) yr.textContent = new Date().getFullYear();
     })();
+
+    // Interactive Live Chat CS Widget (Bottom Left - Tawk.co Style)
+    (function() {
+        const triggerBtn = document.getElementById('livechat-trigger');
+        const chatWindow = document.getElementById('livechat-window');
+        const closeBtn = document.getElementById('livechat-close-btn');
+        const resetSessionBtn = document.getElementById('livechat-reset-session-btn');
+        const prechatView = document.getElementById('livechat-prechat-view');
+        const convView = document.getElementById('livechat-conversation-view');
+        const startForm = document.getElementById('livechat-start-form');
+        const sendForm = document.getElementById('livechat-send-form');
+        const inputText = document.getElementById('livechat-input-text');
+        const messagesList = document.getElementById('livechat-messages-list');
+        const activeCategoryBadge = document.getElementById('livechat-active-category');
+        const activeClientName = document.getElementById('livechat-active-client-name');
+        const unreadBadge = document.getElementById('livechat-unread-badge');
+
+        const STORAGE_KEY = 'dents_chat_session_v1';
+        const PROFILE_KEY = 'dents_chat_profile_v1';
+        let currentSession = null;
+        let pollTimer = null;
+        let knownMessageCount = 0;
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        function getStoredSession() {
+            try {
+                const data = localStorage.getItem(STORAGE_KEY);
+                return data ? JSON.parse(data) : null;
+            } catch (err) {
+                return null;
+            }
+        }
+
+        function saveStoredSession(session) {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
+            } catch (err) {}
+        }
+
+        function clearStoredSession() {
+            try {
+                localStorage.removeItem(STORAGE_KEY);
+            } catch (err) {}
+        }
+
+        function prefillForm() {
+            try {
+                const profStr = localStorage.getItem(PROFILE_KEY);
+                if (!profStr) return;
+                const prof = JSON.parse(profStr);
+                const nameEl = document.getElementById('lc-name');
+                const emailEl = document.getElementById('lc-email');
+                const phoneEl = document.getElementById('lc-phone');
+                if (nameEl && prof.name && !nameEl.value) nameEl.value = prof.name;
+                if (emailEl && prof.email && !emailEl.value) emailEl.value = prof.email;
+                if (phoneEl && prof.phone && !phoneEl.value) {
+                    let p = prof.phone;
+                    if (p.startsWith('+62')) p = p.slice(3);
+                    else if (p.startsWith('62')) p = p.slice(2);
+                    else if (p.startsWith('0')) p = p.slice(1);
+                    phoneEl.value = p;
+                }
+            } catch (e) {}
+        }
+
+        function formatTime(isoStr) {
+            try {
+                const d = new Date(isoStr);
+                return d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+            } catch (e) {
+                return '';
+            }
+        }
+
+        function renderMessages(messages) {
+            if (!messages || !Array.isArray(messages)) return;
+            messagesList.innerHTML = '';
+            messages.forEach(msg => {
+                const s = String(msg.sender || '').toUpperCase();
+                const isCustomer = (s === 'CUSTOMER' || s === 'CLIENT' || s === 'USER');
+                const row = document.createElement('div');
+                row.className = `livechat-msg-row ${isCustomer ? 'msg-client' : 'msg-admin'}`;
+                
+                const bubble = document.createElement('div');
+                bubble.className = 'livechat-bubble';
+                
+                const textEl = document.createElement('div');
+                textEl.className = 'livechat-msg-text';
+                textEl.textContent = msg.text;
+
+                const timeEl = document.createElement('div');
+                timeEl.className = 'livechat-msg-time';
+                const label = isCustomer ? 'Anda' : (msg.senderName || 'CS Support');
+                timeEl.textContent = `${label} • ${formatTime(msg.timestamp)}`;
+
+                bubble.appendChild(textEl);
+                bubble.appendChild(timeEl);
+                row.appendChild(bubble);
+                messagesList.appendChild(row);
+            });
+            messagesList.scrollTop = messagesList.scrollHeight;
+        }
+
+        let clientAudioCtx = null;
+        function getClientAudioContext() {
+            try {
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContextClass) return null;
+                if (!clientAudioCtx) {
+                    clientAudioCtx = new AudioContextClass();
+                }
+                if (clientAudioCtx.state === 'suspended') {
+                    clientAudioCtx.resume().catch(() => {});
+                }
+                return clientAudioCtx;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        // Global gesture unlock on click / touch anywhere on the page
+        const unlockClientAudioOnGesture = () => {
+            const ctx = getClientAudioContext();
+            if (ctx && ctx.state === 'suspended') {
+                ctx.resume().catch(() => {});
+            }
+        };
+        ['click', 'touchstart', 'keydown'].forEach(ev => {
+            document.addEventListener(ev, unlockClientAudioOnGesture, { passive: true });
+        });
+
+        function playClientChatChime() {
+            try {
+                const ctx = getClientAudioContext();
+                if (!ctx) return;
+                if (ctx.state === 'suspended') {
+                    ctx.resume().catch(() => {});
+                }
+                const now = ctx.currentTime;
+                // Rich crystal two-tone chime (G5 -> C6)
+                const osc1 = ctx.createOscillator();
+                const gain1 = ctx.createGain();
+                osc1.type = 'triangle';
+                osc1.frequency.setValueAtTime(783.99, now);
+                gain1.gain.setValueAtTime(0, now);
+                gain1.gain.linearRampToValueAtTime(0.28, now + 0.02);
+                gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+                osc1.connect(gain1);
+                gain1.connect(ctx.destination);
+                osc1.start(now);
+                osc1.stop(now + 0.24);
+
+                const osc2 = ctx.createOscillator();
+                const gain2 = ctx.createGain();
+                osc2.type = 'sine';
+                osc2.frequency.setValueAtTime(1046.50, now + 0.12);
+                gain2.gain.setValueAtTime(0, now + 0.12);
+                gain2.gain.linearRampToValueAtTime(0.32, now + 0.14);
+                gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.40);
+                osc2.connect(gain2);
+                gain2.connect(ctx.destination);
+                osc2.start(now + 0.12);
+                osc2.stop(now + 0.42);
+            } catch (e) {
+                console.warn('Client audio chime error:', e);
+            }
+        }
+
+        async function fetchMessages(sessionId) {
+            if (!sessionId) return;
+            try {
+                const res = await fetch(`/api/chat/messages/${sessionId}`);
+                if (!res.ok) return;
+                const data = await res.json();
+                if (data && data.success) {
+                    const messages = data.messages || (data.chat && data.chat.messages) || [];
+                    if (messages.length > knownMessageCount) {
+                        const newMsgCount = messages.length - knownMessageCount;
+                        if (chatWindow.style.display === 'none' && knownMessageCount > 0) {
+                            unreadBadge.textContent = newMsgCount;
+                            unreadBadge.style.display = 'flex';
+                        }
+                        // Play pleasant chime on CS / Admin reply
+                        if (knownMessageCount > 0) {
+                            const latestMsg = messages[messages.length - 1];
+                            const s = String(latestMsg?.sender || '').toUpperCase();
+                            if (s === 'ADMIN' || s === 'SUPPORT' || s === 'CS') {
+                                playClientChatChime();
+                            }
+                        }
+                        knownMessageCount = messages.length;
+                        renderMessages(messages);
+                    }
+                }
+            } catch (err) {
+                console.warn('Polling chat error:', err);
+            }
+        }
+
+        function startPolling(sessionId) {
+            if (pollTimer) clearInterval(pollTimer);
+            pollTimer = setInterval(() => {
+                fetchMessages(sessionId);
+            }, 3000);
+        }
+
+        function stopPolling() {
+            if (pollTimer) clearInterval(pollTimer);
+            pollTimer = null;
+        }
+
+        function showConversationView(session, initialChat) {
+            prechatView.style.display = 'none';
+            convView.style.display = 'flex';
+            resetSessionBtn.style.display = 'inline-flex';
+            activeCategoryBadge.textContent = session.category || 'Konsultasi';
+            activeClientName.textContent = (session.name || 'Klien') + (session.phone ? ' • +' + session.phone : '');
+            
+            const messages = (initialChat && initialChat.messages) ? initialChat.messages : [];
+            if (messages.length > 0) {
+                knownMessageCount = messages.length;
+                renderMessages(messages);
+            } else {
+                fetchMessages(session.sessionId);
+            }
+            startPolling(session.sessionId);
+        }
+
+        function showPrechatView() {
+            stopPolling();
+            prechatView.style.display = 'block';
+            convView.style.display = 'none';
+            resetSessionBtn.style.display = 'none';
+            messagesList.innerHTML = '';
+            knownMessageCount = 0;
+            prefillForm();
+        }
+
+        // Check if existing session on load
+        currentSession = getStoredSession();
+        if (currentSession && currentSession.sessionId) {
+            fetch(`/api/chat/messages/${currentSession.sessionId}`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data && data.success) {
+                        const chatObj = data.chat || {
+                            messages: data.messages || [],
+                            category: currentSession.category,
+                            name: currentSession.name
+                        };
+                        showConversationView(currentSession, chatObj);
+                    } else {
+                        // Session expired or not found
+                        clearStoredSession();
+                        currentSession = null;
+                        showPrechatView();
+                    }
+                })
+                .catch(() => {
+                    // Temporary network glitch, show existing conversation optimistically
+                    showConversationView(currentSession, null);
+                });
+        } else {
+            showPrechatView();
+        }
+
+        // Trigger open/close
+        if (triggerBtn && chatWindow) {
+            triggerBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isOpen = (chatWindow.style.display === 'flex');
+                if (isOpen) {
+                    chatWindow.style.display = 'none';
+                } else {
+                    chatWindow.style.display = 'flex';
+                    unreadBadge.style.display = 'none';
+                    unreadBadge.textContent = '0';
+                    if (convView.style.display === 'flex' && inputText) {
+                        inputText.focus();
+                    }
+                }
+            });
+        }
+
+        if (closeBtn && chatWindow) {
+            closeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                chatWindow.style.display = 'none';
+            });
+        }
+
+        if (resetSessionBtn) {
+            resetSessionBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (confirm('Akhiri sesi chat ini dan mulai topik baru?')) {
+                    clearStoredSession();
+                    currentSession = null;
+                    showPrechatView();
+                }
+            });
+        }
+
+        // Start Chat Form Submit
+        if (startForm) {
+            startForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const submitBtn = document.getElementById('lc-submit-btn');
+                const origHtml = submitBtn.innerHTML;
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span>Menghubungkan...</span>';
+
+                const formData = new FormData(startForm);
+                const rawPhone = (formData.get('phone') || '').trim();
+                const cleanPhone = rawPhone.startsWith('0') ? '62' + rawPhone.slice(1) : (rawPhone.startsWith('+62') ? rawPhone.slice(1) : (rawPhone.startsWith('62') ? rawPhone : '62' + rawPhone));
+
+                const payload = {
+                    name: (formData.get('name') || '').trim(),
+                    email: (formData.get('email') || '').trim(),
+                    phone: cleanPhone,
+                    category: formData.get('category') || 'Jasa Pembuatan Website Baru',
+                    message: (formData.get('message') || '').trim()
+                };
+
+                try {
+                    const res = await fetch('/api/chat/start', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    const data = await res.json();
+                    if (data && data.success) {
+                        currentSession = {
+                            sessionId: data.sessionId,
+                            name: payload.name,
+                            email: payload.email,
+                            phone: payload.phone,
+                            category: payload.category
+                        };
+                        saveStoredSession(currentSession);
+                        // Save profile persistently so user doesn't re-type next time
+                        try {
+                            localStorage.setItem(PROFILE_KEY, JSON.stringify({
+                                name: payload.name,
+                                email: payload.email,
+                                phone: payload.phone
+                            }));
+                        } catch (err) {}
+
+                        showConversationView(currentSession, data.chat || { messages: data.messages });
+                    } else {
+                        alert(data.message || 'Gagal memulai chat. Silakan coba lagi.');
+                    }
+                } catch (err) {
+                    alert('Terjadi kendala jaringan. Pastikan koneksi internet stabil.');
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = origHtml;
+                }
+            });
+        }
+
+        // Send message in active chat
+        if (sendForm) {
+            sendForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (!currentSession || !currentSession.sessionId) return;
+                const text = inputText.value.trim();
+                if (!text) return;
+
+                inputText.value = '';
+                // Optimistic UI append
+                const tempMsg = {
+                    sender: 'CUSTOMER',
+                    text: text,
+                    timestamp: new Date().toISOString()
+                };
+                const row = document.createElement('div');
+                row.className = 'livechat-msg-row msg-client';
+                row.innerHTML = `<div class="livechat-bubble"><div class="livechat-msg-text">${escapeHtml(text)}</div><div class="livechat-msg-time">Anda • ${formatTime(tempMsg.timestamp)}</div></div>`;
+                messagesList.appendChild(row);
+                messagesList.scrollTop = messagesList.scrollHeight;
+
+                try {
+                    const res = await fetch('/api/chat/send', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            sessionId: currentSession.sessionId,
+                            sender: 'CUSTOMER',
+                            senderName: currentSession.name || 'Klien',
+                            message: text
+                        })
+                    });
+                    const data = await res.json();
+                    if (data && data.success) {
+                        fetchMessages(currentSession.sessionId);
+                    }
+                } catch (err) {
+                    console.warn('Gagal kirim pesan:', err);
+                }
+            });
+        }
+    })();
 </script>
 
 <!-- Security Deterrent -->
 <script src="/public/js/protect-devtools.js" defer></script>
+
