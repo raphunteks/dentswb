@@ -6,8 +6,8 @@
     <meta name="theme-color" content="#05081c">
     
     <!-- DYNAMIC SEO GOLD STANDARD -->
-    <title><%= typeof seo !== 'undefined' ? seo.title : 'Dents Web | Studio Rekayasa Website & Solusi Digital Performa Tinggi' %></title>
-    <meta name="description" content="<%= typeof seo !== 'undefined' ? seo.desc : 'Studio rekayasa website kustom, landing page konversi tinggi, dan sistem informasi berkinerja tinggi. Dirancang khusus membangun otoritas bisnis dan konversi maksimal.' %>">
+    <title><%= typeof seo !== 'undefined' ? seo.title : 'Dents Web | Studio Pembuatan Website & Solusi Digital Performa Tinggi' %></title>
+    <meta name="description" content="<%= typeof seo !== 'undefined' ? seo.desc : 'Studio pembuatan website kustom, landing page konversi tinggi, dan sistem informasi berkinerja tinggi. Dirancang khusus membangun otoritas bisnis dan konversi maksimal.' %>">
     <meta name="keywords" content="<%= typeof seo !== 'undefined' ? seo.keywords : 'jasa pembuatan website, jasa web developer, arsitektur web modern, sistem informasi kustom, website cepat SEO, Dents Web' %>">
     <link rel="canonical" href="<%= typeof seo !== 'undefined' ? seo.url : 'https://dentsweb.my.id/' %>">
     
@@ -19,14 +19,14 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="<%= typeof seo !== 'undefined' ? seo.url : 'https://dentsweb.my.id/' %>">
-    <meta property="og:title" content="<%= typeof seo !== 'undefined' ? seo.title : 'Dents Web | Studio Rekayasa Website & Solusi Digital Performa Tinggi' %>">
+    <meta property="og:title" content="<%= typeof seo !== 'undefined' ? seo.title : 'Dents Web | Studio Pembuatan Website & Solusi Digital Performa Tinggi' %>">
     <meta property="og:description" content="<%= typeof seo !== 'undefined' ? seo.desc : '' %>">
     <meta property="og:image" content="<%= typeof seo !== 'undefined' ? seo.image : '/public/img/axalogo.png' %>">
     
     <!-- Twitter Cards -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="<%= typeof seo !== 'undefined' ? seo.url : 'https://dentsweb.my.id/' %>">
-    <meta name="twitter:title" content="<%= typeof seo !== 'undefined' ? seo.title : 'Dents Web | Studio Rekayasa Website & Solusi Digital Performa Tinggi' %>">
+    <meta name="twitter:title" content="<%= typeof seo !== 'undefined' ? seo.title : 'Dents Web | Studio Pembuatan Website & Solusi Digital Performa Tinggi' %>">
     <meta name="twitter:description" content="<%= typeof seo !== 'undefined' ? seo.desc : '' %>">
     <meta name="twitter:image" content="<%= typeof seo !== 'undefined' ? seo.image : '/public/img/axalogo.png' %>">
 
@@ -64,10 +64,10 @@
             <div class="container" style="position: relative; z-index: 10;">
                 <div class="grid-2" style="align-items: center;">
                     <!-- Left Column: Copy & Actions -->
-                    <div>
+                    <div class="pptx-swift-right">
                         <div class="badge-tag-lime" style="margin-bottom: 24px;">
                             <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                            <span>STUDIO REKAYASA DIGITAL &bull; HIGH PERFORMANCE &amp; SCALABLE</span>
+                            <span>STUDIO PENGEMBANGAN WEB &amp; DIGITAL &bull; HIGH PERFORMANCE &amp; SCALABLE</span>
                         </div>
                         
                         <h1>
@@ -79,7 +79,7 @@
                         </h1>
 
                         <p style="font-size: 1.15rem; color: rgba(255,255,255,0.8); max-width: 560px; margin-bottom: 36px; font-weight: 500; line-height: 1.8;">
-                            Kami merekayasa website kustom, landing page konversi tinggi, dan sistem informasi berkinerja tinggi bersama <strong class="font-logo text-white"><%= typeof settings !== 'undefined' && settings.brandName ? settings.brandName : 'Dents Web' %></strong>. Dirancang khusus untuk membangun otoritas industri, mempercepat retensi pengguna, dan melipatgandakan pertumbuhan bisnis Anda.
+                            Kami mengembangkan website kustom, landing page konversi tinggi, dan sistem informasi berkinerja tinggi bersama <strong class="font-logo text-white"><%= typeof settings !== 'undefined' && settings.brandName ? settings.brandName : 'Dents Web' %></strong>. Dirancang khusus untuk membangun otoritas industri, mempercepat retensi pengguna, dan melipatgandakan pertumbuhan bisnis Anda.
                         </p>
 
                         <div style="display: flex; gap: 16px; flex-wrap: wrap;">
@@ -94,7 +94,7 @@
                     </div>
 
                     <!-- Right Column: Soft Modern Hero Showcase Card -->
-                    <div style="display: flex; justify-content: center; width: 100%;">
+                    <div class="pptx-swift-left" style="display: flex; justify-content: center; width: 100%;">
                         <div class="tactile-card tactile-card-heavy" style="max-width: 430px; width: 100%; background: #ffffff;">
                             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
                                 <div style="display: flex; align-items: center; gap: 4px;">
@@ -140,29 +140,29 @@
              ========================================== -->
         <section id="about" class="section-white">
             <div class="container">
-                <div class="section-header text-center">
+                <div class="section-header text-center pptx-slide-up">
                     <div class="badge-tag-royal" style="margin-bottom: 16px;">TENTANG KAMI</div>
                     <h2>Bukan Sekadar Estetik. Kami Bangun <span class="font-editorial text-royal">Mesin Pertumbuhan Bisnis</span></h2>
                     <p>
-                        <strong><%= typeof settings !== 'undefined' && settings.brandName ? settings.brandName : 'Dents Web' %></strong> adalah studio teknologi dan rekayasa web kustom. Kami membantu para pemilik bisnis membangun aset digital berstandar global—tangguh, berkecepatan tinggi, dan terbukti menghasilkan ROI terukur.
+                        <strong><%= typeof settings !== 'undefined' && settings.brandName ? settings.brandName : 'Dents Web' %></strong> adalah studio teknologi dan pengembangan web modern. Kami membantu para pemilik bisnis membangun aset digital berstandar global—tangguh, berkecepatan tinggi, dan terbukti menghasilkan ROI terukur.
                     </p>
                 </div>
 
                 <div class="grid-3" style="align-items: stretch;">
                     <!-- Visual Card -->
-                    <div class="tactile-card tactile-card-heavy" style="padding: 0; overflow: hidden; display: flex; flex-direction: column; background: #ffffff;">
+                    <div class="tactile-card tactile-card-heavy pptx-scale-in pptx-stagger-1" style="padding: 0; overflow: hidden; display: flex; flex-direction: column; background: #ffffff;">
                         <div style="width: 100%; height: 240px; background: url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=700&q=80') center/cover;"></div>
                         <div style="padding: 28px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
                             <div>
                                 <span class="badge-tag-royal" style="margin-bottom: 12px;">ENGINEERING FIRST</span>
-                                <h3 style="font-size: 1.25rem; color: var(--navy-text); margin-bottom: 8px;">Rekayasa Kode Berstandar Tinggi</h3>
+                                <h3 style="font-size: 1.25rem; color: var(--navy-text); margin-bottom: 8px;">Arsitektur Kode Berstandar Tinggi</h3>
                                 <p style="font-size: 0.95rem; color: var(--slate-body); margin: 0; line-height: 1.65;">Kami menolak template instan lambat. Kode ditulis bersih, modular, dan siap diskalakan sesuai akselerasi pertumbuhan bisnis Anda.</p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Solusi Digital -->
-                    <div class="tactile-card tactile-card-heavy" style="background: #ffffff;">
+                    <div class="tactile-card tactile-card-heavy pptx-scale-in pptx-stagger-2" style="background: #ffffff;">
                         <div style="width: 52px; height: 52px; border-radius: 14px; background: rgba(33, 82, 207, 0.1); color: var(--royal-blue); display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
                             <svg class="svg-icon svg-icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
                         </div>
@@ -173,7 +173,7 @@
                     </div>
 
                     <!-- Transparansi & Dukungan -->
-                    <div class="tactile-card tactile-card-heavy" style="background: #ffffff;">
+                    <div class="tactile-card tactile-card-heavy pptx-scale-in pptx-stagger-3" style="background: #ffffff;">
                         <div style="width: 52px; height: 52px; border-radius: 14px; background: rgba(0, 200, 83, 0.12); color: var(--success); display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
                             <svg class="svg-icon svg-icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                         </div>
@@ -192,12 +192,12 @@
         <section class="section-soft" style="border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light);">
             <div class="container">
                 <div class="grid-2" style="align-items: center;">
-                    <div>
+                    <div class="pptx-swift-right">
                         <h2 style="font-size: clamp(1.8rem, 3.5vw, 2.6rem); line-height: 1.3; color: var(--navy-text);">
                             <%= typeof settings !== 'undefined' && settings.brandName ? settings.brandName : 'Dents Web' %> adalah <span class="font-editorial text-royal">partner teknologi</span> yang memastikan aset digital Anda kredibel dan mengonversi pengunjung menjadi pembeli.
                         </h2>
                     </div>
-                    <div style="display: flex; justify-content: flex-end;">
+                    <div class="pptx-swift-left" style="display: flex; justify-content: flex-end;">
                         <a href="/about" class="btn-royal" style="display: inline-flex; align-items: center; gap: 8px;">
                             <span>Pelajari Filosofi Kami</span>
                             <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
@@ -212,7 +212,7 @@
              ========================================== -->
         <section id="services" class="section-white">
             <div class="container">
-                <div class="section-header text-center">
+                <div class="section-header text-center pptx-slide-up">
                     <div class="badge-tag-royal" style="margin-bottom: 16px;">LAYANAN UNGGULAN</div>
                     <h2>Solusi Kustom Sesuai <span class="font-editorial text-royal">Kebutuhan Nyata</span></h2>
                     <p>Pilih paket solusi teknologi yang paling pas dengan skala dan target bisnis Anda.</p>
@@ -280,7 +280,7 @@
             <div class="container">
                 <div class="process-grid">
                     <!-- Left Sticky Column -->
-                    <div class="sticky-col">
+                    <div class="sticky-col pptx-swift-right">
                         <div class="badge-tag-royal" style="margin-bottom: 16px;">ALUR PENGERJAAN</div>
                         <h2 style="font-size: clamp(2rem, 4vw, 3rem); line-height: 1.2; color: var(--navy-text); margin-bottom: 20px;">
                             4 Langkah Praktis. Dari Ide Jadi <span class="font-editorial text-royal">Website Live</span>
@@ -317,7 +317,7 @@
                     </div>
 
                     <!-- Right Steps Column -->
-                    <div>
+                    <div class="pptx-swift-left">
                         <div class="step-card">
                             <div class="step-number">01</div>
                             <div>
@@ -359,7 +359,7 @@
              ========================================== -->
         <section id="portfolio" class="portfolio-section-tahoe">
             <div class="container">
-                <div class="section-header text-center">
+                <div class="section-header text-center pptx-slide-up">
                     <div class="badge-tag-lime" style="margin-bottom: 16px;">STUDI KASUS &bull; STYLE TAHOE</div>
                     <h2 style="color: #ffffff;">Portofolio &amp; <span class="font-editorial text-lime">Hasil Karya Nyata</span></h2>
                     <p style="color: #cbd5e1;">Bukan sekadar portofolio pajangan. Ini karya arsitektur digital yang terbukti memicu akselerasi bisnis klien kami.</p>
@@ -447,7 +447,7 @@
             <div class="orb-glow-blue" style="top: -100px; right: -100px; opacity: 0.35;"></div>
             <div class="orb-glow-lime" style="bottom: -80px; left: -80px; opacity: 0.08;"></div>
 
-            <div class="container text-center" style="margin-bottom: 48px; position: relative; z-index: 2;">
+            <div class="container text-center pptx-slide-up" style="margin-bottom: 48px; position: relative; z-index: 2;">
                 <div class="badge-tag-lime" style="margin-bottom: 16px;">TESTIMONI REKAN BISNIS</div>
                 <h2 style="font-size: clamp(2rem, 4vw, 3rem); color: #ffffff;">
                     Apa Kata <span class="font-editorial text-lime">Klien Kami</span>
@@ -505,7 +505,7 @@
             <div class="container">
                 <div class="process-grid">
                     <!-- Left Sticky Column (Sesuai Gambar 1) -->
-                    <div class="sticky-col">
+                    <div class="sticky-col pptx-swift-right">
                         <h2 style="font-size: clamp(2.4rem, 4.5vw, 3.4rem); font-weight: 800; line-height: 1.15; color: var(--navy-text); margin-bottom: 20px;">
                             Ada yang Ingin<br>
                             <span class="font-editorial" style="font-style: italic; color: var(--royal-blue); font-weight: 500;">Ditanyakan?</span>
@@ -520,7 +520,7 @@
                     </div>
 
                     <!-- Right Column: Numbered Accordion 01-08 (Sesuai Gambar 1) -->
-                    <div>
+                    <div class="pptx-swift-left">
                         <div class="faq-accordion-gbr1">
                             <% 
                                 const fallbackFaqs = [
@@ -566,7 +566,7 @@
             <div class="orb-glow-blue" style="top: 0; left: 0; opacity: 0.25;"></div>
             <div class="orb-glow-lime" style="bottom: 0; right: 0; opacity: 0.1;"></div>
 
-            <div class="container text-center" style="position: relative; z-index: 2; max-width: 760px;">
+            <div class="container text-center pptx-scale-in" style="position: relative; z-index: 2; max-width: 760px;">
                 <h2 style="font-size: clamp(2.2rem, 4.5vw, 3.2rem); color: #ffffff; margin-bottom: 20px;">
                     Siap Membangun Platform Digital yang <span class="font-editorial text-lime">Kredibel &amp; Berkelas?</span>
                 </h2>
