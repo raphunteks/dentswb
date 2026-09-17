@@ -9,23 +9,28 @@
     <title><%= typeof seo !== 'undefined' ? seo.title : 'Layanan Kami | Dents Web' %></title>
     <meta name="description" content="<%= typeof seo !== 'undefined' ? seo.desc : 'Jasa pembuatan website dan aplikasi profesional berkinerja tinggi.' %>">
     <meta name="keywords" content="<%= typeof seo !== 'undefined' ? seo.keywords : 'jasa pembuatan website, web developer, aplikasi mobile, solusi digital, web custom' %>">
-    <link rel="canonical" href="<%= typeof seo !== 'undefined' ? seo.url : 'https://dentsweb.my.id/services' %>">
-    
-    <!-- Google Site Verification -->
-    <% if (typeof settings !== 'undefined' && settings.googleVerification) { %>
-    <meta name="google-site-verification" content="<%= settings.googleVerification %>" />
+    <link rel="canonical" href="<%= typeof seo !== 'undefined' ? seo.url : 'https://www.dentsweb.my.id/services' %>">
+    <meta name="referrer" content="origin-when-cross-origin">
+    <% if (typeof settings !== 'undefined' && settings.analyticsId) { %>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=<%= settings.analyticsId %>"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '<%= settings.analyticsId %>');
+    </script>
     <% } %>
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="article">
-    <meta property="og:url" content="<%= typeof seo !== 'undefined' ? seo.url : 'https://dentsweb.my.id/services' %>">
+    <meta property="og:url" content="<%= typeof seo !== 'undefined' ? seo.url : 'https://www.dentsweb.my.id/services' %>">
     <meta property="og:title" content="<%= typeof seo !== 'undefined' ? seo.title : 'Layanan Kami | Dents Web' %>">
     <meta property="og:description" content="<%= typeof seo !== 'undefined' ? seo.desc : '' %>">
     <meta property="og:image" content="<%= typeof seo !== 'undefined' ? seo.image : '/public/img/axalogo.png' %>">
     
-    <!-- Twitter Cards -->
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="<%= typeof seo !== 'undefined' ? seo.url : 'https://dentsweb.my.id/services' %>">
+    <meta name="twitter:url" content="<%= typeof seo !== 'undefined' ? seo.url : 'https://www.dentsweb.my.id/services' %>">
     <meta name="twitter:title" content="<%= typeof seo !== 'undefined' ? seo.title : 'Layanan Kami | Dents Web' %>">
     <meta name="twitter:description" content="<%= typeof seo !== 'undefined' ? seo.desc : '' %>">
     <meta name="twitter:image" content="<%= typeof seo !== 'undefined' ? seo.image : '/public/img/axalogo.png' %>">
@@ -56,7 +61,7 @@
             <div class="orb-glow-blue" style="top: -10%; left: -5%;"></div>
             <div class="orb-glow-lime" style="bottom: -15%; right: 5%; opacity: 0.1;"></div>
 
-            <div class="container text-center" style="position: relative; z-index: 2; max-width: 800px;">
+            <div class="container text-center pptx-slide-up" style="position: relative; z-index: 2; max-width: 800px;">
                 <div class="badge-tag-lime" style="margin-bottom: 20px;">
                     <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
                     <span>SOLUSI DIGITAL BISNIS</span>
@@ -85,7 +90,7 @@
                                 features: [
                                     '1–3 Halaman responsif (1–4 Section esensial)',
                                     'Database otomatis tersimpan ke Google Sheets',
-                                    'Notifikasi instan via Bot Telegram / Webhook',
+                                    'Integrasi Direct WhatsApp & Maps',
                                     'Hosting gratis via Google / GitHub Pages / Vercel',
                                     'Gratis subdomain / setup custom domain sendiri'
                                 ],
@@ -95,12 +100,11 @@
                                 id: 'serv_2',
                                 slug: 'business-landing-page',
                                 title: 'Business — High-Converting Landing Page',
-                                description: 'Landing page 1 halaman panjang (long-form) terstruktur khusus untuk promosi produk atau kampanye iklan Google Ads & TikTok/Meta Ads. Fokus pada tingkat konversi tinggi (CRO) dan kecepatan akses super cepat.',
+                                description: 'Website 1–6 halaman terintegrasi (atau sales page panjang) terstruktur khusus untuk promosi produk atau kampanye iklan Google Ads & Meta Ads. Fokus pada tingkat konversi tinggi (CRO) dan kecepatan akses super cepat.',
                                 startingPrice: 'Rp 1.500.000',
                                 features: [
-                                    '1 Halaman panjang (Long-form landing page lengkap)',
+                                    '1–6 Halaman responsif (Sales / Landing Page)',
                                     'Desain premium berorientasi konversi (CRO Focus)',
-                                    'Integrasi Meta Pixel, Google Analytics 4 & TikTok Pixel',
                                     'Floating WhatsApp interaktif langsung ke nomor sales',
                                     'Speed grade A, Core Web Vitals optimized (< 1 detik)',
                                     'Gratis domain .my.id / .com tahun pertama'
@@ -115,7 +119,7 @@
                                 features: [
                                     '5–8 Halaman profil korporat lengkap & terstruktur',
                                     'Panel Admin CMS untuk update berita, portofolio & layanan',
-                                    'Setup hingga 5 akun email resmi perusahaan (nama@bisnis.com)',
+                                    'Hingga 1 Email Bisnis Resmi (@perusahaan.com)',
                                     'On-page SEO lengkap dengan Google Rich Snippet & Schema JSON-LD',
                                     'Desain UI/UX eksklusif disesuaikan dengan identitas brand',
                                     'Sertifikat SSL premium & proteksi keamanan firewall'
@@ -139,7 +143,7 @@
                         ];
                     %>
                     <% displayServices.forEach((service, idx) => { %>
-                        <div class="tactile-card tactile-card-heavy service-card-kalana" style="padding: 28px 22px;">
+                        <div class="tactile-card tactile-card-heavy service-card-kalana pptx-slide-up pptx-stagger-<%= (idx % 4) + 1 %>" style="padding: 28px 22px;">
                             <% if (service.slug === 'pro-company-profile' || idx === 2) { %>
                                 <div style="position: absolute; top: 16px; right: 16px; background: var(--royal-blue); color: #fff; font-size: 0.72rem; font-weight: 800; padding: 4px 10px; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.8px;">
                                     Pilihan Favorit
@@ -219,21 +223,21 @@
 
                 <!-- Three Guarantees (Pure SVG Icons) -->
                 <div class="grid-3" style="margin-top: 80px;">
-                    <div class="tactile-card" style="padding: 28px;">
+                    <div class="tactile-card pptx-scale-in pptx-stagger-1" style="padding: 28px;">
                         <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(33, 82, 207, 0.1); color: var(--royal-blue); display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
                             <svg class="svg-icon svg-icon-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
                         </div>
                         <h4 style="font-size: 1.2rem; color: var(--navy-text); margin-bottom: 8px;">Kecepatan &amp; Core Web Vitals</h4>
                         <p style="font-size: 0.95rem; color: var(--slate-body); margin: 0;">Optimasi kode maksimal agar website terbuka instan di semua koneksi dan disukai algoritma Google.</p>
                     </div>
-                    <div class="tactile-card" style="padding: 28px;">
+                    <div class="tactile-card pptx-scale-in pptx-stagger-2" style="padding: 28px;">
                         <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(0, 200, 83, 0.12); color: var(--success); display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
                             <svg class="svg-icon svg-icon-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                         </div>
                         <h4 style="font-size: 1.2rem; color: var(--navy-text); margin-bottom: 8px;">Keamanan Berlapis</h4>
                         <p style="font-size: 0.95rem; color: var(--slate-body); margin: 0;">Header keamanan tingkat enterprise, pencegahan rate-limit, dan sanitasi input form untuk melindungi reputasi bisnis.</p>
                     </div>
-                    <div class="tactile-card" style="padding: 28px;">
+                    <div class="tactile-card pptx-scale-in pptx-stagger-3" style="padding: 28px;">
                         <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(217, 255, 66, 0.25); color: var(--navy-text); display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
                             <svg class="svg-icon svg-icon-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
                         </div>
