@@ -9,23 +9,28 @@
     <title><%= typeof seo !== 'undefined' ? seo.title : 'Artikel & Materi | Dents Web' %></title>
     <meta name="description" content="<%= typeof seo !== 'undefined' ? seo.desc : 'Wawasan rekayasa web, tutorial teknis, dan standar industri pemrograman modern.' %>">
     <meta name="keywords" content="<%= typeof seo !== 'undefined' ? seo.keywords : 'artikel pemrograman, tutorial web, frontend, backend, devops' %>">
-    <link rel="canonical" href="<%= typeof seo !== 'undefined' ? seo.url : 'https://dentsweb.my.id/articles' %>">
-    
-    <!-- Google Site Verification -->
-    <% if (typeof settings !== 'undefined' && settings.googleVerification) { %>
-    <meta name="google-site-verification" content="<%= settings.googleVerification %>" />
+    <link rel="canonical" href="<%= typeof seo !== 'undefined' ? seo.url : 'https://www.dentsweb.my.id/articles' %>">
+    <meta name="referrer" content="origin-when-cross-origin">
+    <% if (typeof settings !== 'undefined' && settings.analyticsId) { %>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=<%= settings.analyticsId %>"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '<%= settings.analyticsId %>');
+    </script>
     <% } %>
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="<%= typeof seo !== 'undefined' ? seo.url : 'https://dentsweb.my.id/articles' %>">
+    <meta property="og:url" content="<%= typeof seo !== 'undefined' ? seo.url : 'https://www.dentsweb.my.id/articles' %>">
     <meta property="og:title" content="<%= typeof seo !== 'undefined' ? seo.title : 'Artikel & Materi | Dents Web' %>">
     <meta property="og:description" content="<%= typeof seo !== 'undefined' ? seo.desc : '' %>">
     <meta property="og:image" content="<%= typeof seo !== 'undefined' ? seo.image : '/public/img/axalogo.png' %>">
     
     <!-- Twitter Cards -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="<%= typeof seo !== 'undefined' ? seo.url : 'https://dentsweb.my.id/articles' %>">
+    <meta name="twitter:url" content="<%= typeof seo !== 'undefined' ? seo.url : 'https://www.dentsweb.my.id/articles' %>">
     <meta name="twitter:title" content="<%= typeof seo !== 'undefined' ? seo.title : 'Artikel & Materi | Dents Web' %>">
     <meta name="twitter:description" content="<%= typeof seo !== 'undefined' ? seo.desc : '' %>">
     <meta name="twitter:image" content="<%= typeof seo !== 'undefined' ? seo.image : '/public/img/axalogo.png' %>">
@@ -58,7 +63,7 @@
     <div class="container" style="position: relative; z-index: 2;">
         
         <!-- Hero Header -->
-        <header class="section-header" style="text-align: center; max-width: 820px; margin: 0 auto 48px;">
+        <header class="section-header pptx-slide-up" style="text-align: center; max-width: 820px; margin: 0 auto 48px;">
             <div style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 999px; background: rgba(33, 82, 207, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); color: #60a5fa; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 16px;">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
                 KNOWLEDGE BASE & MATERI TEKNIS
@@ -72,7 +77,7 @@
         </header>
 
         <!-- Search & Filter Controls -->
-        <div style="background: rgba(16, 24, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid var(--navy-surface-border); border-radius: var(--radius-lg); padding: 20px 24px; margin-bottom: 40px; display: flex; flex-direction: column; gap: 16px;">
+        <div class="pptx-slide-down" style="background: rgba(16, 24, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid var(--navy-surface-border); border-radius: var(--radius-lg); padding: 20px 24px; margin-bottom: 40px; display: flex; flex-direction: column; gap: 16px;">
             
             <div style="display: flex; flex-direction: column; gap: 16px; justify-content: space-between; align-items: center;">
                 <!-- Category Tabs -->
@@ -113,8 +118,8 @@
         <!-- Article Card Grid -->
         <% if (articles && articles.length > 0) { %>
             <div class="article-grid">
-                <% articles.forEach(function(article) { %>
-                    <article class="article-card" itemscope itemtype="https://schema.org/TechArticle">
+                <% articles.forEach(function(article, index) { %>
+                    <article class="article-card pptx-slide-up pptx-stagger-<%= (index % 6) + 1 %>" itemscope itemtype="https://schema.org/TechArticle">
                         <a href="/article/<%= article.slug %>" class="article-card-cover-link" itemprop="url">
                             <% if (article.coverImage) { %>
                                 <img src="<%= article.coverImage %>" alt="<%= article.title %>" class="article-card-cover" itemprop="image" loading="lazy">
