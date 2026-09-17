@@ -31,58 +31,77 @@
 
     <div class="admin-layout-kalana">
         <!-- Sidebar Navigation -->
-        <aside class="admin-sidebar-kalana">
-            <div style="display: flex; align-items: center; gap: 4px; margin-bottom: 32px; padding-bottom: 20px; border-bottom: 1px solid var(--navy-surface-border);">
-                <img src="/public/img/axalogo.png" alt="Dents Logo" style="height: 32px; width: auto; object-fit: contain;">
-                <span style="font-family: 'Lexend Deca', sans-serif; font-size: 1.15rem; font-weight: 800; color: #ffffff; letter-spacing: -0.5px;">ents Console</span>
+        <!-- Sidebar Navigation (Collapsible with < and >) -->
+        <aside class="admin-sidebar-kalana" id="admin-sidebar">
+            <div class="admin-sidebar-brand" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--navy-surface-border);">
+                <div style="display: flex; align-items: center; gap: 8px; overflow: hidden;">
+                    <img src="/public/img/axalogo.png" alt="Dents Logo" style="height: 28px; width: auto; object-fit: contain; flex-shrink: 0;">
+                    <span class="admin-sidebar-brand-title" style="font-family: 'Lexend Deca', sans-serif; font-size: 1.1rem; font-weight: 800; color: #ffffff; letter-spacing: -0.5px; white-space: nowrap;">Dents Console</span>
+                </div>
+                <button type="button" id="sidebar-collapse-toggle" class="admin-sidebar-toggle-btn" onclick="toggleSidebarCollapse()" title="Ciutkan / Perluas Navigasi" aria-label="Ciutkan / Perluas Navigasi">
+                    <svg id="sidebar-toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
             </div>
 
-            <div style="margin-bottom: 24px;">
-                <div class="badge-tag-lime" style="font-size: 0.75rem; padding: 4px 12px; display: inline-flex; align-items: center; gap: 6px;">
-                    <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #05081c;"></span> Sesi Admin Aktif
-                </div>
-            </div>
+            <!-- Prominent Action Button (+ Buat) - Matches Gambar 1 & 2 -->
+            <button type="button" class="btn-sidebar-create" id="btn-quick-create" onclick="openQuickCreateModal()" title="Buat / Tambah Data Baru">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                <span class="btn-sidebar-create-text">Buat</span>
+            </button>
 
             <nav style="display: flex; flex-direction: column; flex-grow: 1;">
-                <div class="admin-nav-item active" data-tab="leads">
+                <!-- Section 1: Komunikasi & CS -->
+                <div class="admin-nav-category-title">Komunikasi &amp; CS</div>
+                <div class="admin-nav-item active" data-tab="leads" data-title="Leads Masuk">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
                     <span>Leads Masuk</span>
                 </div>
-                <div class="admin-nav-item" data-tab="portfolio">
+                <div class="admin-nav-item" data-tab="livechat" data-title="Live Chat CS">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                    <span>Live Chat CS</span>
+                    <span class="badge-unread-chat" id="admin-unread-chat-count" style="display: none; background: #ef4444; color: #fff; border-radius: 999px; padding: 2px 7px; font-size: 0.72rem; font-weight: 800; margin-left: auto;">0</span>
+                </div>
+
+                <!-- Section 2: Konten & Website -->
+                <div class="admin-nav-category-title">Konten &amp; Website</div>
+                <div class="admin-nav-item" data-tab="portfolio" data-title="Portofolio Proyek">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
                     <span>Portofolio</span>
                 </div>
-                <div class="admin-nav-item" data-tab="articles">
+                <div class="admin-nav-item" data-tab="articles" data-title="Artikel & Materi">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
                     <span>Artikel &amp; Materi</span>
                 </div>
-                <div class="admin-nav-item" data-tab="services">
+                <div class="admin-nav-item" data-tab="services" data-title="Layanan & Solusi">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 12 22 12"></polyline></svg>
                     <span>Layanan</span>
                 </div>
-                <div class="admin-nav-item" data-tab="pricing">
+                <div class="admin-nav-item" data-tab="pricing" data-title="Paket Harga">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
                     <span>Paket Harga</span>
                 </div>
-                <div class="admin-nav-item" data-tab="testimonials">
+                <div class="admin-nav-item" data-tab="testimonials" data-title="Testimoni Klien">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
                     <span>Testimoni Klien</span>
                 </div>
-                <div class="admin-nav-item" data-tab="faq">
+                <div class="admin-nav-item" data-tab="faq" data-title="Tanya Jawab FAQ">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
                     <span>FAQ</span>
                 </div>
-                <div class="admin-nav-item" data-tab="settings">
+
+                <!-- Section 3: Pengaturan -->
+                <div class="admin-nav-category-title">Pengaturan</div>
+                <div class="admin-nav-item" data-tab="settings" data-title="Pengaturan Web">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
                     <span>Pengaturan Web</span>
                 </div>
 
                 <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid var(--navy-surface-border);">
-                    <a href="/" target="_blank" class="admin-nav-item" style="color: var(--slate-muted); text-decoration: none;">
+                    <a href="/" target="_blank" class="admin-nav-item" data-title="Kunjungi Situs" style="color: var(--slate-muted); text-decoration: none;">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
                         <span>Kunjungi Situs</span>
                     </a>
-                    <div class="admin-nav-item" style="color: var(--danger); cursor: pointer;" onclick="handleLogout()">
+                    <div class="admin-nav-item" data-title="Keluar Sesi" style="color: var(--danger); cursor: pointer;" onclick="handleLogout()">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
                         <span>Keluar Sesi</span>
                     </div>
@@ -345,6 +364,107 @@
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                         </button>
                     </form>
+                </div>
+            </div>
+
+            <!-- TAB 8: LIVE CHAT CS (SPLIT PANE REAL-TIME) -->
+            <div id="panel-livechat" class="admin-panel" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+                    <div>
+                        <h2 style="font-size: 1.8rem; color: #ffffff; margin-bottom: 6px;">Live Chat Customer Support</h2>
+                        <p style="color: var(--slate-muted); font-size: 0.95rem;">Pantau dan balas percakapan real-time dengan calon klien dari widget Tawk.co.</p>
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <button type="button" class="btn-ghost-white" onclick="toggleChatSound()" id="chat-header-sound-toggle-btn" style="font-size: 0.85rem; padding: 7px 14px; display: inline-flex; align-items: center; gap: 6px;" title="Aktifkan / Nonaktifkan Notifikasi Suara">
+                            <svg id="chat-header-sound-icon-on" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                            <svg id="chat-header-sound-icon-off" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+                            <span id="chat-header-sound-label">Suara: ON</span>
+                        </button>
+                        <button type="button" class="btn-ghost-white" onclick="testAdminChatSound()" style="font-size: 0.85rem; padding: 7px 14px; display: inline-flex; align-items: center; gap: 6px;" title="Uji Suara Notifikasi Chat Sekarang">
+                            <span>🔊 Tes Suara</span>
+                        </button>
+                        <button type="button" class="btn-royal" onclick="refreshAdminChats()" style="padding: 8px 16px; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 6px;">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+                            <span>Muat Ulang Chat</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Split-Pane Chat Interface -->
+                <div class="admin-chat-layout tactile-card-dark" style="padding: 0; display: flex; height: 680px; border: 1px solid var(--navy-surface-border); border-radius: 16px; overflow: hidden;">
+                    <!-- Left: Conversations Thread List -->
+                    <div class="admin-chat-sidebar" style="width: 340px; min-width: 300px; border-right: 1px solid var(--navy-surface-border); display: flex; flex-direction: column; background: rgba(5, 8, 28, 0.6);">
+                        <div style="padding: 16px; border-bottom: 1px solid var(--navy-surface-border);">
+                            <input type="text" id="admin-chat-search" placeholder="Cari nama, email, atau no WA..." class="form-control" style="background: var(--navy-surface); color: #fff; font-size: 0.85rem; padding: 8px 12px; border-color: var(--navy-surface-border);" oninput="renderAdminChatThreads()">
+                            <div style="display: flex; gap: 6px; margin-top: 10px;">
+                                <button type="button" class="admin-chat-filter-btn active" data-filter="all" onclick="filterAdminChats('all')">Semua</button>
+                                <button type="button" class="admin-chat-filter-btn" data-filter="open" onclick="filterAdminChats('open')">Aktif</button>
+                                <button type="button" class="admin-chat-filter-btn" data-filter="closed" onclick="filterAdminChats('closed')">Selesai</button>
+                            </div>
+                        </div>
+                        <div id="admin-chat-threads-list" style="flex: 1; overflow-y: auto; padding: 8px;">
+                            <div style="text-align: center; color: var(--slate-muted); padding: 30px; font-size: 0.88rem;">Memuat daftar percakapan...</div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Active Chat Conversation & Reply -->
+                    <div class="admin-chat-main" id="admin-chat-main-area" style="flex: 1; display: flex; flex-direction: column; background: var(--navy-base);">
+                        <!-- Empty state when no chat is selected -->
+                        <div id="admin-chat-empty-state" style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--slate-muted); padding: 40px; text-align: center;">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 16px; opacity: 0.6;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                            <h4 style="color: #ffffff; font-size: 1.15rem; margin-bottom: 6px;">Pilih Percakapan Klien</h4>
+                            <p style="max-width: 320px; font-size: 0.88rem;">Klik salah satu percakapan di sebelah kiri untuk melihat riwayat pesan dan membalas langsung.</p>
+                        </div>
+
+                        <!-- Active Thread Container (Hidden by default) -->
+                        <div id="admin-chat-active-box" style="display: none; flex-direction: column; height: 100%;">
+                            <!-- Thread Top Bar -->
+                            <div style="padding: 14px 20px; border-bottom: 1px solid var(--navy-surface-border); display: flex; align-items: center; justify-content: space-between; background: rgba(5, 8, 28, 0.4); flex-wrap: wrap; gap: 10px;">
+                                <div>
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <h4 id="act-client-name" style="color: #ffffff; margin: 0; font-size: 1.1rem;">Nama Klien</h4>
+                                        <span id="act-category-badge" class="badge-tag-lime" style="font-size: 0.72rem;">Kategori</span>
+                                        <span id="act-status-badge" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 999px; background: rgba(16, 185, 129, 0.2); color: #34d399; font-weight: 700;">Open</span>
+                                    </div>
+                                    <div style="font-size: 0.8rem; color: var(--slate-muted); margin-top: 4px; display: flex; gap: 14px; flex-wrap: wrap;">
+                                        <span id="act-client-email">email@klien.com</span>
+                                        <span id="act-client-phone">+62 812-xxxx</span>
+                                        <span id="act-started-at" style="opacity: 0.7;">Waktu</span>
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 8px; align-items: center;">
+                                    <button type="button" id="chat-sound-toggle-btn" onclick="toggleChatSound()" class="btn-ghost-white" style="font-size: 0.78rem; padding: 6px 12px; display: inline-flex; align-items: center; gap: 5px;" title="Aktifkan / Bisukan Suara Notifikasi">
+                                        <svg id="sound-icon-on" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                                        <svg id="sound-icon-off" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+                                        <span id="sound-label">Suara: ON</span>
+                                    </button>
+                                    <button type="button" onclick="testAdminChatSound()" class="btn-ghost-white" style="font-size: 0.78rem; padding: 6px 12px; display: inline-flex; align-items: center; gap: 5px;" title="Uji Suara Notifikasi Chat">
+                                        <span>🔊 Tes</span>
+                                    </button>
+                                    <a id="act-wa-link" href="#" target="_blank" rel="noopener" class="btn-ghost-white" style="font-size: 0.78rem; padding: 6px 12px; display: inline-flex; align-items: center; gap: 5px; color: #25D366; border-color: rgba(37, 211, 102, 0.4);">
+                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                                        <span>Hubungi via WA</span>
+                                    </a>
+                                    <button type="button" id="act-toggle-status-btn" onclick="toggleActiveChatStatus()" class="btn-ghost-white" style="font-size: 0.78rem; padding: 6px 12px;">Selesai</button>
+                                    <button type="button" onclick="deleteActiveChat()" class="btn-action-delete" style="padding: 6px 12px; font-size: 0.78rem;">Hapus</button>
+                                </div>
+                            </div>
+
+                            <!-- Messages Conversation Flow -->
+                            <div id="admin-chat-messages-container" style="flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px;">
+                                <!-- Bubbles dynamically rendered -->
+                            </div>
+
+                            <!-- Admin Reply Form -->
+                            <form id="admin-chat-reply-form" onsubmit="sendAdminChatReply(event)" style="padding: 16px 20px; border-top: 1px solid var(--navy-surface-border); display: flex; gap: 10px; background: rgba(5, 8, 28, 0.6);">
+                                <input type="text" id="admin-chat-reply-input" placeholder="Tulis balasan Customer Support untuk klien..." class="form-control" style="flex: 1; background: var(--navy-surface); color: #fff; border-color: var(--navy-surface-border);" autocomplete="off" required>
+                                <button type="submit" class="btn-royal" style="padding: 10px 20px; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 8px; white-space: nowrap;">
+                                    <span>Kirim Balasan CS</span>
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -720,6 +840,33 @@
                     <label class="form-label" style="color: #ffffff;">Isi Testimoni / Ulasan Klien *</label>
                     <textarea class="form-control" name="content" rows="4" placeholder="Tuliskan pengalaman atau dampak nyata setelah bekerjasama dengan Dents Web..." required style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);"></textarea>
                 </div>
+
+                <!-- Foto Profil Klien (Avatar) -->
+                <div class="form-group">
+                    <label class="form-label" style="color: #ffffff; display: flex; justify-content: space-between; align-items: center;">
+                        <span>Foto Profil Klien (Avatar)</span>
+                        <span style="font-size: 0.72rem; color: #94a3b8;">PNG, JPG, WEBP (Disarankan 1:1 Persegi)</span>
+                    </label>
+
+                    <div class="upload-dropzone" id="dropzone-testimonials" style="padding: 16px;">
+                        <input type="file" id="file-testimonials" accept="image/*">
+                        <div class="upload-dropzone-content">
+                            <div class="upload-icon-circle" style="width: 38px; height: 38px;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                            </div>
+                            <div style="font-size: 0.85rem; font-weight: 700; color: #f1f5f9;">Pilih atau Tarik Foto Profil Klien</div>
+                            <div style="font-size: 0.72rem; color: #94a3b8;">atau <span style="color: #38bdf8; text-decoration: underline;">Pilih File</span></div>
+                        </div>
+                    </div>
+
+                    <div class="upload-preview-box" id="preview-box-testimonials" style="margin-top: 10px;">
+                        <img id="preview-img-testimonials" src="" alt="Preview Foto Klien" class="upload-preview-img" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover;">
+                        <button type="button" class="upload-remove-btn" id="remove-img-testimonials" title="Hapus Foto">&times;</button>
+                    </div>
+
+                    <input type="text" class="form-control" name="avatar" id="input-img-testimonials" placeholder="Atau tempel URL foto avatar langsung (https://...)" style="margin-top: 10px; background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border); font-size: 0.8rem;">
+                </div>
+
                 <div class="form-group">
                     <label class="form-label" style="color: #ffffff;">Status Publikasi</label>
                     <select class="form-control" name="isPublished" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
@@ -767,6 +914,74 @@
         </div>
     </div>
 
+    <!-- Quick Create Modal (+ Buat - Sesuai Gambar 1 & 2) -->
+    <div class="modal-overlay-kalana" id="modal-quick-create">
+        <div class="modal-card-kalana" style="max-width: 560px; padding: 28px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; border-bottom: 1px solid var(--navy-surface-border); padding-bottom: 16px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 40px; height: 40px; border-radius: 12px; background: rgba(59, 130, 246, 0.15); display: flex; align-items: center; justify-content: center; color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.25);">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    </div>
+                    <div>
+                        <h3 style="color: #ffffff; margin: 0; font-size: 1.25rem;">Buat / Tambah Data Baru</h3>
+                        <p style="color: var(--slate-muted); font-size: 0.82rem; margin: 3px 0 0 0;">Pilih entitas data yang ingin ditambahkan ke sistem DentsWeb</p>
+                    </div>
+                </div>
+                <button type="button" class="btn-close-modal" onclick="closeModal('modal-quick-create')" style="background: none; border: none; color: var(--slate-muted); font-size: 1.6rem; cursor: pointer; line-height: 1;" aria-label="Tutup">&times;</button>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;">
+                <button type="button" onclick="quickCreateTarget('portfolio')" style="background: var(--navy-surface); border: 1px solid var(--navy-surface-border); border-radius: 12px; padding: 16px; text-align: left; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--royal-blue)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--navy-surface-border)'; this.style.transform='none'">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                        <span style="font-size: 1.3rem;">🚀</span>
+                        <strong style="color: #fff; font-size: 0.95rem;">Portofolio Baru</strong>
+                    </div>
+                    <p style="color: var(--slate-muted); font-size: 0.8rem; margin: 0; line-height: 1.4;">Tambah proyek karya web baru dengan gambar WebP.</p>
+                </button>
+
+                <button type="button" onclick="quickCreateTarget('article')" style="background: var(--navy-surface); border: 1px solid var(--navy-surface-border); border-radius: 12px; padding: 16px; text-align: left; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--royal-blue)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--navy-surface-border)'; this.style.transform='none'">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                        <span style="font-size: 1.3rem;">📝</span>
+                        <strong style="color: #fff; font-size: 0.95rem;">Artikel / Blog</strong>
+                    </div>
+                    <p style="color: var(--slate-muted); font-size: 0.8rem; margin: 0; line-height: 1.4;">Tulis artikel baru untuk SEO dan wawasan klien.</p>
+                </button>
+
+                <button type="button" onclick="quickCreateTarget('testimonial')" style="background: var(--navy-surface); border: 1px solid var(--navy-surface-border); border-radius: 12px; padding: 16px; text-align: left; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--royal-blue)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--navy-surface-border)'; this.style.transform='none'">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                        <span style="font-size: 1.3rem;">⭐</span>
+                        <strong style="color: #fff; font-size: 0.95rem;">Testimonial</strong>
+                    </div>
+                    <p style="color: var(--slate-muted); font-size: 0.8rem; margin: 0; line-height: 1.4;">Tambahkan testimoni, foto klien, & rating bintang.</p>
+                </button>
+
+                <button type="button" onclick="quickCreateTarget('faq')" style="background: var(--navy-surface); border: 1px solid var(--navy-surface-border); border-radius: 12px; padding: 16px; text-align: left; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--royal-blue)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--navy-surface-border)'; this.style.transform='none'">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                        <span style="font-size: 1.3rem;">❓</span>
+                        <strong style="color: #fff; font-size: 0.95rem;">FAQ Pertanyaan</strong>
+                    </div>
+                    <p style="color: var(--slate-muted); font-size: 0.8rem; margin: 0; line-height: 1.4;">Tambah tanya-jawab umum seputar pemesanan web.</p>
+                </button>
+
+                <button type="button" onclick="quickCreateTarget('service')" style="background: var(--navy-surface); border: 1px solid var(--navy-surface-border); border-radius: 12px; padding: 16px; text-align: left; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--royal-blue)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--navy-surface-border)'; this.style.transform='none'">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                        <span style="font-size: 1.3rem;">💼</span>
+                        <strong style="color: #fff; font-size: 0.95rem;">Layanan Baru</strong>
+                    </div>
+                    <p style="color: var(--slate-muted); font-size: 0.8rem; margin: 0; line-height: 1.4;">Kelola tier layanan website & paket harga.</p>
+                </button>
+
+                <button type="button" onclick="quickCreateTarget('livechat')" style="background: var(--navy-surface); border: 1px solid var(--navy-surface-border); border-radius: 12px; padding: 16px; text-align: left; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--royal-blue)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--navy-surface-border)'; this.style.transform='none'">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                        <span style="font-size: 1.3rem;">💬</span>
+                        <strong style="color: #fff; font-size: 0.95rem;">Inbox Live Chat</strong>
+                    </div>
+                    <p style="color: var(--slate-muted); font-size: 0.8rem; margin: 0; line-height: 1.4;">Buka obrolan langsung dan balas percakapan klien.</p>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Toast Notifications -->
     <div class="toast-box" id="toast-container"></div>
 
@@ -779,7 +994,8 @@
             services: [],
             pricing: [],
             testimonials: [],
-            faq: []
+            faq: [],
+            livechat: []
         };
 
         // UI Helpers
@@ -1060,6 +1276,11 @@
                 if (previewBox) previewBox.classList.remove('active');
                 const slugInput = document.getElementById('art-slug');
                 if (slugInput) delete slugInput.dataset.manual;
+            } else if (id === 'modal-testimonials') {
+                const previewBox = document.getElementById('preview-box-testimonials');
+                const previewImg = document.getElementById('preview-img-testimonials');
+                if (previewBox) previewBox.classList.remove('active');
+                if (previewImg) previewImg.src = '';
             }
 
             // Set title back to Add
@@ -1191,7 +1412,18 @@
                 setVal('company', item.company);
                 setVal('rating', item.rating || 5);
                 setVal('content', item.content);
+                setVal('avatar', item.avatar || '');
                 setVal('isPublished', item.isPublished !== false ? 'true' : 'false');
+
+                // Update Avatar Preview
+                const previewBox = document.getElementById('preview-box-testimonials');
+                const previewImg = document.getElementById('preview-img-testimonials');
+                if (item.avatar && previewBox && previewImg) {
+                    previewImg.src = item.avatar;
+                    previewBox.classList.add('active');
+                } else if (previewBox) {
+                    previewBox.classList.remove('active');
+                }
             } else if (entity === 'faq') {
                 setVal('question', item.question);
                 setVal('answer', item.answer);
@@ -1216,19 +1448,74 @@
             modal.style.display = 'flex';
         }
 
+        // Sidebar Collapse Toggle (< and >) - Sesuai Gambar 1 & 2
+        function toggleSidebarCollapse() {
+            const sidebar = document.getElementById('admin-sidebar');
+            if (!sidebar) return;
+            sidebar.classList.toggle('collapsed');
+            const isCollapsed = sidebar.classList.contains('collapsed');
+            localStorage.setItem('dents_admin_sidebar_collapsed', isCollapsed ? 'true' : 'false');
+            
+            const toggleIcon = document.getElementById('sidebar-toggle-icon');
+            if (toggleIcon) {
+                if (isCollapsed) {
+                    toggleIcon.innerHTML = '<polyline points="9 18 15 12 9 6"></polyline>'; // >
+                } else {
+                    toggleIcon.innerHTML = '<polyline points="15 18 9 12 15 6"></polyline>'; // <
+                }
+            }
+        }
+
+        // Quick Create Modal Dispatcher (+ Buat)
+        function openQuickCreateModal() {
+            openModal('modal-quick-create');
+        }
+
+        function quickCreateTarget(type) {
+            closeModal('modal-quick-create');
+            if (type === 'portfolio') {
+                switchTab('portfolio');
+                setTimeout(() => openModal('modal-portfolio'), 120);
+            } else if (type === 'article') {
+                switchTab('articles');
+                setTimeout(() => openModal('modal-articles'), 120);
+            } else if (type === 'testimonial') {
+                switchTab('testimonials');
+                setTimeout(() => openModal('modal-testimonials'), 120);
+            } else if (type === 'faq') {
+                switchTab('faq');
+                setTimeout(() => openModal('modal-faq'), 120);
+            } else if (type === 'service') {
+                switchTab('services');
+                setTimeout(() => openModal('modal-services'), 120);
+            } else if (type === 'livechat') {
+                switchTab('livechat');
+            }
+        }
+
         // Tab Switcher
+        function switchTab(tab) {
+            if (!tab) return;
+            document.querySelectorAll('.admin-nav-item').forEach(i => {
+                if (i.getAttribute('data-tab') === tab) {
+                    i.classList.add('active');
+                } else if (i.getAttribute('data-tab')) {
+                    i.classList.remove('active');
+                }
+            });
+
+            document.querySelectorAll('.admin-panel').forEach(p => p.style.display = 'none');
+            const targetPanel = document.getElementById(`panel-${tab}`);
+            if (targetPanel) targetPanel.style.display = 'block';
+
+            loadData(tab);
+        }
+
         document.querySelectorAll('.admin-nav-item').forEach(item => {
             const tab = item.getAttribute('data-tab');
             if (!tab) return;
             item.addEventListener('click', () => {
-                document.querySelectorAll('.admin-nav-item').forEach(i => i.classList.remove('active'));
-                item.classList.add('active');
-
-                document.querySelectorAll('.admin-panel').forEach(p => p.style.display = 'none');
-                const targetPanel = document.getElementById(`panel-${tab}`);
-                if (targetPanel) targetPanel.style.display = 'block';
-
-                loadData(tab);
+                switchTab(tab);
             });
         });
 
@@ -1366,8 +1653,16 @@
                 const tb = document.querySelector('#table-testimonials tbody');
                 tb.innerHTML = (res.data && res.data.length) ? res.data.map(t => `
                     <tr>
-                        <td style="font-weight: 700; color: #ffffff;">${escapeHtml(t.name)}</td>
-                        <td style="color: var(--slate-muted);">${escapeHtml(t.role)} &bull; ${escapeHtml(t.company || '')}</td>
+                        <td style="font-weight: 700; color: #ffffff;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                ${t.avatar ? `<img src="${escapeHtml(t.avatar)}" alt="${escapeHtml(t.name)}" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid var(--royal-blue); flex-shrink: 0;">` : `<div style="width: 38px; height: 38px; border-radius: 50%; background: rgba(33, 82, 207, 0.2); color: #60a5fa; font-weight: 800; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">${(t.name || 'K').charAt(0).toUpperCase()}</div>`}
+                                <div>
+                                    <div>${escapeHtml(t.name)}</div>
+                                    <div style="font-size: 0.75rem; color: var(--slate-muted); font-weight: 400;">${escapeHtml(t.company || '')}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td style="color: var(--slate-muted);">${escapeHtml(t.role)}</td>
                         <td style="color: #fbbf24; font-weight: 700;">${'★'.repeat(t.rating || 5)}</td>
                         <td style="max-width: 300px; font-size: 0.85rem; line-height: 1.5; color: var(--slate-body);">${escapeHtml(t.content)}</td>
                         <td><span class="badge-tag-lime" style="font-size: 0.75rem;">${t.isPublished !== false ? 'Published' : 'Draft'}</span></td>
@@ -1407,6 +1702,10 @@
                     document.getElementById('set-seoTitle').value = res.data.defaultSeoTitle || '';
                     document.getElementById('set-seoDesc').value = res.data.defaultSeoDescription || '';
                 }
+            }
+
+            if (tab === 'livechat') {
+                await loadAdminChats();
             }
         }
 
@@ -1491,6 +1790,406 @@
                 .replace(/'/g, '&#039;');
         }
 
+        // ==========================================
+        // LIVE CHAT CUSTOMER SUPPORT ADMIN LOGIC (TAWK.TO PARITY)
+        // ==========================================
+        let currentAdminChatId = null;
+        let currentChatFilter = 'all';
+
+        function getCust(c) {
+            if (!c) return { name: 'Klien', email: '-', phone: '-', category: 'Konsultasi' };
+            const cust = c.customer || {};
+            return {
+                name: c.name || cust.name || 'Klien',
+                email: c.email || cust.email || '-',
+                phone: c.phone || cust.phone || '-',
+                category: c.category || cust.category || 'Konsultasi'
+            };
+        }
+
+        function isClientMsg(m) {
+            if (!m || !m.sender) return false;
+            const s = String(m.sender).toUpperCase();
+            return s === 'CLIENT' || s === 'CUSTOMER' || s === 'USER';
+        }
+
+        // Live Chat Sound Notification Engine (Dual-Tone Web Audio API Synthesizer with Autoplay Gesture Unlock)
+        let prevTotalClientMessages = -1;
+        let isChatSoundEnabled = localStorage.getItem('dents_chat_sound') !== 'false';
+        let sharedAudioCtx = null;
+
+        function getUnlockedAudioContext() {
+            try {
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContextClass) return null;
+                if (!sharedAudioCtx) {
+                    sharedAudioCtx = new AudioContextClass();
+                }
+                if (sharedAudioCtx.state === 'suspended') {
+                    sharedAudioCtx.resume().catch(() => {});
+                }
+                return sharedAudioCtx;
+            } catch (e) {
+                console.warn('AudioContext error:', e);
+                return null;
+            }
+        }
+
+        // Global unlock on click / touch / keydown anywhere on the page
+        const unlockAdminAudioOnGesture = () => {
+            const ctx = getUnlockedAudioContext();
+            if (ctx && ctx.state === 'suspended') {
+                ctx.resume().catch(() => {});
+            }
+        };
+        ['click', 'touchstart', 'keydown'].forEach(ev => {
+            document.addEventListener(ev, unlockAdminAudioOnGesture, { passive: true });
+        });
+
+        function updateSoundToggleBtnUI() {
+            const soundLabel = document.getElementById('sound-label');
+            const iconOn = document.getElementById('sound-icon-on');
+            const iconOff = document.getElementById('sound-icon-off');
+            const soundHeaderLabel = document.getElementById('chat-header-sound-label');
+            const soundHeaderIconOn = document.getElementById('chat-header-sound-icon-on');
+            const soundHeaderIconOff = document.getElementById('chat-header-sound-icon-off');
+            
+            if (soundLabel) soundLabel.textContent = isChatSoundEnabled ? 'Suara: ON' : 'Suara: OFF';
+            if (iconOn) iconOn.style.display = isChatSoundEnabled ? 'block' : 'none';
+            if (iconOff) iconOff.style.display = isChatSoundEnabled ? 'none' : 'block';
+
+            if (soundHeaderLabel) soundHeaderLabel.textContent = isChatSoundEnabled ? 'Suara: ON' : 'Suara: OFF';
+            if (soundHeaderIconOn) soundHeaderIconOn.style.display = isChatSoundEnabled ? 'block' : 'none';
+            if (soundHeaderIconOff) soundHeaderIconOff.style.display = isChatSoundEnabled ? 'none' : 'block';
+        }
+
+        function toggleChatSound() {
+            isChatSoundEnabled = !isChatSoundEnabled;
+            localStorage.setItem('dents_chat_sound', isChatSoundEnabled ? 'true' : 'false');
+            updateSoundToggleBtnUI();
+            if (isChatSoundEnabled) {
+                playChatChime(true);
+                showToast('Notifikasi suara Live Chat aktif.', 'success');
+            } else {
+                showToast('Notifikasi suara Live Chat dimatikan.', 'error');
+            }
+        }
+
+        function playChatChime(force = false) {
+            if (!force && !isChatSoundEnabled) return;
+            try {
+                const ctx = getUnlockedAudioContext();
+                if (!ctx) return;
+                if (ctx.state === 'suspended') {
+                    ctx.resume().catch(() => {});
+                }
+                const now = ctx.currentTime;
+                
+                // Tone 1: E5 (659.25 Hz) - Triangle attack for punchy presence
+                const osc1 = ctx.createOscillator();
+                const gain1 = ctx.createGain();
+                osc1.type = 'triangle';
+                osc1.frequency.setValueAtTime(659.25, now);
+                gain1.gain.setValueAtTime(0, now);
+                gain1.gain.linearRampToValueAtTime(0.35, now + 0.02);
+                gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+                osc1.connect(gain1);
+                gain1.connect(ctx.destination);
+                osc1.start(now);
+                osc1.stop(now + 0.24);
+
+                // Tone 2: C6 (1046.50 Hz) - Crystal Sine Resonance chime
+                const osc2 = ctx.createOscillator();
+                const gain2 = ctx.createGain();
+                osc2.type = 'sine';
+                osc2.frequency.setValueAtTime(1046.50, now + 0.12);
+                gain2.gain.setValueAtTime(0, now + 0.12);
+                gain2.gain.linearRampToValueAtTime(0.38, now + 0.14);
+                gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+                osc2.connect(gain2);
+                gain2.connect(ctx.destination);
+                osc2.start(now + 0.12);
+                osc2.stop(now + 0.48);
+            } catch (e) {
+                console.warn('Audio play error:', e);
+            }
+        }
+
+        function testAdminChatSound() {
+            getUnlockedAudioContext();
+            playChatChime(true);
+            showToast('🔊 Tes nada notifikasi live chat berhasil diputar!', 'success');
+        }
+
+        function checkClientMessageChime() {
+            const chats = window.cacheData.livechat || [];
+            let currentTotalClientMsgs = 0;
+            chats.forEach(c => {
+                (c.messages || []).forEach(m => {
+                    if (isClientMsg(m)) currentTotalClientMsgs++;
+                });
+            });
+
+            if (prevTotalClientMessages !== -1 && currentTotalClientMsgs > prevTotalClientMessages) {
+                playChatChime();
+            }
+            prevTotalClientMessages = currentTotalClientMsgs;
+        }
+
+        async function loadAdminChats(silent = false) {
+            try {
+                const res = await api('/api/admin/chats');
+                window.cacheData.livechat = res.data || [];
+                renderAdminChatThreads();
+                updateAdminUnreadBadge();
+                checkClientMessageChime();
+
+                if (currentAdminChatId) {
+                    const activeChat = (window.cacheData.livechat || []).find(c => c.id === currentAdminChatId || c.sessionId === currentAdminChatId);
+                    if (activeChat) {
+                        renderAdminChatMessages(activeChat);
+                    }
+                }
+            } catch (err) {
+                if (!silent) console.warn('Failed to load admin chats:', err);
+            }
+        }
+
+        function updateAdminUnreadBadge() {
+            const chats = window.cacheData.livechat || [];
+            let unreadCount = 0;
+            chats.forEach(c => {
+                if (c.status !== 'closed') {
+                    if (c.unreadByAdmin && c.unreadByAdmin > 0) {
+                        unreadCount += c.unreadByAdmin;
+                    } else if (c.messages && c.messages.length > 0) {
+                        const lastMsg = c.messages[c.messages.length - 1];
+                        if (isClientMsg(lastMsg)) unreadCount++;
+                    }
+                }
+            });
+            const badge = document.getElementById('admin-unread-chat-count');
+            if (badge) {
+                if (unreadCount > 0) {
+                    badge.textContent = unreadCount;
+                    badge.style.display = 'inline-block';
+                } else {
+                    badge.style.display = 'none';
+                }
+            }
+        }
+
+        function filterAdminChats(filter) {
+            currentChatFilter = filter;
+            document.querySelectorAll('.admin-chat-filter-btn').forEach(b => {
+                b.classList.toggle('active', b.getAttribute('data-filter') === filter);
+            });
+            renderAdminChatThreads();
+        }
+
+        function renderAdminChatThreads() {
+            const listEl = document.getElementById('admin-chat-threads-list');
+            if (!listEl) return;
+            const searchVal = (document.getElementById('admin-chat-search')?.value || '').toLowerCase().trim();
+            let chats = window.cacheData.livechat || [];
+
+            if (currentChatFilter !== 'all') {
+                chats = chats.filter(c => (c.status || 'open') === currentChatFilter);
+            }
+            if (searchVal) {
+                chats = chats.filter(c => {
+                    const cust = getCust(c);
+                    return (cust.name && cust.name.toLowerCase().includes(searchVal)) ||
+                           (cust.email && cust.email.toLowerCase().includes(searchVal)) ||
+                           (cust.phone && cust.phone.toLowerCase().includes(searchVal)) ||
+                           (cust.category && cust.category.toLowerCase().includes(searchVal));
+                });
+            }
+
+            if (!chats.length) {
+                listEl.innerHTML = '<div style="text-align: center; color: var(--slate-muted); padding: 30px; font-size: 0.85rem;">Tidak ada percakapan ditemukan.</div>';
+                return;
+            }
+
+            listEl.innerHTML = chats.map(c => {
+                const cust = getCust(c);
+                const chatId = c.id || c.sessionId;
+                const isActive = (chatId === currentAdminChatId);
+                const lastMsg = (c.messages && c.messages.length > 0) ? c.messages[c.messages.length - 1] : null;
+                const snippet = lastMsg ? escapeHtml(lastMsg.text) : 'Percakapan baru dimulai';
+                const time = lastMsg ? new Date(lastMsg.timestamp).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) : '';
+                const isClientLast = lastMsg && isClientMsg(lastMsg);
+                const isClosed = (c.status === 'closed');
+                const hasUnread = (c.unreadByAdmin > 0) || (isClientLast && !isClosed);
+
+                return `
+                    <div class="admin-chat-thread-item ${isActive ? 'active' : ''}" onclick="selectAdminChat('${chatId}')" style="padding: 12px 14px; border-radius: 10px; margin-bottom: 6px; cursor: pointer; transition: all 0.2s; border: 1px solid ${isActive ? 'var(--royal-blue)' : 'transparent'}; background: ${isActive ? 'rgba(33, 82, 207, 0.18)' : 'rgba(255, 255, 255, 0.03)'};">
+                        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px;">
+                            <span style="font-weight: 700; color: #ffffff; font-size: 0.92rem; display: flex; align-items: center; gap: 6px;">
+                                ${escapeHtml(cust.name)}
+                                ${hasUnread ? '<span style="width: 8px; height: 8px; border-radius: 50%; background: #ef4444; display: inline-block;" title="Pesan Baru"></span>' : ''}
+                            </span>
+                            <span style="font-size: 0.72rem; color: var(--slate-muted);">${time}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; font-size: 0.75rem;">
+                            <span style="color: var(--lime-accent); font-weight: 600;">${escapeHtml(cust.category)}</span>
+                            <span style="color: var(--slate-muted); font-size: 0.72rem;">${cust.phone !== '-' ? '+' + cust.phone : ''}</span>
+                        </div>
+                        <div style="font-size: 0.82rem; color: ${isClientLast ? '#ffffff' : 'var(--slate-muted)'}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: ${isClientLast ? '600' : '400'};">
+                            ${isClientLast ? '<strong style="color: #60a5fa;">Klien:</strong> ' : '<strong style="color: var(--lime-accent);">CS (Anda):</strong> '}${snippet}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function selectAdminChat(chatId) {
+            currentAdminChatId = chatId;
+            renderAdminChatThreads();
+            const chat = (window.cacheData.livechat || []).find(c => (c.id === chatId || c.sessionId === chatId));
+            if (!chat) return;
+
+            const cust = getCust(chat);
+
+            document.getElementById('admin-chat-empty-state').style.display = 'none';
+            const activeBox = document.getElementById('admin-chat-active-box');
+            activeBox.style.display = 'flex';
+
+            document.getElementById('act-client-name').textContent = cust.name;
+            document.getElementById('act-category-badge').textContent = cust.category;
+            document.getElementById('act-client-email').textContent = cust.email;
+            document.getElementById('act-client-phone').textContent = cust.phone !== '-' ? '+' + cust.phone : '-';
+            
+            const statusBadge = document.getElementById('act-status-badge');
+            const toggleBtn = document.getElementById('act-toggle-status-btn');
+            if (chat.status === 'closed') {
+                statusBadge.textContent = 'Selesai';
+                statusBadge.style.background = 'rgba(148, 163, 184, 0.2)';
+                statusBadge.style.color = '#94a3b8';
+                toggleBtn.textContent = 'Buka Kembali';
+            } else {
+                statusBadge.textContent = 'Open';
+                statusBadge.style.background = 'rgba(16, 185, 129, 0.2)';
+                statusBadge.style.color = '#34d399';
+                toggleBtn.textContent = 'Tandai Selesai';
+            }
+
+            const waLink = document.getElementById('act-wa-link');
+            if (cust.phone && cust.phone !== '-') {
+                const cleanWa = cust.phone.replace(/[^0-9]/g, '');
+                waLink.href = `https://wa.me/${cleanWa}?text=${encodeURIComponent('Halo ' + cust.name + ', terima kasih telah menghubungi Dents Web.')}`;
+                waLink.style.display = 'inline-flex';
+            } else {
+                waLink.style.display = 'none';
+            }
+
+            const startedDate = chat.createdAt ? new Date(chat.createdAt).toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'short' }) : '';
+            document.getElementById('act-started-at').textContent = startedDate;
+
+            renderAdminChatMessages(chat);
+            setTimeout(() => {
+                document.getElementById('admin-chat-reply-input')?.focus();
+            }, 100);
+        }
+
+        function renderAdminChatMessages(chat) {
+            const container = document.getElementById('admin-chat-messages-container');
+            if (!container) return;
+            const messages = chat.messages || [];
+            const cust = getCust(chat);
+
+            if (!messages.length) {
+                container.innerHTML = '<div style="text-align: center; color: var(--slate-muted); padding: 40px;">Belum ada riwayat pesan.</div>';
+                return;
+            }
+
+            // TAWK.TO PARITY FOR ADMIN:
+            // Client messages on LEFT (dark bubble, client name header)
+            // Admin CS messages on RIGHT (royal blue gradient bubble, CS Support header)
+            container.innerHTML = messages.map(m => {
+                const isClient = isClientMsg(m);
+                const time = m.timestamp ? new Date(m.timestamp).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) : '';
+                
+                if (isClient) {
+                    return `
+                        <div style="display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 6px;">
+                            <div style="display: flex; align-items: center; gap: 6px; font-size: 0.72rem; color: #94a3b8; margin-bottom: 4px; padding-left: 4px;">
+                                <span style="display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; border-radius: 50%; background: #334155; color: #38bdf8; font-size: 0.65rem; font-weight: 700;">👤</span>
+                                <strong style="color: #38bdf8;">${escapeHtml(cust.name)}</strong> (Klien) &bull; ${time}
+                            </div>
+                            <div style="max-width: 75%; padding: 12px 16px; border-radius: 14px; border-bottom-left-radius: 3px; font-size: 0.9rem; line-height: 1.55; word-break: break-word; background: #1e293b; color: #f8fafc; border: 1px solid rgba(255, 255, 255, 0.12); box-shadow: 0 4px 12px rgba(0,0,0,0.25);">
+                                ${escapeHtml(m.text)}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    return `
+                        <div style="display: flex; flex-direction: column; align-items: flex-end; margin-bottom: 6px;">
+                            <div style="display: flex; align-items: center; gap: 6px; font-size: 0.72rem; color: #94a3b8; margin-bottom: 4px; padding-right: 4px;">
+                                <strong style="color: var(--lime-accent);">🎧 CS Support (Anda)</strong> &bull; ${time}
+                            </div>
+                            <div style="max-width: 75%; padding: 12px 16px; border-radius: 14px; border-bottom-right-radius: 3px; font-size: 0.9rem; line-height: 1.55; word-break: break-word; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #ffffff; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);">
+                                ${escapeHtml(m.text)}
+                            </div>
+                        </div>
+                    `;
+                }
+            }).join('');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        async function sendAdminChatReply(e) {
+            e.preventDefault();
+            if (!currentAdminChatId) return;
+            const input = document.getElementById('admin-chat-reply-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            input.value = '';
+            try {
+                await api(`/api/admin/chats/${currentAdminChatId}/reply`, 'POST', {
+                    message: text,
+                    adminName: 'CS Support (Anda)'
+                });
+                showToast('Balasan CS terkirim.', 'success');
+                await loadAdminChats(true);
+                selectAdminChat(currentAdminChatId);
+            } catch (err) {
+                showToast('Gagal mengirim balasan chat: ' + err.message, 'error');
+            }
+        }
+
+        async function toggleActiveChatStatus() {
+            if (!currentAdminChatId) return;
+            const chat = (window.cacheData.livechat || []).find(c => (c.id === currentAdminChatId || c.sessionId === currentAdminChatId));
+            if (!chat) return;
+            const newStatus = (chat.status === 'closed') ? 'open' : 'closed';
+            try {
+                await api(`/api/admin/chats/${currentAdminChatId}/status`, 'PATCH', { status: newStatus });
+                showToast(`Status chat diubah menjadi ${newStatus === 'open' ? 'Aktif' : 'Selesai'}.`, 'success');
+                await loadAdminChats(true);
+                selectAdminChat(currentAdminChatId);
+            } catch (err) {}
+        }
+
+        async function deleteActiveChat() {
+            if (!currentAdminChatId) return;
+            if (!confirm('Yakin ingin menghapus seluruh riwayat percakapan klien ini?')) return;
+            try {
+                await api(`/api/admin/chats/${currentAdminChatId}`, 'DELETE');
+                showToast('Percakapan berhasil dihapus.', 'success');
+                currentAdminChatId = null;
+                document.getElementById('admin-chat-empty-state').style.display = 'flex';
+                document.getElementById('admin-chat-active-box').style.display = 'none';
+                await loadAdminChats();
+            } catch (err) {}
+        }
+
+        function refreshAdminChats() {
+            loadAdminChats();
+            showToast('Daftar chat diperbarui.', 'success');
+        }
+
         // Initialize & Event Bindings
         document.addEventListener('DOMContentLoaded', () => {
             loadData('leads');
@@ -1498,13 +2197,50 @@
             // Initialize 116 Tools Selector
             initTechSelector();
 
-            // Initialize Dropzones for Portfolio & Articles
+            // Initialize Dropzones for Portfolio, Articles & Testimonials
             setupDropzone('dropzone-portfolio', 'file-portfolio', 'preview-box-portfolio', 'preview-img-portfolio', 'input-img-portfolio', 'remove-img-portfolio');
             setupDropzone('dropzone-articles', 'file-articles', 'preview-box-articles', 'preview-img-articles', 'input-img-articles', 'remove-img-articles');
+            setupDropzone('dropzone-testimonials', 'file-testimonials', 'preview-box-testimonials', 'preview-img-testimonials', 'input-img-testimonials', 'remove-img-testimonials');
 
             // Initialize Slug Auto Generators
             setupSlugAutoGenerator('port-title', 'port-slug');
             setupSlugAutoGenerator('art-title', 'art-slug');
+
+            // Periodic Live Chat Poller (every 4s)
+            setInterval(() => {
+                const livechatPanel = document.getElementById('panel-livechat');
+                const isLiveChatVisible = livechatPanel && livechatPanel.style.display !== 'none';
+                if (isLiveChatVisible) {
+                    loadAdminChats(true);
+                } else {
+                    fetch('/api/admin/chats')
+                        .then(r => r.json())
+                        .then(res => {
+                            if (res && res.data) {
+                                window.cacheData.livechat = res.data;
+                                updateAdminUnreadBadge();
+                                checkClientMessageChime();
+                            }
+                        })
+                        .catch(() => {});
+                }
+            }, 4000);
+
+            // Restore collapsed sidebar state from localStorage
+            const savedCollapsed = localStorage.getItem('dents_admin_sidebar_collapsed');
+            if (savedCollapsed === 'true') {
+                const sidebar = document.getElementById('admin-sidebar');
+                if (sidebar) {
+                    sidebar.classList.add('collapsed');
+                    const toggleIcon = document.getElementById('sidebar-toggle-icon');
+                    if (toggleIcon) {
+                        toggleIcon.innerHTML = '<polyline points="9 18 15 12 9 6"></polyline>';
+                    }
+                }
+            }
+
+            // Sync Sound Toggle Button UI
+            updateSoundToggleBtnUI();
 
             // Mobile Drawer Toggle
             const menuToggle = document.getElementById('admin-menu-toggle');
@@ -1580,6 +2316,20 @@
         window.handleFormSubmit = handleFormSubmit;
         window.showToast = showToast;
         window.loadData = loadData;
+        window.switchTab = switchTab;
+        window.toggleSidebarCollapse = toggleSidebarCollapse;
+        window.openQuickCreateModal = openQuickCreateModal;
+        window.quickCreateTarget = quickCreateTarget;
+        window.toggleChatSound = toggleChatSound;
+        window.playChatChime = playChatChime;
+        window.testAdminChatSound = testAdminChatSound;
+        window.selectAdminChat = selectAdminChat;
+        window.filterAdminChats = filterAdminChats;
+        window.sendAdminChatReply = sendAdminChatReply;
+        window.toggleActiveChatStatus = toggleActiveChatStatus;
+        window.deleteActiveChat = deleteActiveChat;
+        window.refreshAdminChats = refreshAdminChats;
+        window.renderAdminChatThreads = renderAdminChatThreads;
     </script>
 </body>
 </html>
