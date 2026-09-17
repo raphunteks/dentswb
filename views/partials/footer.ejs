@@ -704,6 +704,69 @@
     })();
 </script>
 
+<script>
+    // Presentation-Style PPTX Morph & Soft Scroll Reveal System
+    (function() {
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px 0px -40px 0px',
+            threshold: 0.08
+        };
+
+        const pptxObserver = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('pptx-visible');
+                    obs.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        function initPptxObserver() {
+            const targets = document.querySelectorAll(`
+                .pptx-reveal, 
+                .pptx-slide-up, 
+                .pptx-slide-down,
+                .pptx-swift-left, 
+                .pptx-swift-right, 
+                .pptx-scale-in,
+                .service-card-kalana,
+                .pricing-card-kalana,
+                .portfolio-card-kalana,
+                .article-card-kalana,
+                .faq-card-gbr1,
+                .faq-item-kalana,
+                .testimonial-card-kalana,
+                .tactile-card
+            `);
+
+            targets.forEach((el, index) => {
+                if (!el.classList.contains('pptx-visible')) {
+                    if (!el.classList.contains('pptx-slide-up') && 
+                        !el.classList.contains('pptx-slide-down') && 
+                        !el.classList.contains('pptx-swift-left') && 
+                        !el.classList.contains('pptx-swift-right') && 
+                        !el.classList.contains('pptx-scale-in') &&
+                        !el.classList.contains('pptx-reveal')) {
+                        el.classList.add('pptx-slide-up');
+                    }
+                    if (!el.className.includes('pptx-stagger-')) {
+                        const staggerIdx = (index % 8) + 1;
+                        el.classList.add('pptx-stagger-' + staggerIdx);
+                    }
+                    pptxObserver.observe(el);
+                }
+            });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initPptxObserver);
+        } else {
+            initPptxObserver();
+        }
+    })();
+</script>
+
 <!-- Security Deterrent -->
 <script src="/public/js/protect-devtools.js" defer></script>
 
