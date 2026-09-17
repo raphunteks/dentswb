@@ -218,17 +218,19 @@
                     <p>Pilih paket solusi teknologi yang paling pas dengan skala dan target bisnis Anda.</p>
                 </div>
 
-                <div class="grid-3">
+                <div class="grid-services-4">
                     <% if (typeof services !== 'undefined' && services.length > 0) { %>
                         <% services.forEach(service => { %>
-                            <div class="tactile-card" style="display: flex; flex-direction: column; background: #ffffff;">
-                                <div style="width: 52px; height: 52px; border-radius: 14px; background: rgba(33, 82, 207, 0.1); color: var(--royal-blue); display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
-                                    <svg class="svg-icon svg-icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
+                            <div class="tactile-card service-card-kalana" style="padding: 24px;">
+                                <div class="service-card-header">
+                                    <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(33, 82, 207, 0.1); color: var(--royal-blue); display: flex; align-items: center; justify-content: center; margin-bottom: 14px;">
+                                        <svg class="svg-icon svg-icon-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
+                                    </div>
+                                    <h3 style="font-size: 1.18rem; color: var(--navy-text); margin-bottom: 8px; line-height: 1.35;"><%= service.title %></h3>
                                 </div>
-                                <h3 style="font-size: 1.35rem; color: var(--navy-text); margin-bottom: 8px;"><%= service.title %></h3>
-                                <p style="font-size: 0.95rem; color: var(--slate-body); margin-bottom: 24px; flex-grow: 1; line-height: 1.65;">
+                                <div class="service-card-desc">
                                     <%= service.shortDescription || service.description %>
-                                </p>
+                                </div>
 
                                 <% 
                                     let feats = [];
@@ -237,11 +239,11 @@
                                     }
                                 %>
                                 <% if (feats.length > 0) { %>
-                                    <ul class="feature-check-list" style="margin-top: 0; margin-bottom: 24px;">
+                                    <ul class="feature-check-list" style="margin-top: 0; margin-bottom: 20px; min-height: 160px;">
                                         <% feats.slice(0, 4).forEach(feat => { %>
-                                            <li class="feature-check-item">
-                                                <span class="check-icon-circle">
-                                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                            <li class="feature-check-item" style="font-size: 0.86rem; margin-bottom: 6px;">
+                                                <span class="check-icon-circle" style="width: 18px; height: 18px; min-width: 18px;">
+                                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                                                 </span>
                                                 <span><%= typeof feat === 'string' ? feat.trim() : feat %></span>
                                             </li>
@@ -249,12 +251,12 @@
                                     </ul>
                                 <% } %>
 
-                                <div style="border-top: 2px solid var(--border-light); padding-top: 20px; margin-top: auto;">
-                                    <div style="font-size: 0.78rem; text-transform: uppercase; color: var(--slate-muted); font-weight: 800; letter-spacing: 0.05em;">Investasi Mulai</div>
-                                    <div style="font-size: 1.6rem; font-weight: 900; color: var(--navy-text); margin-bottom: 16px; line-height: 1.1; margin-top: 4px;"><%= service.startingPrice || 'Hubungi Kami' %></div>
-                                    <a href="/contact?service=<%= service.slug || 'web' %>" class="btn-ghost-navy" style="width: 100%; text-align: center; display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
+                                <div style="border-top: 2px solid var(--border-light); padding-top: 18px; margin-top: auto;">
+                                    <div style="font-size: 0.74rem; text-transform: uppercase; color: var(--slate-muted); font-weight: 800; letter-spacing: 0.05em;">Investasi Mulai</div>
+                                    <div style="font-size: 1.45rem; font-weight: 900; color: var(--navy-text); margin-bottom: 14px; line-height: 1.1; margin-top: 4px;"><%= service.startingPrice || 'Hubungi Kami' %></div>
+                                    <a href="/contact?service=<%= service.slug || 'web' %>" class="btn-ghost-navy" style="width: 100%; text-align: center; display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 0.88rem; padding: 9px 14px;">
                                         <span>Konsultasi Layanan</span>
-                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
                                     </a>
                                 </div>
                             </div>
@@ -359,7 +361,7 @@
             <div class="container">
                 <div class="section-header text-center">
                     <div class="badge-tag-lime" style="margin-bottom: 16px;">STUDI KASUS &bull; STYLE TAHOE</div>
-                    <h2 style="color: #ffffff;">Portofolio &amp; <span class="font-editorial text-lime">Hasil Eksekusi Nyata</span></h2>
+                    <h2 style="color: #ffffff;">Portofolio &amp; <span class="font-editorial text-lime">Hasil Karya Nyata</span></h2>
                     <p style="color: #cbd5e1;">Bukan sekadar portofolio pajangan. Ini karya arsitektur digital yang terbukti memicu akselerasi bisnis klien kami.</p>
                 </div>
 
@@ -420,7 +422,7 @@
 
                                     <!-- Card Action Footer -->
                                     <div class="portfolio-tahoe-footer">
-                                        <span>Buka Studi Kasus</span>
+                                        <span>Lihat Detail</span>
                                         <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
                                     </div>
                                 </div>
@@ -478,12 +480,16 @@
                                 </p>
                             </div>
                             <div style="display: flex; align-items: center; gap: 12px; border-top: 1px solid var(--border-light); padding-top: 14px;">
-                                <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--royal-blue); color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 700;">
-                                    <%= rev.name ? rev.name.charAt(0) : 'K' %>
+                                <div class="testi-avatar-wrapper">
+                                    <% if (rev.avatar) { %>
+                                        <img src="<%= rev.avatar %>" alt="<%= rev.name %>" class="testi-avatar-img" loading="lazy">
+                                    <% } else { %>
+                                        <span class="testi-avatar-initial"><%= rev.name ? rev.name.charAt(0) : 'K' %></span>
+                                    <% } %>
                                 </div>
-                                <div>
-                                    <h4 style="font-size: 0.95rem; color: var(--navy-text); margin: 0;"><%= rev.name %></h4>
-                                    <p style="font-size: 0.8rem; color: var(--slate-muted); margin: 0;"><%= rev.role %>, <%= rev.company %></p>
+                                <div style="min-width: 0; flex-grow: 1;">
+                                    <h4 style="font-size: 0.95rem; color: var(--navy-text); margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><%= rev.name %></h4>
+                                    <p style="font-size: 0.8rem; color: var(--slate-muted); margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><%= rev.role %>, <%= rev.company %></p>
                                 </div>
                             </div>
                         </div>
@@ -493,74 +499,60 @@
         </section>
 
         <!-- ==========================================
-             8. FAQ SECTION (KALANA STICKY 2-COL ACCORDION)
+             8. FAQ SECTION (GAMBAR 1 EXACT MATCH - 2-COL NUMBERED ACCORDION)
              ========================================== -->
-        <section id="faq" class="section-white">
+        <section id="faq" class="section-white" style="padding: 90px 0;">
             <div class="container">
                 <div class="process-grid">
+                    <!-- Left Sticky Column (Sesuai Gambar 1) -->
                     <div class="sticky-col">
-                        <div class="badge-tag-royal" style="margin-bottom: 16px;">FAQ &bull; PUSAT BANTUAN</div>
-                        <h2 style="font-size: clamp(2rem, 4vw, 3rem); line-height: 1.2; color: var(--navy-text); margin-bottom: 16px;">
-                            Ada yang Ingin <span class="font-editorial text-royal">Ditanyakan?</span>
+                        <h2 style="font-size: clamp(2.4rem, 4.5vw, 3.4rem); font-weight: 800; line-height: 1.15; color: var(--navy-text); margin-bottom: 20px;">
+                            Ada yang Ingin<br>
+                            <span class="font-editorial" style="font-style: italic; color: var(--royal-blue); font-weight: 500;">Ditanyakan?</span>
                         </h2>
-                        <p style="font-size: 1.05rem; line-height: 1.7; margin-bottom: 32px; color: var(--slate-body);">
-                            Pertanyaan yang paling sering kami terima dari calon klien. Butuh penjelasan khusus mengenai proyek Anda? Langsung diskusikan via WhatsApp resmi kami.
+                        <p style="font-size: 1.05rem; line-height: 1.7; margin-bottom: 36px; color: var(--slate-body); max-width: 380px;">
+                            Pertanyaan yang paling sering kami terima dari calon klien. Tidak menemukan jawaban yang Anda cari? Langsung hubungi kami.
                         </p>
-                        <a href="/contact" class="btn-royal" style="display: inline-flex; align-items: center; gap: 8px;">
-                            <span>Hubungi Kami Langsung</span>
-                            <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+                        <a href="/contact" class="btn-royal" style="display: inline-flex; align-items: center; gap: 10px; border-radius: 999px; padding: 14px 28px; font-weight: 700; font-size: 0.95rem;">
+                            <span>Hubungi Kami</span>
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
                         </a>
                     </div>
 
+                    <!-- Right Column: Numbered Accordion 01-08 (Sesuai Gambar 1) -->
                     <div>
-                        <div class="faq-accordion">
-                            <div class="faq-item-kalana active">
-                                <button class="faq-question-btn" onclick="toggleFaq(this)" aria-expanded="true">
-                                    <span>Berapa lama proses pengerjaan website hingga siap rilis?</span>
-                                    <span class="faq-arrow-icon">
-                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                                    </span>
-                                </button>
-                                <div class="faq-answer-body">
-                                    Landing page selesai dalam 3-5 hari kerja. Company profile 7-14 hari kerja. Sistem web kustom 2-4 minggu kerja, tergantung kompleksitas fitur dan kesiapan materi brief.
-                                </div>
-                            </div>
-
-                            <div class="faq-item-kalana">
-                                <button class="faq-question-btn" onclick="toggleFaq(this)" aria-expanded="false">
-                                    <span>Apakah website dijamin cepat dan ramah SEO Google?</span>
-                                    <span class="faq-arrow-icon">
-                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                                    </span>
-                                </button>
-                                <div class="faq-answer-body">
-                                    Mutlak ya. Kami bangun menggunakan fondasi Server-Side Rendering (SSR) Node.js dan meta tag Schema.org JSON-LD otomatis agar cepat terindeks Google dan punya skor Core Web Vitals tinggi.
-                                </div>
-                            </div>
-
-                            <div class="faq-item-kalana">
-                                <button class="faq-question-btn" onclick="toggleFaq(this)" aria-expanded="false">
-                                    <span>Apakah saya dapat akses penuh ke source code dan domain?</span>
-                                    <span class="faq-arrow-icon">
-                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                                    </span>
-                                </button>
-                                <div class="faq-answer-body">
-                                    Tentu saja. Setelah pelunasan, 100% kepemilikan source code, akses domain, dan server diserahkan sepenuhnya kepada Anda tanpa biaya sewa sistem tersembunyi.
-                                </div>
-                            </div>
-
-                            <div class="faq-item-kalana">
-                                <button class="faq-question-btn" onclick="toggleFaq(this)" aria-expanded="false">
-                                    <span>Bagaimana jika ada kendala atau bug setelah serah terima?</span>
-                                    <span class="faq-arrow-icon">
-                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                                    </span>
-                                </button>
-                                <div class="faq-answer-body">
-                                    Kami menyediakan garansi pemeliharaan dan perbaikan bug gratis selama masa garansi untuk menjamin platform digital Anda selalu aktif dan prima.
-                                </div>
-                            </div>
+                        <div class="faq-accordion-gbr1">
+                            <% 
+                                const fallbackFaqs = [
+                                    { question: 'Berapa lama waktu pengerjaan proyek?', answer: 'Untuk tier Starter (Web Form GAS) pengerjaan berkisar 2–4 hari kerja. Business (Landing Page) memakan waktu 3–5 hari kerja. Pro (Company Profile) membutuhkan 7–14 hari kerja, dan Custom+ (Web Application) berkisar 2–4 minggu kerja tergantung pada kompleksitas fitur dan kesiapan materi brief.' },
+                                    { question: 'Apakah ada biaya revisi?', answer: 'Tidak ada biaya tambahan selama revisi masih dalam koridor ruang lingkup (scope) paket yang disepakati di awal. Kami memberikan garansi revisi minor gratis (1–2 kali putaran) hingga desain dan fungsionalitas disetujui.' },
+                                    { question: 'Domain dan hosting sudah termasuk dalam paket?', answer: 'Ya, untuk paket Business, Pro, dan Custom+, domain kustom (.com / .id / .my.id) dan cloud hosting berkecepatan tinggi dengan proteksi sertifikat SSL sudah termasuk gratis untuk 1 tahun pertama. Untuk Starter GAS, gratis hosting via Google Cloud / Vercel selamanya tanpa biaya server.' },
+                                    { question: 'Bagaimana cara memulai proyek bersama DentsWeb?', answer: 'Cukup hubungi kami melalui tombol WhatsApp atau form Live Chat di pojok kiri bawah. Tim DentsWeb akan mendengarkan kebutuhan bisnis Anda, memberikan estimasi harga transparan, lalu memulai tahap perancangan setelah kesepakatan DP.' },
+                                    { question: 'Apakah bisa request fitur di luar paket yang ada?', answer: 'Tentu saja bisa. Anda dapat memilih paket terdekat lalu menambahkan fitur kustom (add-ons), atau langsung memesan paket Custom+ untuk membangun arsitektur sistem bisnis spesifik sesuai Standar Operasional Prosedur (SOP) perusahaan Anda.' },
+                                    { question: 'Metode pembayaran apa yang tersedia?', answer: 'Kami menerima transfer bank lokal (BCA, Mandiri, BNI, BRI), QRIS, serta e-wallet. Skema pembayaran pada umumnya adalah sistem DP 50% di awal sebagai tanda jadi pengerjaan dan pelunasan 50% setelah website selesai diuji dan siap serah terima (live).' },
+                                    { question: 'Apakah saya akan mendapatkan source code proyeknya?', answer: 'Ya, 100% hak milik penuh atas source code, basis data, dan akun domain menjadi milik Anda setelah pelunasan. Kami tidak menerapkan sistem sewa atau vendor lock-in yang mengikat klien.' },
+                                    { question: 'Apakah DentsWeb melayani klien dari luar kota / seluruh Indonesia?', answer: 'Ya, kami melayani klien dari seluruh Indonesia hingga mancanegara. Seluruh proses komunikasi, konsultasi desain, presentasi progres pengerjaan, hingga serah terima dapat dilakukan secara efisien melalui WhatsApp, Google Meet, atau Zoom.' }
+                                ];
+                                const faqList = (typeof faq !== 'undefined' && faq && faq.length) ? faq : fallbackFaqs;
+                            %>
+                            <% if (faqList.length > 0) { %>
+                                <% faqList.forEach((item, idx) => { %>
+                                    <div class="faq-card-gbr1 <%= idx === 3 ? 'active' : '' %>" id="faq-item-<%= idx %>">
+                                        <button type="button" class="faq-btn-gbr1" onclick="toggleFaqGbr1(this)" aria-expanded="<%= idx === 3 ? 'true' : 'false' %>">
+                                            <div style="display: flex; align-items: center; gap: 14px; flex: 1;">
+                                                <span class="faq-num-badge"><%= String(idx + 1).padStart(2, '0') %></span>
+                                                <span class="faq-question-text"><%= item.question %></span>
+                                            </div>
+                                            <span class="faq-circle-icon-gbr1">
+                                                <span class="faq-toggle-char"><%= idx === 3 ? '−' : '+' %></span>
+                                            </span>
+                                        </button>
+                                        <div class="faq-answer-gbr1">
+                                            <%= item.answer %>
+                                        </div>
+                                    </div>
+                                <% }) %>
+                            <% } %>
                         </div>
                     </div>
                 </div>
@@ -578,13 +570,15 @@
                 <h2 style="font-size: clamp(2.2rem, 4.5vw, 3.2rem); color: #ffffff; margin-bottom: 20px;">
                     Siap Membangun Platform Digital yang <span class="font-editorial text-lime">Kredibel &amp; Berkelas?</span>
                 </h2>
-                <p style="color: rgba(255, 255, 255, 0.76); font-size: 1.15rem; line-height: 1.8; margin-bottom: 36px;">
-                    Kami siap membantu Anda merancang dan merekayasa solusi digital yang cepat, tangguh, dan menghasilkan dampak terukur.
+                <p style="font-size: 1.15rem; color: rgba(255, 255, 255, 0.78); margin: 0 auto 36px; max-width: 580px; line-height: 1.7;">
+                    Diskusikan visi, sasaran performa, dan model bisnis digital Anda sekarang. Kami siap mewujudkan platform web unggulan tanpa repot teknis.
                 </p>
                 <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
-                    <a href="/contact" class="btn-lime" style="display: inline-flex; align-items: center; gap: 8px;">
-                        <span>Konsultasi Proyek Gratis</span>
-                        <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+                    <a href="/contact" class="btn-royal" style="padding: 16px 36px; font-size: 1rem;">
+                        Konsultasi Proyek Gratis
+                    </a>
+                    <a href="/pricing" class="btn-ghost-white" style="padding: 16px 36px; font-size: 1rem;">
+                        Lihat Paket Harga
                     </a>
                 </div>
             </div>
@@ -597,19 +591,23 @@
     <script defer src="https://va.vercel-scripts.com/v1/speed-insights/script.js"></script>
 
     <script>
-        function toggleFaq(btn) {
-            const item = btn.closest('.faq-item-kalana');
-            const isActive = item.classList.contains('active');
+        function toggleFaqGbr1(btn) {
+            const card = btn.closest('.faq-card-gbr1');
+            const isActive = card.classList.contains('active');
             
-            document.querySelectorAll('.faq-item-kalana').forEach(i => {
-                i.classList.remove('active');
-                const b = i.querySelector('.faq-question-btn');
+            document.querySelectorAll('.faq-card-gbr1').forEach(c => {
+                c.classList.remove('active');
+                const b = c.querySelector('.faq-btn-gbr1');
                 if (b) b.setAttribute('aria-expanded', 'false');
+                const char = c.querySelector('.faq-toggle-char');
+                if (char) char.textContent = '+';
             });
             
             if (!isActive) {
-                item.classList.add('active');
+                card.classList.add('active');
                 btn.setAttribute('aria-expanded', 'true');
+                const char = card.querySelector('.faq-toggle-char');
+                if (char) char.textContent = '−';
             }
         }
 
