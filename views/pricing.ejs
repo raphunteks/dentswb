@@ -56,7 +56,7 @@
             <div class="orb-glow-blue" style="top: -10%; left: -5%;"></div>
             <div class="orb-glow-lime" style="bottom: -15%; right: 5%; opacity: 0.1;"></div>
 
-            <div class="container text-center" style="position: relative; z-index: 2; max-width: 820px;">
+            <div class="container text-center pptx-slide-up" style="position: relative; z-index: 2; max-width: 820px;">
                 <div class="badge-tag-lime" style="margin-bottom: 20px;">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
                     PRICING JELAS &bull; NO HIDDEN COST
@@ -75,8 +75,8 @@
             <div class="container">
                 <div class="grid-4 pricing-grid-4" style="align-items: stretch;">
                     <% if (typeof pricing !== 'undefined' && pricing.length > 0) { %>
-                        <% pricing.forEach(pkg => { %>
-                            <div class="pricing-card-kalana <%= pkg.isFeatured ? 'featured' : '' %>">
+                        <% pricing.forEach((pkg, pIdx) => { %>
+                            <div class="pricing-card-kalana <%= pkg.isFeatured ? 'featured' : '' %> pptx-slide-up pptx-stagger-<%= (pIdx % 4) + 1 %>">
                                 <% if (pkg.isFeatured) { %>
                                     <div class="pricing-badge-popular">
                                         <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4h7.6l-6.2 4.5 2.4 7.4-6.2-4.6-6.2 4.6 2.4-7.4-6.2-4.5h7.6z"/></svg>
@@ -93,7 +93,7 @@
                                 
                                 <div class="pricing-price-box">
                                     <span style="font-size: 0.74rem; color: var(--slate-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;">Mulai Investasi</span>
-                                    <div class="<%= pkg.isFeatured ? 'text-royal' : 'text-navy' %>" style="font-size: 1.95rem; font-weight: 900; line-height: 1.1; margin-top: 4px;">
+                                    <div class="<%= pkg.isFeatured ? 'text-royal' : 'text-navy' %> price-amount">
                                         <%= pkg.price %>
                                     </div>
                                 </div>
@@ -152,22 +152,21 @@
                     <% } else { %>
                         <!-- Fallback 4 Packages with 100% SVG Icons -->
                         <!-- 1. Starter GAS -->
-                        <div class="pricing-card-kalana">
+                        <div class="pricing-card-kalana pptx-slide-up pptx-stagger-1">
                             <div class="pricing-title-box">
-                                <h3 style="color: var(--navy-text); font-size: 1.25rem; margin-bottom: 8px; line-height: 1.35;">Starter — Web Form &amp; Otomasi (GAS)</h3>
+                                <h3 style="color: var(--navy-text); font-size: 1.18rem; margin-bottom: 8px; line-height: 1.35;">Starter — Web Form &amp; Otomasi (GAS)</h3>
                             </div>
                             <div class="pricing-desc-box">
                                 Website 1 - 3 halaman dan 1 - 4 section ringkas dengan integrasi database Google Sheets tanpa biaya hosting selamanya.
                             </div>
                             <div class="pricing-price-box">
                                 <span style="font-size: 0.74rem; color: var(--slate-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;">Mulai Investasi</span>
-                                <div style="font-size: 1.95rem; font-weight: 900; color: var(--navy-text); line-height: 1.1; margin-top: 4px;">Rp 500.000</div>
+                                <div class="price-amount text-navy">Rp 500.000</div>
                             </div>
                             <ul class="feature-check-list" style="margin-bottom: 16px;">
                                 <li class="feature-check-item"><span class="check-icon-circle"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>1 - 3 Halaman Responsif</li>
                                 <li class="feature-check-item"><span class="check-icon-circle"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>1 - 4 Section Fokus Konversi</li>
                                 <li class="feature-check-item"><span class="check-icon-circle"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Database Realtime Google Sheets</li>
-                                <li class="feature-check-item"><span class="check-icon-circle"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Notifikasi Email Otomatis</li>
                                 <li class="feature-check-item"><span class="check-icon-circle"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Integrasi Direct WhatsApp &amp; Maps</li>
                                 <li class="feature-check-item"><span class="check-icon-circle"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Nol Biaya Server Selamanya</li>
                                 <li class="feature-check-item"><span class="check-icon-circle"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Pengerjaan 2 - 4 Hari Kerja</li>
@@ -189,24 +188,24 @@
                         </div>
 
                         <!-- 2. Business -->
-                        <div class="pricing-card-kalana">
+                        <div class="pricing-card-kalana pptx-slide-up pptx-stagger-2">
                             <div class="pricing-title-box">
-                                <h3 style="color: var(--navy-text); font-size: 1.25rem; margin-bottom: 8px; line-height: 1.35;">Business — Landing Page</h3>
+                                <h3 style="color: var(--navy-text); font-size: 1.18rem; margin-bottom: 8px; line-height: 1.35;">Business — High-Converting Landing Page</h3>
                             </div>
                             <div class="pricing-desc-box">
-                                Landing page 1 halaman panjang (sales page) yang dirancang khusus untuk mengubah pengunjung iklan menjadi pembeli.
+                                Landing page 1 - 6 halaman terintegrasi yang dirancang khusus untuk mengubah pengunjung iklan menjadi pembeli.
                             </div>
                             <div class="pricing-price-box">
                                 <span style="font-size: 0.74rem; color: var(--slate-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;">Mulai Investasi</span>
-                                <div style="font-size: 1.95rem; font-weight: 900; color: var(--navy-text); line-height: 1.1; margin-top: 4px;">Rp 1.500.000</div>
+                                <div class="price-amount text-navy">Rp 1.500.000</div>
                             </div>
                             <ul class="feature-check-list">
-                                <li class="feature-check-item"><span class="check-icon-circle"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>1 Halaman Penjualan Panjang (Sales Page)</li>
+                                <li class="feature-check-item"><span class="check-icon-circle"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>1 - 6 Halaman Responsif (Sales Page)</li>
                                 <li class="feature-check-item"><span class="check-icon-circle"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Struktur Psikologi Closing &amp; Copywriting</li>
                                 <li class="feature-check-item"><span class="check-icon-circle"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Core Web Vitals Skor 95+ (Super Cepat)</li>
                                 <li class="feature-check-item"><span class="check-icon-circle"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Domain (.com) &amp; Cloudflare SSL 1 Thn</li>
                                 <li class="feature-check-item"><span class="check-icon-circle"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>High-Speed SSD Cloud Hosting 1 Thn</li>
-                                <li class="feature-check-item"><span class="check-icon-circle"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Integrasi Meta Pixel, TikTok &amp; GTM</li>
+                                <li class="feature-check-item"><span class="check-icon-circle"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Direct WhatsApp Button Teks Otomatis</li>
                                 <li class="feature-check-item"><span class="check-icon-circle"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Pengerjaan 3 - 5 Hari Kerja (Garansi 14 Hari)</li>
                             </ul>
                             <div style="margin-top: auto; padding-top: 20px;">
@@ -215,26 +214,26 @@
                         </div>
 
                         <!-- 3. Pro (Favorit) -->
-                        <div class="pricing-card-kalana featured">
+                        <div class="pricing-card-kalana featured pptx-slide-up pptx-stagger-3">
                             <div class="pricing-badge-popular">
                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4h7.6l-6.2 4.5 2.4 7.4-6.2-4.6-6.2 4.6 2.4-7.4-6.2-4.5h7.6z"/></svg>
                                 PILIHAN FAVORIT
                             </div>
                             <div class="pricing-title-box">
-                                <h3 style="color: var(--navy-text); font-size: 1.25rem; margin-bottom: 8px; line-height: 1.35;">Pro — Company Profile</h3>
+                                <h3 style="color: var(--navy-text); font-size: 1.18rem; margin-bottom: 8px; line-height: 1.35;">Pro — Corporate Company Profile</h3>
                             </div>
                             <div class="pricing-desc-box">
                                 Website profil bisnis multi-halaman berwibawa dengan CMS mandiri dan optimasi SEO Google untuk reputasi perusahaan.
                             </div>
                             <div class="pricing-price-box">
                                 <span style="font-size: 0.74rem; color: var(--slate-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;">Mulai Investasi</span>
-                                <div style="font-size: 1.95rem; font-weight: 900; color: var(--royal-blue); line-height: 1.1; margin-top: 4px;">Rp 3.500.000</div>
+                                <div class="price-amount text-royal">Rp 3.500.000</div>
                             </div>
                             <ul class="feature-check-list">
                                 <li class="feature-check-item"><span class="check-icon-circle"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>5 - 8 Halaman Dinamis Premium</li>
                                 <li class="feature-check-item"><span class="check-icon-circle"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Panel Admin / CMS Mandiri (Edit Bebas)</li>
                                 <li class="feature-check-item"><span class="check-icon-circle"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Domain (.com/.id/.co.id) &amp; Cloud Host 1 Thn</li>
-                                <li class="feature-check-item"><span class="check-icon-circle"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Hingga 3 Email Resmi (@perusahaan.com)</li>
+                                <li class="feature-check-item"><span class="check-icon-circle"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Hingga 1 Email Bisnis Resmi (@perusahaan.com)</li>
                                 <li class="feature-check-item"><span class="check-icon-circle"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Dynamic Schema SEO Google Ready</li>
                                 <li class="feature-check-item"><span class="check-icon-circle"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Form Kontak Leads &amp; Peta Google Maps</li>
                                 <li class="feature-check-item"><span class="check-icon-circle"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Garansi Bug-Free 30 Hari &amp; Video Panduan</li>
@@ -245,16 +244,16 @@
                         </div>
 
                         <!-- 4. Custom+ -->
-                        <div class="pricing-card-kalana">
+                        <div class="pricing-card-kalana pptx-slide-up pptx-stagger-4">
                             <div class="pricing-title-box">
-                                <h3 style="color: var(--navy-text); font-size: 1.25rem; margin-bottom: 8px; line-height: 1.35;">Custom+ — Web Application</h3>
+                                <h3 style="color: var(--navy-text); font-size: 1.18rem; margin-bottom: 8px; line-height: 1.35;">Custom+ — Web Application</h3>
                             </div>
                             <div class="pricing-desc-box">
                                 Sistem web aplikasi khusus untuk operasional bisnis, kasir web, reservasi, portal data, dan integrasi database cloud.
                             </div>
                             <div class="pricing-price-box">
                                 <span style="font-size: 0.74rem; color: var(--slate-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;">Mulai Investasi</span>
-                                <div style="font-size: 1.95rem; font-weight: 900; color: var(--navy-text); line-height: 1.1; margin-top: 4px;">Rp 7.500.000+</div>
+                                <div class="price-amount text-navy">Rp 7.500.000+</div>
                             </div>
                             <ul class="feature-check-list">
                                 <li class="feature-check-item"><span class="check-icon-circle"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>10 - 12 Halaman Terintegrasi Sesuai SOP</li>
@@ -273,7 +272,7 @@
                 </div>
 
                 <!-- Custom Request Banner -->
-                <div class="tactile-card tactile-card-heavy" style="margin-top: 80px; padding: 50px 40px; text-align: center; background: #ffffff;">
+                <div class="tactile-card tactile-card-heavy pptx-scale-in" style="margin-top: 80px; padding: 50px 40px; text-align: center; background: #ffffff;">
                     <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--offwhite-card); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 20px; color: var(--royal-blue); border: 1px solid var(--border-light);">
                         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
                     </div>
