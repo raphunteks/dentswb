@@ -89,7 +89,7 @@ const isLocalOrInternal = (req) => {
     const ip = req.ip || req.connection?.remoteAddress || req.socket?.remoteAddress || '';
     if (ip === '127.0.0.1' || ip === '::1' || ip.includes('127.0.0.1')) return true;
     const p = req.path || req.url || '';
-    if (p.startsWith('/admin') || p.startsWith('/api/admin') || p.startsWith('/api/chat/messages')) return true;
+    if (p.startsWith('/admin') || p.startsWith('/api/admin') || p.startsWith('/api/chat/messages') || p === '/sitemap.xml' || p === '/robots.txt' || p.startsWith('/google')) return true;
     return false;
 };
 
@@ -123,7 +123,7 @@ async function ensureSeedData() {
                 icon: 'cpu',
                 shortDescription: 'Website 1-3 halaman terintegrasi Google Sheets tanpa biaya sewa hosting bulanan.',
                 description: 'Solusi digitalisasi hemat biaya memanfaatkan infrastruktur cloud Google. Data formulir pendaftaran, pesanan, atau inventaris langsung masuk ke Google Sheets Anda secara real-time.',
-                features: ['1 - 3 Halaman & 1 - 4 Section', 'Database Realtime Google Sheets', 'Notifikasi Email Otomatis', 'Zero Server Fee Selamanya', 'Pengerjaan Cepat 2 - 4 Hari'],
+                features: ['1 - 3 Halaman & 1 - 4 Section', 'Database Realtime Google Sheets', 'Integrasi Direct WhatsApp & Maps', 'Zero Server Fee Selamanya', 'Pengerjaan Cepat 2 - 4 Hari'],
                 startingPrice: 'Rp 500.000',
                 order: 1,
                 isFeatured: false,
@@ -134,9 +134,9 @@ async function ensureSeedData() {
                 title: 'Business — High-Converting Landing Page',
                 slug: 'landing-page',
                 icon: 'globe',
-                shortDescription: 'Halaman penjualan fokus closing tinggi yang siap dihubungkan ke iklan Meta Ads dan Google Ads.',
-                description: 'Landing page 1 halaman panjang dengan copywriting persuasif dan kecepatan loading di bawah 1 detik untuk memaksimalkan hasil belanja iklan Anda.',
-                features: ['1 Halaman Penjualan (Sales Page)', 'Core Web Vitals Skor 95+', 'Integrasi Tracking Pixel Lengkap', 'Domain, Hosting & SSL Gratis', 'WhatsApp Direct Click'],
+                shortDescription: 'Website 1-6 halaman terintegrasi fokus closing tinggi yang siap dihubungkan ke iklan Meta Ads dan Google Ads.',
+                description: 'Website 1 - 6 halaman (atau sales page panjang) dengan copywriting persuasif dan kecepatan loading di bawah 1 detik untuk memaksimalkan hasil belanja iklan Anda.',
+                features: ['1 - 6 Halaman Responsif (Sales Page)', 'Core Web Vitals Skor 95+', 'WhatsApp Direct Click', 'Domain, Hosting & SSL Gratis 1 Thn', 'Pengerjaan Cepat 3 - 5 Hari'],
                 startingPrice: 'Rp 1.500.000',
                 order: 2,
                 isFeatured: false,
@@ -149,7 +149,7 @@ async function ensureSeedData() {
                 icon: 'layers',
                 shortDescription: 'Website profil perusahaan multi-halaman berwibawa dengan CMS mandiri dan optimasi SEO Google.',
                 description: 'Bangun otoritas bisnis Anda di hadapan klien dan investor dengan website 5-8 halaman berstandar internasional, dilengkapi CMS mandiri dan email bisnis resmi.',
-                features: ['5 - 8 Halaman Dinamis', 'Panel Admin / CMS Mandiri', 'Google SEO Schema Gold Standard', 'Email Bisnis Resmi (@domain)', 'Garansi 30 Hari & Tutorial Admin'],
+                features: ['5 - 8 Halaman Dinamis', 'Panel Admin / CMS Mandiri', 'Google SEO Schema Gold Standard', 'Hingga 1 Email Bisnis Resmi (@perusahaan.com)', 'Garansi 30 Hari & Tutorial Admin'],
                 startingPrice: 'Rp 3.500.000',
                 order: 3,
                 isFeatured: true,
@@ -161,7 +161,7 @@ async function ensureSeedData() {
                 slug: 'web-app',
                 icon: 'cpu',
                 shortDescription: 'Aplikasi web khusus sesuai alur SOP bisnis dengan database cloud dan multi-role user.',
-                description: 'Solusi rekayasa perangkat lunak 10-12 halaman terintegrasi untuk kasir web, sistem reservasi, portal karyawan, atau dashboard analitik operasional perusahaan.',
+                description: 'Solusi pengembangan web 10-12 halaman terintegrasi untuk kasir web, sistem reservasi, portal karyawan, atau dashboard analitik operasional perusahaan.',
                 features: ['10 - 12 Halaman Alur Khusus', 'Multi-Role User & Hak Akses', 'Database Cloud PostgreSQL/Redis', 'Integrasi API & Payment Gateway', '100% Hak Milik Source Code'],
                 startingPrice: 'Rp 7.500.000+',
                 order: 4,
@@ -180,7 +180,6 @@ async function ensureSeedData() {
                     '1 - 3 Halaman Responsif',
                     '1 - 4 Section Fokus Konversi',
                     'Database Realtime Google Sheets',
-                    'Notifikasi Email Otomatis',
                     'Integrasi Direct WhatsApp & Maps',
                     'Nol Biaya Server / Hosting Selamanya',
                     'Pengerjaan Cepat 2 - 4 Hari Kerja'
@@ -198,14 +197,13 @@ async function ensureSeedData() {
                 id: 'price_2',
                 name: 'Business — High-Converting Landing Page',
                 price: 'Rp 1.500.000',
-                description: 'Landing page 1 halaman panjang (sales page) yang dirancang khusus untuk mengubah pengunjung iklan menjadi pembeli.',
+                description: 'Landing page 1 - 6 halaman terintegrasi yang dirancang khusus untuk mengubah pengunjung iklan menjadi pembeli.',
                 features: [
-                    '1 Halaman Penjualan Panjang (Sales Page)',
+                    '1 - 6 Halaman Responsif (Sales Page)',
                     'Struktur Psikologi Closing & Copywriting',
                     'Core Web Vitals Skor 95+ (Super Cepat)',
                     'Gratis Domain (.com/.my.id) & SSL 1 Tahun',
                     'High-Speed SSD Cloud Hosting 1 Tahun',
-                    'Integrasi Meta Pixel, TikTok & GTM',
                     'Direct WhatsApp Button Teks Otomatis',
                     'Pengerjaan 3 - 5 Hari Kerja (Garansi 14 Hari)'
                 ],
@@ -222,7 +220,7 @@ async function ensureSeedData() {
                     '5 - 8 Halaman Dinamis Premium',
                     'Panel Admin / CMS Mandiri (Edit Tanpa Koding)',
                     'Gratis Domain (.com/.id/.co.id) & Cloud Host 1 Thn',
-                    'Hingga 3 Email Bisnis Resmi (@perusahaan.com)',
+                    'Hingga 1 Email Bisnis Resmi (@perusahaan.com)',
                     'Dynamic Schema Google SEO & Sitemap XML',
                     'Formulir Leads Masuk & Google Maps Interaktif',
                     'Proteksi Keamanan SSL & Firewall Tingkat Lanjut',
@@ -870,10 +868,10 @@ async function ensureSeedData() {
             }
         ];
 
-        const MIGRATION_VERSION = 'v6_faq_and_base64_webp_portfolio';
+        const MIGRATION_VERSION = 'v7_pricing_services_refinements';
         const currentMigration = await redis.get('dents:migration:portfolio');
         if (currentMigration !== MIGRATION_VERSION) {
-            console.log('[MIGRATION v6] Storing 20 portfolio images directly as Base64 WebP in Redis DB & syncing 8 FAQs...');
+            console.log('[MIGRATION v7] Syncing refined Pricing & Services tiers (1-6 hal Business, 1 email Pro, no email Starter, no pixel Business) & verifying Base64 WebP in Redis DB...');
             
             // Ambil portfolio yang sudah ada di Redis untuk mempertahankan data kustom
             const existingPortfolio = await redis.get('dents:portfolio') || [];
@@ -906,7 +904,7 @@ async function ensureSeedData() {
             await redis.set('dents:services', INITIAL_SERVICES_4_TIERS);
             await redis.set('dents:testimonials', MASKED_TESTIMONIALS);
             await redis.set('dents:migration:portfolio', MIGRATION_VERSION);
-            console.log('[MIGRATION v6] Sync complete: 20 WebP images stored 100% in Redis DB & 8 FAQs updated.');
+            console.log('[MIGRATION v7] Sync complete: Pricing & Services tiers refined in Redis DB.');
         }
 
         if (!testimonials || !testimonials.length) {
@@ -1235,11 +1233,16 @@ async function getGlobalSettings() {
         ensureSeedData();
 
         if (settings) {
-            return {
+            const merged = {
                 ...defaultSettings,
                 ...settings,
                 socialLinks: { ...defaultSettings.socialLinks, ...(settings.socialLinks || {}) }
             };
+            if (merged.siteUrl && merged.siteUrl.includes('dentsweb.my.id') && !merged.siteUrl.includes('www.dentsweb.my.id')) {
+                merged.siteUrl = merged.siteUrl.replace('dentsweb.my.id', 'www.dentsweb.my.id');
+                redis.set('dents:settings', merged).catch(() => {});
+            }
+            return merged;
         }
         await redis.set('dents:settings', defaultSettings);
         return defaultSettings;
@@ -1248,16 +1251,32 @@ async function getGlobalSettings() {
     }
 }
 
-// Dynamic SEO Builder (Gold Standard GSC)
+// Helper: Sanitasi input Google Site Verification (Mendukung token polos, meta tag lengkap, atau nama file googleXYZ.html)
+function cleanGoogleVerification(code) {
+    if (!code || typeof code !== 'string') return '';
+    let val = code.trim();
+    // Jika user menempel tag meta lengkap: <meta name="google-site-verification" content="..." />
+    const metaMatch = val.match(/content=["']([^"']+)["']/i);
+    if (metaMatch) return metaMatch[1].trim();
+    // Jika user menempel format file: google<hash>.html
+    const htmlMatch = val.match(/^google([a-zA-Z0-9_-]+)\.html$/i);
+    if (htmlMatch) return htmlMatch[1].trim();
+    // Jika user menempel format teks header Google
+    val = val.replace(/^google-site-verification:\s*/i, '');
+    return val.trim();
+}
+
+// Dynamic SEO Builder (Gold Standard Google Search Console & Sitelinks Navigation Parity)
 function buildSEO(settings, pageData, extraData = {}) {
-    const siteUrl = settings.siteUrl ? settings.siteUrl.replace(/\/+$/, '') : 'https://dentsweb.my.id';
-    const cleanPath = pageData.path === '/' ? '' : pageData.path;
+    const siteUrl = (settings.siteUrl && settings.siteUrl.trim()) ? settings.siteUrl.replace(/\/+$/, '') : 'https://www.dentsweb.my.id';
+    const cleanPath = pageData.path === '/' ? '' : (pageData.path || '');
     const fullUrl = `${siteUrl}${cleanPath}`;
     
     const title = pageData.title ? `${pageData.title} | ${settings.brandName || 'Dents Web'}` : settings.defaultSeoTitle;
     const desc = pageData.desc || settings.defaultSeoDescription;
     const image = pageData.image ? (pageData.image.startsWith('http') ? pageData.image : `${siteUrl}${pageData.image}`) : `${siteUrl}${settings.defaultOgImage || '/public/img/axalogo.png'}`;
-    const keywords = pageData.keywords || "jasa pembuatan website, web developer, sistem informasi, Dents Web, agensi digital, website profesional, SEO website, arsitektur web performa tinggi";
+    const keywords = pageData.keywords || "jasa pembuatan website, web developer profesional, landing page konversi tinggi, sistem informasi kustom, Dents Web, Google Sitelinks, SEO website, arsitektur web performa tinggi";
+    const googleVerification = cleanGoogleVerification(settings.googleVerification);
 
     // Testimonial Reviews & AggregateRating for Google Search Console Rich Results
     let reviewsList = [];
@@ -1292,7 +1311,7 @@ function buildSEO(settings, pageData, extraData = {}) {
         "@type": "ProfessionalService",
         "@id": `${siteUrl}/#organization`,
         "name": settings.brandName || "Dents Web",
-        "alternateName": ["Dents Web Studio", "DentsWeb"],
+        "alternateName": ["Dents Web Studio", "DentsWeb", "Dents Web Technology"],
         "url": `${siteUrl}/`,
         "logo": {
             "@type": "ImageObject",
@@ -1300,7 +1319,7 @@ function buildSEO(settings, pageData, extraData = {}) {
             "inLanguage": "id-ID",
             "url": `${siteUrl}${settings.logo || '/public/img/axalogo.png'}`,
             "contentUrl": `${siteUrl}${settings.logo || '/public/img/axalogo.png'}`,
-            "caption": `Logo ${settings.brandName || 'Dents Web'}`
+            "caption": `Logo Resmi ${settings.brandName || 'Dents Web'}`
         },
         "image": `${siteUrl}${settings.logo || '/public/img/axalogo.png'}`,
         "description": desc,
@@ -1311,7 +1330,7 @@ function buildSEO(settings, pageData, extraData = {}) {
             "addressCountry": "ID",
             "addressLocality": settings.address || "Indonesia"
         },
-        "priceRange": "Rp 1.500.000 - Rp 15.000.000",
+        "priceRange": "Rp 500.000 - Rp 15.000.000",
         "openingHoursSpecification": {
             "@type": "OpeningHoursSpecification",
             "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
@@ -1337,20 +1356,88 @@ function buildSEO(settings, pageData, extraData = {}) {
         orgEntity.review = reviewsList;
     }
 
-    let schemaGraph = [
+    // Core Sitelink Entities for Sitelinks Search & Navigation (Reference: BEM KBMFKG UMI Parity)
+    const sitelinkElements = [
         {
-            "@type": "WebSite",
-            "@id": `${siteUrl}/#website`,
-            "url": `${siteUrl}/`,
-            "name": settings.brandName || "Dents Web",
-            "alternateName": ["DentsWeb", "Dents Web Agency"],
-            "publisher": { "@id": `${siteUrl}/#organization` },
-            "potentialAction": {
-                "@type": "SearchAction",
-                "target": `${siteUrl}/?q={search_term_string}`,
-                "query-input": "required name=search_term_string"
-            }
+            "@type": "SiteNavigationElement",
+            "@id": `${siteUrl}/#nav-services`,
+            "name": "Layanan Kami",
+            "description": "Layanan pembuatan website profesional, landing page konversi tinggi, otomasi Google Sheets, hingga web app kustom.",
+            "url": `${siteUrl}/services`
         },
+        {
+            "@type": "SiteNavigationElement",
+            "@id": `${siteUrl}/#nav-portfolio`,
+            "name": "Portofolio Karya",
+            "description": "Galeri proyek website nyata, studi kasus performa, dan solusi digital yang telah sukses diluncurkan.",
+            "url": `${siteUrl}/portfolio`
+        },
+        {
+            "@type": "SiteNavigationElement",
+            "@id": `${siteUrl}/#nav-pricing`,
+            "name": "Paket Harga & Investasi",
+            "description": "Skema harga transparan tanpa biaya tersembunyi mulai dari Starter, Business, Pro, hingga Custom Enterprise.",
+            "url": `${siteUrl}/pricing`
+        },
+        {
+            "@type": "SiteNavigationElement",
+            "@id": `${siteUrl}/#nav-articles`,
+            "name": "Portal Artikel & Edukasi",
+            "description": "Wawasan arsitektur performa web, optimasi SEO Google organik, dan strategi digital branding modern.",
+            "url": `${siteUrl}/articles`
+        },
+        {
+            "@type": "SiteNavigationElement",
+            "@id": `${siteUrl}/#nav-about`,
+            "name": "Tentang Dents Web",
+            "description": "Filosofi rekayasa perangkat lunak, standar performa kecepatan, dan profil studio teknologi Dents Web.",
+            "url": `${siteUrl}/about`
+        },
+        {
+            "@type": "SiteNavigationElement",
+            "@id": `${siteUrl}/#nav-contact`,
+            "name": "Hubungi Kami",
+            "description": "Konsultasi proyek gratis, audit kebutuhan website bisnis, dan penawaran langsung melalui WhatsApp.",
+            "url": `${siteUrl}/contact`
+        },
+        {
+            "@type": "SiteNavigationElement",
+            "@id": `${siteUrl}/#nav-faq`,
+            "name": "Pusat Bantuan & FAQ",
+            "description": "Pertanyaan yang sering diajukan mengenai domain, hosting, waktu pengerjaan, dan dukungan teknis.",
+            "url": `${siteUrl}/faq`
+        }
+    ];
+
+    const websiteEntity = {
+        "@type": "WebSite",
+        "@id": `${siteUrl}/#website`,
+        "url": `${siteUrl}/`,
+        "name": settings.brandName || "Dents Web",
+        "alternateName": ["DentsWeb", "Dents Web Agency", "Dents Web Studio"],
+        "description": settings.defaultSeoDescription,
+        "publisher": { "@id": `${siteUrl}/#organization` },
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": `${siteUrl}/articles?search={search_term_string}`
+            },
+            "query-input": "required name=search_term_string"
+        },
+        "hasPart": [
+            { "@type": "WebPage", "@id": `${siteUrl}/services#webpage`, "name": "Layanan Kami", "url": `${siteUrl}/services` },
+            { "@type": "WebPage", "@id": `${siteUrl}/portfolio#webpage`, "name": "Portofolio Karya", "url": `${siteUrl}/portfolio` },
+            { "@type": "WebPage", "@id": `${siteUrl}/pricing#webpage`, "name": "Paket Harga", "url": `${siteUrl}/pricing` },
+            { "@type": "WebPage", "@id": `${siteUrl}/articles#webpage`, "name": "Portal Artikel", "url": `${siteUrl}/articles` },
+            { "@type": "WebPage", "@id": `${siteUrl}/about#webpage`, "name": "Tentang Kami", "url": `${siteUrl}/about` },
+            { "@type": "WebPage", "@id": `${siteUrl}/contact#webpage`, "name": "Hubungi Kami", "url": `${siteUrl}/contact` },
+            { "@type": "WebPage", "@id": `${siteUrl}/faq#webpage`, "name": "Pusat Bantuan & FAQ", "url": `${siteUrl}/faq` }
+        ]
+    };
+
+    let schemaGraph = [
+        websiteEntity,
         orgEntity,
         {
             "@type": "WebPage",
@@ -1371,7 +1458,7 @@ function buildSEO(settings, pageData, extraData = {}) {
         "item": `${siteUrl}/`
     }];
 
-    if (pageData.path !== '/') {
+    if (pageData.path && pageData.path !== '/') {
         const pathParts = pageData.path.split('/').filter(p => p);
         let currUrl = siteUrl;
         pathParts.forEach((part, idx) => {
@@ -1393,19 +1480,17 @@ function buildSEO(settings, pageData, extraData = {}) {
     });
 
     if (pageData.path === '/') {
+        // Inject standalone SiteNavigationElement objects for Google Sitelinks parser
+        schemaGraph.push(...sitelinkElements);
         schemaGraph.push({
             "@type": "ItemList",
-            "@id": `${siteUrl}/#sitelinks`,
+            "@id": `${siteUrl}/#sitelinks-list`,
             "name": "Navigasi Utama Dents Web",
-            "itemListElement": [
-                { "@type": "SiteNavigationElement", "position": 1, "name": "Beranda", "description": "Halaman Utama Dents Web.", "url": `${siteUrl}/` },
-                { "@type": "SiteNavigationElement", "position": 2, "name": "Layanan Kami", "description": "Solusi web development & digital marketing.", "url": `${siteUrl}/services` },
-                { "@type": "SiteNavigationElement", "position": 3, "name": "Portfolio", "description": "Karya digital terbaik dari klien kami.", "url": `${siteUrl}/portfolio` },
-                { "@type": "SiteNavigationElement", "position": 4, "name": "Harga & Paket", "description": "Investasi digital transparan.", "url": `${siteUrl}/pricing` },
-                { "@type": "SiteNavigationElement", "position": 5, "name": "Tentang Kami", "description": "Profil dan filosofi tim Dents Web.", "url": `${siteUrl}/about` },
-                { "@type": "SiteNavigationElement", "position": 6, "name": "FAQ", "description": "Tanya Jawab Seputar Layanan.", "url": `${siteUrl}/faq` },
-                { "@type": "SiteNavigationElement", "position": 7, "name": "Hubungi Kami", "description": "Konsultasi gratis proyek website Anda.", "url": `${siteUrl}/contact` }
-            ]
+            "itemListElement": sitelinkElements.map((el, idx) => ({
+                "@type": "ListItem",
+                "position": idx + 1,
+                "item": el
+            }))
         });
     }
 
@@ -1424,8 +1509,12 @@ function buildSEO(settings, pageData, extraData = {}) {
         title,
         desc,
         url: fullUrl,
+        path: pageData.path || '/',
+        siteUrl,
         image,
         keywords,
+        googleVerification,
+        analyticsId: settings.analyticsId || '',
         schemaString: safeSchemaString
     };
 }
@@ -1638,7 +1727,7 @@ app.get('/contact', async (req, res) => {
 // ==========================================
 app.get('/articles', async (req, res) => {
     const settings = await getGlobalSettings();
-    const siteUrl = settings.siteUrl ? settings.siteUrl.replace(/\/+$/, '') : 'https://dentsweb.my.id';
+    const siteUrl = settings.siteUrl ? settings.siteUrl.replace(/\/+$/, '') : 'https://www.dentsweb.my.id';
     const allArticles = await redis.get('dents:articles') || [];
     let articles = allArticles.filter(a => a.isPublished !== false).sort((a, b) => new Date(b.publishedAt || 0) - new Date(a.publishedAt || 0));
 
@@ -1695,7 +1784,7 @@ app.get('/articles', async (req, res) => {
 
 app.get('/article/:slug', async (req, res) => {
     const settings = await getGlobalSettings();
-    const siteUrl = settings.siteUrl ? settings.siteUrl.replace(/\/+$/, '') : 'https://dentsweb.my.id';
+    const siteUrl = settings.siteUrl ? settings.siteUrl.replace(/\/+$/, '') : 'https://www.dentsweb.my.id';
     const allArticles = await redis.get('dents:articles') || [];
     const article = allArticles.find(a => a.slug === req.params.slug && a.isPublished !== false);
 
@@ -2179,67 +2268,114 @@ app.get('/api/admin/settings', requireAdmin, async (req, res) => {
 });
 app.put('/api/admin/settings', requireAdmin, async (req, res) => {
     try {
-        await redis.set('dents:settings', req.body);
-        res.json({ success: true, message: 'Settings saved.' });
-    } catch (err) { res.status(500).json({ success: false }); }
+        const current = await getGlobalSettings();
+        const incoming = req.body || {};
+        if (incoming.googleVerification !== undefined) {
+            incoming.googleVerification = cleanGoogleVerification(incoming.googleVerification);
+        }
+        if (incoming.siteUrl !== undefined) {
+            incoming.siteUrl = incoming.siteUrl.trim().replace(/\/+$/, '');
+            if (incoming.siteUrl.includes('dentsweb.my.id') && !incoming.siteUrl.includes('www.dentsweb.my.id')) {
+                incoming.siteUrl = incoming.siteUrl.replace('dentsweb.my.id', 'www.dentsweb.my.id');
+            }
+        }
+        const updated = {
+            ...current,
+            ...incoming,
+            socialLinks: {
+                ...(current.socialLinks || {}),
+                ...(incoming.socialLinks || {})
+            }
+        };
+        await redis.set('dents:settings', updated);
+        res.json({ success: true, message: 'Pengaturan global & SEO berhasil diperbarui!', data: updated });
+    } catch (err) { res.status(500).json({ success: false, message: 'Gagal menyimpan pengaturan.' }); }
+});
+
+// Dynamic Google Site Verification HTML File Route (e.g. /google<hash>.html)
+app.get('/google:code.html', async (req, res) => {
+    const code = req.params.code;
+    res.type('text/html');
+    res.send(`google-site-verification: google${code}.html`);
 });
 
 // ==========================================
 // SEARCH ENGINE DISCOVERY (ROBOTS & SITEMAP)
 // ==========================================
-app.get('/robots.txt', (req, res) => {
-    const reqHost = req.get('host');
-    const reqProto = (req.headers['x-forwarded-proto'] || req.protocol || 'https').split(',')[0].trim();
-    const baseUrl = reqHost ? `${reqProto}://${reqHost}` : 'https://www.dentsweb.my.id';
-    res.type('text/plain');
-    res.send(`User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /admin-login\nDisallow: /api/\n\nSitemap: ${baseUrl}/sitemap.xml`);
+app.get('/robots.txt', async (req, res) => {
+    const settings = await getGlobalSettings();
+    const siteUrl = (settings.siteUrl && settings.siteUrl.trim()) ? settings.siteUrl.replace(/\/+$/, '') : 'https://www.dentsweb.my.id';
+    res.type('text/plain; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.send([
+        'User-agent: *',
+        'Allow: /',
+        'Disallow: /admin',
+        'Disallow: /admin/',
+        'Disallow: /admin-login',
+        'Disallow: /admin-dashboard',
+        'Disallow: /api/',
+        '',
+        `Sitemap: ${siteUrl}/sitemap.xml`
+    ].join('\n'));
 });
 
-app.get('/sitemap.xml', async (req, res) => {
-    const settings = await getGlobalSettings();
-    const reqHost = req.get('host');
-    const reqProto = (req.headers['x-forwarded-proto'] || req.protocol || 'https').split(',')[0].trim();
-    const baseUrl = reqHost ? `${reqProto}://${reqHost}` : (settings.siteUrl ? settings.siteUrl.replace(/\/+$/, '') : 'https://www.dentsweb.my.id');
-    const today = new Date().toISOString().split('T')[0];
-    
-    let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
-    
-    const staticRoutes = [
-        { path: '/', priority: '1.0', freq: 'daily' },
-        { path: '/services', priority: '0.9', freq: 'weekly' },
-        { path: '/portfolio', priority: '0.9', freq: 'weekly' },
-        { path: '/articles', priority: '0.9', freq: 'daily' },
-        { path: '/pricing', priority: '0.8', freq: 'weekly' },
-        { path: '/about', priority: '0.7', freq: 'monthly' },
-        { path: '/faq', priority: '0.8', freq: 'weekly' },
-        { path: '/contact', priority: '0.8', freq: 'monthly' }
-    ];
+app.all('/sitemap.xml', async (req, res) => {
+    try {
+        const settings = await getGlobalSettings();
+        const baseUrl = (settings.siteUrl && settings.siteUrl.trim()) ? settings.siteUrl.replace(/\/+$/, '') : 'https://www.dentsweb.my.id';
+        const today = new Date().toISOString().split('T')[0];
+        
+        let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
+        
+        const staticRoutes = [
+            { path: '/', priority: '1.0', freq: 'daily' },
+            { path: '/services', priority: '0.9', freq: 'weekly' },
+            { path: '/portfolio', priority: '0.9', freq: 'weekly' },
+            { path: '/articles', priority: '0.9', freq: 'daily' },
+            { path: '/pricing', priority: '0.8', freq: 'weekly' },
+            { path: '/about', priority: '0.7', freq: 'monthly' },
+            { path: '/faq', priority: '0.8', freq: 'weekly' },
+            { path: '/contact', priority: '0.8', freq: 'monthly' }
+        ];
 
-    staticRoutes.forEach(route => {
-        xml += `  <url>\n    <loc>${baseUrl}${route.path}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>${route.freq}</changefreq>\n    <priority>${route.priority}</priority>\n  </url>\n`;
-    });
-
-    const [portfolio, articles] = await Promise.all([
-        redis.get('dents:portfolio'),
-        redis.get('dents:articles')
-    ]);
-
-    if (portfolio && Array.isArray(portfolio)) {
-        portfolio.filter(p => p.isPublished).forEach(p => {
-            xml += `  <url>\n    <loc>${baseUrl}/portfolio/${p.slug}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.7</priority>\n  </url>\n`;
+        staticRoutes.forEach(route => {
+            const loc = route.path === '/' ? `${baseUrl}/` : `${baseUrl}${route.path}`;
+            xml += `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>${route.freq}</changefreq>\n    <priority>${route.priority}</priority>\n  </url>\n`;
         });
-    }
 
-    if (articles && Array.isArray(articles)) {
-        articles.filter(a => a.isPublished !== false).forEach(a => {
-            const artDate = (a.updatedAt || a.publishedAt || today).split('T')[0];
-            xml += `  <url>\n    <loc>${baseUrl}/article/${a.slug}</loc>\n    <lastmod>${artDate}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
-        });
-    }
+        const [portfolio, articles] = await Promise.all([
+            redis.get('dents:portfolio'),
+            redis.get('dents:articles')
+        ]);
 
-    xml += `</urlset>`;
-    res.header('Content-Type', 'application/xml; charset=utf-8');
-    res.send(xml);
+        if (portfolio && Array.isArray(portfolio)) {
+            portfolio.filter(p => p.isPublished).forEach(p => {
+                xml += `  <url>\n    <loc>${baseUrl}/portfolio/${p.slug}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.7</priority>\n  </url>\n`;
+            });
+        }
+
+        if (articles && Array.isArray(articles)) {
+            articles.filter(a => a.isPublished !== false).forEach(a => {
+                const artDate = (a.updatedAt || a.publishedAt || today).split('T')[0];
+                xml += `  <url>\n    <loc>${baseUrl}/article/${a.slug}</loc>\n    <lastmod>${artDate}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
+            });
+        }
+
+        xml += `</urlset>`;
+        res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+        res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400');
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+        if (req.method === 'HEAD') {
+            return res.status(200).end();
+        }
+        res.status(200).send(xml);
+    } catch (err) {
+        console.error('[SITEMAP] Error generating sitemap:', err);
+        res.status(500).send('Error generating sitemap');
+    }
 });
 
 app.use(async (req, res) => {
