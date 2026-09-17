@@ -9,23 +9,34 @@
     <title><%= typeof seo !== 'undefined' ? seo.title : 'Dents Web | Studio Pembuatan Website & Solusi Digital Performa Tinggi' %></title>
     <meta name="description" content="<%= typeof seo !== 'undefined' ? seo.desc : 'Studio pembuatan website kustom, landing page konversi tinggi, dan sistem informasi berkinerja tinggi. Dirancang khusus membangun otoritas bisnis dan konversi maksimal.' %>">
     <meta name="keywords" content="<%= typeof seo !== 'undefined' ? seo.keywords : 'jasa pembuatan website, jasa web developer, arsitektur web modern, sistem informasi kustom, website cepat SEO, Dents Web' %>">
-    <link rel="canonical" href="<%= typeof seo !== 'undefined' ? seo.url : 'https://dentsweb.my.id/' %>">
+    <link rel="canonical" href="<%= typeof seo !== 'undefined' ? (seo.url.endsWith('/') ? seo.url : seo.url + '/') : 'https://www.dentsweb.my.id/' %>">
+    <meta name="referrer" content="origin-when-cross-origin">
     
-    <!-- Google Site Verification -->
-    <% if (typeof settings !== 'undefined' && settings.googleVerification) { %>
-    <meta name="google-site-verification" content="<%= settings.googleVerification %>" />
+    <!-- Google Site Verification (100% Dinamis dari Redis DB / Admin Dashboard) -->
+    <% const gVerifyCode = (typeof seo !== 'undefined' && seo.googleVerification) ? seo.googleVerification : ((typeof settings !== 'undefined' && settings.googleVerification) ? settings.googleVerification : ''); %>
+    <% if (gVerifyCode) { %>
+    <meta name="google-site-verification" content="<%= gVerifyCode %>" />
+    <% } %>
+    <% if (typeof settings !== 'undefined' && settings.analyticsId) { %>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=<%= settings.analyticsId %>"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '<%= settings.analyticsId %>');
+    </script>
     <% } %>
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="<%= typeof seo !== 'undefined' ? seo.url : 'https://dentsweb.my.id/' %>">
+    <meta property="og:url" content="<%= typeof seo !== 'undefined' ? (seo.url.endsWith('/') ? seo.url : seo.url + '/') : 'https://www.dentsweb.my.id/' %>">
     <meta property="og:title" content="<%= typeof seo !== 'undefined' ? seo.title : 'Dents Web | Studio Pembuatan Website & Solusi Digital Performa Tinggi' %>">
     <meta property="og:description" content="<%= typeof seo !== 'undefined' ? seo.desc : '' %>">
     <meta property="og:image" content="<%= typeof seo !== 'undefined' ? seo.image : '/public/img/axalogo.png' %>">
     
     <!-- Twitter Cards -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="<%= typeof seo !== 'undefined' ? seo.url : 'https://dentsweb.my.id/' %>">
+    <meta name="twitter:url" content="<%= typeof seo !== 'undefined' ? (seo.url.endsWith('/') ? seo.url : seo.url + '/') : 'https://www.dentsweb.my.id/' %>">
     <meta name="twitter:title" content="<%= typeof seo !== 'undefined' ? seo.title : 'Dents Web | Studio Pembuatan Website & Solusi Digital Performa Tinggi' %>">
     <meta name="twitter:description" content="<%= typeof seo !== 'undefined' ? seo.desc : '' %>">
     <meta name="twitter:image" content="<%= typeof seo !== 'undefined' ? seo.image : '/public/img/axalogo.png' %>">
@@ -556,6 +567,131 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             8.5. GOOGLE SITELINKS NAVIGATION DISCOVERY HUB
+             (Struktur Direktori Ekosistem Paritas Google Search Sitelinks)
+             ========================================== -->
+        <section class="section-dark" id="sitelinks-navigation-hub" style="padding: 70px 0 50px; background: rgba(5, 8, 28, 0.95); border-top: 1px solid rgba(255, 255, 255, 0.06); position: relative;">
+            <div class="orb-glow-blue" style="top: 20%; right: 5%; opacity: 0.15; pointer-events: none;"></div>
+            <div class="container" style="position: relative; z-index: 2;">
+                <div class="text-center pptx-fade-up" style="max-width: 720px; margin: 0 auto 40px;">
+                    <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(163, 230, 53, 0.1); border: 1px solid rgba(163, 230, 53, 0.25); border-radius: 999px; padding: 6px 16px; margin-bottom: 16px;">
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--lime-bright); box-shadow: 0 0 10px var(--lime-bright);"></span>
+                        <span style="font-size: 0.82rem; font-weight: 700; color: var(--lime-bright); letter-spacing: 0.08em; text-transform: uppercase;">
+                            Struktur Ekosistem Digital &bull; Sitelinks Navigation
+                        </span>
+                    </div>
+                    <h2 style="font-size: clamp(1.8rem, 3.5vw, 2.5rem); color: #ffffff; margin-bottom: 14px; font-weight: 700; line-height: 1.25;">
+                        Pusat Akses &amp; Direktori <span class="font-editorial text-lime">Dents Web</span>
+                    </h2>
+                    <p style="color: var(--slate-muted); font-size: 0.98rem; line-height: 1.65; margin: 0 auto;">
+                        Navigasi cepat ke pilar utama layanan, portofolio karya nyata, transparansi investasi harga, dan repositori wawasan teknologi kami.
+                    </p>
+                </div>
+
+                <!-- Sitelinks 2-Column Desktop Grid / 1-Column Mobile (Mirroring Google SERP Sitelinks) -->
+                <nav aria-label="Direktori Sitelinks Ekosistem Dents Web" itemscope itemtype="https://schema.org/SiteNavigationElement" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; max-width: 1080px; margin: 0 auto;">
+                    
+                    <!-- 1. Layanan Kami -->
+                    <a href="/services" itemprop="url" class="sitelink-serp-card pptx-fade-up" style="display: flex; justify-content: space-between; align-items: center; background: rgba(11, 17, 43, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 18px 22px; text-decoration: none; transition: all 0.25s ease;">
+                        <div style="padding-right: 14px;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                                <span style="color: #a78bfa; font-size: 0.8rem; font-weight: 700;">01 &bull;</span>
+                                <h3 itemprop="name" style="color: #c4b5fd; font-size: 1.12rem; font-weight: 700; margin: 0; line-height: 1.3;">Layanan &amp; Solusi Web</h3>
+                            </div>
+                            <p itemprop="description" style="color: #94a3b8; font-size: 0.87rem; line-height: 1.5; margin: 0;">
+                                Pembuatan website custom, landing page konversi tinggi, otomatisasi formulir Google Apps Script, dan sistem web apps.
+                            </p>
+                        </div>
+                        <div style="flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%; background: rgba(167, 139, 250, 0.12); border: 1px solid rgba(167, 139, 250, 0.25); display: flex; align-items: center; justify-content: center; color: #c4b5fd;">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                        </div>
+                    </a>
+
+                    <!-- 2. Portofolio Karya -->
+                    <a href="/portfolio" itemprop="url" class="sitelink-serp-card pptx-fade-up" style="display: flex; justify-content: space-between; align-items: center; background: rgba(11, 17, 43, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 18px 22px; text-decoration: none; transition: all 0.25s ease;">
+                        <div style="padding-right: 14px;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                                <span style="color: #38bdf8; font-size: 0.8rem; font-weight: 700;">02 &bull;</span>
+                                <h3 itemprop="name" style="color: #7dd3fc; font-size: 1.12rem; font-weight: 700; margin: 0; line-height: 1.3;">Portofolio &amp; Studi Kasus</h3>
+                            </div>
+                            <p itemprop="description" style="color: #94a3b8; font-size: 0.87rem; line-height: 1.5; margin: 0;">
+                                Galeri karya nyata website klien, pengujian skor performa 95+, dan arsitektur kode modern siap pakai.
+                            </p>
+                        </div>
+                        <div style="flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.25); display: flex; align-items: center; justify-content: center; color: #7dd3fc;">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                        </div>
+                    </a>
+
+                    <!-- 3. Paket Investasi & Harga -->
+                    <a href="/pricing" itemprop="url" class="sitelink-serp-card pptx-fade-up" style="display: flex; justify-content: space-between; align-items: center; background: rgba(11, 17, 43, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 18px 22px; text-decoration: none; transition: all 0.25s ease;">
+                        <div style="padding-right: 14px;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                                <span style="color: var(--lime-bright); font-size: 0.8rem; font-weight: 700;">03 &bull;</span>
+                                <h3 itemprop="name" style="color: #bef264; font-size: 1.12rem; font-weight: 700; margin: 0; line-height: 1.3;">Paket Investasi &amp; Harga</h3>
+                            </div>
+                            <p itemprop="description" style="color: #94a3b8; font-size: 0.87rem; line-height: 1.5; margin: 0;">
+                                Skema harga transparan tanpa biaya tersembunyi: Starter (Rp 500rb), Business (Rp 1.5jt), Pro (Rp 3.5jt), &amp; Custom.
+                            </p>
+                        </div>
+                        <div style="flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%; background: rgba(163, 230, 53, 0.12); border: 1px solid rgba(163, 230, 53, 0.25); display: flex; align-items: center; justify-content: center; color: var(--lime-bright);">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                        </div>
+                    </a>
+
+                    <!-- 4. Portal Artikel & Edukasi -->
+                    <a href="/articles" itemprop="url" class="sitelink-serp-card pptx-fade-up" style="display: flex; justify-content: space-between; align-items: center; background: rgba(11, 17, 43, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 18px 22px; text-decoration: none; transition: all 0.25s ease;">
+                        <div style="padding-right: 14px;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                                <span style="color: #f472b6; font-size: 0.8rem; font-weight: 700;">04 &bull;</span>
+                                <h3 itemprop="name" style="color: #fbcfe8; font-size: 1.12rem; font-weight: 700; margin: 0; line-height: 1.3;">Portal Artikel &amp; Wawasan</h3>
+                            </div>
+                            <p itemprop="description" style="color: #94a3b8; font-size: 0.87rem; line-height: 1.5; margin: 0;">
+                                Edukasi strategi website modern, teknik SEO on-page Google organik, dan arsitektur performa tinggi.
+                            </p>
+                        </div>
+                        <div style="flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%; background: rgba(244, 114, 182, 0.12); border: 1px solid rgba(244, 114, 182, 0.25); display: flex; align-items: center; justify-content: center; color: #fbcfe8;">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                        </div>
+                    </a>
+
+                    <!-- 5. Tentang Kami -->
+                    <a href="/about" itemprop="url" class="sitelink-serp-card pptx-fade-up" style="display: flex; justify-content: space-between; align-items: center; background: rgba(11, 17, 43, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 18px 22px; text-decoration: none; transition: all 0.25s ease;">
+                        <div style="padding-right: 14px;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                                <span style="color: #fb923c; font-size: 0.8rem; font-weight: 700;">05 &bull;</span>
+                                <h3 itemprop="name" style="color: #fed7aa; font-size: 1.12rem; font-weight: 700; margin: 0; line-height: 1.3;">Tentang Dents Web</h3>
+                            </div>
+                            <p itemprop="description" style="color: #94a3b8; font-size: 0.87rem; line-height: 1.5; margin: 0;">
+                                Mengenal filosofi studio rekayasa web, standar kualitas tanpa kompromi, dan komitmen tim pengembang.
+                            </p>
+                        </div>
+                        <div style="flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%; background: rgba(251, 146, 60, 0.12); border: 1px solid rgba(251, 146, 60, 0.25); display: flex; align-items: center; justify-content: center; color: #fed7aa;">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                        </div>
+                    </a>
+
+                    <!-- 6. Hubungi Kami -->
+                    <a href="/contact" itemprop="url" class="sitelink-serp-card pptx-fade-up" style="display: flex; justify-content: space-between; align-items: center; background: rgba(11, 17, 43, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 18px 22px; text-decoration: none; transition: all 0.25s ease;">
+                        <div style="padding-right: 14px;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                                <span style="color: #34d399; font-size: 0.8rem; font-weight: 700;">06 &bull;</span>
+                                <h3 itemprop="name" style="color: #a7f3d0; font-size: 1.12rem; font-weight: 700; margin: 0; line-height: 1.3;">Hubungi &amp; Konsultasi</h3>
+                            </div>
+                            <p itemprop="description" style="color: #94a3b8; font-size: 0.87rem; line-height: 1.5; margin: 0;">
+                                Konsultasi proyek gratis, audit kebutuhan platform digital Anda, atau hubungi langsung via WhatsApp resmi.
+                            </p>
+                        </div>
+                        <div style="flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%; background: rgba(52, 211, 153, 0.12); border: 1px solid rgba(52, 211, 153, 0.25); display: flex; align-items: center; justify-content: center; color: #a7f3d0;">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                        </div>
+                    </a>
+
+                </nav>
             </div>
         </section>
 
