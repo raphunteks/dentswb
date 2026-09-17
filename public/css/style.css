@@ -1246,10 +1246,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .pricing-card-kalana.featured {
-  border-color: rgba(33, 82, 207, 0.5);
+  border: 2px solid var(--royal-blue);
   border-bottom: 4px solid var(--royal-blue);
-  box-shadow: var(--shadow-soft-hover);
-  transform: scale(1.02);
+  box-shadow: 0 14px 36px rgba(33, 82, 207, 0.14);
   z-index: 2;
 }
 
@@ -3363,24 +3362,46 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .pricing-title-box {
-  min-height: 56px;
+  height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.pricing-title-box h3 {
+  font-size: 1.15rem;
+  line-height: 1.35;
+  margin: 0;
 }
 
 .pricing-desc-box {
-  min-height: 64px;
-  font-size: 0.88rem;
+  height: 88px;
+  font-size: 0.85rem;
   color: var(--slate-body);
-  line-height: 1.5;
+  line-height: 1.55;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-start;
 }
 
 .pricing-price-box {
-  height: 90px;
-  margin: 18px 0;
+  height: 94px;
+  margin: 16px 0 20px 0;
   border-bottom: 2px solid var(--border-light);
-  padding-bottom: 16px;
+  padding-bottom: 14px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-end;
+}
+
+.pricing-price-box .price-amount,
+.pricing-price-box > div:last-child {
+  font-size: clamp(1.42rem, 1.75vw, 1.95rem);
+  font-weight: 900;
+  line-height: 1.15;
+  margin-top: 4px;
+  white-space: nowrap;
+  letter-spacing: -0.02em;
 }
 
 /* --------------------------------------------------------------------------
@@ -3707,3 +3728,225 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 0.95rem;
   }
 }
+
+/* --------------------------------------------------------------------------
+   23. Presentation-Style PPTX Morph & Soft Animation Suite (All Tabs)
+   -------------------------------------------------------------------------- */
+
+/* Page View Entrance */
+main, .page-header-kalana, .hero-kalana {
+  animation: pptxMorphFadeIn 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Keyframes - Soft & Natural Easing */
+@keyframes pptxMorphFadeIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.985) translate3d(0, 16px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+}
+
+@keyframes pptxSlideUp {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 28px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes pptxSlideDown {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -28px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes pptxSwiftLeft {
+  0% {
+    opacity: 0;
+    transform: translate3d(32px, 0, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes pptxSwiftRight {
+  0% {
+    opacity: 0;
+    transform: translate3d(-32px, 0, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes pptxScaleIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Scroll Reveal Classes */
+.pptx-reveal {
+  opacity: 0;
+  transform: translate3d(0, 20px, 0);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.pptx-slide-up {
+  opacity: 0;
+  transform: translate3d(0, 28px, 0);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.pptx-slide-down {
+  opacity: 0;
+  transform: translate3d(0, -24px, 0);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.pptx-swift-left {
+  opacity: 0;
+  transform: translate3d(32px, 0, 0);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.pptx-swift-right {
+  opacity: 0;
+  transform: translate3d(-32px, 0, 0);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.pptx-scale-in {
+  opacity: 0;
+  transform: scale(0.94);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+/* Visible State */
+.pptx-visible {
+  opacity: 1 !important;
+  transform: scale(1) translate3d(0, 0, 0) !important;
+}
+
+/* Stagger Delays for Cards & Grids (1 s/d 8) */
+.pptx-stagger-1 { transition-delay: 0.05s; }
+.pptx-stagger-2 { transition-delay: 0.10s; }
+.pptx-stagger-3 { transition-delay: 0.15s; }
+.pptx-stagger-4 { transition-delay: 0.20s; }
+.pptx-stagger-5 { transition-delay: 0.25s; }
+.pptx-stagger-6 { transition-delay: 0.30s; }
+.pptx-stagger-7 { transition-delay: 0.35s; }
+.pptx-stagger-8 { transition-delay: 0.40s; }
+
+/* Interactive Hover Morph for Cards */
+.service-card-kalana,
+.pricing-card-kalana,
+.portfolio-card-kalana,
+.article-card-kalana,
+.tactile-card {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .service-card-kalana:hover,
+  .pricing-card-kalana:hover,
+  .portfolio-card-kalana:hover,
+  .article-card-kalana:hover {
+    transform: translateY(-6px) scale(1.006);
+    box-shadow: 0 16px 36px rgba(5, 8, 28, 0.09);
+  }
+}
+
+/* Touch & Mobile Optimization (Subtle Clamping to Prevent Horizontal Overflow) */
+@media (max-width: 768px) {
+  .pptx-reveal, .pptx-slide-up {
+    transform: translate3d(0, 14px, 0);
+  }
+  .pptx-slide-down {
+    transform: translate3d(0, -14px, 0);
+  }
+  .pptx-swift-left {
+    transform: translate3d(14px, 0, 0);
+  }
+  .pptx-swift-right {
+    transform: translate3d(-14px, 0, 0);
+  }
+  .pptx-scale-in {
+    transform: scale(0.97);
+  }
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .pptx-reveal, .pptx-slide-up, .pptx-slide-down, .pptx-swift-left, .pptx-swift-right, .pptx-scale-in {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ==========================================================================
+   26. Google SERP Sitelinks Discovery Hub Interactive Card Styling
+   ========================================================================== */
+.sitelink-serp-card {
+  position: relative;
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.sitelink-serp-card:hover {
+  background: rgba(19, 29, 70, 0.92) !important;
+  border-color: rgba(163, 230, 53, 0.4) !important;
+  transform: translateY(-3px) scale(1.008);
+  box-shadow: 0 12px 28px -6px rgba(0, 0, 0, 0.5), 0 0 18px rgba(163, 230, 53, 0.15);
+}
+
+.sitelink-serp-card:hover h3 {
+  color: var(--lime-bright) !important;
+  transition: color 0.2s ease;
+}
+
+.sitelink-serp-card:hover div[style*="border-radius: 50%"] {
+  background: var(--lime-bright) !important;
+  color: #05081c !important;
+  border-color: var(--lime-bright) !important;
+  transform: translateX(4px);
+  transition: all 0.25s ease;
+}
+
+@media (max-width: 768px) {
+  .sitelink-serp-card {
+    padding: 16px 18px !important;
+  }
+}
+
+
