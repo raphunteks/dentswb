@@ -6,15 +6,15 @@
             <span class="nav-brand-name"><%= typeof settings !== 'undefined' && settings.siteName ? settings.siteName : 'ents Web' %></span>
         </a>
 
-        <!-- Desktop Pill Navigation -->
-        <nav class="nav-links-desktop" aria-label="Navigasi Utama">
-            <a href="/" class="nav-pill-link <%= (typeof seo !== 'undefined' && seo.path === '/') ? 'active' : '' %>">Home</a>
-            <a href="/services" class="nav-pill-link <%= (typeof seo !== 'undefined' && seo.path === '/services') ? 'active' : '' %>">Services</a>
-            <a href="/portfolio" class="nav-pill-link <%= (typeof seo !== 'undefined' && seo.path && seo.path.startsWith('/portfolio')) ? 'active' : '' %>">Portfolio</a>
-            <a href="/articles" class="nav-pill-link <%= (typeof seo !== 'undefined' && seo.path && (seo.path === '/articles' || seo.path.startsWith('/article/'))) ? 'active' : '' %>">Articles</a>
-            <a href="/pricing" class="nav-pill-link <%= (typeof seo !== 'undefined' && seo.path === '/pricing') ? 'active' : '' %>">Pricing</a>
-            <a href="/about" class="nav-pill-link <%= (typeof seo !== 'undefined' && seo.path === '/about') ? 'active' : '' %>">About</a>
-            <a href="/faq" class="nav-pill-link <%= (typeof seo !== 'undefined' && seo.path === '/faq') ? 'active' : '' %>">FAQ</a>
+        <!-- Desktop Pill Navigation with Schema.org SiteNavigationElement -->
+        <nav class="nav-links-desktop" itemscope itemtype="https://schema.org/SiteNavigationElement" aria-label="Navigasi Utama">
+            <a href="/" itemprop="url" class="nav-pill-link <%= (typeof seo !== 'undefined' && seo.path === '/') ? 'active' : '' %>"><span itemprop="name">Beranda</span></a>
+            <a href="/services" itemprop="url" class="nav-pill-link <%= (typeof seo !== 'undefined' && seo.path === '/services') ? 'active' : '' %>"><span itemprop="name">Layanan</span></a>
+            <a href="/portfolio" itemprop="url" class="nav-pill-link <%= (typeof seo !== 'undefined' && seo.path && seo.path.startsWith('/portfolio')) ? 'active' : '' %>"><span itemprop="name">Portofolio</span></a>
+            <a href="/articles" itemprop="url" class="nav-pill-link <%= (typeof seo !== 'undefined' && seo.path && (seo.path === '/articles' || seo.path.startsWith('/article/'))) ? 'active' : '' %>"><span itemprop="name">Artikel</span></a>
+            <a href="/pricing" itemprop="url" class="nav-pill-link <%= (typeof seo !== 'undefined' && seo.path === '/pricing') ? 'active' : '' %>"><span itemprop="name">Harga</span></a>
+            <a href="/about" itemprop="url" class="nav-pill-link <%= (typeof seo !== 'undefined' && seo.path === '/about') ? 'active' : '' %>"><span itemprop="name">Tentang Kami</span></a>
+            <a href="/faq" itemprop="url" class="nav-pill-link <%= (typeof seo !== 'undefined' && seo.path === '/faq') ? 'active' : '' %>"><span itemprop="name">FAQ</span></a>
         </nav>
 
         <!-- CTA Action -->
@@ -32,16 +32,16 @@
 </div>
 
 <!-- Mobile Dropdown Drawer -->
-<nav class="mobile-nav-drawer" id="mobile-drawer" aria-label="Navigasi Mobile">
-    <a href="/" class="<%= (typeof seo !== 'undefined' && seo.path === '/') ? 'active' : '' %>">Home</a>
-    <a href="/services" class="<%= (typeof seo !== 'undefined' && seo.path === '/services') ? 'active' : '' %>">Services</a>
-    <a href="/portfolio" class="<%= (typeof seo !== 'undefined' && seo.path && seo.path.startsWith('/portfolio')) ? 'active' : '' %>">Portfolio</a>
-    <a href="/articles" class="<%= (typeof seo !== 'undefined' && seo.path && (seo.path === '/articles' || seo.path.startsWith('/article/'))) ? 'active' : '' %>">Articles</a>
-    <a href="/pricing" class="<%= (typeof seo !== 'undefined' && seo.path === '/pricing') ? 'active' : '' %>">Pricing</a>
-    <a href="/about" class="<%= (typeof seo !== 'undefined' && seo.path === '/about') ? 'active' : '' %>">About</a>
-    <a href="/faq" class="<%= (typeof seo !== 'undefined' && seo.path === '/faq') ? 'active' : '' %>">FAQ</a>
-    <a href="/contact" class="mobile-cta">
-        <span>Mulai Project</span>
+<nav class="mobile-nav-drawer" id="mobile-drawer" itemscope itemtype="https://schema.org/SiteNavigationElement" aria-label="Navigasi Mobile">
+    <a href="/" itemprop="url" class="<%= (typeof seo !== 'undefined' && seo.path === '/') ? 'active' : '' %>"><span itemprop="name">Beranda</span></a>
+    <a href="/services" itemprop="url" class="<%= (typeof seo !== 'undefined' && seo.path === '/services') ? 'active' : '' %>"><span itemprop="name">Layanan</span></a>
+    <a href="/portfolio" itemprop="url" class="<%= (typeof seo !== 'undefined' && seo.path && seo.path.startsWith('/portfolio')) ? 'active' : '' %>"><span itemprop="name">Portofolio</span></a>
+    <a href="/articles" itemprop="url" class="<%= (typeof seo !== 'undefined' && seo.path && (seo.path === '/articles' || seo.path.startsWith('/article/'))) ? 'active' : '' %>"><span itemprop="name">Artikel</span></a>
+    <a href="/pricing" itemprop="url" class="<%= (typeof seo !== 'undefined' && seo.path === '/pricing') ? 'active' : '' %>"><span itemprop="name">Harga</span></a>
+    <a href="/about" itemprop="url" class="<%= (typeof seo !== 'undefined' && seo.path === '/about') ? 'active' : '' %>"><span itemprop="name">Tentang Kami</span></a>
+    <a href="/faq" itemprop="url" class="<%= (typeof seo !== 'undefined' && seo.path === '/faq') ? 'active' : '' %>"><span itemprop="name">FAQ</span></a>
+    <a href="/contact" itemprop="url" class="mobile-cta">
+        <span itemprop="name">Mulai Project</span>
         <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
     </a>
 </nav>
