@@ -349,6 +349,37 @@
                             <input type="text" class="form-control" name="address" id="set-address" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
                         </div>
 
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                            <div class="form-group">
+                                <label class="form-label" style="color: #ffffff;">Domain / Canonical Site URL</label>
+                                <input type="url" class="form-control" name="siteUrl" id="set-siteUrl" placeholder="https://www.dentsweb.my.id" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                                <small style="color: var(--slate-muted); font-size: 0.8rem; display: block; margin-top: 4px;">URL canonical utama untuk Google Search Console &amp; Sitelinks.</small>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" style="color: #ffffff;">Google Analytics / GTM ID</label>
+                                <input type="text" class="form-control" name="analyticsId" id="set-analyticsId" placeholder="G-XXXXXXXXXX" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                                <small style="color: var(--slate-muted); font-size: 0.8rem; display: block; margin-top: 4px;">Opsional: ID pelacakan traffic Google Analytics 4.</small>
+                            </div>
+                        </div>
+
+                        <!-- Google Site Verification Dynamic Box -->
+                        <div class="form-group" style="border: 1px solid rgba(163, 230, 53, 0.25); background: rgba(163, 230, 53, 0.04); padding: 16px; border-radius: 12px; margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                <label class="form-label" style="color: var(--lime-bright); margin: 0; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                                    Google Site Verification Code (100% Dinamis)
+                                </label>
+                                <span style="font-size: 0.75rem; background: rgba(163, 230, 53, 0.2); color: var(--lime-bright); padding: 2px 8px; border-radius: 20px; font-weight: 600;">GSC Verified</span>
+                            </div>
+                            <input type="text" class="form-control" name="googleVerification" id="set-googleVerification" placeholder="Cth: e67nOsjn34kGZ_5feJrhj68I24DnRqzB2OZOpgxIuY4" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border); font-family: monospace; font-size: 0.9rem;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; flex-wrap: wrap; gap: 8px;">
+                                <small style="color: var(--slate-muted); font-size: 0.8rem;">
+                                    Masukkan kode token, tag <code>&lt;meta&gt;</code> lengkap, atau nama file HTML. Sistem otomatis mengekstrak hash valid.
+                                </small>
+                                <div id="set-googleVerification-preview" style="font-size: 0.8rem;"></div>
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <label class="form-label" style="color: #ffffff;">Default SEO Title</label>
                             <input type="text" class="form-control" name="defaultSeoTitle" id="set-seoTitle" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
@@ -360,7 +391,7 @@
                         </div>
 
                         <button type="submit" class="btn-lime" style="width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
-                            <span>Simpan Pengaturan Global</span>
+                            <span>Simpan Pengaturan Global &amp; SEO Dinamis</span>
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                         </button>
                     </form>
@@ -1699,8 +1730,16 @@
                     document.getElementById('set-email').value = res.data.email || '';
                     document.getElementById('set-whatsapp').value = res.data.whatsapp || '';
                     document.getElementById('set-address').value = res.data.address || '';
+                    document.getElementById('set-siteUrl').value = res.data.siteUrl || '';
+                    document.getElementById('set-analyticsId').value = res.data.analyticsId || '';
+                    document.getElementById('set-googleVerification').value = res.data.googleVerification || '';
                     document.getElementById('set-seoTitle').value = res.data.defaultSeoTitle || '';
                     document.getElementById('set-seoDesc').value = res.data.defaultSeoDescription || '';
+
+                    const previewEl = document.getElementById('set-googleVerification-preview');
+                    if (previewEl && res.data.googleVerification) {
+                        previewEl.innerHTML = `<a href="/google${encodeURIComponent(res.data.googleVerification)}.html" target="_blank" style="color: #60a5fa; text-decoration: underline; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 4px;"><span>Uji File Verifikasi Google</span> &rarr;</a>`;
+                    }
                 }
             }
 
