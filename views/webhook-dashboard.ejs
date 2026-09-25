@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#05081c">
+    <title>Pakasir KYC Reviewer Console | Dents Web</title>
+    <link rel="icon" type="image/png" href="/public/img/axalogo.png">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/public/css/style.css">
+</head>
+<body style="background: var(--navy-deep); color: var(--slate-body); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden;">
+
+    <!-- Top Navigation Bar -->
+    <header style="background: rgba(16, 24, 59, 0.95); border-bottom: 1px solid var(--navy-surface-border); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 100;">
+        <div style="max-width: 1280px; margin: 0 auto; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;">
+            
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <a href="/" style="display: inline-flex; align-items: center; gap: 4px; text-decoration: none;">
+                    <img src="/public/img/axalogo.png" alt="Dents Logo" style="height: 32px; width: auto; object-fit: contain;">
+                    <span style="font-family: 'Lexend Deca', sans-serif; font-size: 1.2rem; font-weight: 800; color: #ffffff; letter-spacing: -0.5px;">ents Web</span>
+                </a>
+                <span style="color: var(--slate-muted); font-size: 0.9rem;">/</span>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="color: var(--lime-bright); font-weight: 800; font-size: 0.92rem; letter-spacing: -0.2px;">PAKASIR REVIEWER</span>
+                    <span class="badge-tag-lime" style="font-size: 0.68rem; padding: 2px 7px;">Sandbox v2</span>
+                </div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="font-size: 0.82rem; color: var(--slate-muted); display: none; align-items: center; gap: 6px;" id="desktop-user-badge">
+                    <span>Login sebagai:</span>
+                    <strong style="color: #ffffff;"><%= user %></strong>
+                </div>
+                <button type="button" class="btn-ghost-white" onclick="handleTesterLogout()" style="padding: 6px 14px; font-size: 0.82rem; display: inline-flex; align-items: center; gap: 6px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    <span>Keluar</span>
+                </button>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main style="flex: 1; max-width: 1280px; width: 100%; margin: 0 auto; padding: 24px 20px 48px 20px; box-sizing: border-box;">
+        
+        <!-- Tester Hero Banner -->
+        <div class="tester-hero-box">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap;">
+                <div>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                        <span class="tester-pill-badge">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                            KYC Sandbox Ready
+                        </span>
+                        <span style="font-size: 0.8rem; color: var(--slate-muted);">Project Slug: <strong style="color: #ffffff;"><%= (settings && settings.pakasirSlug) ? settings.pakasirSlug : 'dentsweb' %></strong></span>
+                    </div>
+                    <h1 style="color: #ffffff; font-size: 1.65rem; margin: 0 0 8px 0; font-family: 'Lexend Deca', sans-serif;">
+                        Pakasir Payment Gateway — KYC Verification &amp; Sandbox Console
+                    </h1>
+                    <p style="color: var(--slate-muted); font-size: 0.88rem; margin: 0; line-height: 1.6; max-width: 820px;">
+                        Lingkungan pengujian resmi platform <strong>Dents Web</strong> untuk Tim Verifikasi &amp; Reviewer Pakasir. Gunakan konsol ini untuk menguji simulasi transaksi (QRIS, Payment Link, VA), pengecekan status real-time, inspeksi payload webhook callback, serta kalkulator fee.
+                    </p>
+                </div>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <button type="button" class="btn-royal" onclick="switchTesterTab('create')" style="padding: 8px 16px; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        <span>Uji Transaksi</span>
+                    </button>
+                    <button type="button" class="btn-ghost-white" onclick="loadTesterAllData()" style="padding: 8px 14px; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+                        <span>Segarkan</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Metric Stat Cards -->
+        <div class="pakasir-stat-grid">
+            <div class="pakasir-stat-card">
+                <div class="stat-label">Total Omzet Sukses</div>
+                <div class="stat-val" id="tester-stat-omzet" style="color: var(--lime-bright);">Rp 0</div>
+                <div class="stat-desc">Dana terverifikasi masuk</div>
+            </div>
+            <div class="pakasir-stat-card">
+                <div class="stat-label">Total Transaksi</div>
+                <div class="stat-val" id="tester-stat-total" style="color: #ffffff;">0</div>
+                <div class="stat-desc">Semua transaksi uji coba</div>
+            </div>
+            <div class="pakasir-stat-card">
+                <div class="stat-label" style="color: #4ade80;">Sukses (Completed)</div>
+                <div class="stat-val" id="tester-stat-completed" style="color: #4ade80;">0</div>
+                <div class="stat-desc">Pembayaran tervalidasi</div>
+            </div>
+            <div class="pakasir-stat-card">
+                <div class="stat-label" style="color: #facc15;">Menunggu (Pending)</div>
+                <div class="stat-val" id="tester-stat-pending" style="color: #facc15;">0</div>
+                <div class="stat-desc">Menunggu pembayaran</div>
+            </div>
+            <div class="pakasir-stat-card">
+                <div class="stat-label" style="color: #f87171;">Dibatalkan (Canceled)</div>
+                <div class="stat-val" id="tester-stat-canceled" style="color: #f87171;">0</div>
+                <div class="stat-desc">Expired / dibatalkan</div>
+            </div>
+        </div>
+
+        <!-- Sub-Navigation Capsule Tabs -->
+        <div class="pakasir-subnav">
+            <button type="button" class="btn-subnav active" onclick="switchTesterTab('create')" id="tester-nav-create">
+                <span>➕ Uji Buat Transaksi</span>
+            </button>
+            <button type="button" class="btn-subnav" onclick="switchTesterTab('history')" id="tester-nav-history">
+                <span>📋 Riwayat Transaksi</span>
+            </button>
+            <button type="button" class="btn-subnav" onclick="switchTesterTab('webhooks')" id="tester-nav-webhooks">
+                <span>⚡ Webhook Callback Logs</span>
+                <span class="badge-tag-lime" id="tester-wh-count" style="font-size: 0.7rem; padding: 1px 6px;">0</span>
+            </button>
+            <button type="button" class="btn-subnav" onclick="switchTesterTab('calc')" id="tester-nav-calc">
+                <span>🧮 Live Fee Calculator</span>
+            </button>
+        </div>
+
+        <!-- TAB 1: FORM BUAT TRANSAKSI UJI COBA -->
+        <div id="tester-view-create" class="tester-subview">
+            <div class="pakasir-create-grid">
+                
+                <!-- Form Transaksi -->
+                <div class="tactile-card-dark">
+                    <h3 style="color: #ffffff; font-size: 1.15rem; margin-top: 0; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                        <span>💳 Formulir Uji Coba Transaksi Pakasir (API v2)</span>
+                    </h3>
+                    <form id="form-tester-create" onsubmit="handleTesterCreateTxn(event)">
+                        
+                        <div style="display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: flex-end; margin-bottom: 16px;">
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label" style="color: #ffffff; font-size: 0.88rem;">Order ID / Invoice</label>
+                                <input type="text" class="form-control" id="tester-order-id" placeholder="DW-TEST-..." style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);" required>
+                            </div>
+                            <button type="button" class="btn-ghost-white" onclick="generateTesterOrderId()" style="padding: 10px 14px; font-size: 0.85rem;" title="Acak Order ID Baru">
+                                <span>🎲 Acak ID</span>
+                            </button>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" style="color: #ffffff; font-size: 0.88rem;">Nominal Tagihan (Rupiah)</label>
+                            <div style="position: relative;">
+                                <span style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--slate-muted); font-weight: 700;">Rp</span>
+                                <input type="number" class="form-control" id="tester-amount" placeholder="50000" min="500" step="500" value="50000" style="padding-left: 45px; background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border); font-size: 1.1rem; font-weight: 700;" oninput="updateTesterLiveFee()" required>
+                            </div>
+                            <small style="color: var(--slate-muted); font-size: 0.8rem; display: block; margin-top: 4px;">Minimal Rp 500 (QRIS/Link) atau Rp 10.000 (Virtual Account).</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" style="color: #ffffff; font-size: 0.88rem;">Metode Pembayaran</label>
+                            <select class="form-control" id="tester-method" onchange="updateTesterLiveFee()" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);" required>
+                                <optgroup label="Instant QR Code">
+                                    <option value="qris" selected>QRIS (Semua E-Wallet & Mobile Banking) [Min: 500, Max: 10jt]</option>
+                                </optgroup>
+                                <optgroup label="Payment Checkout Link">
+                                    <option value="payment_link">Payment Link (Halaman Bayar Pakasir) [Min: 500, Max: 50jt]</option>
+                                </optgroup>
+                                <optgroup label="Virtual Account Bank (Min: 10.000, Max: 50jt)">
+                                    <option value="bni_va">BNI Virtual Account</option>
+                                    <option value="bri_va">BRI Virtual Account</option>
+                                    <option value="cimb_niaga_va">CIMB Niaga Virtual Account</option>
+                                    <option value="permata_va">Permata Virtual Account</option>
+                                    <option value="maybank_va">Maybank Virtual Account</option>
+                                    <option value="bnc_va">Bank Neo Commerce (BNC) VA</option>
+                                    <option value="artha_graha_va">Artha Graha Virtual Account</option>
+                                    <option value="sampoerna_va">Bank Sahabat Sampoerna VA</option>
+                                </optgroup>
+                            </select>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                            <div class="form-group">
+                                <label class="form-label" style="color: #ffffff; font-size: 0.88rem;">Nama Pelanggan (Tester)</label>
+                                <input type="text" class="form-control" id="tester-customer-name" value="Pakasir KYC Reviewer" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" style="color: #ffffff; font-size: 0.88rem;">Email Pelanggan</label>
+                                <input type="email" class="form-control" id="tester-customer-email" value="reviewer@pakasir.com" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" style="color: #ffffff; font-size: 0.88rem;">Catatan Pengujian</label>
+                            <input type="text" class="form-control" id="tester-notes" value="Pengujian KYC Pakasir Dents Web" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                        </div>
+
+                        <button type="submit" id="btn-submit-tester-txn" class="btn-lime" style="width: 100%; padding: 12px; font-size: 0.98rem; display: inline-flex; align-items: center; justify-content: center; gap: 8px; margin-top: 10px;">
+                            <span>Kirim Transaksi Uji Coba ke Pakasir</span>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Live Fee & Payment Summary Preview -->
+                <div>
+                    <div class="tactile-card-dark" style="background: rgba(16, 24, 59, 0.95); border: 1px solid rgba(59, 130, 246, 0.3); margin-bottom: 20px;">
+                        <h4 style="color: #ffffff; margin-top: 0; margin-bottom: 14px; font-size: 1.05rem; display: flex; align-items: center; gap: 6px;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--lime-bright);"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span>Estimasi Biaya Transaksi</span>
+                        </h4>
+                        <div style="display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem;">
+                            <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed var(--navy-surface-border); padding-bottom: 8px;">
+                                <span style="color: var(--slate-muted);">Metode Dipilih</span>
+                                <span id="tester-preview-method" style="font-weight: 700; color: #ffffff;">QRIS</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed var(--navy-surface-border); padding-bottom: 8px;">
+                                <span style="color: var(--slate-muted);">Nominal Tagihan</span>
+                                <span id="tester-preview-nominal" style="font-weight: 700; color: #ffffff;">Rp 50.000</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed var(--navy-surface-border); padding-bottom: 8px;">
+                                <span style="color: var(--slate-muted);">Estimasi Fee Pakasir</span>
+                                <span id="tester-preview-fee" style="font-weight: 700; color: #facc15;">-</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding-top: 4px; font-size: 1rem;">
+                                <span style="color: #ffffff; font-weight: 700;">Total Dibayar</span>
+                                <span id="tester-preview-total" style="font-weight: 800; color: var(--lime-bright);">Rp 50.000</span>
+                            </div>
+                        </div>
+                        <div style="margin-top: 14px; font-size: 0.78rem; color: var(--slate-muted); background: var(--navy-surface); padding: 8px 12px; border-radius: 8px;">
+                            Biaya live diambil langsung dari API resmi Pakasir saat Anda memasukkan nominal.
+                        </div>
+                    </div>
+
+                    <!-- Batas Limit Pembayaran Info (Sesuai Gambar 1 & Gambar 2) -->
+                    <div class="tactile-card-dark" style="font-size: 0.82rem; color: var(--slate-muted);">
+                        <strong style="color: #ffffff; display: block; margin-bottom: 8px;">Ketentuan Nominal Pakasir:</strong>
+                        <ul style="margin: 0; padding-left: 18px; line-height: 1.6;">
+                            <li><strong>QRIS</strong>: Min Rp 500, Max Rp 10.000.000</li>
+                            <li><strong>Payment Link</strong>: Min Rp 500, Max Rp 50.000.000</li>
+                            <li><strong>Semua Virtual Account</strong>: Min Rp 10.000, Max Rp 50.000.000</li>
+                            <li>Transaksi kadaluarsa otomatis setelah 1x24 jam jika tidak dibayar.</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- TAB 2: RIWAYAT TRANSAKSI -->
+        <div id="tester-view-history" class="tester-subview" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <button type="button" class="btn-subnav active" onclick="filterTesterHistory('all', this)">Semua (<span id="tester-count-hist-all">0</span>)</button>
+                    <button type="button" class="btn-subnav" onclick="filterTesterHistory('completed', this)">Completed (<span id="tester-count-hist-completed">0</span>)</button>
+                    <button type="button" class="btn-subnav" onclick="filterTesterHistory('pending', this)">Pending (<span id="tester-count-hist-pending">0</span>)</button>
+                    <button type="button" class="btn-subnav" onclick="filterTesterHistory('canceled', this)">Canceled (<span id="tester-count-hist-canceled">0</span>)</button>
+                </div>
+                <input type="text" id="tester-search-input" oninput="searchTesterHistory()" placeholder="Cari Order ID / Txn ID..." class="form-control" style="max-width: 250px; background: var(--navy-surface); color: #fff; border-color: var(--navy-surface-border); font-size: 0.85rem; padding: 6px 12px;">
+            </div>
+
+            <div class="pakasir-table-wrapper">
+                <table class="admin-table" id="tester-table-txns">
+                    <thead>
+                        <tr>
+                            <th>Waktu Dibuat</th>
+                            <th>Order ID &amp; Txn ID</th>
+                            <th>Metode</th>
+                            <th>Nominal</th>
+                            <th>Status</th>
+                            <th>Klien / Catatan</th>
+                            <th style="text-align: right;">Aksi Uji Coba</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td colspan="7" style="text-align: center; color: var(--slate-muted); padding: 30px;">Memuat riwayat transaksi...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 3: WEBHOOK LOGS & SIMULATOR -->
+        <div id="tester-view-webhooks" class="tester-subview" style="display: none;">
+            
+            <!-- Webhook Info Box -->
+            <div class="pakasir-info-banner">
+                <div>
+                    <strong style="color: #ffffff; font-size: 0.95rem; display: block; margin-bottom: 4px;">📡 Webhook Callback Endpoint Platform</strong>
+                    <p style="color: var(--slate-muted); font-size: 0.82rem; margin: 0;">Sistem Dents Web menerima callback HTTP POST dari Pakasir pada URL publik ini.</p>
+                </div>
+                <div style="display: flex; gap: 8px; align-items: center; flex-grow: 1; max-width: 480px;">
+                    <input type="text" id="tester-wh-url" readonly class="form-control" style="background: var(--navy-surface); color: var(--lime-bright); font-family: monospace; font-size: 0.82rem;" value="/api/webhook/pakasir">
+                    <button type="button" class="btn-royal" onclick="copyTesterWhUrl()" style="white-space: nowrap; font-size: 0.82rem; padding: 8px 12px;">📋 Salin</button>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+                <h4 style="color: #ffffff; margin: 0; font-size: 1.05rem;">Riwayat Panggilan Webhook Masuk (Real-time)</h4>
+                <div style="display: flex; gap: 8px;">
+                    <button type="button" class="btn-ghost-white" onclick="loadTesterWebhookLogs()" style="font-size: 0.82rem; padding: 6px 12px;">🔄 Segarkan Log</button>
+                    <button type="button" class="btn-action-delete" onclick="clearTesterWebhookLogs()" style="font-size: 0.82rem; padding: 6px 12px;">🗑️ Bersihkan</button>
+                </div>
+            </div>
+
+            <div class="pakasir-table-wrapper">
+                <table class="admin-table" id="tester-table-wh">
+                    <thead>
+                        <tr>
+                            <th>Waktu Terima</th>
+                            <th>IP Pengirim</th>
+                            <th>Secret Valid?</th>
+                            <th>Txn ID &amp; Order ID</th>
+                            <th>Nominal</th>
+                            <th>Status Callback</th>
+                            <th style="text-align: right;">Detail Payload</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td colspan="7" style="text-align: center; color: var(--slate-muted); padding: 30px;">Memuat riwayat log webhook...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 4: LIVE FEE CALCULATOR -->
+        <div id="tester-view-calc" class="tester-subview" style="display: none;">
+            <div class="tactile-card-dark pakasir-calc-card">
+                <h3 style="color: #ffffff; font-size: 1.2rem; margin-top: 0; margin-bottom: 8px;">🧮 Penghitung Estimasi Biaya Pakasir (Fee Calculator)</h3>
+                <p style="color: var(--slate-muted); font-size: 0.88rem; margin-bottom: 18px;">
+                    Uji coba endpoint resmi Pakasir <code>/api/v2/payment-fee/{amount}</code> secara langsung dari platform.
+                </p>
+                
+                <div class="pakasir-calc-controls">
+                    <div class="form-group calc-input-wrap">
+                        <label class="form-label" style="color: #ffffff; font-size: 0.88rem;">Nominal Transaksi (Rp)</label>
+                        <input type="number" id="tester-calc-amount" class="form-control" value="100000" min="1000" step="1000" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border); font-size: 1.1rem; font-weight: 700;">
+                    </div>
+                    <div class="calc-btn-wrap">
+                        <button type="button" class="btn-lime" onclick="runTesterFeeCalc()" style="padding: 10px 20px; font-size: 0.92rem; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><line x1="8" y1="2" x2="8" y2="6"></line><line x1="16" y1="2" x2="16" y2="6"></line></svg>
+                            <span>Hitung Biaya Live</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="tester-calc-results" class="pakasir-table-wrapper">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Metode Pembayaran</th>
+                                <th>Nominal Transaksi</th>
+                                <th>Estimasi Biaya (Fee)</th>
+                                <th>Total Dibayar Klien</th>
+                                <th>Dana Bersih Diterima</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tester-calc-tbody">
+                            <tr><td colspan="5" style="text-align: center; color: var(--slate-muted); padding: 24px;">Masukkan nominal dan klik "Hitung Biaya Live".</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modal Detail Transaksi / QRIS Viewer -->
+    <div id="modal-tester-txn" style="display: none; position: fixed; inset: 0; background: rgba(5, 8, 28, 0.85); backdrop-filter: blur(8px); z-index: 1000; align-items: center; justify-content: center; padding: 20px;">
+        <div class="tactile-card-dark" style="max-width: 500px; width: 100%; border-color: rgba(59, 130, 246, 0.4); max-height: 90vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h3 style="color: #ffffff; margin: 0; font-size: 1.15rem;" id="modal-tester-title">Detail Transaksi Uji Coba</h3>
+                <button type="button" onclick="closeTesterModal()" style="background: none; border: none; color: var(--slate-muted); cursor: pointer; font-size: 1.5rem; line-height: 1;">&times;</button>
+            </div>
+            <div id="modal-tester-body"></div>
+        </div>
+    </div>
+
+    <!-- Client-side Logic Script -->
+    <script>
+        let testerTxnCache = [];
+
+        function switchTesterTab(tabId) {
+            document.querySelectorAll('.btn-subnav').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tester-subview').forEach(v => v.style.display = 'none');
+            
+            const btn = document.getElementById('tester-nav-' + tabId);
+            if (btn) btn.classList.add('active');
+            
+            const view = document.getElementById('tester-view-' + tabId);
+            if (view) view.style.display = 'block';
+
+            if (tabId === 'history') loadTesterTransactions();
+            if (tabId === 'webhooks') loadTesterWebhookLogs();
+            if (tabId === 'calc') runTesterFeeCalc();
+        }
+
+        function generateTesterOrderId() {
+            const rand = Math.floor(100000 + Math.random() * 900000);
+            document.getElementById('tester-order-id').value = 'DW-TEST-' + rand;
+        }
+
+        async function updateTesterLiveFee() {
+            const amount = parseInt(document.getElementById('tester-amount').value, 10) || 0;
+            const method = document.getElementById('tester-method').value;
+            
+            document.getElementById('tester-preview-method').textContent = method.toUpperCase();
+            document.getElementById('tester-preview-nominal').textContent = 'Rp ' + amount.toLocaleString('id-ID');
+            
+            if (amount < 500) {
+                document.getElementById('tester-preview-fee').textContent = '-';
+                document.getElementById('tester-preview-total').textContent = 'Rp 0';
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/admin/pakasir/fee-calculator?amount=' + amount);
+                const json = await res.json();
+                if (json.success && json.data && json.data.payment_fee) {
+                    const item = json.data.payment_fee.find(f => f.payment_method === method);
+                    if (item) {
+                        document.getElementById('tester-preview-fee').textContent = '+ Rp ' + item.fee.toLocaleString('id-ID');
+                        document.getElementById('tester-preview-total').textContent = 'Rp ' + item.total_amount.toLocaleString('id-ID');
+                    }
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function handleTesterCreateTxn(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-submit-tester-txn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span>Menghubungi Pakasir API v2...</span>';
+            btn.disabled = true;
+
+            const payload = {
+                order_id: document.getElementById('tester-order-id').value.trim(),
+                amount: parseInt(document.getElementById('tester-amount').value, 10),
+                method: document.getElementById('tester-method').value,
+                customer_name: document.getElementById('tester-customer-name').value.trim(),
+                customer_email: document.getElementById('tester-customer-email').value.trim(),
+                notes: document.getElementById('tester-notes').value.trim()
+            };
+
+            try {
+                const res = await fetch('/api/admin/pakasir/transactions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+
+                if (!res.ok || !data.success) {
+                    throw new Error(data.message || 'Gagal membuat transaksi di Pakasir.');
+                }
+
+                showTesterTxnModal(data.data);
+                generateTesterOrderId();
+                loadTesterTransactions();
+            } catch (err) {
+                alert('Gagal membuat transaksi: ' + err.message);
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        function showTesterTxnModal(txn) {
+            const modal = document.getElementById('modal-tester-txn');
+            const title = document.getElementById('modal-tester-title');
+            const body = document.getElementById('modal-tester-body');
+
+            title.textContent = 'Transaksi Uji Coba Berhasil Dibuat!';
+            
+            let paySection = '';
+            if (txn.payment_method === 'qris' && txn.qr_image_url) {
+                paySection = `
+                    <div style="text-align: center; margin: 16px 0; background: #ffffff; padding: 16px; border-radius: 12px;">
+                        <img src="${txn.qr_image_url}" alt="QRIS Code" style="max-width: 200px; width: 100%; height: auto; display: block; margin: 0 auto;">
+                        <p style="color: #05081c; font-size: 0.8rem; font-weight: 700; margin: 8px 0 0 0;">Scan QRIS ini menggunakan GoPay, OVO, Dana, BCA, atau M-Banking</p>
+                    </div>
+                `;
+            } else if (txn.va_number) {
+                paySection = `
+                    <div style="background: var(--navy-surface); padding: 14px; border-radius: 10px; margin: 16px 0; border: 1px solid var(--navy-surface-border);">
+                        <div style="font-size: 0.8rem; color: var(--slate-muted);">Nomor Virtual Account:</div>
+                        <div style="font-size: 1.3rem; font-weight: 800; color: var(--lime-bright); font-family: monospace;">${txn.va_number}</div>
+                    </div>
+                `;
+            } else if (txn.payment_link) {
+                paySection = `
+                    <div style="margin: 16px 0; text-align: center;">
+                        <a href="${txn.payment_link}" target="_blank" rel="noopener" class="btn-royal" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; font-weight: 700;">
+                            <span>Buka Halaman Checkout Pakasir</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                        </a>
+                    </div>
+                `;
+            }
+
+            body.innerHTML = `
+                <div style="font-size: 0.88rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="color: var(--slate-muted);">Order ID:</span>
+                        <strong style="color: #ffffff;">${txn.order_id}</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="color: var(--slate-muted);">Pakasir Txn ID:</span>
+                        <code style="color: var(--lime-bright);">${txn.txn_id || '-'}</code>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="color: var(--slate-muted);">Metode:</span>
+                        <strong style="color: #ffffff;">${(txn.payment_method || '').toUpperCase()}</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="color: var(--slate-muted);">Total Tagihan:</span>
+                        <strong style="color: var(--lime-bright); font-size: 1.05rem;">Rp ${(txn.total_amount || txn.amount || 0).toLocaleString('id-ID')}</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="color: var(--slate-muted);">Status Saat Ini:</span>
+                        <span class="badge-status-pending">PENDING</span>
+                    </div>
+                    ${paySection}
+                    <div style="display: flex; gap: 8px; margin-top: 18px;">
+                        <button type="button" class="btn-lime" onclick="checkTesterTxnStatus('${txn.id || txn.txn_id}')" style="flex: 1; justify-content: center; padding: 10px;">
+                            🔄 Cek Status Live
+                        </button>
+                        <button type="button" class="btn-ghost-white" onclick="closeTesterModal()" style="padding: 10px 16px;">Tutup</button>
+                    </div>
+                </div>
+            `;
+
+            modal.style.display = 'flex';
+        }
+
+        function closeTesterModal() {
+            document.getElementById('modal-tester-txn').style.display = 'none';
+        }
+
+        async function loadTesterTransactions() {
+            try {
+                const res = await fetch('/api/admin/pakasir/transactions');
+                const json = await res.json();
+                if (json.success && Array.isArray(json.data)) {
+                    testerTxnCache = json.data;
+                    renderTesterTxnTable(testerTxnCache);
+                    updateTesterMetrics(testerTxnCache);
+                }
+            } catch (e) {
+                console.error('Error fetching transactions:', e);
+            }
+        }
+
+        function updateTesterMetrics(txns) {
+            let total = txns.length;
+            let completed = txns.filter(t => t.status === 'completed').length;
+            let pending = txns.filter(t => t.status === 'pending').length;
+            let canceled = txns.filter(t => t.status === 'canceled').length;
+            let omzet = txns.filter(t => t.status === 'completed').reduce((sum, t) => sum + (t.amount || 0), 0);
+
+            document.getElementById('tester-stat-total').textContent = total;
+            document.getElementById('tester-stat-completed').textContent = completed;
+            document.getElementById('tester-stat-pending').textContent = pending;
+            document.getElementById('tester-stat-canceled').textContent = canceled;
+            document.getElementById('tester-stat-omzet').textContent = 'Rp ' + omzet.toLocaleString('id-ID');
+
+            document.getElementById('tester-count-hist-all').textContent = total;
+            document.getElementById('tester-count-hist-completed').textContent = completed;
+            document.getElementById('tester-count-hist-pending').textContent = pending;
+            document.getElementById('tester-count-hist-canceled').textContent = canceled;
+        }
+
+        function renderTesterTxnTable(txns) {
+            const tbody = document.querySelector('#tester-table-txns tbody');
+            if (!txns || txns.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--slate-muted); padding: 30px;">Belum ada transaksi. Silakan buat transaksi uji coba baru.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = txns.map(t => {
+                const dateStr = t.createdAt ? new Date(t.createdAt).toLocaleString('id-ID') : '-';
+                const statusBadge = t.status === 'completed'
+                    ? '<span class="badge-status-completed">COMPLETED</span>'
+                    : (t.status === 'canceled' ? '<span class="badge-status-canceled">CANCELED</span>' : '<span class="badge-status-pending">PENDING</span>');
+
+                return `
+                    <tr>
+                        <td style="font-size: 0.8rem; white-space: nowrap; color: var(--slate-muted);">${dateStr}</td>
+                        <td>
+                            <strong style="color: #ffffff; display: block; font-size: 0.85rem;">${t.order_id || '-'}</strong>
+                            <small style="color: var(--lime-bright); font-family: monospace;">${t.txn_id || '-'}</small>
+                        </td>
+                        <td><span style="font-weight: 700; color: #ffffff;">${(t.payment_method || '-').toUpperCase()}</span></td>
+                        <td>
+                            <strong style="color: #ffffff;">Rp ${(t.amount || 0).toLocaleString('id-ID')}</strong>
+                            ${t.fee ? `<br><small style="color: var(--slate-muted);">Fee: Rp ${t.fee.toLocaleString('id-ID')}</small>` : ''}
+                        </td>
+                        <td>${statusBadge}</td>
+                        <td style="font-size: 0.82rem; color: var(--slate-muted); max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                            ${t.customer_name || t.notes || '-'}
+                        </td>
+                        <td style="text-align: right; white-space: nowrap;">
+                            <div style="display: inline-flex; gap: 6px;">
+                                <button type="button" class="btn-ghost-white" onclick="checkTesterTxnStatus('${t.id || t.txn_id}')" style="padding: 4px 8px; font-size: 0.78rem;" title="Cek Status Live Pakasir">
+                                    🔄 Cek Status
+                                </button>
+                                ${t.status === 'pending' ? `
+                                    <button type="button" class="btn-action-delete" onclick="cancelTesterTxn('${t.id || t.txn_id}')" style="padding: 4px 8px; font-size: 0.78rem;" title="Batalkan Transaksi">
+                                        ❌ Batal
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        async function checkTesterTxnStatus(id) {
+            try {
+                const res = await fetch(`/api/admin/pakasir/transactions/${encodeURIComponent(id)}/status`);
+                const json = await res.json();
+                alert(json.message || 'Status transaksi diperbarui.');
+                loadTesterTransactions();
+                closeTesterModal();
+            } catch (e) {
+                alert('Gagal mengecek status: ' + e.message);
+            }
+        }
+
+        async function cancelTesterTxn(id) {
+            if (!confirm('Yakin ingin membatalkan transaksi ini di sistem Pakasir?')) return;
+            try {
+                const res = await fetch(`/api/admin/pakasir/transactions/${encodeURIComponent(id)}/cancel`, { method: 'POST' });
+                const json = await res.json();
+                alert(json.message || 'Transaksi dibatalkan.');
+                loadTesterTransactions();
+            } catch (e) {
+                alert('Gagal membatalkan transaksi: ' + e.message);
+            }
+        }
+
+        function filterTesterHistory(status, btn) {
+            document.querySelectorAll('#tester-view-history .btn-subnav').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+
+            if (status === 'all') {
+                renderTesterTxnTable(testerTxnCache);
+            } else {
+                const filtered = testerTxnCache.filter(t => t.status === status);
+                renderTesterTxnTable(filtered);
+            }
+        }
+
+        function searchTesterHistory() {
+            const q = document.getElementById('tester-search-input').value.toLowerCase().trim();
+            if (!q) {
+                renderTesterTxnTable(testerTxnCache);
+                return;
+            }
+            const filtered = testerTxnCache.filter(t => 
+                (t.order_id && t.order_id.toLowerCase().includes(q)) ||
+                (t.txn_id && t.txn_id.toLowerCase().includes(q)) ||
+                (t.customer_name && t.customer_name.toLowerCase().includes(q))
+            );
+            renderTesterTxnTable(filtered);
+        }
+
+        async function loadTesterWebhookLogs() {
+            const tbody = document.querySelector('#tester-table-wh tbody');
+            try {
+                const res = await fetch('/api/admin/pakasir/webhook-logs');
+                const json = await res.json();
+                if (json.success && Array.isArray(json.data)) {
+                    document.getElementById('tester-wh-count').textContent = json.data.length;
+                    if (json.data.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--slate-muted); padding: 30px;">Belum ada log webhook yang diterima.</td></tr>';
+                        return;
+                    }
+                    tbody.innerHTML = json.data.map(log => {
+                        const dateStr = log.receivedAt ? new Date(log.receivedAt).toLocaleString('id-ID') : '-';
+                        const secretBadge = log.isSecretValid ? '<span style="color:#4ade80;">✅ Valid</span>' : '<span style="color:#f87171;">❌ Invalid</span>';
+                        return `
+                            <tr>
+                                <td style="font-size: 0.8rem; color: var(--slate-muted);">${dateStr}</td>
+                                <td style="font-family: monospace; font-size: 0.8rem;">${log.ip || '-'}</td>
+                                <td>${secretBadge}</td>
+                                <td>
+                                    <strong style="color: #ffffff; display: block;">${log.order_id || '-'}</strong>
+                                    <small style="color: var(--lime-bright); font-family: monospace;">${log.txn_id || '-'}</small>
+                                </td>
+                                <td>Rp ${(log.amount || 0).toLocaleString('id-ID')}</td>
+                                <td><span class="badge-status-completed">${(log.status || '-').toUpperCase()}</span></td>
+                                <td style="text-align: right;">
+                                    <button type="button" class="btn-ghost-white" onclick='showTesterPayloadModal(${JSON.stringify(log.payload || {})})' style="padding: 4px 8px; font-size: 0.78rem;">
+                                        🔍 Inspect
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    }).join('');
+                }
+            } catch (e) {
+                console.error('Error fetching webhook logs:', e);
+            }
+        }
+
+        function showTesterPayloadModal(payload) {
+            const modal = document.getElementById('modal-tester-txn');
+            const title = document.getElementById('modal-tester-title');
+            const body = document.getElementById('modal-tester-body');
+
+            title.textContent = 'Payload Webhook Callback Pakasir';
+            body.innerHTML = `
+                <pre style="background: var(--navy-deep); border: 1px solid var(--navy-surface-border); border-radius: 8px; padding: 14px; color: var(--lime-bright); font-family: monospace; font-size: 0.82rem; overflow-x: auto; max-height: 400px;">${JSON.stringify(payload, null, 2)}</pre>
+                <div style="margin-top: 14px; text-align: right;">
+                    <button type="button" class="btn-ghost-white" onclick="closeTesterModal()" style="padding: 8px 16px;">Tutup</button>
+                </div>
+            `;
+            modal.style.display = 'flex';
+        }
+
+        async function clearTesterWebhookLogs() {
+            if (!confirm('Bersihkan semua log webhook pengujian?')) return;
+            try {
+                await fetch('/api/admin/pakasir/webhook-logs', { method: 'DELETE' });
+                loadTesterWebhookLogs();
+            } catch (e) {
+                alert('Gagal membersihkan log: ' + e.message);
+            }
+        }
+
+        function copyTesterWhUrl() {
+            const origin = window.location.origin;
+            const fullUrl = origin + '/api/webhook/pakasir';
+            navigator.clipboard.writeText(fullUrl).then(() => {
+                alert('Webhook URL berhasil disalin: ' + fullUrl);
+            }).catch(() => {
+                alert('URL Webhook: ' + fullUrl);
+            });
+        }
+
+        async function runTesterFeeCalc() {
+            const amount = parseInt(document.getElementById('tester-calc-amount').value, 10);
+            const tbody = document.getElementById('tester-calc-tbody');
+            if (!amount || amount <= 0) return;
+
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--slate-muted); padding: 24px;">Menghitung biaya via Pakasir API...</td></tr>';
+
+            try {
+                const res = await fetch('/api/admin/pakasir/fee-calculator?amount=' + amount);
+                const json = await res.json();
+                if (json.success && json.data && json.data.payment_fee) {
+                    tbody.innerHTML = json.data.payment_fee.map(item => `
+                        <tr>
+                            <td><strong style="color: #ffffff;">${(item.payment_method || '').toUpperCase()}</strong></td>
+                            <td>Rp ${amount.toLocaleString('id-ID')}</td>
+                            <td style="color: #facc15; font-weight: 700;">+ Rp ${item.fee.toLocaleString('id-ID')}</td>
+                            <td style="color: var(--lime-bright); font-weight: 800;">Rp ${item.total_amount.toLocaleString('id-ID')}</td>
+                            <td style="color: #4ade80; font-weight: 700;">Rp ${amount.toLocaleString('id-ID')}</td>
+                        </tr>
+                    `).join('');
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--danger); padding: 24px;">Gagal mengambil data kalkulator fee.</td></tr>';
+                }
+            } catch (e) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--danger); padding: 24px;">Error: ${e.message}</td></tr>`;
+            }
+        }
+
+        async function handleTesterLogout() {
+            try {
+                await fetch('/api/webhook-logout', { method: 'POST' });
+                window.location.href = '/webhook-login';
+            } catch (e) {
+                window.location.href = '/webhook-login';
+            }
+        }
+
+        function loadTesterAllData() {
+            loadTesterTransactions();
+            loadTesterWebhookLogs();
+            updateTesterLiveFee();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            generateTesterOrderId();
+            loadTesterAllData();
+            const origin = window.location.origin;
+            const input = document.getElementById('tester-wh-url');
+            if (input) input.value = origin + '/api/webhook/pakasir';
+        });
+    </script>
+</body>
+</html>
