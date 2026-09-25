@@ -28,25 +28,13 @@
     <div class="tactile-card-dark tactile-card-heavy" style="width: 100%; max-width: 460px; position: relative; z-index: 10; padding: 36px 30px; border-color: rgba(59, 130, 246, 0.35);">
         
         <!-- Header Branding -->
-        <div class="text-center" style="margin-bottom: 26px;">
-            <div style="display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px;">
-                <img src="/public/img/axalogo.png" alt="Dents Logo" style="height: 34px; width: auto; object-fit: contain;">
-                <span style="font-family: 'Lexend Deca', sans-serif; font-size: 1.35rem; font-weight: 800; color: #ffffff; letter-spacing: -0.5px;">ents Web</span>
-                <span style="color: var(--slate-muted); font-size: 1rem; margin: 0 4px;">×</span>
-                <span style="color: var(--lime-bright); font-weight: 800; font-size: 1.1rem; letter-spacing: -0.3px;">PAKASIR</span>
+        <div class="text-center" style="margin-bottom: 28px;">
+            <div style="display: inline-flex; align-items: center; gap: 8px;">
+                <img src="/public/img/axalogo.png" alt="Dents Logo" style="height: 38px; width: auto; object-fit: contain;">
+                <span style="font-family: 'Lexend Deca', sans-serif; font-size: 1.4rem; font-weight: 800; color: #ffffff; letter-spacing: -0.5px;">ents Web</span>
+                <span style="color: var(--slate-muted); font-size: 1.1rem; margin: 0 4px;">×</span>
+                <span style="color: var(--lime-bright); font-weight: 800; font-size: 1.2rem; letter-spacing: -0.3px;">PAKASIR</span>
             </div>
-            
-            <div style="margin-bottom: 8px;">
-                <span class="tester-pill-badge">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                    KYC Verification &amp; Testing Portal
-                </span>
-            </div>
-            
-            <h2 style="color: #ffffff; font-size: 1.35rem; font-family: 'Lexend Deca', sans-serif; margin: 6px 0 4px 0;">Reviewer Authentication</h2>
-            <p style="font-size: 0.82rem; color: var(--slate-muted); margin: 0; line-height: 1.5;">
-                Portal ini disiapkan khusus bagi Tim Verifikasi &amp; Reviewer <strong>Pakasir</strong> untuk menguji alur checkout, transaksi QRIS / VA, dan webhook callbacks.
-            </p>
         </div>
 
         <!-- Login Form -->
@@ -54,14 +42,11 @@
             <div id="login-alert" style="display:none; padding: 12px 14px; border-radius: var(--radius-sm); margin-bottom: 18px; font-size: 0.85rem; font-weight: 600;"></div>
 
             <div class="form-group" style="margin-bottom: 16px;">
-                <label class="form-label" style="color: #ffffff; font-size: 0.88rem; display: flex; justify-content: space-between;">
-                    <span>Username Testing</span>
-                    <span style="color: var(--slate-muted); font-size: 0.75rem;">(Sesuai Dokumen KYC)</span>
-                </label>
+                <label class="form-label" style="color: #ffffff; font-size: 0.88rem;">Username Testing</label>
                 <input type="text" class="form-control" name="username" placeholder="Masukkan username testing..." required autocomplete="username" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
             </div>
 
-            <div class="form-group" style="margin-bottom: 22px;">
+            <div class="form-group" style="margin-bottom: 24px;">
                 <label class="form-label" style="color: #ffffff; font-size: 0.88rem;">Password Testing</label>
                 <input type="password" class="form-control" name="password" placeholder="••••••••" required autocomplete="current-password" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
             </div>
@@ -71,17 +56,6 @@
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
             </button>
         </form>
-
-        <!-- Testing Credentials Helper Box -->
-        <div style="margin-top: 22px; background: rgba(16, 24, 59, 0.75); border: 1px dashed var(--navy-surface-border); border-radius: 10px; padding: 12px 14px; font-size: 0.78rem; color: var(--slate-muted);">
-            <div style="font-weight: 700; color: #ffffff; margin-bottom: 4px; display: flex; align-items: center; gap: 5px;">
-                <span>🔑 Kredensial Pengujian untuk Pakasir:</span>
-            </div>
-            <div style="display: flex; justify-content: space-between; margin-top: 4px;">
-                <span>Username: <strong style="color: var(--lime-bright);">pakasirtest123</strong></span>
-                <span>Password: <strong style="color: var(--lime-bright);">pakasirtest321</strong></span>
-            </div>
-        </div>
 
         <div style="margin-top: 20px; text-align: center;">
             <a href="/" style="font-size: 0.82rem; color: var(--slate-muted); text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
