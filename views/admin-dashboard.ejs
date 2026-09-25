@@ -14,84 +14,6 @@
     
     <link rel="stylesheet" href="/public/css/style.css">
     <script src="/public/js/tech-icons.js"></script>
-    <style>
-        .btn-subnav {
-            background: var(--navy-surface);
-            color: var(--slate-muted);
-            border: 1px solid var(--navy-surface-border);
-            padding: 8px 16px;
-            border-radius: 999px;
-            font-size: 0.88rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.2s;
-        }
-        .btn-subnav:hover {
-            color: #ffffff;
-            border-color: rgba(59, 130, 246, 0.4);
-        }
-        .btn-subnav.active {
-            background: rgba(33, 82, 207, 0.2);
-            color: var(--lime-bright);
-            border-color: var(--lime-accent);
-        }
-        .pakasir-stat-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-        .pakasir-stat-card {
-            background: var(--navy-surface);
-            border: 1px solid var(--navy-surface-border);
-            border-radius: 12px;
-            padding: 16px;
-            transition: transform 0.2s, border-color 0.2s;
-        }
-        .pakasir-stat-card:hover {
-            border-color: rgba(59, 130, 246, 0.3);
-            transform: translateY(-2px);
-        }
-        .badge-status-completed {
-            background: rgba(34, 197, 94, 0.15);
-            color: #4ade80;
-            border: 1px solid rgba(34, 197, 94, 0.3);
-            padding: 3px 8px;
-            border-radius: 6px;
-            font-size: 0.72rem;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .badge-status-pending {
-            background: rgba(234, 179, 8, 0.15);
-            color: #facc15;
-            border: 1px solid rgba(234, 179, 8, 0.3);
-            padding: 3px 8px;
-            border-radius: 6px;
-            font-size: 0.72rem;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .badge-status-canceled {
-            background: rgba(239, 68, 68, 0.15);
-            color: #f87171;
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            padding: 3px 8px;
-            border-radius: 6px;
-            font-size: 0.72rem;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-    </style>
 </head>
 <body>
 
@@ -467,7 +389,7 @@
 
                 <!-- SUB-VIEW 1: FORM BUAT TRANSAKSI -->
                 <div id="pakasir-view-create" class="pakasir-subview">
-                    <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 24px; align-items: start;">
+                    <div class="pakasir-create-grid">
                         <!-- Form Buat Transaksi -->
                         <div class="tactile-card-dark">
                             <h3 style="color: #ffffff; font-size: 1.2rem; margin-top: 0; margin-bottom: 18px; display: flex; align-items: center; gap: 8px;">
@@ -570,7 +492,7 @@
 
                             <!-- Batas Limit Pembayaran Info (Sesuai Gambar 2) -->
                             <div class="tactile-card-dark" style="font-size: 0.82rem; color: var(--slate-muted);">
-                                <strong style="color: #ffffff; display: block; margin-bottom: 8px;">ℹ️ Ketentuan Nominal Pakasir (Gambar 2):</strong>
+                                <strong style="color: #ffffff; display: block; margin-bottom: 8px;">Ketentuan Nominal Pakasir:</strong>
                                 <ul style="margin: 0; padding-left: 18px; line-height: 1.6;">
                                     <li><strong>QRIS</strong>: Min Rp 500, Max Rp 10.000.000</li>
                                     <li><strong>Payment Link</strong>: Min Rp 500, Max Rp 50.000.000</li>
@@ -660,19 +582,24 @@
 
                 <!-- SUB-VIEW 4: KALKULATOR BIAYA -->
                 <div id="pakasir-view-calc" class="pakasir-subview" style="display: none;">
-                    <div class="tactile-card-dark" style="max-width: 800px; margin-bottom: 24px;">
+                    <div class="tactile-card-dark pakasir-calc-card">
                         <h3 style="color: #ffffff; font-size: 1.2rem; margin-top: 0; margin-bottom: 12px;">🧮 Penghitung Estimasi Biaya Pakasir (Fee Calculator)</h3>
                         <p style="color: var(--slate-muted); font-size: 0.9rem; margin-bottom: 18px;">Ketahui potongan biaya real-time untuk setiap metode pembayaran berdasarkan nominal transaksi via API resmi <code>/api/v2/payment-fee</code>.</p>
                         
-                        <div style="display: flex; gap: 12px; align-items: flex-end; margin-bottom: 20px;">
-                            <div class="form-group" style="margin-bottom: 0; flex-grow: 1;">
+                        <div class="pakasir-calc-controls">
+                            <div class="form-group calc-input-wrap">
                                 <label class="form-label" style="color: #ffffff;">Nominal Transaksi (Rp)</label>
                                 <input type="number" id="pakasir-calc-amount-input" class="form-control" value="100000" min="1000" step="1000" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border); font-size: 1.1rem; font-weight: 700;">
                             </div>
-                            <button type="button" class="btn-lime" onclick="runFeeCalculator()" style="padding: 10px 20px; font-size: 0.92rem; font-weight: 700;">Hitung Biaya Live</button>
+                            <div class="calc-btn-wrap">
+                                <button type="button" class="btn-lime" onclick="runFeeCalculator()" style="padding: 10px 20px; font-size: 0.92rem; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><line x1="8" y1="2" x2="8" y2="6"></line><line x1="16" y1="2" x2="16" y2="6"></line></svg>
+                                    <span>Hitung Biaya Live</span>
+                                </button>
+                            </div>
                         </div>
 
-                        <div id="pakasir-calc-results" class="admin-table-responsive" style="border: 1px solid var(--navy-surface-border); border-radius: 12px; overflow: hidden;">
+                        <div id="pakasir-calc-results" class="pakasir-table-wrapper">
                             <table class="admin-table">
                                 <thead>
                                     <tr>
