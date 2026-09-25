@@ -68,17 +68,33 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser());
 
-// Security Headers & Content Security Policy (allows Google Fonts & Vercel Speed Insights)
+// Security Headers & Content Security Policy (allows Google Fonts, Google Analytics 4, GTM & Vercel Speed Insights)
 app.use(helmet({
     contentSecurityPolicy: {
         directives: {
             defaultSrc: ["'self'"],
-            scriptSrc: ["'self'", "'unsafe-inline'", "https://va.vercel-scripts.com"],
+            scriptSrc: [
+                "'self'", 
+                "'unsafe-inline'", 
+                "https://va.vercel-scripts.com",
+                "https://www.googletagmanager.com",
+                "https://*.google-analytics.com",
+                "https://cdnjs.cloudflare.com"
+            ],
             scriptSrcAttr: ["'unsafe-inline'"],
             styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
             fontSrc: ["'self'", "https://fonts.gstatic.com", "data:"],
             imgSrc: ["'self'", "data:", "https://*"], 
-            connectSrc: ["'self'", "https://va.vercel-scripts.com", "https://vitals.vercel-insights.com"]
+            connectSrc: [
+                "'self'", 
+                "https://va.vercel-scripts.com", 
+                "https://vitals.vercel-insights.com",
+                "https://*.google-analytics.com",
+                "https://analytics.google.com",
+                "https://*.analytics.google.com",
+                "https://*.googletagmanager.com",
+                "https://app.pakasir.com"
+            ]
         }
     },
     xPoweredBy: false
@@ -89,7 +105,7 @@ const isLocalOrInternal = (req) => {
     const ip = req.ip || req.connection?.remoteAddress || req.socket?.remoteAddress || '';
     if (ip === '127.0.0.1' || ip === '::1' || ip.includes('127.0.0.1')) return true;
     const p = req.path || req.url || '';
-    if (p.startsWith('/admin') || p.startsWith('/api/admin') || p.startsWith('/api/chat/messages') || p === '/sitemap.xml' || p === '/robots.txt' || p.startsWith('/google')) return true;
+    if (p.startsWith('/admin') || p.startsWith('/api/admin') || p.startsWith('/api/chat/messages') || p.startsWith('/api/webhook/pakasir') || p === '/sitemap.xml' || p === '/robots.txt' || p.startsWith('/google')) return true;
     return false;
 };
 
@@ -1222,9 +1238,12 @@ async function getGlobalSettings() {
         defaultSeoDescription: "Dents Web membantu bisnis membangun website custom yang profesional, cepat, SEO-ready, dan fokus pada konversi.",
         defaultOgImage: "/public/img/axalogo.png",
         googleVerification: "e67nOsjn34kGZ_5feJrhj68I24DnRqzB2OZOpgxIuY4",
-        analyticsId: "",
+        analyticsId: process.env.GOOGLE_ANALYTICS_ID || "",
         favicon: "/public/img/axalogo.png",
-        logo: "/public/img/axalogo.png"
+        logo: "/public/img/axalogo.png",
+        pakasirApiKey: process.env.APIKEY_PAKASIR || "",
+        pakasirSlug: process.env.PAKASIR_SLUG || "dentsweb",
+        pakasirWebhookSecret: process.env.APIKEY_WEBHOOK_PAKASIR || process.env.PAKASIR_WEBHOOK_SECRET || ""
     };
 
     try {
@@ -1236,6 +1255,10 @@ async function getGlobalSettings() {
             const merged = {
                 ...defaultSettings,
                 ...settings,
+                analyticsId: (settings.analyticsId && settings.analyticsId.trim() !== '') ? settings.analyticsId : (process.env.GOOGLE_ANALYTICS_ID || defaultSettings.analyticsId),
+                pakasirApiKey: (settings.pakasirApiKey && settings.pakasirApiKey.trim() !== '') ? settings.pakasirApiKey : (process.env.APIKEY_PAKASIR || defaultSettings.pakasirApiKey),
+                pakasirSlug: (settings.pakasirSlug && settings.pakasirSlug.trim() !== '') ? settings.pakasirSlug : (process.env.PAKASIR_SLUG || defaultSettings.pakasirSlug),
+                pakasirWebhookSecret: (settings.pakasirWebhookSecret && settings.pakasirWebhookSecret.trim() !== '') ? settings.pakasirWebhookSecret : (process.env.APIKEY_WEBHOOK_PAKASIR || process.env.PAKASIR_WEBHOOK_SECRET || defaultSettings.pakasirWebhookSecret),
                 socialLinks: { ...defaultSettings.socialLinks, ...(settings.socialLinks || {}) }
             };
             if (merged.siteUrl && merged.siteUrl.includes('dentsweb.my.id') && !merged.siteUrl.includes('www.dentsweb.my.id')) {
@@ -2256,6 +2279,398 @@ app.delete('/api/admin/chats/:id', requireAdmin, async (req, res) => {
         res.json({ success: true, message: 'Percakapan berhasil dihapus.' });
     } catch (err) {
         res.status(500).json({ success: false, message: 'Gagal menghapus percakapan.' });
+    }
+});
+
+// ==========================================
+// PAKASIR PAYMENT GATEWAY INTEGRATION (API v2)
+// ==========================================
+
+const PAKASIR_BASE_URL = 'https://app.pakasir.com';
+
+// Payment methods metadata with limits (from official docs & user spec)
+const PAKASIR_PAYMENT_METHODS = {
+    payment_link: { code: 'payment_link', name: 'Payment Link', min: 500, max: 50000000, type: 'link' },
+    qris: { code: 'qris', name: 'QRIS', min: 500, max: 10000000, type: 'qr' },
+    bri_va: { code: 'bri_va', name: 'BRI Virtual Account', min: 10000, max: 50000000, type: 'va' },
+    bni_va: { code: 'bni_va', name: 'BNI Virtual Account', min: 10000, max: 50000000, type: 'va' },
+    cimb_niaga_va: { code: 'cimb_niaga_va', name: 'CIMB Niaga Virtual Account', min: 10000, max: 50000000, type: 'va' },
+    maybank_va: { code: 'maybank_va', name: 'Maybank Virtual Account', min: 10000, max: 50000000, type: 'va' },
+    permata_va: { code: 'permata_va', name: 'Permata Virtual Account', min: 10000, max: 50000000, type: 'va' },
+    bnc_va: { code: 'bnc_va', name: 'Bank Neo Commerce Virtual Account', min: 10000, max: 50000000, type: 'va' },
+    artha_graha_va: { code: 'artha_graha_va', name: 'Artha Graha Virtual Account', min: 10000, max: 50000000, type: 'va' },
+    sampoerna_va: { code: 'sampoerna_va', name: 'Bank Sahabat Sampoerna VA', min: 10000, max: 50000000, type: 'va' }
+};
+
+// Helper: Get active Pakasir configuration from Redis settings or .env fallback
+async function getPakasirConfig() {
+    const settings = await getGlobalSettings();
+    const apiKey = settings.pakasirApiKey || process.env.APIKEY_PAKASIR || '';
+    const slug = settings.pakasirSlug || process.env.PAKASIR_SLUG || 'dentsweb';
+    const webhookSecret = settings.pakasirWebhookSecret || process.env.APIKEY_WEBHOOK_PAKASIR || process.env.PAKASIR_WEBHOOK_SECRET || '';
+    return { apiKey, slug, webhookSecret };
+}
+
+// 1. PUBLIC WEBHOOK ROUTER (Pakasir Callback Receiver)
+// Receives notifications when transactions are completed
+app.post('/api/webhook/pakasir', async (req, res) => {
+    try {
+        const payload = req.body || {};
+        const incomingSecret = req.headers['x-secret'] || req.headers['x-api-key'] || '';
+        const clientIp = req.headers['x-forwarded-for'] || req.ip || req.connection?.remoteAddress || 'unknown';
+        const config = await getPakasirConfig();
+
+        const secretMatched = (!config.webhookSecret) || (incomingSecret === config.webhookSecret);
+
+        const logEntry = {
+            id: `wh_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`,
+            receivedAt: new Date().toISOString(),
+            ip: clientIp,
+            secretMatched: !!secretMatched,
+            txn_id: payload.txn_id || '-',
+            order_id: payload.order_id || '-',
+            amount: payload.amount || 0,
+            status: payload.status || 'unknown',
+            is_sandbox: !!payload.is_sandbox,
+            completed_at: payload.completed_at || null,
+            rawPayload: payload,
+            headers: {
+                'x-secret': incomingSecret ? (incomingSecret.slice(0, 4) + '...' + incomingSecret.slice(-4)) : 'missing',
+                'user-agent': req.headers['user-agent'] || '-'
+            }
+        };
+
+        // Save to Redis Webhook Logs (Keep last 150 entries)
+        let webhookLogs = await redis.get('dents:pakasir:webhook_logs') || [];
+        if (!Array.isArray(webhookLogs)) webhookLogs = [];
+        webhookLogs.unshift(logEntry);
+        if (webhookLogs.length > 150) webhookLogs = webhookLogs.slice(0, 150);
+        await redis.set('dents:pakasir:webhook_logs', webhookLogs);
+
+        // If secret matches (or no secret configured), update corresponding transaction status
+        if (secretMatched && (payload.txn_id || payload.order_id)) {
+            let txns = await redis.get('dents:pakasir:transactions') || [];
+            if (Array.isArray(txns)) {
+                let matchedIndex = -1;
+                if (payload.txn_id) {
+                    matchedIndex = txns.findIndex(t => t.txn_id === payload.txn_id);
+                }
+                if (matchedIndex === -1 && payload.order_id) {
+                    matchedIndex = txns.findIndex(t => t.order_id === payload.order_id);
+                }
+
+                if (matchedIndex !== -1) {
+                    txns[matchedIndex].status = payload.status || 'completed';
+                    if (payload.completed_at) txns[matchedIndex].completed_at = payload.completed_at;
+                    txns[matchedIndex].updatedAt = new Date().toISOString();
+                    txns[matchedIndex].lastWebhookReceivedAt = new Date().toISOString();
+                    await redis.set('dents:pakasir:transactions', txns);
+                }
+            }
+        }
+
+        return res.status(200).json({ success: true, message: 'Webhook processed successfully' });
+    } catch (err) {
+        console.error('Error handling Pakasir webhook:', err);
+        return res.status(200).json({ success: false, error: err.message }); // Always return 200 to prevent webhook retry spam
+    }
+});
+
+// 2. ADMIN API: Get & Update Pakasir Config
+app.get('/api/admin/pakasir/config', requireAdmin, async (req, res) => {
+    try {
+        const config = await getPakasirConfig();
+        const settings = await getGlobalSettings();
+        res.json({
+            success: true,
+            data: {
+                slug: config.slug,
+                apiKey: config.apiKey,
+                webhookSecret: config.webhookSecret,
+                webhookUrl: `${settings.siteUrl}/api/webhook/pakasir`
+            }
+        });
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
+app.put('/api/admin/pakasir/config', requireAdmin, async (req, res) => {
+    try {
+        const { slug, apiKey, webhookSecret } = req.body || {};
+        const settings = await getGlobalSettings();
+        const updated = {
+            ...settings,
+            pakasirSlug: (slug !== undefined ? slug.trim() : settings.pakasirSlug),
+            pakasirApiKey: (apiKey !== undefined ? apiKey.trim() : settings.pakasirApiKey),
+            pakasirWebhookSecret: (webhookSecret !== undefined ? webhookSecret.trim() : settings.pakasirWebhookSecret)
+        };
+        await redis.set('dents:settings', updated);
+        res.json({ success: true, message: 'Konfigurasi Pakasir berhasil diperbarui!', data: updated });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Gagal menyimpan konfigurasi Pakasir.' });
+    }
+});
+
+// 3. ADMIN API: Create Transaction (POST /api/v2/create-transaction/{slug}/{order_id})
+app.post('/api/admin/pakasir/transactions', requireAdmin, async (req, res) => {
+    try {
+        const { method, amount, order_id, customer_name, customer_email, notes } = req.body || {};
+        const numAmount = parseInt(amount, 10);
+        if (!method || isNaN(numAmount) || numAmount <= 0) {
+            return res.status(400).json({ success: false, message: 'Metode pembayaran dan nominal amount (angka positif) wajib diisi.' });
+        }
+
+        const methodMeta = PAKASIR_PAYMENT_METHODS[method];
+        if (!methodMeta) {
+            return res.status(400).json({ success: false, message: `Metode pembayaran '${method}' tidak valid.` });
+        }
+        if (numAmount < methodMeta.min || numAmount > methodMeta.max) {
+            return res.status(400).json({
+                success: false,
+                message: `Nominal untuk ${methodMeta.name} harus antara Rp ${methodMeta.min.toLocaleString('id-ID')} s/d Rp ${methodMeta.max.toLocaleString('id-ID')}.`
+            });
+        }
+
+        const config = await getPakasirConfig();
+        if (!config.apiKey || !config.slug) {
+            return res.status(400).json({
+                success: false,
+                message: 'API Key atau Project Slug Pakasir belum disetel. Periksa konfigurasi Pakasir di tab Pengaturan.'
+            });
+        }
+
+        // Clean / Generate Order ID
+        let cleanOrderId = (order_id || '').trim();
+        if (!cleanOrderId) {
+            cleanOrderId = `DW-${Date.now().toString(36).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
+        }
+
+        // Call Pakasir API v2: POST /api/v2/create-transaction/{slug}/{order_id}
+        const endpoint = `${PAKASIR_BASE_URL}/api/v2/create-transaction/${encodeURIComponent(config.slug)}/${encodeURIComponent(cleanOrderId)}`;
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Api-Key': config.apiKey
+            },
+            body: JSON.stringify({
+                method: method,
+                amount: numAmount
+            })
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+            return res.status(response.status).json({
+                success: false,
+                message: data.message || data.error || 'Gagal membuat transaksi di Pakasir.',
+                raw: data
+            });
+        }
+
+        // Construct standardized transaction record
+        const nowIso = new Date().toISOString();
+        const transactionRecord = {
+            id: `pakasir_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`,
+            txn_id: data.txn_id,
+            order_id: cleanOrderId,
+            project_slug: config.slug,
+            method: method,
+            method_name: methodMeta.name,
+            amount: numAmount,
+            fee: data.fee || 0,
+            total_payment: data.total_payment || numAmount,
+            payment_link: data.payment_link || (method === 'payment_link' ? `https://app.pakasir.com/pay-v2/${data.txn_id}` : ''),
+            qr_string: data.qr_string || '',
+            va_number: data.va_number || '',
+            expired_at: data.expired_at || null,
+            is_sandbox: !!data.is_sandbox,
+            status: data.status || 'pending',
+            completed_at: data.completed_at || null,
+            customer_name: (customer_name || '').trim(),
+            customer_email: (customer_email || '').trim(),
+            notes: (notes || '').trim(),
+            createdAt: nowIso,
+            updatedAt: nowIso
+        };
+
+        // Save to Redis
+        let txns = await redis.get('dents:pakasir:transactions') || [];
+        if (!Array.isArray(txns)) txns = [];
+        txns.unshift(transactionRecord);
+        await redis.set('dents:pakasir:transactions', txns);
+
+        res.json({
+            success: true,
+            message: 'Transaksi berhasil dibuat!',
+            data: transactionRecord
+        });
+    } catch (err) {
+        console.error('Error creating Pakasir transaction:', err);
+        res.status(500).json({ success: false, message: 'Server error saat menghubungi Pakasir: ' + err.message });
+    }
+});
+
+// 4. ADMIN API: List Transactions
+app.get('/api/admin/pakasir/transactions', requireAdmin, async (req, res) => {
+    try {
+        let txns = await redis.get('dents:pakasir:transactions') || [];
+        if (!Array.isArray(txns)) txns = [];
+        res.json({ success: true, data: txns });
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
+// 5. ADMIN API: Check Transaction Status (Live from Pakasir GET /api/v2/transaction-status/{slug}/{txn_id})
+app.get('/api/admin/pakasir/transactions/:id/status', requireAdmin, async (req, res) => {
+    try {
+        const { id } = req.params;
+        let txns = await redis.get('dents:pakasir:transactions') || [];
+        if (!Array.isArray(txns)) txns = [];
+
+        const index = txns.findIndex(t => t.id === id || t.txn_id === id);
+        if (index === -1) {
+            return res.status(404).json({ success: false, message: 'Transaksi tidak ditemukan di database.' });
+        }
+
+        const txn = txns[index];
+        const config = await getPakasirConfig();
+        const slug = txn.project_slug || config.slug;
+
+        // Call Pakasir API: GET /api/v2/transaction-status/{slug}/{txn_id}
+        const endpoint = `${PAKASIR_BASE_URL}/api/v2/transaction-status/${encodeURIComponent(slug)}/${encodeURIComponent(txn.txn_id)}`;
+        const response = await fetch(endpoint, {
+            headers: { 'X-Api-Key': config.apiKey }
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+            return res.status(response.status).json({
+                success: false,
+                message: data.message || 'Gagal mengecek status transaksi di Pakasir.'
+            });
+        }
+
+        // Update local status in database
+        txns[index].status = data.status || txns[index].status;
+        txns[index].completed_at = data.completed_at || txns[index].completed_at;
+        txns[index].is_sandbox = (data.is_sandbox !== undefined) ? data.is_sandbox : txns[index].is_sandbox;
+        txns[index].lastCheckedAt = new Date().toISOString();
+        await redis.set('dents:pakasir:transactions', txns);
+
+        res.json({
+            success: true,
+            message: `Status transaksi: ${String(data.status).toUpperCase()}`,
+            data: txns[index],
+            pakasirResponse: data
+        });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Server error: ' + err.message });
+    }
+});
+
+// 6. ADMIN API: Cancel Transaction (POST /api/v2/cancel-transaction/{slug}/{txn_id})
+app.post('/api/admin/pakasir/transactions/:id/cancel', requireAdmin, async (req, res) => {
+    try {
+        const { id } = req.params;
+        let txns = await redis.get('dents:pakasir:transactions') || [];
+        if (!Array.isArray(txns)) txns = [];
+
+        const index = txns.findIndex(t => t.id === id || t.txn_id === id);
+        if (index === -1) {
+            return res.status(404).json({ success: false, message: 'Transaksi tidak ditemukan.' });
+        }
+
+        const txn = txns[index];
+        const config = await getPakasirConfig();
+        const slug = txn.project_slug || config.slug;
+
+        // Call Pakasir API: POST /api/v2/cancel-transaction/{slug}/{txn_id}
+        const endpoint = `${PAKASIR_BASE_URL}/api/v2/cancel-transaction/${encodeURIComponent(slug)}/${encodeURIComponent(txn.txn_id)}`;
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'X-Api-Key': config.apiKey }
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+            return res.status(response.status).json({
+                success: false,
+                message: data.message || 'Gagal membatalkan transaksi di Pakasir.'
+            });
+        }
+
+        // Update local status to canceled
+        txns[index].status = 'canceled';
+        txns[index].canceled_at = new Date().toISOString();
+        txns[index].updatedAt = new Date().toISOString();
+        await redis.set('dents:pakasir:transactions', txns);
+
+        res.json({
+            success: true,
+            message: data.message || 'Transaksi berhasil dibatalkan!',
+            data: txns[index]
+        });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Server error: ' + err.message });
+    }
+});
+
+// 7. ADMIN API: Delete Transaction Record from local database
+app.delete('/api/admin/pakasir/transactions/:id', requireAdmin, async (req, res) => {
+    try {
+        const { id } = req.params;
+        let txns = await redis.get('dents:pakasir:transactions') || [];
+        if (!Array.isArray(txns)) txns = [];
+        const filtered = txns.filter(t => t.id !== id && t.txn_id !== id);
+        await redis.set('dents:pakasir:transactions', filtered);
+        res.json({ success: true, message: 'Riwayat transaksi berhasil dihapus dari sistem.' });
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
+// 8. ADMIN API: Fee Calculator (Proxy to Pakasir GET /api/v2/payment-fee/{amount})
+app.get('/api/admin/pakasir/fee-calculator', requireAdmin, async (req, res) => {
+    try {
+        const amount = parseInt(req.query.amount, 10);
+        if (isNaN(amount) || amount <= 0) {
+            return res.status(400).json({ success: false, message: 'Nominal amount harus berupa angka bulat positif.' });
+        }
+
+        const endpoint = `${PAKASIR_BASE_URL}/api/v2/payment-fee/${amount}`;
+        const response = await fetch(endpoint);
+        const data = await response.json();
+
+        if (!response.ok) {
+            return res.status(response.status).json({ success: false, message: 'Gagal mengambil data kalkulator fee dari Pakasir.' });
+        }
+
+        res.json({ success: true, data, amount });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Server error kalkulator fee: ' + err.message });
+    }
+});
+
+// 9. ADMIN API: Get & Delete Webhook Logs
+app.get('/api/admin/pakasir/webhook-logs', requireAdmin, async (req, res) => {
+    try {
+        let logs = await redis.get('dents:pakasir:webhook_logs') || [];
+        if (!Array.isArray(logs)) logs = [];
+        res.json({ success: true, data: logs });
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
+app.delete('/api/admin/pakasir/webhook-logs', requireAdmin, async (req, res) => {
+    try {
+        await redis.set('dents:pakasir:webhook_logs', []);
+        res.json({ success: true, message: 'Log webhook berhasil dibersihkan.' });
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
     }
 });
 
