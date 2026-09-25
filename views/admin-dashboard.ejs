@@ -14,6 +14,84 @@
     
     <link rel="stylesheet" href="/public/css/style.css">
     <script src="/public/js/tech-icons.js"></script>
+    <style>
+        .btn-subnav {
+            background: var(--navy-surface);
+            color: var(--slate-muted);
+            border: 1px solid var(--navy-surface-border);
+            padding: 8px 16px;
+            border-radius: 999px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+        .btn-subnav:hover {
+            color: #ffffff;
+            border-color: rgba(59, 130, 246, 0.4);
+        }
+        .btn-subnav.active {
+            background: rgba(33, 82, 207, 0.2);
+            color: var(--lime-bright);
+            border-color: var(--lime-accent);
+        }
+        .pakasir-stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .pakasir-stat-card {
+            background: var(--navy-surface);
+            border: 1px solid var(--navy-surface-border);
+            border-radius: 12px;
+            padding: 16px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .pakasir-stat-card:hover {
+            border-color: rgba(59, 130, 246, 0.3);
+            transform: translateY(-2px);
+        }
+        .badge-status-completed {
+            background: rgba(34, 197, 94, 0.15);
+            color: #4ade80;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .badge-status-pending {
+            background: rgba(234, 179, 8, 0.15);
+            color: #facc15;
+            border: 1px solid rgba(234, 179, 8, 0.3);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .badge-status-canceled {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+    </style>
 </head>
 <body>
 
@@ -89,7 +167,15 @@
                     <span>FAQ</span>
                 </div>
 
-                <!-- Section 3: Pengaturan -->
+                <!-- Section 3: Keuangan & Pembayaran -->
+                <div class="admin-nav-category-title">Keuangan &amp; Transaksi</div>
+                <div class="admin-nav-item" data-tab="pakasir" data-title="Pakasir Payment">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                    <span>Pakasir Payment</span>
+                    <span class="badge-tag-lime" style="font-size: 0.65rem; padding: 2px 6px; margin-left: auto;">API v2</span>
+                </div>
+
+                <!-- Section 4: Pengaturan -->
                 <div class="admin-nav-category-title">Pengaturan</div>
                 <div class="admin-nav-item" data-tab="settings" data-title="Pengaturan Web">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
@@ -305,6 +391,350 @@
                             <tr><td colspan="3" style="text-align: center; color: var(--slate-muted); padding: 30px;">Memuat data FAQ...</td></tr>
                         </tbody>
                     </table>
+                </div>
+            </div>
+
+            <!-- TAB: PAKASIR PAYMENT GATEWAY (API v2) -->
+            <div id="panel-pakasir" class="admin-panel" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                            <h2 style="font-size: 1.8rem; color: #ffffff; margin: 0;">Pakasir Payment Gateway</h2>
+                            <span class="badge-tag-lime" style="font-size: 0.72rem; padding: 3px 8px; border-radius: 999px;">API v2 Resmi</span>
+                        </div>
+                        <p style="color: var(--slate-muted); font-size: 0.95rem; margin: 0;">Kelola transaksi QRIS instan, Virtual Account, kalkulator biaya, dan log webhook real-time.</p>
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <button type="button" class="btn-royal" onclick="switchPakasirSubTab('create')" style="padding: 8px 16px; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 6px;">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            <span>Buat Transaksi Baru</span>
+                        </button>
+                        <button type="button" class="btn-ghost-white" onclick="loadData('pakasir')" style="padding: 8px 14px; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 6px;">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+                            <span>Refresh Data</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Pakasir Stat Metrics -->
+                <div class="pakasir-stat-grid">
+                    <div class="pakasir-stat-card">
+                        <div style="font-size: 0.78rem; color: var(--slate-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Total Omzet Sukses</div>
+                        <div id="pakasir-stat-omzet" style="font-size: 1.45rem; font-weight: 800; color: var(--lime-bright);">Rp 0</div>
+                        <div style="font-size: 0.75rem; color: var(--slate-muted); margin-top: 4px;">Dana terverifikasi masuk</div>
+                    </div>
+                    <div class="pakasir-stat-card">
+                        <div style="font-size: 0.78rem; color: var(--slate-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Total Transaksi</div>
+                        <div id="pakasir-stat-total" style="font-size: 1.45rem; font-weight: 800; color: #ffffff;">0</div>
+                        <div style="font-size: 0.75rem; color: var(--slate-muted); margin-top: 4px;">Semua order dibuat</div>
+                    </div>
+                    <div class="pakasir-stat-card">
+                        <div style="font-size: 0.78rem; color: #4ade80; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Sukses (Completed)</div>
+                        <div id="pakasir-stat-completed" style="font-size: 1.45rem; font-weight: 800; color: #4ade80;">0</div>
+                        <div style="font-size: 0.75rem; color: var(--slate-muted); margin-top: 4px;">Pembayaran diterima</div>
+                    </div>
+                    <div class="pakasir-stat-card">
+                        <div style="font-size: 0.78rem; color: #facc15; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Menunggu (Pending)</div>
+                        <div id="pakasir-stat-pending" style="font-size: 1.45rem; font-weight: 800; color: #facc15;">0</div>
+                        <div style="font-size: 0.75rem; color: var(--slate-muted); margin-top: 4px;">Belum dibayar</div>
+                    </div>
+                    <div class="pakasir-stat-card">
+                        <div style="font-size: 0.78rem; color: #f87171; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Dibatalkan (Canceled)</div>
+                        <div id="pakasir-stat-canceled" style="font-size: 1.45rem; font-weight: 800; color: #f87171;">0</div>
+                        <div style="font-size: 0.75rem; color: var(--slate-muted); margin-top: 4px;">Expired / dibatalkan</div>
+                    </div>
+                </div>
+
+                <!-- Sub-Navigation Capsule Tabs -->
+                <div class="pakasir-subnav">
+                    <button type="button" class="btn-subnav active" onclick="switchPakasirSubTab('create')" id="subnav-btn-create">
+                        <span>➕ Buat Transaksi Baru</span>
+                    </button>
+                    <button type="button" class="btn-subnav" onclick="switchPakasirSubTab('history')" id="subnav-btn-history">
+                        <span>📋 Riwayat Transaksi</span>
+                    </button>
+                    <button type="button" class="btn-subnav" onclick="switchPakasirSubTab('webhooks')" id="subnav-btn-webhooks">
+                        <span>⚡ Webhook Logs</span>
+                        <span class="badge-tag-lime" id="pakasir-wh-count" style="font-size: 0.7rem; padding: 1px 6px;">0</span>
+                    </button>
+                    <button type="button" class="btn-subnav" onclick="switchPakasirSubTab('calc')" id="subnav-btn-calc">
+                        <span>🧮 Kalkulator Biaya</span>
+                    </button>
+                    <button type="button" class="btn-subnav" onclick="switchPakasirSubTab('config')" id="subnav-btn-config">
+                        <span>⚙️ Pengaturan Pakasir</span>
+                    </button>
+                </div>
+
+                <!-- SUB-VIEW 1: FORM BUAT TRANSAKSI -->
+                <div id="pakasir-view-create" class="pakasir-subview">
+                    <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 24px; align-items: start;">
+                        <!-- Form Buat Transaksi -->
+                        <div class="tactile-card-dark">
+                            <h3 style="color: #ffffff; font-size: 1.2rem; margin-top: 0; margin-bottom: 18px; display: flex; align-items: center; gap: 8px;">
+                                <span>💳 Formulir Pembuatan Transaksi Pakasir</span>
+                            </h3>
+                            <form id="form-create-pakasir" onsubmit="handleCreatePakasirTxn(event)">
+                                <div style="display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: flex-end; margin-bottom: 16px;">
+                                    <div class="form-group" style="margin-bottom: 0;">
+                                        <label class="form-label" style="color: #ffffff;">Order ID / Invoice</label>
+                                        <input type="text" class="form-control" id="pakasir-order-id" placeholder="DW-..." style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);" required>
+                                    </div>
+                                    <button type="button" class="btn-ghost-white" onclick="generateRandomOrderId()" style="padding: 10px 14px; font-size: 0.85rem;" title="Acak Order ID Baru">
+                                        <span>🎲 Acak ID</span>
+                                    </button>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" style="color: #ffffff;">Nominal Tagihan (Rupiah)</label>
+                                    <div style="position: relative;">
+                                        <span style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--slate-muted); font-weight: 700;">Rp</span>
+                                        <input type="number" class="form-control" id="pakasir-amount" placeholder="50000" min="500" step="500" style="padding-left: 45px; background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border); font-size: 1.1rem; font-weight: 700;" oninput="updateLiveFeeEstimation()" required>
+                                    </div>
+                                    <small style="color: var(--slate-muted); font-size: 0.8rem; display: block; margin-top: 4px;">Minimal Rp 500 (QRIS/Link) atau Rp 10.000 (Virtual Account).</small>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" style="color: #ffffff;">Pilihan Metode Pembayaran</label>
+                                    <select class="form-control" id="pakasir-method" onchange="updateLiveFeeEstimation()" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);" required>
+                                        <optgroup label="Instant QR Code">
+                                            <option value="qris" selected>QRIS (Semua E-Wallet & Mobile Banking) [Min: 500, Max: 10jt]</option>
+                                        </optgroup>
+                                        <optgroup label="Payment Checkout Link">
+                                            <option value="payment_link">Payment Link (Halaman Bayar Pakasir) [Min: 500, Max: 50jt]</option>
+                                        </optgroup>
+                                        <optgroup label="Virtual Account Bank (Min: 10.000, Max: 50jt)">
+                                            <option value="bni_va">BNI Virtual Account</option>
+                                            <option value="bri_va">BRI Virtual Account</option>
+                                            <option value="cimb_niaga_va">CIMB Niaga Virtual Account</option>
+                                            <option value="permata_va">Permata Virtual Account</option>
+                                            <option value="maybank_va">Maybank Virtual Account</option>
+                                            <option value="bnc_va">Bank Neo Commerce (BNC) VA</option>
+                                            <option value="artha_graha_va">Artha Graha Virtual Account</option>
+                                            <option value="sampoerna_va">Bank Sahabat Sampoerna VA</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                                    <div class="form-group">
+                                        <label class="form-label" style="color: #ffffff;">Nama Klien / Pemesan (Opsional)</label>
+                                        <input type="text" class="form-control" id="pakasir-customer-name" placeholder="Cth: Bpk. Hendra" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" style="color: #ffffff;">Email Klien (Opsional)</label>
+                                        <input type="email" class="form-control" id="pakasir-customer-email" placeholder="klien@gmail.com" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" style="color: #ffffff;">Catatan / Keperluan Pembayaran (Opsional)</label>
+                                    <input type="text" class="form-control" id="pakasir-notes" placeholder="Cth: DP Pembuatan Website Custom Tier Growth" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                                </div>
+
+                                <button type="submit" id="btn-submit-create-pakasir" class="btn-lime" style="width: 100%; padding: 12px; font-size: 1rem; display: inline-flex; align-items: center; justify-content: center; gap: 8px; margin-top: 10px;">
+                                    <span>Buat Transaksi Pakasir Sekarang</span>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Live Fee & Payment Summary Preview -->
+                        <div>
+                            <div class="tactile-card-dark" style="background: rgba(16, 24, 59, 0.95); border: 1px solid rgba(59, 130, 246, 0.3); margin-bottom: 20px;">
+                                <h4 style="color: #ffffff; margin-top: 0; margin-bottom: 14px; font-size: 1.05rem; display: flex; align-items: center; gap: 6px;">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--lime-bright);"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                    <span>Estimasi Biaya Transaksi</span>
+                                </h4>
+                                <div style="display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem;">
+                                    <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed var(--navy-surface-border); padding-bottom: 8px;">
+                                        <span style="color: var(--slate-muted);">Metode Dipilih</span>
+                                        <span id="preview-method-name" style="font-weight: 700; color: #ffffff;">QRIS</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed var(--navy-surface-border); padding-bottom: 8px;">
+                                        <span style="color: var(--slate-muted);">Nominal Tagihan</span>
+                                        <span id="preview-nominal" style="font-weight: 700; color: #ffffff;">Rp 0</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed var(--navy-surface-border); padding-bottom: 8px;">
+                                        <span style="color: var(--slate-muted);">Estimasi Fee Pakasir</span>
+                                        <span id="preview-fee" style="font-weight: 700; color: #facc15;">-</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; padding-top: 4px; font-size: 1rem;">
+                                        <span style="color: #ffffff; font-weight: 700;">Total Pembayaran</span>
+                                        <span id="preview-total" style="font-weight: 800; color: var(--lime-bright);">Rp 0</span>
+                                    </div>
+                                </div>
+                                <div id="preview-fee-note" style="margin-top: 14px; font-size: 0.78rem; color: var(--slate-muted); background: var(--navy-surface); padding: 8px 12px; border-radius: 8px;">
+                                    Biaya live diambil langsung dari API resmi Pakasir saat Anda memasukkan nominal.
+                                </div>
+                            </div>
+
+                            <!-- Batas Limit Pembayaran Info (Sesuai Gambar 2) -->
+                            <div class="tactile-card-dark" style="font-size: 0.82rem; color: var(--slate-muted);">
+                                <strong style="color: #ffffff; display: block; margin-bottom: 8px;">ℹ️ Ketentuan Nominal Pakasir (Gambar 2):</strong>
+                                <ul style="margin: 0; padding-left: 18px; line-height: 1.6;">
+                                    <li><strong>QRIS</strong>: Min Rp 500, Max Rp 10.000.000</li>
+                                    <li><strong>Payment Link</strong>: Min Rp 500, Max Rp 50.000.000</li>
+                                    <li><strong>Semua Virtual Account</strong>: Min Rp 10.000, Max Rp 50.000.000</li>
+                                    <li>Transaksi kadaluarsa otomatis setelah 1x24 jam jika tidak dibayar.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUB-VIEW 2: RIWAYAT TRANSAKSI -->
+                <div id="pakasir-view-history" class="pakasir-subview" style="display: none;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+                        <div style="display: flex; gap: 8px;">
+                            <button type="button" class="btn-subnav active" onclick="filterPakasirHistory('all', this)" style="padding: 5px 14px; font-size: 0.8rem;">Semua (<span id="count-hist-all">0</span>)</button>
+                            <button type="button" class="btn-subnav" onclick="filterPakasirHistory('completed', this)" style="padding: 5px 14px; font-size: 0.8rem;">Completed (<span id="count-hist-completed">0</span>)</button>
+                            <button type="button" class="btn-subnav" onclick="filterPakasirHistory('pending', this)" style="padding: 5px 14px; font-size: 0.8rem;">Pending (<span id="count-hist-pending">0</span>)</button>
+                            <button type="button" class="btn-subnav" onclick="filterPakasirHistory('canceled', this)" style="padding: 5px 14px; font-size: 0.8rem;">Canceled (<span id="count-hist-canceled">0</span>)</button>
+                        </div>
+                        <input type="text" id="pakasir-search-input" oninput="searchPakasirHistory()" placeholder="Cari Order ID / Txn ID..." class="form-control" style="max-width: 250px; background: var(--navy-surface); color: #fff; border-color: var(--navy-surface-border); font-size: 0.85rem; padding: 6px 12px;">
+                    </div>
+
+                    <div class="tactile-card-dark admin-table-responsive" style="padding: 0;">
+                        <table class="admin-table" id="table-pakasir">
+                            <thead>
+                                <tr>
+                                    <th>Waktu Dibuat</th>
+                                    <th>Order ID &amp; Txn ID</th>
+                                    <th>Metode</th>
+                                    <th>Nominal</th>
+                                    <th>Status</th>
+                                    <th>Klien / Catatan</th>
+                                    <th style="text-align: right;">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td colspan="7" style="text-align: center; color: var(--slate-muted); padding: 30px;">Memuat data transaksi Pakasir...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- SUB-VIEW 3: WEBHOOK LOGS -->
+                <div id="pakasir-view-webhooks" class="pakasir-subview" style="display: none;">
+                    <!-- Webhook Info Box -->
+                    <div class="tactile-card-dark" style="margin-bottom: 20px; background: rgba(33, 82, 207, 0.08); border-color: rgba(59, 130, 246, 0.3);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+                            <div>
+                                <strong style="color: #ffffff; font-size: 0.95rem; display: block; margin-bottom: 4px;">📡 URL Webhook Anda di Pakasir</strong>
+                                <p style="color: var(--slate-muted); font-size: 0.85rem; margin: 0;">Salin URL ini dan tempelkan pada kolom <strong>Webhook URL</strong> di halaman Detail Proyek Pakasir Anda.</p>
+                            </div>
+                            <div style="display: flex; gap: 8px; align-items: center; flex-grow: 1; max-width: 520px;">
+                                <input type="text" id="pakasir-webhook-url-display" readonly class="form-control" style="background: var(--navy-surface); color: var(--lime-bright); font-family: monospace; font-size: 0.85rem;" value="/api/webhook/pakasir">
+                                <button type="button" class="btn-royal" onclick="copyWebhookUrl()" style="white-space: nowrap; font-size: 0.85rem; padding: 8px 14px;">📋 Salin URL</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                        <h4 style="color: #ffffff; margin: 0; font-size: 1.1rem;">Riwayat Panggilan Webhook Masuk</h4>
+                        <div style="display: flex; gap: 8px;">
+                            <button type="button" class="btn-ghost-white" onclick="loadPakasirWebhookLogs()" style="font-size: 0.82rem; padding: 6px 12px;">🔄 Segarkan</button>
+                            <button type="button" class="btn-action-delete" onclick="clearPakasirWebhookLogs()" style="font-size: 0.82rem; padding: 6px 12px;">🗑️ Bersihkan Log</button>
+                        </div>
+                    </div>
+
+                    <div class="tactile-card-dark admin-table-responsive" style="padding: 0;">
+                        <table class="admin-table" id="table-pakasir-wh">
+                            <thead>
+                                <tr>
+                                    <th>Waktu Terima</th>
+                                    <th>IP Pengirim</th>
+                                    <th>Secret Valid?</th>
+                                    <th>Txn ID &amp; Order ID</th>
+                                    <th>Nominal</th>
+                                    <th>Status Dikirim</th>
+                                    <th style="text-align: right;">Detail Payload</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td colspan="7" style="text-align: center; color: var(--slate-muted); padding: 30px;">Memuat riwayat log webhook...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- SUB-VIEW 4: KALKULATOR BIAYA -->
+                <div id="pakasir-view-calc" class="pakasir-subview" style="display: none;">
+                    <div class="tactile-card-dark" style="max-width: 800px; margin-bottom: 24px;">
+                        <h3 style="color: #ffffff; font-size: 1.2rem; margin-top: 0; margin-bottom: 12px;">🧮 Penghitung Estimasi Biaya Pakasir (Fee Calculator)</h3>
+                        <p style="color: var(--slate-muted); font-size: 0.9rem; margin-bottom: 18px;">Ketahui potongan biaya real-time untuk setiap metode pembayaran berdasarkan nominal transaksi via API resmi <code>/api/v2/payment-fee</code>.</p>
+                        
+                        <div style="display: flex; gap: 12px; align-items: flex-end; margin-bottom: 20px;">
+                            <div class="form-group" style="margin-bottom: 0; flex-grow: 1;">
+                                <label class="form-label" style="color: #ffffff;">Nominal Transaksi (Rp)</label>
+                                <input type="number" id="pakasir-calc-amount-input" class="form-control" value="100000" min="1000" step="1000" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border); font-size: 1.1rem; font-weight: 700;">
+                            </div>
+                            <button type="button" class="btn-lime" onclick="runFeeCalculator()" style="padding: 10px 20px; font-size: 0.92rem; font-weight: 700;">Hitung Biaya Live</button>
+                        </div>
+
+                        <div id="pakasir-calc-results" class="admin-table-responsive" style="border: 1px solid var(--navy-surface-border); border-radius: 12px; overflow: hidden;">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Metode Pembayaran</th>
+                                        <th>Nominal Transaksi</th>
+                                        <th>Estimasi Biaya (Fee)</th>
+                                        <th>Total Dibayar Klien</th>
+                                        <th>Dana Bersih Diterima</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="pakasir-calc-tbody">
+                                    <tr><td colspan="5" style="text-align: center; color: var(--slate-muted); padding: 24px;">Masukkan nominal dan klik "Hitung Biaya Live".</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUB-VIEW 5: PENGATURAN PAKASIR -->
+                <div id="pakasir-view-config" class="pakasir-subview" style="display: none;">
+                    <div class="tactile-card-dark" style="max-width: 680px;">
+                        <h3 style="color: #ffffff; font-size: 1.2rem; margin-top: 0; margin-bottom: 6px;">⚙️ Konfigurasi API Pakasir</h3>
+                        <p style="color: var(--slate-muted); font-size: 0.9rem; margin-bottom: 20px;">Sesuaikan kredensial proyek Pakasir Anda. Data ini tersimpan aman di database Redis dan disinkronkan dengan .env.</p>
+
+                        <form id="form-pakasir-config" onsubmit="handleSavePakasirConfig(event)">
+                            <div class="form-group">
+                                <label class="form-label" style="color: #ffffff;">Project Slug Pakasir</label>
+                                <input type="text" class="form-control" id="pakasir-cfg-slug" placeholder="Cth: depodomain atau dentsweb" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);" required>
+                                <small style="color: var(--slate-muted); font-size: 0.8rem; display: block; margin-top: 4px;">
+                                    Ditemukan pada bagian bawah halaman <strong>Detail Proyek</strong> di dashboard Pakasir (contoh: <code>depodomain</code>).
+                                </small>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" style="color: #ffffff;">API Key Pakasir (X-Api-Key)</label>
+                                <input type="text" class="form-control" id="pakasir-cfg-apikey" placeholder="Iqvd3Uks2V5hFBpQ..." style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border); font-family: monospace;" required>
+                                <small style="color: var(--slate-muted); font-size: 0.8rem; display: block; margin-top: 4px;">
+                                    Diambil dari halaman Detail Proyek bagian bawah di Pakasir.
+                                </small>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" style="color: #ffffff;">Webhook Secret Header (X-Secret)</label>
+                                <input type="text" class="form-control" id="pakasir-cfg-secret" placeholder="1f215f6df6fae56..." style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border); font-family: monospace;">
+                                <small style="color: var(--slate-muted); font-size: 0.8rem; display: block; margin-top: 4px;">
+                                    Secret yang dikirimkan Pakasir melalui header <code>X-Secret</code> untuk memverifikasi keaslian webhook.
+                                </small>
+                            </div>
+
+                            <div class="form-group" style="background: var(--navy-surface); padding: 14px; border-radius: 10px; border: 1px solid var(--navy-surface-border);">
+                                <label class="form-label" style="color: var(--lime-bright); margin-bottom: 4px;">Webhook Endpoint Anda:</label>
+                                <div style="display: flex; gap: 8px; align-items: center;">
+                                    <input type="text" id="pakasir-cfg-url-preview" readonly class="form-control" style="background: var(--navy-deep); color: #ffffff; font-family: monospace; font-size: 0.82rem;" value="">
+                                    <button type="button" class="btn-ghost-white" onclick="copyWebhookUrl()" style="padding: 6px 12px; font-size: 0.8rem; white-space: nowrap;">Salin</button>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn-lime" style="width: 100%; padding: 12px; font-weight: 700; margin-top: 10px;">
+                                <span>Simpan Konfigurasi Pakasir</span>
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
 
@@ -945,6 +1375,94 @@
         </div>
     </div>
 
+    <!-- MODAL DETAIL TRANSAKSI PAKASIR (QRIS / VA / PAYMENT LINK) -->
+    <div class="modal-overlay-kalana" id="modal-pakasir-detail">
+        <div class="modal-card-kalana" style="max-width: 600px; padding: 28px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; border-bottom: 1px solid var(--navy-surface-border); padding-bottom: 14px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(163, 230, 53, 0.15); display: flex; align-items: center; justify-content: center; color: var(--lime-bright); font-size: 1.2rem;">
+                        💳
+                    </div>
+                    <div>
+                        <h3 id="modal-pakasir-title" style="color: #ffffff; margin: 0; font-size: 1.2rem;">Detail Transaksi Pakasir</h3>
+                        <p id="modal-pakasir-subtitle" style="color: var(--slate-muted); font-size: 0.8rem; margin: 2px 0 0 0;">ID: -</p>
+                    </div>
+                </div>
+                <button type="button" class="btn-close-modal" onclick="closeModal('modal-pakasir-detail')" style="background: none; border: none; color: var(--slate-muted); font-size: 1.6rem; cursor: pointer; line-height: 1;" aria-label="Tutup">&times;</button>
+            </div>
+
+            <!-- Status Banner & Amount Highlight -->
+            <div style="background: var(--navy-surface); border: 1px solid var(--navy-surface-border); border-radius: 12px; padding: 16px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <span style="font-size: 0.8rem; color: var(--slate-muted); display: block;">Total Harus Dibayar</span>
+                    <strong id="modal-pakasir-amount" style="font-size: 1.5rem; color: var(--lime-bright); font-weight: 800;">Rp 0</strong>
+                    <div id="modal-pakasir-fee-info" style="font-size: 0.75rem; color: var(--slate-muted); margin-top: 2px;">Termasuk biaya layanan: Rp 0</div>
+                </div>
+                <div id="modal-pakasir-status-badge">
+                    <span class="badge-status-pending">PENDING</span>
+                </div>
+            </div>
+
+            <!-- Dynamic Method Body (QRIS / VA / Link) -->
+            <div id="modal-pakasir-body" style="margin-bottom: 20px;">
+                <!-- Populated by JS -->
+            </div>
+
+            <!-- Meta Information Table -->
+            <div style="background: rgba(0,0,0,0.2); border-radius: 10px; padding: 12px 16px; font-size: 0.83rem; margin-bottom: 20px; display: flex; flex-direction: column; gap: 6px;">
+                <div style="display: flex; justify-content: space-between;">
+                    <span style="color: var(--slate-muted);">Order ID:</span>
+                    <span id="modal-pakasir-order-id" style="color: #ffffff; font-family: monospace; font-weight: 700;">-</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span style="color: var(--slate-muted);">Txn ID Pakasir:</span>
+                    <span id="modal-pakasir-txn-id" style="color: #ffffff; font-family: monospace;">-</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span style="color: var(--slate-muted);">Metode Pembayaran:</span>
+                    <span id="modal-pakasir-method" style="color: #ffffff; font-weight: 600;">-</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span style="color: var(--slate-muted);">Kadaluarsa Pada:</span>
+                    <span id="modal-pakasir-expired" style="color: #facc15;">-</span>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div style="display: flex; gap: 10px; justify-content: space-between; flex-wrap: wrap;">
+                <div style="display: flex; gap: 8px;">
+                    <button type="button" id="modal-pakasir-btn-check" class="btn-royal" onclick="checkCurrentModalStatus()" style="font-size: 0.85rem; padding: 8px 16px; display: inline-flex; align-items: center; gap: 6px;">
+                        <span>🔄 Cek Status Realtime</span>
+                    </button>
+                    <button type="button" id="modal-pakasir-btn-cancel" class="btn-action-delete" onclick="cancelCurrentModalTxn()" style="font-size: 0.85rem; padding: 8px 14px;">
+                        <span>Batalkan Transaksi</span>
+                    </button>
+                </div>
+                <button type="button" class="btn-ghost-white" onclick="closeModal('modal-pakasir-detail')" style="font-size: 0.85rem; padding: 8px 16px;">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL RAW PAYLOAD WEBHOOK INSPECTOR -->
+    <div class="modal-overlay-kalana" id="modal-pakasir-rawpayload">
+        <div class="modal-card-kalana" style="max-width: 650px; padding: 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--navy-surface-border); padding-bottom: 12px;">
+                <div>
+                    <h3 style="color: #ffffff; margin: 0; font-size: 1.15rem;">Inspeksi Raw Webhook Payload</h3>
+                    <p id="modal-rawpayload-subtitle" style="color: var(--slate-muted); font-size: 0.8rem; margin: 2px 0 0 0;">Received from Pakasir</p>
+                </div>
+                <button type="button" class="btn-close-modal" onclick="closeModal('modal-pakasir-rawpayload')" style="background: none; border: none; color: var(--slate-muted); font-size: 1.6rem; cursor: pointer; line-height: 1;" aria-label="Tutup">&times;</button>
+            </div>
+
+            <pre style="background: #05081c; border: 1px solid var(--navy-surface-border); border-radius: 8px; padding: 14px; overflow-x: auto; color: #a5f3fc; font-family: monospace; font-size: 0.82rem; max-height: 380px;"><code id="modal-rawpayload-code">{}</code></pre>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 18px;">
+                <button type="button" class="btn-royal" onclick="copyRawPayload()" style="font-size: 0.82rem; padding: 7px 14px;">📋 Salin JSON</button>
+                <button type="button" class="btn-ghost-white" onclick="closeModal('modal-pakasir-rawpayload')" style="font-size: 0.82rem; padding: 7px 14px;">Tutup</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Quick Create Modal (+ Buat - Sesuai Gambar 1 & 2) -->
     <div class="modal-overlay-kalana" id="modal-quick-create">
         <div class="modal-card-kalana" style="max-width: 560px; padding: 28px;">
@@ -1521,6 +2039,9 @@
                 setTimeout(() => openModal('modal-services'), 120);
             } else if (type === 'livechat') {
                 switchTab('livechat');
+            } else if (type === 'pakasir') {
+                switchTab('pakasir');
+                switchPakasirSubTab('create');
             }
         }
 
@@ -1745,6 +2266,10 @@
 
             if (tab === 'livechat') {
                 await loadAdminChats();
+            }
+
+            if (tab === 'pakasir') {
+                await loadPakasirData();
             }
         }
 
@@ -2346,6 +2871,639 @@
             });
         });
 
+        // ==========================================
+        // PAKASIR PAYMENT GATEWAY CONTROLLER (API v2)
+        // ==========================================
+        window.cacheData.pakasir = [];
+        window.cacheData.pakasir_wh = [];
+        window.pakasirCurrentFilter = 'all';
+        window.currentViewingTxn = null;
+        let feeEstimateTimeout = null;
+
+        // Switch Sub-Tab inside Pakasir Panel
+        function switchPakasirSubTab(subtab) {
+            document.querySelectorAll('.pakasir-subnav .btn-subnav').forEach(btn => btn.classList.remove('active'));
+            const activeBtn = document.getElementById(`subnav-btn-${subtab}`);
+            if (activeBtn) activeBtn.classList.add('active');
+
+            document.querySelectorAll('.pakasir-subview').forEach(view => view.style.display = 'none');
+            const targetView = document.getElementById(`pakasir-view-${subtab}`);
+            if (targetView) targetView.style.display = 'block';
+
+            if (subtab === 'create') {
+                const orderIdEl = document.getElementById('pakasir-order-id');
+                if (orderIdEl && !orderIdEl.value) generateRandomOrderId();
+                updateLiveFeeEstimation();
+            } else if (subtab === 'calc') {
+                runFeeCalculator();
+            } else if (subtab === 'webhooks') {
+                loadPakasirWebhookLogs();
+            }
+        }
+
+        // Generate Random Order ID
+        function generateRandomOrderId() {
+            const idEl = document.getElementById('pakasir-order-id');
+            if (idEl) {
+                const rand = Math.floor(1000 + Math.random() * 9000);
+                idEl.value = `DW-${Date.now().toString(36).toUpperCase()}-${rand}`;
+            }
+        }
+
+        // Live Fee Estimation with Debounce
+        function updateLiveFeeEstimation() {
+            clearTimeout(feeEstimateTimeout);
+            feeEstimateTimeout = setTimeout(async () => {
+                const amountInput = document.getElementById('pakasir-amount');
+                const methodSelect = document.getElementById('pakasir-method');
+                if (!amountInput || !methodSelect) return;
+
+                const amount = parseInt(amountInput.value, 10) || 0;
+                const method = methodSelect.value;
+                const methodName = methodSelect.options[methodSelect.selectedIndex]?.text || method;
+
+                const previewMethod = document.getElementById('preview-method-name');
+                const previewNominal = document.getElementById('preview-nominal');
+                const previewFee = document.getElementById('preview-fee');
+                const previewTotal = document.getElementById('preview-total');
+
+                if (previewMethod) previewMethod.textContent = methodName.split('[')[0].trim();
+                if (previewNominal) previewNominal.textContent = `Rp ${amount.toLocaleString('id-ID')}`;
+
+                if (amount <= 0) {
+                    if (previewFee) previewFee.textContent = '-';
+                    if (previewTotal) previewTotal.textContent = 'Rp 0';
+                    return;
+                }
+
+                try {
+                    const res = await api(`/api/admin/pakasir/fee-calculator?amount=${amount}`);
+                    if (res && res.data) {
+                        const fee = res.data[method] !== undefined ? res.data[method] : (method === 'qris' ? Math.round(amount * 0.007) : 3500);
+                        const total = amount + fee;
+                        if (previewFee) previewFee.textContent = `+ Rp ${fee.toLocaleString('id-ID')}`;
+                        if (previewTotal) previewTotal.textContent = `Rp ${total.toLocaleString('id-ID')}`;
+                    }
+                } catch (e) {
+                    // Fallback local estimation if offline
+                    let estFee = 0;
+                    if (method === 'qris') estFee = Math.round(amount * 0.007);
+                    else if (method.endsWith('_va')) estFee = (method === 'artha_graha_va' || method === 'sampoerna_va') ? 2000 : 3500;
+                    else estFee = 2500;
+                    if (previewFee) previewFee.textContent = `~ Rp ${estFee.toLocaleString('id-ID')}`;
+                    if (previewTotal) previewTotal.textContent = `Rp ${(amount + estFee).toLocaleString('id-ID')}`;
+                }
+            }, 300);
+        }
+
+        // Load All Pakasir Data
+        async function loadPakasirData() {
+            try {
+                const [txnsRes, configRes, whRes] = await Promise.allSettled([
+                    api('/api/admin/pakasir/transactions'),
+                    api('/api/admin/pakasir/config'),
+                    api('/api/admin/pakasir/webhook-logs')
+                ]);
+
+                if (txnsRes.status === 'fulfilled' && txnsRes.value?.data) {
+                    window.cacheData.pakasir = txnsRes.value.data;
+                    renderPakasirHistory(window.cacheData.pakasir);
+                }
+
+                if (whRes.status === 'fulfilled' && whRes.value?.data) {
+                    window.cacheData.pakasir_wh = whRes.value.data;
+                    const whCountEl = document.getElementById('pakasir-wh-count');
+                    if (whCountEl) whCountEl.textContent = window.cacheData.pakasir_wh.length;
+                    renderPakasirWebhookTable(window.cacheData.pakasir_wh);
+                }
+
+                if (configRes.status === 'fulfilled' && configRes.value?.data) {
+                    const cfg = configRes.value.data;
+                    const slugEl = document.getElementById('pakasir-cfg-slug');
+                    const keyEl = document.getElementById('pakasir-cfg-apikey');
+                    const secretEl = document.getElementById('pakasir-cfg-secret');
+                    const urlPreviewEl = document.getElementById('pakasir-cfg-url-preview');
+                    const urlDisplayEl = document.getElementById('pakasir-webhook-url-display');
+
+                    if (slugEl) slugEl.value = cfg.slug || '';
+                    if (keyEl) keyEl.value = cfg.apiKey || '';
+                    if (secretEl) secretEl.value = cfg.webhookSecret || '';
+                    if (urlPreviewEl) urlPreviewEl.value = cfg.webhookUrl || '';
+                    if (urlDisplayEl) urlDisplayEl.value = cfg.webhookUrl || '';
+                }
+            } catch (err) {
+                console.error('Error loading Pakasir data:', err);
+            }
+        }
+
+        // Render History Table & Metric Cards
+        function renderPakasirHistory(list) {
+            const data = Array.isArray(list) ? list : [];
+            let totalOmzet = 0;
+            let countCompleted = 0;
+            let countPending = 0;
+            let countCanceled = 0;
+
+            data.forEach(t => {
+                const st = (t.status || '').toLowerCase();
+                if (st === 'completed') {
+                    countCompleted++;
+                    totalOmzet += (Number(t.amount) || 0);
+                } else if (st === 'pending') {
+                    countPending++;
+                } else if (st === 'canceled') {
+                    countCanceled++;
+                }
+            });
+
+            // Update stats
+            const omzetEl = document.getElementById('pakasir-stat-omzet');
+            const totalEl = document.getElementById('pakasir-stat-total');
+            const compEl = document.getElementById('pakasir-stat-completed');
+            const pendEl = document.getElementById('pakasir-stat-pending');
+            const cancEl = document.getElementById('pakasir-stat-canceled');
+
+            if (omzetEl) omzetEl.textContent = `Rp ${totalOmzet.toLocaleString('id-ID')}`;
+            if (totalEl) totalEl.textContent = data.length;
+            if (compEl) compEl.textContent = countCompleted;
+            if (pendEl) pendEl.textContent = countPending;
+            if (cancEl) cancEl.textContent = countCanceled;
+
+            // Update filter counts
+            const cntAll = document.getElementById('count-hist-all');
+            const cntComp = document.getElementById('count-hist-completed');
+            const cntPend = document.getElementById('count-hist-pending');
+            const cntCanc = document.getElementById('count-hist-canceled');
+            if (cntAll) cntAll.textContent = data.length;
+            if (cntComp) cntComp.textContent = countCompleted;
+            if (cntPend) cntPend.textContent = countPending;
+            if (cntCanc) cntCanc.textContent = countCanceled;
+
+            // Filter by active status
+            let filtered = data;
+            if (window.pakasirCurrentFilter && window.pakasirCurrentFilter !== 'all') {
+                filtered = data.filter(t => (t.status || '').toLowerCase() === window.pakasirCurrentFilter);
+            }
+
+            const tb = document.querySelector('#table-pakasir tbody');
+            if (!tb) return;
+
+            if (!filtered.length) {
+                tb.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 30px; color: var(--slate-muted);">Tidak ada transaksi yang cocok.</td></tr>';
+                return;
+            }
+
+            tb.innerHTML = filtered.map(t => {
+                const st = (t.status || 'pending').toLowerCase();
+                let badgeClass = 'badge-status-pending';
+                let badgeText = 'PENDING';
+                if (st === 'completed') { badgeClass = 'badge-status-completed'; badgeText = 'COMPLETED'; }
+                else if (st === 'canceled') { badgeClass = 'badge-status-canceled'; badgeText = 'CANCELED'; }
+
+                const isSandboxBadge = t.is_sandbox ? `<span style="font-size:0.65rem; background:rgba(59,130,246,0.2); color:#60a5fa; border:1px solid rgba(59,130,246,0.3); padding:1px 5px; border-radius:4px; margin-left:4px;">SANDBOX</span>` : '';
+                const dateStr = t.createdAt ? new Date(t.createdAt).toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'short' }) : '-';
+
+                return `
+                    <tr>
+                        <td style="color: var(--slate-muted); font-size: 0.82rem; white-space: nowrap;">${dateStr}</td>
+                        <td>
+                            <strong style="color: #ffffff; font-family: monospace; font-size: 0.88rem;">${escapeHtml(t.order_id || '-')}</strong>
+                            <div style="font-size: 0.72rem; color: var(--slate-muted); font-family: monospace;">Txn: ${escapeHtml(t.txn_id || '-')}</div>
+                        </td>
+                        <td>
+                            <span class="badge-tag-royal" style="font-size: 0.75rem; font-weight: 700;">${escapeHtml(t.method_name || t.method || '-')}</span>
+                        </td>
+                        <td>
+                            <strong style="color: var(--lime-bright); font-size: 0.95rem;">Rp ${(t.amount || 0).toLocaleString('id-ID')}</strong>
+                            ${t.fee ? `<div style="font-size:0.72rem; color:var(--slate-muted);">Fee: Rp ${t.fee.toLocaleString('id-ID')}</div>` : ''}
+                        </td>
+                        <td>
+                            <span class="${badgeClass}">${badgeText}</span>
+                            ${isSandboxBadge}
+                        </td>
+                        <td style="font-size: 0.82rem; color: var(--slate-muted); max-width: 180px;">
+                            ${t.customer_name ? `<div style="color:#ffffff; font-weight:600;">${escapeHtml(t.customer_name)}</div>` : ''}
+                            ${t.notes ? `<div style="font-size:0.75rem; line-height:1.3;">${escapeHtml(t.notes)}</div>` : '-'}
+                        </td>
+                        <td style="text-align: right; white-space: nowrap;">
+                            <button type="button" class="btn-royal" onclick="openPakasirModalById('${t.id}')" style="padding: 5px 10px; font-size: 0.8rem; margin-right: 4px;">Lihat / Bayar</button>
+                            <button type="button" class="btn-ghost-white" onclick="checkPakasirStatus('${t.id}')" title="Cek Status Realtime" style="padding: 5px 8px; font-size: 0.8rem; margin-right: 4px;">🔄</button>
+                            ${st === 'pending' ? `<button type="button" class="btn-action-delete" onclick="cancelPakasirTxn('${t.id}')" title="Batalkan Transaksi" style="padding: 5px 8px; font-size: 0.8rem; margin-right: 4px;">Batalkan</button>` : ''}
+                            <button type="button" class="btn-action-delete" onclick="deletePakasirTxn('${t.id}')" title="Hapus Riwayat Lokal" style="padding: 5px 8px; font-size: 0.8rem;">🗑️</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function filterPakasirHistory(status, btnEl) {
+            window.pakasirCurrentFilter = status;
+            document.querySelectorAll('#pakasir-view-history .btn-subnav').forEach(b => b.classList.remove('active'));
+            if (btnEl) btnEl.classList.add('active');
+            renderPakasirHistory(window.cacheData.pakasir);
+        }
+
+        function searchPakasirHistory() {
+            const q = (document.getElementById('pakasir-search-input')?.value || '').toLowerCase().trim();
+            if (!q) {
+                renderPakasirHistory(window.cacheData.pakasir);
+                return;
+            }
+            const filtered = (window.cacheData.pakasir || []).filter(t => {
+                return (t.order_id && t.order_id.toLowerCase().includes(q)) ||
+                       (t.txn_id && t.txn_id.toLowerCase().includes(q)) ||
+                       (t.customer_name && t.customer_name.toLowerCase().includes(q)) ||
+                       (t.method && t.method.toLowerCase().includes(q));
+            });
+            renderPakasirHistory(filtered);
+        }
+
+        // Handle Create Transaction Submit
+        async function handleCreatePakasirTxn(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-submit-create-pakasir');
+            const originalText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<span>Membuat transaksi di Pakasir...</span>';
+
+            const order_id = document.getElementById('pakasir-order-id').value.trim();
+            const amount = parseInt(document.getElementById('pakasir-amount').value, 10);
+            const method = document.getElementById('pakasir-method').value;
+            const customer_name = document.getElementById('pakasir-customer-name').value.trim();
+            const customer_email = document.getElementById('pakasir-customer-email').value.trim();
+            const notes = document.getElementById('pakasir-notes').value.trim();
+
+            try {
+                const res = await api('/api/admin/pakasir/transactions', 'POST', {
+                    order_id,
+                    amount,
+                    method,
+                    customer_name,
+                    customer_email,
+                    notes
+                });
+
+                if (res && res.success) {
+                    showToast('Transaksi Pakasir berhasil dibuat!', 'success');
+                    // Reset form & generate new Order ID
+                    document.getElementById('form-create-pakasir').reset();
+                    generateRandomOrderId();
+
+                    // Open transaction detail modal
+                    if (res.data) {
+                        openPakasirModal(res.data);
+                    }
+
+                    // Reload transactions list
+                    await loadPakasirData();
+                }
+            } catch (err) {
+                // error toast handled by api()
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+        }
+
+        // Open Transaction Detail Modal by Object
+        function openPakasirModal(txn) {
+            if (!txn) return;
+            window.currentViewingTxn = txn;
+
+            document.getElementById('modal-pakasir-title').textContent = txn.method_name || 'Transaksi Pakasir';
+            document.getElementById('modal-pakasir-subtitle').textContent = `Order ID: ${txn.order_id}`;
+            document.getElementById('modal-pakasir-amount').textContent = `Rp ${(txn.total_payment || txn.amount || 0).toLocaleString('id-ID')}`;
+            document.getElementById('modal-pakasir-fee-info').textContent = txn.fee ? `Termasuk biaya layanan: Rp ${txn.fee.toLocaleString('id-ID')}` : 'Bebas biaya tambahan';
+
+            // Status Badge
+            const st = (txn.status || 'pending').toLowerCase();
+            const badgeContainer = document.getElementById('modal-pakasir-status-badge');
+            if (st === 'completed') {
+                badgeContainer.innerHTML = '<span class="badge-status-completed">COMPLETED</span>';
+            } else if (st === 'canceled') {
+                badgeContainer.innerHTML = '<span class="badge-status-canceled">CANCELED</span>';
+            } else {
+                badgeContainer.innerHTML = '<span class="badge-status-pending">PENDING</span>';
+            }
+
+            // Meta Info
+            document.getElementById('modal-pakasir-order-id').textContent = txn.order_id || '-';
+            document.getElementById('modal-pakasir-txn-id').textContent = txn.txn_id || '-';
+            document.getElementById('modal-pakasir-method').textContent = txn.method_name || txn.method || '-';
+            document.getElementById('modal-pakasir-expired').textContent = txn.expired_at ? new Date(txn.expired_at).toLocaleString('id-ID') : '1x24 Jam';
+
+            // Cancel Button visibility
+            const cancelBtn = document.getElementById('modal-pakasir-btn-cancel');
+            if (cancelBtn) {
+                cancelBtn.style.display = (st === 'pending') ? 'inline-flex' : 'none';
+            }
+
+            // Render Dynamic Body (QRIS, VA, or Payment Link)
+            const bodyEl = document.getElementById('modal-pakasir-body');
+            bodyEl.innerHTML = '';
+
+            if (txn.method === 'qris') {
+                const qrString = txn.qr_string || '';
+                const qrImgUrl = qrString ? `https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encodeURIComponent(qrString)}` : '';
+                bodyEl.innerHTML = `
+                    <div style="text-align: center; background: #ffffff; padding: 20px; border-radius: 14px; border: 2px solid var(--navy-surface-border); max-width: 320px; margin: 0 auto 16px auto;">
+                        <img src="/public/img/axalogo.png" alt="Dents Logo" style="height: 24px; margin-bottom: 8px;">
+                        <div style="font-weight: 800; font-size: 1.1rem; color: #05081c; margin-bottom: 12px; letter-spacing: -0.5px;">QRIS STANDAR PEMBAYARAN</div>
+                        ${qrImgUrl ? `<img src="${qrImgUrl}" alt="QRIS QR Code" style="width: 220px; height: 220px; display: block; margin: 0 auto 10px auto; border-radius: 8px;">` : '<div style="padding: 40px; color:#64748b;">QR Code tidak tersedia</div>'}
+                        <div style="font-size: 0.75rem; color: #475569; font-weight: 600;">Scan dengan GoPay, OVO, Dana, ShopeePay, BCA, Mandiri, BRI, dll.</div>
+                    </div>
+                    <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+                        ${qrString ? `<button type="button" class="btn-ghost-white" onclick="copyText('${escapeHtml(qrString)}', 'String QRIS berhasil disalin!')" style="font-size: 0.8rem; padding: 6px 12px;">📋 Salin String QR</button>` : ''}
+                        ${qrImgUrl ? `<a href="${qrImgUrl}" target="_blank" download="QRIS_${txn.order_id}.png" class="btn-ghost-white" style="font-size: 0.8rem; padding: 6px 12px; text-decoration: none;">📥 Unduh QR Image</a>` : ''}
+                    </div>
+                `;
+            } else if (txn.method && txn.method.endsWith('_va')) {
+                const vaNumber = txn.va_number || '-';
+                bodyEl.innerHTML = `
+                    <div style="background: rgba(33, 82, 207, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 12px; padding: 20px; text-align: center;">
+                        <div style="color: var(--slate-muted); font-size: 0.85rem; margin-bottom: 6px;">Nomor Virtual Account (${escapeHtml(txn.method_name)})</div>
+                        <div style="font-size: 1.8rem; font-weight: 800; font-family: monospace; color: #ffffff; letter-spacing: 2px; margin-bottom: 12px;">
+                            ${escapeHtml(vaNumber)}
+                        </div>
+                        <button type="button" class="btn-lime" onclick="copyText('${escapeHtml(vaNumber)}', 'Nomor Virtual Account berhasil disalin!')" style="padding: 8px 18px; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px; margin: 0 auto;">
+                            <span>📋 Salin Nomor VA</span>
+                        </button>
+                    </div>
+                    <div style="margin-top: 14px; font-size: 0.8rem; color: var(--slate-muted); background: var(--navy-surface); padding: 12px; border-radius: 8px;">
+                        <strong style="color: #ffffff; display: block; margin-bottom: 4px;">Cara Pembayaran:</strong>
+                        1. Buka Mobile Banking / ATM bank Anda.<br>
+                        2. Pilih menu Transfer &gt; Virtual Account.<br>
+                        3. Masukkan nomor VA di atas dan pastikan nominal tepat <strong>Rp ${(txn.total_payment || txn.amount || 0).toLocaleString('id-ID')}</strong>.
+                    </div>
+                `;
+            } else {
+                // Payment link
+                const payLink = txn.payment_link || `https://app.pakasir.com/pay-v2/${txn.txn_id}`;
+                bodyEl.innerHTML = `
+                    <div style="background: rgba(33, 82, 207, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 12px; padding: 20px; text-align: center;">
+                        <div style="color: var(--slate-muted); font-size: 0.85rem; margin-bottom: 10px;">Link Halaman Pembayaran Checkout Pakasir:</div>
+                        <div style="background: var(--navy-surface); padding: 10px; border-radius: 8px; font-family: monospace; font-size: 0.85rem; color: var(--lime-bright); margin-bottom: 14px; word-break: break-all;">
+                            ${escapeHtml(payLink)}
+                        </div>
+                        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                            <a href="${payLink}" target="_blank" class="btn-royal" style="text-decoration: none; padding: 8px 18px; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px;">
+                                <span>Buka Halaman Checkout Pakasir &nearr;</span>
+                            </a>
+                            <button type="button" class="btn-ghost-white" onclick="copyText('${escapeHtml(payLink)}', 'Link pembayaran berhasil disalin!')" style="padding: 8px 14px; font-size: 0.85rem;">
+                                <span>📋 Salin Link</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            openModal('modal-pakasir-detail');
+        }
+
+        function openPakasirModalById(id) {
+            const found = (window.cacheData.pakasir || []).find(t => t.id === id || t.txn_id === id);
+            if (found) openPakasirModal(found);
+        }
+
+        // Live Poll Status from Modal
+        async function checkCurrentModalStatus() {
+            if (!window.currentViewingTxn) return;
+            const btn = document.getElementById('modal-pakasir-btn-check');
+            btn.disabled = true;
+            btn.innerHTML = '<span>Memeriksa ke Pakasir...</span>';
+
+            try {
+                const res = await api(`/api/admin/pakasir/transactions/${window.currentViewingTxn.id}/status`);
+                if (res && res.success && res.data) {
+                    showToast(res.message || 'Status berhasil diperbarui!', 'success');
+                    openPakasirModal(res.data);
+                    await loadPakasirData();
+                }
+            } catch (e) {
+                // error handled
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<span>🔄 Cek Status Realtime</span>';
+            }
+        }
+
+        // Cancel Current Modal Transaction
+        async function cancelCurrentModalTxn() {
+            if (!window.currentViewingTxn) return;
+            if (!confirm(`Batalkan transaksi ${window.currentViewingTxn.order_id} di Pakasir?`)) return;
+
+            const btn = document.getElementById('modal-pakasir-btn-cancel');
+            btn.disabled = true;
+
+            try {
+                const res = await api(`/api/admin/pakasir/transactions/${window.currentViewingTxn.id}/cancel`, 'POST');
+                if (res && res.success) {
+                    showToast(res.message || 'Transaksi berhasil dibatalkan!', 'success');
+                    closeModal('modal-pakasir-detail');
+                    await loadPakasirData();
+                }
+            } catch (e) {
+                // error handled
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        // Check Status from Table Action
+        async function checkPakasirStatus(id) {
+            try {
+                const res = await api(`/api/admin/pakasir/transactions/${id}/status`);
+                if (res && res.success) {
+                    showToast(res.message || 'Status berhasil diperbarui!', 'success');
+                    await loadPakasirData();
+                }
+            } catch (e) {}
+        }
+
+        // Cancel Transaction from Table Action
+        async function cancelPakasirTxn(id) {
+            if (!confirm('Yakin ingin membatalkan transaksi ini di Pakasir?')) return;
+            try {
+                const res = await api(`/api/admin/pakasir/transactions/${id}/cancel`, 'POST');
+                if (res && res.success) {
+                    showToast(res.message || 'Transaksi berhasil dibatalkan!', 'success');
+                    await loadPakasirData();
+                }
+            } catch (e) {}
+        }
+
+        // Delete Transaction Record from local database
+        async function deletePakasirTxn(id) {
+            if (!confirm('Hapus riwayat transaksi ini dari database lokal DentsWeb?')) return;
+            try {
+                const res = await api(`/api/admin/pakasir/transactions/${id}`, 'DELETE');
+                if (res && res.success) {
+                    showToast('Riwayat transaksi berhasil dihapus.', 'success');
+                    await loadPakasirData();
+                }
+            } catch (e) {}
+        }
+
+        // Webhook Logs Table Rendering
+        function renderPakasirWebhookTable(logs) {
+            const tb = document.querySelector('#table-pakasir-wh tbody');
+            if (!tb) return;
+
+            if (!logs || !logs.length) {
+                tb.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 30px; color: var(--slate-muted);">Belum ada payload webhook yang diterima dari Pakasir.</td></tr>';
+                return;
+            }
+
+            tb.innerHTML = logs.map(l => {
+                const dateStr = l.receivedAt ? new Date(l.receivedAt).toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'medium' }) : '-';
+                const secretBadge = l.secretMatched 
+                    ? '<span class="badge-status-completed" style="font-size:0.7rem;">VALID (X-Secret OK)</span>'
+                    : '<span class="badge-status-canceled" style="font-size:0.7rem;">MISMATCH / UNVERIFIED</span>';
+
+                return `
+                    <tr>
+                        <td style="color: var(--slate-muted); font-size: 0.8rem; white-space: nowrap;">${dateStr}</td>
+                        <td style="font-family: monospace; font-size: 0.8rem; color: #ffffff;">${escapeHtml(l.ip || '-')}</td>
+                        <td>${secretBadge}</td>
+                        <td>
+                            <strong style="color: #ffffff; font-family: monospace; font-size: 0.85rem;">${escapeHtml(l.order_id || '-')}</strong>
+                            <div style="font-size: 0.72rem; color: var(--slate-muted); font-family: monospace;">Txn: ${escapeHtml(l.txn_id || '-')}</div>
+                        </td>
+                        <td style="color: var(--lime-bright); font-weight: 700;">Rp ${(l.amount || 0).toLocaleString('id-ID')}</td>
+                        <td>
+                            <span class="badge-tag-royal" style="font-size: 0.75rem;">${escapeHtml((l.status || 'completed').toUpperCase())}</span>
+                        </td>
+                        <td style="text-align: right;">
+                            <button type="button" class="btn-royal" onclick="openWebhookPayloadModal('${l.id}')" style="padding: 4px 10px; font-size: 0.78rem;">Inspeksi JSON</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        async function loadPakasirWebhookLogs() {
+            try {
+                const res = await api('/api/admin/pakasir/webhook-logs');
+                if (res && res.data) {
+                    window.cacheData.pakasir_wh = res.data;
+                    const whCountEl = document.getElementById('pakasir-wh-count');
+                    if (whCountEl) whCountEl.textContent = res.data.length;
+                    renderPakasirWebhookTable(res.data);
+                    showToast('Log webhook berhasil disegarkan.', 'success');
+                }
+            } catch (e) {}
+        }
+
+        async function clearPakasirWebhookLogs() {
+            if (!confirm('Bersihkan seluruh catatan log webhook?')) return;
+            try {
+                const res = await api('/api/admin/pakasir/webhook-logs', 'DELETE');
+                if (res && res.success) {
+                    showToast('Log webhook dibersihkan.', 'success');
+                    await loadPakasirWebhookLogs();
+                }
+            } catch (e) {}
+        }
+
+        function openWebhookPayloadModal(logId) {
+            const log = (window.cacheData.pakasir_wh || []).find(l => l.id === logId);
+            if (!log) return;
+
+            document.getElementById('modal-rawpayload-subtitle').textContent = `Txn: ${log.txn_id} | Order: ${log.order_id} | Received: ${log.receivedAt}`;
+            document.getElementById('modal-rawpayload-code').textContent = JSON.stringify(log, null, 2);
+            openModal('modal-pakasir-rawpayload');
+        }
+
+        function copyRawPayload() {
+            const code = document.getElementById('modal-rawpayload-code')?.textContent || '';
+            copyText(code, 'Payload JSON berhasil disalin ke clipboard!');
+        }
+
+        function copyWebhookUrl() {
+            const url = document.getElementById('pakasir-webhook-url-display')?.value || '';
+            copyText(url, 'URL Webhook Pakasir berhasil disalin!');
+        }
+
+        function copyText(text, successMsg) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast(successMsg, 'success');
+                }).catch(() => {
+                    prompt('Salin teks berikut:', text);
+                });
+            } else {
+                prompt('Salin teks berikut:', text);
+            }
+        }
+
+        // Live Fee Calculator Runner
+        async function runFeeCalculator() {
+            const amountInput = document.getElementById('pakasir-calc-amount-input');
+            const tbody = document.getElementById('pakasir-calc-tbody');
+            if (!amountInput || !tbody) return;
+
+            const amount = parseInt(amountInput.value, 10);
+            if (isNaN(amount) || amount <= 0) {
+                showToast('Masukkan nominal valid.', 'error');
+                return;
+            }
+
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--slate-muted); padding: 20px;">Mengambil data kalkulator fee dari Pakasir...</td></tr>';
+
+            const methodNames = {
+                qris: 'QRIS (Semua E-Wallet & Bank)',
+                payment_link: 'Payment Link Checkout',
+                bni_va: 'BNI Virtual Account',
+                bri_va: 'BRI Virtual Account',
+                cimb_niaga_va: 'CIMB Niaga Virtual Account',
+                permata_va: 'Permata Virtual Account',
+                maybank_va: 'Maybank Virtual Account',
+                bnc_va: 'Bank Neo Commerce (BNC) VA',
+                artha_graha_va: 'Artha Graha Virtual Account',
+                sampoerna_va: 'Bank Sahabat Sampoerna VA',
+                atm_bersama_va: 'ATM Bersama Virtual Account'
+            };
+
+            try {
+                const res = await api(`/api/admin/pakasir/fee-calculator?amount=${amount}`);
+                if (res && res.data) {
+                    const rows = Object.entries(res.data).map(([key, fee]) => {
+                        const name = methodNames[key] || key;
+                        const total = amount + fee;
+                        const net = amount;
+                        return `
+                            <tr>
+                                <td style="font-weight: 700; color: #ffffff;">${escapeHtml(name)}</td>
+                                <td style="color: var(--slate-muted);">Rp ${amount.toLocaleString('id-ID')}</td>
+                                <td style="color: #facc15; font-weight: 600;">+ Rp ${fee.toLocaleString('id-ID')}</td>
+                                <td style="color: var(--lime-bright); font-weight: 800;">Rp ${total.toLocaleString('id-ID')}</td>
+                                <td style="color: #4ade80;">Rp ${net.toLocaleString('id-ID')}</td>
+                            </tr>
+                        `;
+                    }).join('');
+                    tbody.innerHTML = rows;
+                }
+            } catch (e) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #f87171; padding: 20px;">Gagal mengambil data kalkulator fee dari server Pakasir.</td></tr>';
+            }
+        }
+
+        // Save Pakasir Config Submit
+        async function handleSavePakasirConfig(e) {
+            e.preventDefault();
+            const slug = document.getElementById('pakasir-cfg-slug').value.trim();
+            const apiKey = document.getElementById('pakasir-cfg-apikey').value.trim();
+            const webhookSecret = document.getElementById('pakasir-cfg-secret').value.trim();
+
+            try {
+                const res = await api('/api/admin/pakasir/config', 'PUT', { slug, apiKey, webhookSecret });
+                if (res && res.success) {
+                    showToast('Konfigurasi Pakasir berhasil diperbarui!', 'success');
+                    await loadPakasirData();
+                }
+            } catch (e) {}
+        }
+
         // Global functions exposure
         window.openModal = openModal;
         window.closeModal = closeModal;
@@ -2369,6 +3527,30 @@
         window.deleteActiveChat = deleteActiveChat;
         window.refreshAdminChats = refreshAdminChats;
         window.renderAdminChatThreads = renderAdminChatThreads;
+        // Pakasir exposures
+        window.switchPakasirSubTab = switchPakasirSubTab;
+        window.generateRandomOrderId = generateRandomOrderId;
+        window.updateLiveFeeEstimation = updateLiveFeeEstimation;
+        window.handleCreatePakasirTxn = handleCreatePakasirTxn;
+        window.renderPakasirHistory = renderPakasirHistory;
+        window.filterPakasirHistory = filterPakasirHistory;
+        window.searchPakasirHistory = searchPakasirHistory;
+        window.openPakasirModal = openPakasirModal;
+        window.openPakasirModalById = openPakasirModalById;
+        window.checkCurrentModalStatus = checkCurrentModalStatus;
+        window.cancelCurrentModalTxn = cancelCurrentModalTxn;
+        window.checkPakasirStatus = checkPakasirStatus;
+        window.cancelPakasirTxn = cancelPakasirTxn;
+        window.deletePakasirTxn = deletePakasirTxn;
+        window.loadPakasirWebhookLogs = loadPakasirWebhookLogs;
+        window.clearPakasirWebhookLogs = clearPakasirWebhookLogs;
+        window.openWebhookPayloadModal = openWebhookPayloadModal;
+        window.copyRawPayload = copyRawPayload;
+        window.copyWebhookUrl = copyWebhookUrl;
+        window.copyText = copyText;
+        window.runFeeCalculator = runFeeCalculator;
+        window.handleSavePakasirConfig = handleSavePakasirConfig;
+        window.loadPakasirData = loadPakasirData;
     </script>
 </body>
 </html>
