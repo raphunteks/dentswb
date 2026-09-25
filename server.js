@@ -105,7 +105,7 @@ const isLocalOrInternal = (req) => {
     const ip = req.ip || req.connection?.remoteAddress || req.socket?.remoteAddress || '';
     if (ip === '127.0.0.1' || ip === '::1' || ip.includes('127.0.0.1')) return true;
     const p = req.path || req.url || '';
-    if (p.startsWith('/admin') || p.startsWith('/api/admin') || p.startsWith('/api/chat/messages') || p.startsWith('/api/webhook/pakasir') || p === '/sitemap.xml' || p === '/robots.txt' || p.startsWith('/google')) return true;
+    if (p.startsWith('/admin') || p.startsWith('/api/admin') || p.startsWith('/api/chat/messages') || p.startsWith('/api/webhook/pakasir') || p.startsWith('/webhook-') || p.startsWith('/test-login') || p.startsWith('/api/webhook-') || p === '/sitemap.xml' || p === '/robots.txt' || p.startsWith('/google')) return true;
     return false;
 };
 
@@ -1563,6 +1563,44 @@ async function requireAdmin(req, res, next) {
     }
 }
 
+// Reviewer & Sandbox Testing Authentication Middleware (Supports tester_session or admin_session)
+async function requireTesterOrAdmin(req, res, next) {
+    const adminSessionId = req.cookies.admin_session;
+    const testerSessionId = req.cookies.tester_session;
+
+    // 1. If active admin session exists and is valid
+    if (adminSessionId) {
+        try {
+            const adminData = await redis.get(`dents:admin:sessions:${adminSessionId}`);
+            if (adminData) {
+                req.testerUser = adminData.username || 'admin';
+                req.isAdminUser = true;
+                await redis.expire(`dents:admin:sessions:${adminSessionId}`, 1800);
+                return next();
+            }
+        } catch (e) {}
+    }
+
+    // 2. If active tester session exists and is valid
+    if (testerSessionId) {
+        try {
+            const testerData = await redis.get(`dents:tester:sessions:${testerSessionId}`);
+            if (testerData) {
+                req.testerUser = testerData.username || 'pakasir_reviewer';
+                req.isAdminUser = false;
+                await redis.expire(`dents:tester:sessions:${testerSessionId}`, 7200);
+                return next();
+            }
+        } catch (e) {}
+    }
+
+    // If neither session is valid
+    if (req.path.startsWith('/api/')) {
+        return res.status(401).json({ success: false, message: 'Unauthorized. Silakan login ke portal pengujian /webhook-login.' });
+    }
+    return res.redirect('/webhook-login');
+}
+
 // ==========================================
 // PUBLIC SSR ROUTES
 // ==========================================
@@ -2085,6 +2123,57 @@ app.get('/admin-dashboard', requireAdmin, async (req, res) => {
     res.render('admin-dashboard', { settings, seo: { title: 'Dashboard Admin', desc: '', path: '' }});
 });
 
+// Pakasir KYC Reviewer & Testing Portal Routes
+app.get(['/webhook-login', '/test-login'], (req, res) => {
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+    if (req.cookies.tester_session || req.cookies.admin_session) {
+        return res.redirect('/webhook-dashboard');
+    }
+    res.render('test-login', { seo: { title: 'Pakasir Reviewer Login', desc: '', path: req.path }});
+});
+
+app.post('/api/webhook-login', loginLimiter, async (req, res) => {
+    try {
+        const { username, password } = req.body || {};
+        const envUser = process.env.ADMINTESTING_USER || 'pakasirtest123';
+        const envPass = process.env.ADMINTESTING_PASS || 'pakasirtest321';
+
+        if (!username || !password || username !== envUser || password !== envPass) {
+            return res.status(401).json({ success: false, message: 'Kredensial login testing tidak valid. Periksa kembali username & password.' });
+        }
+
+        const sessionId = crypto.randomUUID();
+        await redis.set(`dents:tester:sessions:${sessionId}`, { username, loginAt: new Date().toISOString() }, { ex: 7200 });
+        res.cookie('tester_session', sessionId, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'Lax',
+            maxAge: 7200000
+        });
+        res.json({ success: true, redirect: '/webhook-dashboard' });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+});
+
+app.post('/api/webhook-logout', async (req, res) => {
+    const sessionId = req.cookies.tester_session;
+    if (sessionId) {
+        await redis.del(`dents:tester:sessions:${sessionId}`);
+        res.clearCookie('tester_session');
+    }
+    res.json({ success: true });
+});
+
+app.get('/webhook-dashboard', requireTesterOrAdmin, async (req, res) => {
+    const settings = await getGlobalSettings();
+    res.render('webhook-dashboard', {
+        settings,
+        user: req.testerUser || 'Reviewer Pakasir',
+        seo: { title: 'Pakasir KYC Reviewer Console', desc: '', path: req.path }
+    });
+});
+
 async function handleListGet(req, res, redisKey) {
     try {
         const data = await redis.get(redisKey) || [];
@@ -2376,8 +2465,8 @@ app.post('/api/webhook/pakasir', async (req, res) => {
     }
 });
 
-// 2. ADMIN API: Get & Update Pakasir Config
-app.get('/api/admin/pakasir/config', requireAdmin, async (req, res) => {
+// 2. ADMIN & REVIEWER API: Get & Update Pakasir Config
+app.get('/api/admin/pakasir/config', requireTesterOrAdmin, async (req, res) => {
     try {
         const config = await getPakasirConfig();
         const settings = await getGlobalSettings();
@@ -2412,8 +2501,8 @@ app.put('/api/admin/pakasir/config', requireAdmin, async (req, res) => {
     }
 });
 
-// 3. ADMIN API: Create Transaction (POST /api/v2/create-transaction/{slug}/{order_id})
-app.post('/api/admin/pakasir/transactions', requireAdmin, async (req, res) => {
+// 3. ADMIN & REVIEWER API: Create Transaction (POST /api/v2/create-transaction/{slug}/{order_id})
+app.post('/api/admin/pakasir/transactions', requireTesterOrAdmin, async (req, res) => {
     try {
         const { method, amount, order_id, customer_name, customer_email, notes } = req.body || {};
         const numAmount = parseInt(amount, 10);
@@ -2512,8 +2601,8 @@ app.post('/api/admin/pakasir/transactions', requireAdmin, async (req, res) => {
     }
 });
 
-// 4. ADMIN API: List Transactions
-app.get('/api/admin/pakasir/transactions', requireAdmin, async (req, res) => {
+// 4. ADMIN & REVIEWER API: List Transactions
+app.get('/api/admin/pakasir/transactions', requireTesterOrAdmin, async (req, res) => {
     try {
         let txns = await redis.get('dents:pakasir:transactions') || [];
         if (!Array.isArray(txns)) txns = [];
@@ -2523,8 +2612,8 @@ app.get('/api/admin/pakasir/transactions', requireAdmin, async (req, res) => {
     }
 });
 
-// 5. ADMIN API: Check Transaction Status (Live from Pakasir GET /api/v2/transaction-status/{slug}/{txn_id})
-app.get('/api/admin/pakasir/transactions/:id/status', requireAdmin, async (req, res) => {
+// 5. ADMIN & REVIEWER API: Check Transaction Status (Live from Pakasir GET /api/v2/transaction-status/{slug}/{txn_id})
+app.get('/api/admin/pakasir/transactions/:id/status', requireTesterOrAdmin, async (req, res) => {
     try {
         const { id } = req.params;
         let txns = await redis.get('dents:pakasir:transactions') || [];
@@ -2571,8 +2660,8 @@ app.get('/api/admin/pakasir/transactions/:id/status', requireAdmin, async (req, 
     }
 });
 
-// 6. ADMIN API: Cancel Transaction (POST /api/v2/cancel-transaction/{slug}/{txn_id})
-app.post('/api/admin/pakasir/transactions/:id/cancel', requireAdmin, async (req, res) => {
+// 6. ADMIN & REVIEWER API: Cancel Transaction (POST /api/v2/cancel-transaction/{slug}/{txn_id})
+app.post('/api/admin/pakasir/transactions/:id/cancel', requireTesterOrAdmin, async (req, res) => {
     try {
         const { id } = req.params;
         let txns = await redis.get('dents:pakasir:transactions') || [];
@@ -2618,8 +2707,8 @@ app.post('/api/admin/pakasir/transactions/:id/cancel', requireAdmin, async (req,
     }
 });
 
-// 7. ADMIN API: Delete Transaction Record from local database
-app.delete('/api/admin/pakasir/transactions/:id', requireAdmin, async (req, res) => {
+// 7. ADMIN & REVIEWER API: Delete Transaction Record from local database
+app.delete('/api/admin/pakasir/transactions/:id', requireTesterOrAdmin, async (req, res) => {
     try {
         const { id } = req.params;
         let txns = await redis.get('dents:pakasir:transactions') || [];
@@ -2632,8 +2721,8 @@ app.delete('/api/admin/pakasir/transactions/:id', requireAdmin, async (req, res)
     }
 });
 
-// 8. ADMIN API: Fee Calculator (Proxy to Pakasir GET /api/v2/payment-fee/{amount})
-app.get('/api/admin/pakasir/fee-calculator', requireAdmin, async (req, res) => {
+// 8. ADMIN & REVIEWER API: Fee Calculator (Proxy to Pakasir GET /api/v2/payment-fee/{amount})
+app.get('/api/admin/pakasir/fee-calculator', requireTesterOrAdmin, async (req, res) => {
     try {
         const amount = parseInt(req.query.amount, 10);
         if (isNaN(amount) || amount <= 0) {
@@ -2654,8 +2743,8 @@ app.get('/api/admin/pakasir/fee-calculator', requireAdmin, async (req, res) => {
     }
 });
 
-// 9. ADMIN API: Get & Delete Webhook Logs
-app.get('/api/admin/pakasir/webhook-logs', requireAdmin, async (req, res) => {
+// 9. ADMIN & REVIEWER API: Get & Delete Webhook Logs
+app.get('/api/admin/pakasir/webhook-logs', requireTesterOrAdmin, async (req, res) => {
     try {
         let logs = await redis.get('dents:pakasir:webhook_logs') || [];
         if (!Array.isArray(logs)) logs = [];
@@ -2665,7 +2754,7 @@ app.get('/api/admin/pakasir/webhook-logs', requireAdmin, async (req, res) => {
     }
 });
 
-app.delete('/api/admin/pakasir/webhook-logs', requireAdmin, async (req, res) => {
+app.delete('/api/admin/pakasir/webhook-logs', requireTesterOrAdmin, async (req, res) => {
     try {
         await redis.set('dents:pakasir:webhook_logs', []);
         res.json({ success: true, message: 'Log webhook berhasil dibersihkan.' });
@@ -2730,6 +2819,9 @@ app.get('/robots.txt', async (req, res) => {
         'Disallow: /admin/',
         'Disallow: /admin-login',
         'Disallow: /admin-dashboard',
+        'Disallow: /webhook-login',
+        'Disallow: /test-login',
+        'Disallow: /webhook-dashboard',
         'Disallow: /api/',
         '',
         `Sitemap: ${siteUrl}/sitemap.xml`
