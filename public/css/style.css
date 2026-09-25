@@ -3949,4 +3949,299 @@ main, .page-header-kalana, .hero-kalana {
   }
 }
 
+/* ==========================================================================
+   27. Pakasir Payment Gateway & Tester Review Portal Master UI System
+   100% Mobile, Tablet, and Desktop Fully Responsive Architecture
+   ========================================================================== */
+
+/* Sub-Navigation Pill Tabs */
+.pakasir-subnav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  padding: 4px 2px 8px 2px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.pakasir-subnav::-webkit-scrollbar {
+  display: none;
+}
+
+.btn-subnav {
+  background: var(--navy-surface);
+  color: var(--slate-muted);
+  border: 1px solid var(--navy-surface-border);
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+  flex-shrink: 0;
+  user-select: none;
+}
+.btn-subnav:hover {
+  color: #ffffff;
+  border-color: rgba(59, 130, 246, 0.45);
+  background: rgba(16, 24, 59, 0.9);
+  transform: translateY(-1px);
+}
+.btn-subnav.active {
+  background: rgba(33, 82, 207, 0.25);
+  color: var(--lime-bright);
+  border-color: var(--lime-accent);
+  box-shadow: 0 0 16px -4px rgba(217, 255, 66, 0.25);
+}
+
+/* Stat Metrics Grid & Cards */
+.pakasir-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+  width: 100%;
+}
+
+.pakasir-stat-card {
+  background: var(--navy-surface);
+  border: 1px solid var(--navy-surface-border);
+  border-radius: 14px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+.pakasir-stat-card:hover {
+  border-color: rgba(59, 130, 246, 0.4);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px -6px rgba(5, 8, 28, 0.5);
+}
+.pakasir-stat-card .stat-label {
+  font-size: 0.78rem;
+  color: var(--slate-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.pakasir-stat-card .stat-val {
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+.pakasir-stat-card .stat-desc {
+  font-size: 0.75rem;
+  color: var(--slate-muted);
+  margin-top: 6px;
+}
+
+/* Status Badges */
+.badge-status-completed {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  padding: 4px 9px;
+  border-radius: 6px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+.badge-status-pending {
+  background: rgba(234, 179, 8, 0.15);
+  color: #facc15;
+  border: 1px solid rgba(234, 179, 8, 0.35);
+  padding: 4px 9px;
+  border-radius: 6px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+.badge-status-canceled {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  padding: 4px 9px;
+  border-radius: 6px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+/* Responsive Two-Column Grid for Create Transaction */
+.pakasir-create-grid {
+  display: grid;
+  grid-template-columns: 1.25fr 0.75fr;
+  gap: 24px;
+  align-items: start;
+  width: 100%;
+}
+
+/* Responsive Fee Calculator & Panels */
+.pakasir-calc-card {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 24px;
+  box-sizing: border-box;
+}
+
+.pakasir-calc-controls {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+.pakasir-calc-controls .calc-input-wrap {
+  flex: 1 1 260px;
+  margin-bottom: 0;
+}
+.pakasir-calc-controls .calc-btn-wrap {
+  flex-shrink: 0;
+}
+
+.pakasir-table-wrapper {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--navy-surface-border);
+  border-radius: 12px;
+  background: var(--navy-surface);
+}
+
+/* Pakasir Banner Notification */
+.pakasir-info-banner {
+  background: rgba(33, 82, 207, 0.08);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+/* Tester Console Specific Classes */
+.tester-hero-box {
+  background: linear-gradient(135deg, rgba(16, 24, 59, 0.95), rgba(5, 8, 28, 0.95));
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.4);
+}
+.tester-pill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(217, 255, 66, 0.12);
+  color: var(--lime-bright);
+  border: 1px solid rgba(217, 255, 66, 0.35);
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+/* Responsive Media Queries (Tablet & Mobile) */
+@media (max-width: 1024px) {
+  .pakasir-create-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .pakasir-stat-grid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+  }
+  .pakasir-stat-card {
+    padding: 14px;
+  }
+  .pakasir-stat-card .stat-val {
+    font-size: 1.35rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .pakasir-stat-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .pakasir-stat-grid > :nth-child(5) {
+    grid-column: span 2;
+  }
+  .pakasir-stat-card {
+    padding: 12px 14px;
+  }
+  .pakasir-stat-card .stat-val {
+    font-size: 1.25rem;
+  }
+  .pakasir-subnav {
+    gap: 8px;
+    margin-bottom: 18px;
+    padding-bottom: 6px;
+  }
+  .btn-subnav {
+    padding: 6px 14px;
+    font-size: 0.82rem;
+  }
+  .pakasir-calc-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .pakasir-calc-controls .calc-input-wrap,
+  .pakasir-calc-controls .calc-btn-wrap {
+    width: 100%;
+    flex: 1 1 100%;
+  }
+  .pakasir-calc-controls .calc-btn-wrap button {
+    width: 100%;
+    justify-content: center;
+  }
+  .pakasir-info-banner {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 14px;
+  }
+  .pakasir-info-banner > div:last-child {
+    max-width: 100% !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .pakasir-stat-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .pakasir-stat-grid > :nth-child(5) {
+    grid-column: auto;
+  }
+  .pakasir-stat-card .stat-val {
+    font-size: 1.2rem;
+  }
+}
+
+
 
