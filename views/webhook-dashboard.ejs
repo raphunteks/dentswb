@@ -13,6 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="/public/css/style.css">
+    <script src="/public/js/protect-devtools.js" defer></script>
 </head>
 <body style="background: var(--navy-deep); color: var(--slate-body); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden;">
 
@@ -60,18 +61,11 @@
                         </span>
                         <span style="font-size: 0.8rem; color: var(--slate-muted);">Project Slug: <strong style="color: #ffffff;"><%= (settings && settings.pakasirSlug) ? settings.pakasirSlug : 'dentsweb' %></strong></span>
                     </div>
-                    <h1 style="color: #ffffff; font-size: 1.65rem; margin: 0 0 8px 0; font-family: 'Lexend Deca', sans-serif;">
-                        Pakasir Payment Gateway — KYC Verification &amp; Sandbox Console
+                    <h1 style="color: #ffffff; font-size: 1.65rem; margin: 0; font-family: 'Lexend Deca', sans-serif;">
+                        Pakasir Payment Gateway x DentWeb
                     </h1>
-                    <p style="color: var(--slate-muted); font-size: 0.88rem; margin: 0; line-height: 1.6; max-width: 820px;">
-                        Lingkungan pengujian resmi platform <strong>Dents Web</strong> untuk Tim Verifikasi &amp; Reviewer Pakasir. Gunakan konsol ini untuk menguji simulasi transaksi (QRIS, Payment Link, VA), pengecekan status real-time, inspeksi payload webhook callback, serta kalkulator fee.
-                    </p>
                 </div>
                 <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                    <button type="button" class="btn-royal" onclick="switchTesterTab('create')" style="padding: 8px 16px; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px;">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                        <span>Uji Transaksi</span>
-                    </button>
                     <button type="button" class="btn-ghost-white" onclick="loadTesterAllData()" style="padding: 8px 14px; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px;">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
                         <span>Segarkan</span>
@@ -112,17 +106,17 @@
         <!-- Sub-Navigation Capsule Tabs -->
         <div class="pakasir-subnav">
             <button type="button" class="btn-subnav active" onclick="switchTesterTab('create')" id="tester-nav-create">
-                <span>➕ Uji Buat Transaksi</span>
+                <span>Uji Buat Transaksi</span>
             </button>
             <button type="button" class="btn-subnav" onclick="switchTesterTab('history')" id="tester-nav-history">
-                <span>📋 Riwayat Transaksi</span>
+                <span>Riwayat Transaksi</span>
             </button>
             <button type="button" class="btn-subnav" onclick="switchTesterTab('webhooks')" id="tester-nav-webhooks">
-                <span>⚡ Webhook Callback Logs</span>
+                <span>Webhook Callback Logs</span>
                 <span class="badge-tag-lime" id="tester-wh-count" style="font-size: 0.7rem; padding: 1px 6px;">0</span>
             </button>
             <button type="button" class="btn-subnav" onclick="switchTesterTab('calc')" id="tester-nav-calc">
-                <span>🧮 Live Fee Calculator</span>
+                <span>Live Fee Calculator</span>
             </button>
         </div>
 
@@ -133,7 +127,7 @@
                 <!-- Form Transaksi -->
                 <div class="tactile-card-dark">
                     <h3 style="color: #ffffff; font-size: 1.15rem; margin-top: 0; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-                        <span>💳 Formulir Uji Coba Transaksi Pakasir (API v2)</span>
+                        <span>Formulir Uji Coba Transaksi Pakasir (API v2)</span>
                     </h3>
                     <form id="form-tester-create" onsubmit="handleTesterCreateTxn(event)">
                         
@@ -143,7 +137,7 @@
                                 <input type="text" class="form-control" id="tester-order-id" placeholder="DW-TEST-..." style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);" required>
                             </div>
                             <button type="button" class="btn-ghost-white" onclick="generateTesterOrderId()" style="padding: 10px 14px; font-size: 0.85rem;" title="Acak Order ID Baru">
-                                <span>🎲 Acak ID</span>
+                                <span>Acak ID</span>
                             </button>
                         </div>
 
@@ -284,20 +278,20 @@
             <!-- Webhook Info Box -->
             <div class="pakasir-info-banner">
                 <div>
-                    <strong style="color: #ffffff; font-size: 0.95rem; display: block; margin-bottom: 4px;">📡 Webhook Callback Endpoint Platform</strong>
+                    <strong style="color: #ffffff; font-size: 0.95rem; display: block; margin-bottom: 4px;">Webhook Callback Endpoint Platform</strong>
                     <p style="color: var(--slate-muted); font-size: 0.82rem; margin: 0;">Sistem Dents Web menerima callback HTTP POST dari Pakasir pada URL publik ini.</p>
                 </div>
                 <div style="display: flex; gap: 8px; align-items: center; flex-grow: 1; max-width: 480px;">
                     <input type="text" id="tester-wh-url" readonly class="form-control" style="background: var(--navy-surface); color: var(--lime-bright); font-family: monospace; font-size: 0.82rem;" value="/api/webhook/pakasir">
-                    <button type="button" class="btn-royal" onclick="copyTesterWhUrl()" style="white-space: nowrap; font-size: 0.82rem; padding: 8px 12px;">📋 Salin</button>
+                    <button type="button" class="btn-royal" onclick="copyTesterWhUrl()" style="white-space: nowrap; font-size: 0.82rem; padding: 8px 12px;">Salin</button>
                 </div>
             </div>
 
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
                 <h4 style="color: #ffffff; margin: 0; font-size: 1.05rem;">Riwayat Panggilan Webhook Masuk (Real-time)</h4>
                 <div style="display: flex; gap: 8px;">
-                    <button type="button" class="btn-ghost-white" onclick="loadTesterWebhookLogs()" style="font-size: 0.82rem; padding: 6px 12px;">🔄 Segarkan Log</button>
-                    <button type="button" class="btn-action-delete" onclick="clearTesterWebhookLogs()" style="font-size: 0.82rem; padding: 6px 12px;">🗑️ Bersihkan</button>
+                    <button type="button" class="btn-ghost-white" onclick="loadTesterWebhookLogs()" style="font-size: 0.82rem; padding: 6px 12px;">Segarkan Log</button>
+                    <button type="button" class="btn-action-delete" onclick="clearTesterWebhookLogs()" style="font-size: 0.82rem; padding: 6px 12px;">Bersihkan</button>
                 </div>
             </div>
 
@@ -324,7 +318,7 @@
         <!-- TAB 4: LIVE FEE CALCULATOR -->
         <div id="tester-view-calc" class="tester-subview" style="display: none;">
             <div class="tactile-card-dark pakasir-calc-card">
-                <h3 style="color: #ffffff; font-size: 1.2rem; margin-top: 0; margin-bottom: 8px;">🧮 Penghitung Estimasi Biaya Pakasir (Fee Calculator)</h3>
+                <h3 style="color: #ffffff; font-size: 1.2rem; margin-top: 0; margin-bottom: 8px;">Penghitung Estimasi Biaya Pakasir (Fee Calculator)</h3>
                 <p style="color: var(--slate-muted); font-size: 0.88rem; margin-bottom: 18px;">
                     Uji coba endpoint resmi Pakasir <code>/api/v2/payment-fee/{amount}</code> secara langsung dari platform.
                 </p>
@@ -523,7 +517,7 @@
                     ${paySection}
                     <div style="display: flex; gap: 8px; margin-top: 18px;">
                         <button type="button" class="btn-lime" onclick="checkTesterTxnStatus('${txn.id || txn.txn_id}')" style="flex: 1; justify-content: center; padding: 10px;">
-                            🔄 Cek Status Live
+                            Cek Status Live
                         </button>
                         <button type="button" class="btn-ghost-white" onclick="closeTesterModal()" style="padding: 10px 16px;">Tutup</button>
                     </div>
@@ -602,11 +596,11 @@
                         <td style="text-align: right; white-space: nowrap;">
                             <div style="display: inline-flex; gap: 6px;">
                                 <button type="button" class="btn-ghost-white" onclick="checkTesterTxnStatus('${t.id || t.txn_id}')" style="padding: 4px 8px; font-size: 0.78rem;" title="Cek Status Live Pakasir">
-                                    🔄 Cek Status
+                                    Cek Status
                                 </button>
                                 ${t.status === 'pending' ? `
                                     <button type="button" class="btn-action-delete" onclick="cancelTesterTxn('${t.id || t.txn_id}')" style="padding: 4px 8px; font-size: 0.78rem;" title="Batalkan Transaksi">
-                                        ❌ Batal
+                                        Batal
                                     </button>
                                 ` : ''}
                             </div>
@@ -679,7 +673,7 @@
                     }
                     tbody.innerHTML = json.data.map(log => {
                         const dateStr = log.receivedAt ? new Date(log.receivedAt).toLocaleString('id-ID') : '-';
-                        const secretBadge = log.isSecretValid ? '<span style="color:#4ade80;">✅ Valid</span>' : '<span style="color:#f87171;">❌ Invalid</span>';
+                        const secretBadge = log.isSecretValid ? '<span style="color:#4ade80;">Valid</span>' : '<span style="color:#f87171;">Invalid</span>';
                         return `
                             <tr>
                                 <td style="font-size: 0.8rem; color: var(--slate-muted);">${dateStr}</td>
@@ -693,7 +687,7 @@
                                 <td><span class="badge-status-completed">${(log.status || '-').toUpperCase()}</span></td>
                                 <td style="text-align: right;">
                                     <button type="button" class="btn-ghost-white" onclick='showTesterPayloadModal(${JSON.stringify(log.payload || {})})' style="padding: 4px 8px; font-size: 0.78rem;">
-                                        🔍 Inspect
+                                        Inspect
                                     </button>
                                 </td>
                             </tr>
