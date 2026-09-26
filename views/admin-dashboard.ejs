@@ -754,9 +754,20 @@
                 <!-- Charts Row -->
                 <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-top: 24px;">
                     <div class="tactile-card-dark" style="padding: 22px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                            <h3 style="color: #ffffff; font-size: 1.05rem; margin: 0;">Tren Penagihan &amp; Pembayaran (6 Bulan Terakhir)</h3>
-                            <span style="font-size: 0.75rem; color: var(--slate-muted);">Rupiah (IDR)</span>
+                        <div class="chart-header-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+                            <div>
+                                <h3 style="color: #ffffff; font-size: 1.05rem; margin: 0; font-weight: 700;">Tren Penagihan &amp; Pembayaran</h3>
+                                <span id="chart-period-subtitle" style="font-size: 0.75rem; color: var(--slate-muted);">Bulan Ini &bull; Rupiah (IDR)</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <select id="chart-period-select" class="chart-period-select" onchange="onChartPeriodChange(this.value)">
+                                    <option value="this_month" selected>Bulan Ini (Default)</option>
+                                    <option value="3_months">3 Bulan Terakhir</option>
+                                    <option value="6_months">6 Bulan Terakhir</option>
+                                    <option value="12_months">12 Bulan Terakhir (1 Tahun)</option>
+                                    <option value="yearly">Tahunan (Per Tahun)</option>
+                                </select>
+                            </div>
                         </div>
                         <div style="position: relative; height: 260px; width: 100%;">
                             <canvas id="chart-monthly-revenue"></canvas>
@@ -764,9 +775,12 @@
                     </div>
 
                     <div class="tactile-card-dark" style="padding: 22px;">
-                        <div style="margin-bottom: 16px;">
-                            <h3 style="color: #ffffff; font-size: 1.05rem; margin: 0;">Proporsi Status Faktur</h3>
-                            <span style="font-size: 0.75rem; color: var(--slate-muted);">Rasio Lunas vs Piutang</span>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                            <div>
+                                <h3 style="color: #ffffff; font-size: 1.05rem; margin: 0; font-weight: 700;">Proporsi Status Faktur</h3>
+                                <span style="font-size: 0.75rem; color: var(--slate-muted);">Rasio Lunas vs Piutang</span>
+                            </div>
+                            <span id="pie-total-invoices-badge" class="badge-tag-lime" style="font-size: 0.72rem; padding: 2px 8px;">0 Faktur</span>
                         </div>
                         <div style="position: relative; height: 260px; width: 100%; display: flex; align-items: center; justify-content: center;">
                             <canvas id="chart-status-pie"></canvas>
@@ -4462,11 +4476,143 @@
         let chartRevenueInstance = null;
         let chartStatusInstance = null;
 
+        // ========================================================
+        // KONFIGURASI PERIODE TREN GRAFIK (Bisa diubah di sini)
+        // Nilai yang didukung:
+        // - 'this_month' : Default sebulan penuh (harian di bulan berjalan)
+        // - '3_months'   : 3 Bulan Terakhir
+        // - '6_months'   : 6 Bulan Terakhir
+        // - '12_months'  : 12 Bulan Terakhir (1 Tahun)
+        // - 'yearly'     : Tiap Tahun (Tahunan)
+        // Atau angka 1 - 12 (jumlah bulan)
+        // ========================================================
+        window.CHART_CONFIG = {
+            defaultPeriod: 'this_month',
+            currentPeriod: 'this_month'
+        };
+
+        window.analyticsCache = {
+            stats: null,
+            statusCounts: null,
+            invoices: [],
+            recentInvoices: []
+        };
+
+        function calculateChartBuckets(invoices, period) {
+            const p = String(period || window.CHART_CONFIG.defaultPeriod).toLowerCase();
+            const now = new Date();
+            const buckets = [];
+
+            if (p === 'this_month' || p === 'month' || p === '1_month' || p === '1') {
+                const year = now.getFullYear();
+                const month = now.getMonth();
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                const monthShort = now.toLocaleDateString('id-ID', { month: 'short' });
+
+                for (let d = 1; d <= daysInMonth; d++) {
+                    const dayStr = String(d).padStart(2, '0');
+                    const key = `${year}-${String(month + 1).padStart(2, '0')}-${dayStr}`;
+                    const label = `${dayStr} ${monthShort}`;
+                    buckets.push({ key, label, billed: 0, paid: 0 });
+                }
+
+                (invoices || []).forEach(inv => {
+                    const dateStr = (inv.invoiceDate || inv.createdAt || '').substring(0, 10);
+                    const b = buckets.find(item => item.key === dateStr);
+                    if (b) {
+                        const status = (inv.status || '').toUpperCase();
+                        if (status !== 'DRAFT') b.billed += Number(inv.total) || 0;
+                        b.paid += Number(inv.amountPaid) || 0;
+                    }
+                });
+            } else if (p === 'yearly' || p === 'years') {
+                const curYear = now.getFullYear();
+                for (let y = curYear - 2; y <= curYear; y++) {
+                    const key = String(y);
+                    const label = `Thn ${y}`;
+                    buckets.push({ key, label, billed: 0, paid: 0 });
+                }
+
+                (invoices || []).forEach(inv => {
+                    const dateStr = (inv.invoiceDate || inv.createdAt || '').substring(0, 4);
+                    const b = buckets.find(item => item.key === dateStr);
+                    if (b) {
+                        const status = (inv.status || '').toUpperCase();
+                        if (status !== 'DRAFT') b.billed += Number(inv.total) || 0;
+                        b.paid += Number(inv.amountPaid) || 0;
+                    }
+                });
+            } else {
+                let numMonths = 6;
+                if (p === '3_months' || p === '3') numMonths = 3;
+                else if (p === '12_months' || p === '12' || p === '1_year') numMonths = 12;
+                else if (!isNaN(parseInt(p))) numMonths = Math.min(Math.max(parseInt(p), 1), 24);
+
+                for (let i = numMonths - 1; i >= 0; i--) {
+                    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+                    const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+                    const label = d.toLocaleDateString('id-ID', { month: 'short', year: '2-digit' });
+                    buckets.push({ key, label, billed: 0, paid: 0 });
+                }
+
+                (invoices || []).forEach(inv => {
+                    const dateStr = (inv.invoiceDate || inv.createdAt || '').substring(0, 7);
+                    const b = buckets.find(item => item.key === dateStr);
+                    if (b) {
+                        const status = (inv.status || '').toUpperCase();
+                        if (status !== 'DRAFT') b.billed += Number(inv.total) || 0;
+                        b.paid += Number(inv.amountPaid) || 0;
+                    }
+                });
+            }
+
+            return {
+                labels: buckets.map(b => b.label),
+                billed: buckets.map(b => b.billed),
+                paid: buckets.map(b => b.paid),
+                period: p
+            };
+        }
+
+        function onChartPeriodChange(period) {
+            window.CHART_CONFIG.currentPeriod = period;
+            
+            const subtitleEl = document.getElementById('chart-period-subtitle');
+            if (subtitleEl) {
+                if (period === 'this_month') subtitleEl.innerHTML = 'Bulan Ini &bull; Rupiah (IDR)';
+                else if (period === '3_months') subtitleEl.innerHTML = '3 Bulan Terakhir &bull; Rupiah (IDR)';
+                else if (period === '6_months') subtitleEl.innerHTML = '6 Bulan Terakhir &bull; Rupiah (IDR)';
+                else if (period === '12_months') subtitleEl.innerHTML = '12 Bulan Terakhir (1 Tahun) &bull; Rupiah (IDR)';
+                else if (period === 'yearly') subtitleEl.innerHTML = 'Tahunan &bull; Rupiah (IDR)';
+                else subtitleEl.innerHTML = `${period} Bulan &bull; Rupiah (IDR)`;
+            }
+
+            const chartData = calculateChartBuckets(window.analyticsCache.invoices, period);
+            if (chartRevenueInstance) {
+                chartRevenueInstance.data.labels = chartData.labels;
+                chartRevenueInstance.data.datasets[0].data = chartData.billed;
+                chartRevenueInstance.data.datasets[1].data = chartData.paid;
+                chartRevenueInstance.update();
+            } else {
+                renderInvoiceCharts(chartData, window.analyticsCache.statusCounts);
+            }
+        }
+
         async function loadInvoiceAnalytics() {
             try {
-                const res = await api('/api/admin/invoice/analytics');
+                const currentPeriod = window.CHART_CONFIG.currentPeriod || window.CHART_CONFIG.defaultPeriod;
+                const res = await api(`/api/admin/invoice/analytics?period=${encodeURIComponent(currentPeriod)}`);
                 if (!res || !res.data) return;
-                const { stats, statusCounts, monthlyChart, recentInvoices } = res.data;
+                
+                const { stats, statusCounts, monthlyChart, chart, invoices, recentInvoices } = res.data;
+                const safeStats = stats || {};
+                const safeCounts = statusCounts || safeStats.statusCounts || {};
+                const safeInvoices = invoices || [];
+
+                window.analyticsCache.stats = safeStats;
+                window.analyticsCache.statusCounts = safeCounts;
+                window.analyticsCache.invoices = safeInvoices;
+                window.analyticsCache.recentInvoices = recentInvoices || [];
 
                 const totalInvEl = document.getElementById('inv-stat-total-invoices');
                 const totalBilledEl = document.getElementById('inv-stat-total-billed');
@@ -4474,13 +4620,21 @@
                 const outstandingEl = document.getElementById('inv-stat-outstanding');
                 const overdueEl = document.getElementById('inv-stat-overdue');
 
-                if (totalInvEl) totalInvEl.textContent = stats.totalInvoices || 0;
-                if (totalBilledEl) totalBilledEl.textContent = formatRupiah(stats.totalBilled);
-                if (totalPaidEl) totalPaidEl.textContent = formatRupiah(stats.totalPaid);
-                if (outstandingEl) outstandingEl.textContent = formatRupiah(stats.totalOutstanding);
-                if (overdueEl) overdueEl.textContent = formatRupiah(stats.totalOverdue);
+                if (totalInvEl) totalInvEl.textContent = safeStats.totalInvoices || safeInvoices.length || 0;
+                if (totalBilledEl) totalBilledEl.textContent = formatRupiah(safeStats.totalBilled);
+                if (totalPaidEl) totalPaidEl.textContent = formatRupiah(safeStats.totalPaid);
+                if (outstandingEl) outstandingEl.textContent = formatRupiah(safeStats.outstanding !== undefined ? safeStats.outstanding : safeStats.totalOutstanding);
+                if (overdueEl) overdueEl.textContent = formatRupiah(safeStats.overdue !== undefined ? safeStats.overdue : safeStats.totalOverdue);
 
-                renderInvoiceCharts(monthlyChart, statusCounts);
+                // Sinkronkan dropdown selector
+                const periodSelect = document.getElementById('chart-period-select');
+                if (periodSelect && periodSelect.value !== currentPeriod) {
+                    periodSelect.value = currentPeriod;
+                }
+
+                // Kalkulasi data tren grafik untuk periode aktif
+                const activeChartData = calculateChartBuckets(safeInvoices, currentPeriod);
+                renderInvoiceCharts(activeChartData, safeCounts);
 
                 const tb = document.querySelector('#table-recent-invoices tbody');
                 if (tb) {
@@ -4510,6 +4664,7 @@
         function renderInvoiceCharts(monthlyData, statusCounts) {
             if (typeof Chart === 'undefined') return;
 
+            // 1. BAR CHART: Tren Penagihan & Pembayaran
             const revCanvas = document.getElementById('chart-monthly-revenue');
             if (revCanvas) {
                 if (chartRevenueInstance) chartRevenueInstance.destroy();
@@ -4522,45 +4677,72 @@
                             {
                                 label: 'Nilai Tertagih (Billed)',
                                 data: monthlyData && monthlyData.billed ? monthlyData.billed : [],
-                                backgroundColor: 'rgba(56, 189, 248, 0.75)',
+                                backgroundColor: 'rgba(56, 189, 248, 0.85)',
                                 borderColor: '#38bdf8',
                                 borderWidth: 1.5,
-                                borderRadius: 6
+                                borderRadius: 6,
+                                maxBarThickness: 32
                             },
                             {
                                 label: 'Dana Diterima (Paid)',
-                                data: monthlyData && monthlyData.paid ? monthlyData.paid : [],
-                                backgroundColor: 'rgba(190, 242, 100, 0.75)',
+                                data: monthlyData && (monthlyData.paid || monthlyData.revenue) ? (monthlyData.paid || monthlyData.revenue) : [],
+                                backgroundColor: 'rgba(190, 242, 100, 0.85)',
                                 borderColor: '#bef264',
                                 borderWidth: 1.5,
-                                borderRadius: 6
+                                borderRadius: 6,
+                                maxBarThickness: 32
                             }
                         ]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
+                        interaction: {
+                            intersect: false,
+                            mode: 'index'
+                        },
                         plugins: {
                             legend: {
-                                labels: { color: '#94a3b8', font: { family: 'Plus Jakarta Sans', size: 12 } }
+                                labels: {
+                                    color: '#94a3b8',
+                                    font: { family: 'Plus Jakarta Sans', size: 12, weight: 600 },
+                                    usePointStyle: true,
+                                    pointStyle: 'circle',
+                                    padding: 16
+                                }
                             },
                             tooltip: {
+                                backgroundColor: 'rgba(10, 13, 38, 0.95)',
+                                titleColor: '#ffffff',
+                                bodyColor: '#cbd5e1',
+                                borderColor: 'rgba(190, 242, 100, 0.3)',
+                                borderWidth: 1,
+                                padding: 12,
+                                boxPadding: 6,
+                                usePointStyle: true,
                                 callbacks: {
                                     label: function(c) {
-                                        return c.dataset.label + ': ' + formatRupiah(c.raw);
+                                        return ' ' + c.dataset.label + ': ' + formatRupiah(c.raw);
                                     }
                                 }
                             }
                         },
                         scales: {
                             x: {
-                                grid: { color: 'rgba(255,255,255,0.05)' },
-                                ticks: { color: '#94a3b8' }
-                            },
-                            y: {
-                                grid: { color: 'rgba(255,255,255,0.05)' },
+                                grid: { color: 'rgba(255,255,255,0.04)' },
                                 ticks: {
                                     color: '#94a3b8',
+                                    font: { family: 'Plus Jakarta Sans', size: 11 },
+                                    maxRotation: 45,
+                                    autoSkip: true,
+                                    maxTicksLimit: 15
+                                }
+                            },
+                            y: {
+                                grid: { color: 'rgba(255,255,255,0.06)' },
+                                ticks: {
+                                    color: '#94a3b8',
+                                    font: { family: 'Plus Jakarta Sans', size: 11 },
                                     callback: function(v) {
                                         if (v >= 1000000) return 'Rp ' + (v / 1000000).toFixed(1) + 'M';
                                         if (v >= 1000) return 'Rp ' + (v / 1000).toFixed(0) + 'K';
@@ -4573,6 +4755,7 @@
                 });
             }
 
+            // 2. DOUGHNUT / PIE CHART: Proporsi Status Faktur
             const statusCanvas = document.getElementById('chart-status-pie');
             if (statusCanvas) {
                 if (chartStatusInstance) chartStatusInstance.destroy();
@@ -4582,35 +4765,90 @@
                 const unpaidCount = (counts.UNPAID || 0) + (counts.PARTIALLY_PAID || 0);
                 const overdueCount = counts.OVERDUE || 0;
                 const draftCount = counts.DRAFT || 0;
+                const totalInvoices = paidCount + unpaidCount + overdueCount + draftCount;
 
-                chartStatusInstance = new Chart(ctx2, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['Lunas', 'Belum Lunas', 'Overdue', 'Draft'],
-                        datasets: [{
-                            data: [paidCount, unpaidCount, overdueCount, draftCount],
-                            backgroundColor: [
-                                '#4ade80',
-                                '#facc15',
-                                '#f87171',
-                                '#60a5fa'
-                            ],
-                            borderColor: '#0a0d26',
-                            borderWidth: 2
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: { color: '#94a3b8', font: { family: 'Plus Jakarta Sans', size: 11 }, padding: 12 }
-                            }
+                const pieBadge = document.getElementById('pie-total-invoices-badge');
+                if (pieBadge) {
+                    pieBadge.textContent = `${totalInvoices} Faktur`;
+                }
+
+                if (totalInvoices === 0) {
+                    // Placeholder saat data faktur masih kosong
+                    chartStatusInstance = new Chart(ctx2, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Belum Ada Faktur'],
+                            datasets: [{
+                                data: [1],
+                                backgroundColor: ['rgba(148, 163, 184, 0.2)'],
+                                borderColor: 'transparent'
+                            }]
                         },
-                        cutout: '65%'
-                    }
-                });
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom',
+                                    labels: { color: '#64748b', font: { family: 'Plus Jakarta Sans', size: 11 } }
+                                },
+                                tooltip: { enabled: false }
+                            },
+                            cutout: '70%'
+                        }
+                    });
+                } else {
+                    chartStatusInstance = new Chart(ctx2, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Lunas', 'Belum Lunas', 'Overdue', 'Draft'],
+                            datasets: [{
+                                data: [paidCount, unpaidCount, overdueCount, draftCount],
+                                backgroundColor: [
+                                    '#bef264', // Lime Dents Web (Lunas)
+                                    '#facc15', // Amber (Belum Lunas)
+                                    '#f87171', // Coral Red (Overdue)
+                                    '#60a5fa'  // Sky Blue (Draft)
+                                ],
+                                borderColor: '#0a0d26',
+                                borderWidth: 3,
+                                hoverOffset: 6
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom',
+                                    labels: {
+                                        color: '#cbd5e1',
+                                        font: { family: 'Plus Jakarta Sans', size: 11, weight: 600 },
+                                        padding: 14,
+                                        usePointStyle: true,
+                                        pointStyle: 'circle'
+                                    }
+                                },
+                                tooltip: {
+                                    backgroundColor: 'rgba(10, 13, 38, 0.95)',
+                                    titleColor: '#ffffff',
+                                    bodyColor: '#cbd5e1',
+                                    borderColor: 'rgba(190, 242, 100, 0.3)',
+                                    borderWidth: 1,
+                                    padding: 10,
+                                    callbacks: {
+                                        label: function(c) {
+                                            const val = Number(c.raw) || 0;
+                                            const pct = totalInvoices > 0 ? Math.round((val / totalInvoices) * 100) : 0;
+                                            return ` ${c.label}: ${val} Faktur (${pct}%)`;
+                                        }
+                                    }
+                                }
+                            },
+                            cutout: '66%'
+                        }
+                    });
+                }
             }
         }
 
