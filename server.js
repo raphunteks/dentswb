@@ -8,6 +8,8 @@ const rateLimit = require('express-rate-limit');
 const cookieParser = require('cookie-parser');
 const crypto = require('crypto');
 const { Redis } = require('@upstash/redis');
+const nodemailer = require('nodemailer');
+const invoiceService = require('./services/invoice-email-service');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -27,6 +29,10 @@ const redis = new Redis({
 app.set('view engine', 'ejs');
 app.set('views', path.join(process.cwd(), 'views'));
 
+// Expose Invoice & Currency Helpers to all EJS templates
+app.locals.formatRupiah = invoiceService.formatRupiah;
+app.locals.formatDate = invoiceService.formatDate;
+
 // Direct Browser Asset Protection: Block direct URL browsing to private assets (/public/css, /public/js)
 // When accessed directly via address bar, returns customized 404.ejs with status 404
 // Subresource requests (<link rel="stylesheet">, <script src="...">) pass through transparently
@@ -35,9 +41,9 @@ app.use(['/public/css', '/public/js'], async (req, res, next) => {
     const secFetchMode = req.headers['sec-fetch-mode'];
     const accept = req.headers['accept'] || '';
 
-    const isDirectNavigation = 
-        secFetchDest === 'document' || 
-        secFetchMode === 'navigate' || 
+    const isDirectNavigation =
+        secFetchDest === 'document' ||
+        secFetchMode === 'navigate' ||
         (!secFetchDest && accept.includes('text/html'));
 
     if (isDirectNavigation) {
@@ -63,6 +69,10 @@ app.use('/public', express.static(path.join(process.cwd(), 'public'), {
     maxAge: '7d',
     etag: true
 }));
+app.use(express.static(path.join(process.cwd(), 'public'), {
+    maxAge: '7d',
+    etag: true
+}));
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
@@ -74,8 +84,8 @@ app.use(helmet({
         directives: {
             defaultSrc: ["'self'"],
             scriptSrc: [
-                "'self'", 
-                "'unsafe-inline'", 
+                "'self'",
+                "'unsafe-inline'",
                 "https://va.vercel-scripts.com",
                 "https://www.googletagmanager.com",
                 "https://*.google-analytics.com",
@@ -84,10 +94,10 @@ app.use(helmet({
             scriptSrcAttr: ["'unsafe-inline'"],
             styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
             fontSrc: ["'self'", "https://fonts.gstatic.com", "data:"],
-            imgSrc: ["'self'", "data:", "https://*"], 
+            imgSrc: ["'self'", "data:", "https://*"],
             connectSrc: [
-                "'self'", 
-                "https://va.vercel-scripts.com", 
+                "'self'",
+                "https://va.vercel-scripts.com",
                 "https://vitals.vercel-insights.com",
                 "https://*.google-analytics.com",
                 "https://analytics.google.com",
@@ -109,15 +119,15 @@ const isLocalOrInternal = (req) => {
     return false;
 };
 
-const publicLimiter = rateLimit({ 
-    windowMs: 15 * 60 * 1000, 
-    max: 2500, 
+const publicLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 2500,
     message: 'Terlalu banyak permintaan.',
     skip: isLocalOrInternal
 });
 const loginLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 20, message: 'Terlalu banyak percobaan login.' });
 const leadLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 30, message: 'Terlalu banyak form yang dikirim.' });
-app.use(publicLimiter); 
+app.use(publicLimiter);
 
 // Global Initial Seed Data
 async function ensureSeedData() {
@@ -888,7 +898,7 @@ async function ensureSeedData() {
         const currentMigration = await redis.get('dents:migration:portfolio');
         if (currentMigration !== MIGRATION_VERSION) {
             console.log('[MIGRATION v7] Syncing refined Pricing & Services tiers (1-6 hal Business, 1 email Pro, no email Starter, no pixel Business) & verifying Base64 WebP in Redis DB...');
-            
+
             // Ambil portfolio yang sudah ada di Redis untuk mempertahankan data kustom
             const existingPortfolio = await redis.get('dents:portfolio') || [];
             const imageMap = {};
@@ -908,7 +918,7 @@ async function ensureSeedData() {
                         try {
                             const buf = fs.readFileSync(localPath);
                             img = 'data:image/webp;base64,' + buf.toString('base64');
-                        } catch (e) {}
+                        } catch (e) { }
                     }
                 }
                 return { ...proj, image: img };
@@ -1263,7 +1273,7 @@ async function getGlobalSettings() {
             };
             if (merged.siteUrl && merged.siteUrl.includes('dentsweb.my.id') && !merged.siteUrl.includes('www.dentsweb.my.id')) {
                 merged.siteUrl = merged.siteUrl.replace('dentsweb.my.id', 'www.dentsweb.my.id');
-                redis.set('dents:settings', merged).catch(() => {});
+                redis.set('dents:settings', merged).catch(() => { });
             }
             return merged;
         }
@@ -1294,7 +1304,7 @@ function buildSEO(settings, pageData, extraData = {}) {
     const siteUrl = (settings.siteUrl && settings.siteUrl.trim()) ? settings.siteUrl.replace(/\/+$/, '') : 'https://www.dentsweb.my.id';
     const cleanPath = pageData.path === '/' ? '' : (pageData.path || '');
     const fullUrl = `${siteUrl}${cleanPath}`;
-    
+
     const title = pageData.title ? `${pageData.title} | ${settings.brandName || 'Dents Web'}` : settings.defaultSeoTitle;
     const desc = pageData.desc || settings.defaultSeoDescription;
     const image = pageData.image ? (pageData.image.startsWith('http') ? pageData.image : `${siteUrl}${pageData.image}`) : `${siteUrl}${settings.defaultOgImage || '/public/img/axalogo.png'}`;
@@ -1578,7 +1588,7 @@ async function requireTesterOrAdmin(req, res, next) {
                 await redis.expire(`dents:admin:sessions:${adminSessionId}`, 1800);
                 return next();
             }
-        } catch (e) {}
+        } catch (e) { }
     }
 
     // 2. If active tester session exists and is valid
@@ -1591,7 +1601,7 @@ async function requireTesterOrAdmin(req, res, next) {
                 await redis.expire(`dents:tester:sessions:${testerSessionId}`, 7200);
                 return next();
             }
-        } catch (e) {}
+        } catch (e) { }
     }
 
     // If neither session is valid
@@ -1608,27 +1618,27 @@ app.get('/', async (req, res) => {
     const settings = await getGlobalSettings();
     const rawServices = await redis.get('dents:services') || [];
     const rawPortfolio = await redis.get('dents:portfolio') || [];
-    const rawTestimonials = await redis.get('dents:testimonials') || []; 
+    const rawTestimonials = await redis.get('dents:testimonials') || [];
     const rawFaq = await redis.get('dents:faq') || [];
-    
+
     const publishedServices = (Array.isArray(rawServices) ? rawServices : [])
         .filter(s => s.isPublished !== false)
         .sort((a, b) => (a.order || 0) - (b.order || 0));
     const featuredPortfolio = (Array.isArray(rawPortfolio) ? rawPortfolio : [])
         .filter(p => p.isPublished && p.isFeatured);
     const activeTestimonials = (Array.isArray(rawTestimonials) ? rawTestimonials : [])
-        .filter(t => t.isPublished !== false); 
+        .filter(t => t.isPublished !== false);
     const publishedFaq = (Array.isArray(rawFaq) ? rawFaq : [])
         .filter(f => f.isPublished !== false)
         .sort((a, b) => (a.order || 0) - (b.order || 0));
 
-    res.render('index', { 
-        settings, 
+    res.render('index', {
+        settings,
         services: publishedServices.slice(0, 4),
         portfolio: featuredPortfolio.length ? featuredPortfolio : rawPortfolio,
         testimonials: activeTestimonials,
         faq: publishedFaq.length ? publishedFaq : INITIAL_8_FAQS,
-        seo: buildSEO(settings, { title: "", desc: settings.defaultSeoDescription, path: '/' }, { testimonials: activeTestimonials, services: rawServices, portfolio: rawPortfolio }) 
+        seo: buildSEO(settings, { title: "", desc: settings.defaultSeoDescription, path: '/' }, { testimonials: activeTestimonials, services: rawServices, portfolio: rawPortfolio })
     });
 });
 
@@ -1800,7 +1810,7 @@ app.get('/articles', async (req, res) => {
     }
 
     if (searchQuery) {
-        articles = articles.filter(a => 
+        articles = articles.filter(a =>
             (a.title || '').toLowerCase().includes(searchQuery) ||
             (a.excerpt || '').toLowerCase().includes(searchQuery) ||
             (a.tags && a.tags.some(t => t.toLowerCase().includes(searchQuery)))
@@ -1917,7 +1927,7 @@ app.post('/api/leads', leadLimiter, async (req, res) => {
             email: email ? email.trim() : '',
             company: company ? company.trim() : '',
             message: message.trim(),
-            status: 'NEW', 
+            status: 'NEW',
             createdAt: new Date().toISOString()
         };
 
@@ -2003,11 +2013,11 @@ app.post('/api/chat/start', async (req, res) => {
         }
 
         await redis.set('dents:chats', chats);
-        res.status(201).json({ 
-            success: true, 
-            sessionId: sid, 
-            chat: existingChat, 
-            messages: existingChat.messages 
+        res.status(201).json({
+            success: true,
+            sessionId: sid,
+            chat: existingChat,
+            messages: existingChat.messages
         });
     } catch (err) {
         console.error('[CHAT START ERROR]', err);
@@ -2033,10 +2043,10 @@ app.get('/api/chat/messages/:sessionId', async (req, res) => {
                 category: chat.category
             };
         }
-        res.json({ 
-            success: true, 
-            chat: chat, 
-            messages: chat ? chat.messages : [] 
+        res.json({
+            success: true,
+            chat: chat,
+            messages: chat ? chat.messages : []
         });
     } catch (err) {
         res.status(500).json({ success: false, message: 'Gagal memuat pesan.' });
@@ -2090,7 +2100,7 @@ app.get('/admin', (req, res) => {
 app.get('/admin-login', (req, res) => {
     res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
     if (req.cookies.admin_session) return res.redirect('/admin-dashboard');
-    res.render('admin-login', { seo: { title: 'Admin Login', desc: '', path: '' }});
+    res.render('admin-login', { seo: { title: 'Admin Login', desc: '', path: '' } });
 });
 
 app.post('/admin/login', loginLimiter, async (req, res) => {
@@ -2120,7 +2130,7 @@ app.post('/admin/logout', async (req, res) => {
 
 app.get('/admin-dashboard', requireAdmin, async (req, res) => {
     const settings = await getGlobalSettings();
-    res.render('admin-dashboard', { settings, seo: { title: 'Dashboard Admin', desc: '', path: '' }});
+    res.render('admin-dashboard', { settings, seo: { title: 'Dashboard Admin', desc: '', path: '' } });
 });
 
 // Pakasir KYC Reviewer & Testing Portal Routes
@@ -2129,7 +2139,7 @@ app.get(['/webhook-login', '/test-login'], (req, res) => {
     if (req.cookies.tester_session || req.cookies.admin_session) {
         return res.redirect('/webhook-dashboard');
     }
-    res.render('test-login', { seo: { title: 'Pakasir Reviewer Login', desc: '', path: req.path }});
+    res.render('test-login', { seo: { title: 'Pakasir Reviewer Login', desc: '', path: req.path } });
 });
 
 app.post('/api/webhook-login', loginLimiter, async (req, res) => {
@@ -2185,7 +2195,7 @@ async function handleListUpdate(req, res, redisKey, idField = 'id') {
     try {
         const payload = req.body;
         let list = await redis.get(redisKey) || [];
-        
+
         if (req.method === 'POST') {
             payload[idField] = `${redisKey.split(':').pop()}_${Date.now()}`;
             payload.createdAt = new Date().toISOString();
@@ -2283,7 +2293,7 @@ app.get('/api/admin/chats/:id', requireAdmin, async (req, res) => {
         if (!Array.isArray(chats)) chats = [];
         const chat = chats.find(c => c.id === id || c.sessionId === id);
         if (!chat) return res.status(404).json({ success: false, message: 'Chat tidak ditemukan.' });
-        
+
         // Normalize customer info
         const cust = chat.customer || {};
         chat.name = chat.name || cust.name || 'Klien';
@@ -2437,6 +2447,7 @@ app.post('/api/webhook/pakasir', async (req, res) => {
         await redis.set('dents:pakasir:webhook_logs', webhookLogs);
 
         // If secret matches (or no secret configured), update corresponding transaction status
+        let matchedTxn = null;
         if (secretMatched && (payload.txn_id || payload.order_id)) {
             let txns = await redis.get('dents:pakasir:transactions') || [];
             if (Array.isArray(txns)) {
@@ -2453,7 +2464,118 @@ app.post('/api/webhook/pakasir', async (req, res) => {
                     if (payload.completed_at) txns[matchedIndex].completed_at = payload.completed_at;
                     txns[matchedIndex].updatedAt = new Date().toISOString();
                     txns[matchedIndex].lastWebhookReceivedAt = new Date().toISOString();
+                    matchedTxn = txns[matchedIndex];
                     await redis.set('dents:pakasir:transactions', txns);
+                }
+            }
+        }
+
+        // =================================================================
+        // AUTO-SYNC WITH INVOICE SYSTEM: Mark Invoice as PAID & Auto Send Receipt Email
+        // =================================================================
+        const isStatusCompleted = (payload.status === 'completed' || payload.status === 'success' || payload.status === 'paid');
+        if (secretMatched && isStatusCompleted) {
+            try {
+                const invoiceIds = await redis.lrange('dents:invoices', 0, -1);
+                if (invoiceIds && invoiceIds.length) {
+                    const rawInvoices = await Promise.all(invoiceIds.map(id => redis.get(`dents:invoice:${id}`)));
+                    const targetInvoice = rawInvoices.find(inv => {
+                        if (!inv) return false;
+                        if (matchedTxn && matchedTxn.invoice_id && inv.id === matchedTxn.invoice_id) return true;
+                        if (payload.order_id && (inv.number === payload.order_id || inv.id === payload.order_id || inv.order_id === payload.order_id)) return true;
+                        if (matchedTxn && matchedTxn.order_id && (inv.number === matchedTxn.order_id || inv.order_id === matchedTxn.order_id)) return true;
+                        return false;
+                    });
+
+                    if (targetInvoice && targetInvoice.status !== 'PAID') {
+                        const payAmount = parseInt(payload.amount, 10) || targetInvoice.balance || targetInvoice.total;
+                        const newPayment = {
+                            id: `PAY-${Date.now()}`,
+                            amount: payAmount,
+                            method: payload.payment_method || matchedTxn?.method_name || 'Pakasir Payment Gateway',
+                            reference: payload.txn_id || payload.order_id || '-',
+                            paidAt: payload.completed_at || new Date().toISOString()
+                        };
+
+                        targetInvoice.payments = targetInvoice.payments || [];
+                        targetInvoice.payments.push(newPayment);
+                        targetInvoice.amountPaid = (targetInvoice.amountPaid || 0) + payAmount;
+                        targetInvoice.balance = Math.max(0, targetInvoice.total - targetInvoice.amountPaid);
+                        if (targetInvoice.balance <= 0) {
+                            targetInvoice.status = 'PAID';
+                        } else {
+                            targetInvoice.status = 'PARTIALLY_PAID';
+                        }
+                        targetInvoice.completed_at = payload.completed_at || new Date().toISOString();
+                        targetInvoice.updatedAt = new Date().toISOString();
+                        await redis.set(`dents:invoice:${targetInvoice.id}`, targetInvoice);
+
+                        // Auto-Send Official Receipt Email to Customer's Gmail
+                        const customer = await redis.get(`dents:customer:${targetInvoice.customerId}`);
+                        const invSettings = await invoiceService.getInvoiceSettings(redis);
+                        if (customer && customer.email && invSettings.autoSendReceipt !== false) {
+                            try {
+                                await invoiceService.sendReceiptEmail({
+                                    redis,
+                                    invoice: targetInvoice,
+                                    customer,
+                                    paymentInfo: newPayment
+                                });
+                                logEntry.receiptEmailSent = true;
+                                logEntry.receiptRecipient = customer.email;
+                                console.log(`[AUTO-RECEIPT] Kuitansi resmi berhasil dikirim ke ${customer.email} untuk invoice #${targetInvoice.number}`);
+                            } catch (emailErr) {
+                                console.error('[AUTO-RECEIPT] Gagal mengirim email kuitansi otomatis:', emailErr.message);
+                                logEntry.receiptEmailError = emailErr.message;
+                            }
+                        }
+                    }
+                }
+            } catch (syncErr) {
+                console.error('[INVOICE-SYNC] Error syncing Pakasir with invoice:', syncErr);
+            }
+
+            // =================================================================
+            // AUTO-SEND COMPLETION RECEIPT EMAIL TO CLIENT GMAIL (STANDALONE TRANSAKSI PAKASIR)
+            // =================================================================
+            if (matchedTxn && matchedTxn.customer_email && !matchedTxn.completionEmailSent) {
+                try {
+                    const clientRecipient = matchedTxn.customer_email.trim();
+                    await invoiceService.sendPakasirCompletionEmail({
+                        redis,
+                        transaction: matchedTxn,
+                        customer: {
+                            name: matchedTxn.customer_name || 'Klien Dents Web',
+                            email: clientRecipient
+                        },
+                        targetEmail: clientRecipient
+                    });
+
+                    matchedTxn.completionEmailSent = true;
+                    matchedTxn.completionEmailSentAt = new Date().toISOString();
+                    logEntry.completionEmailSent = true;
+                    logEntry.completionRecipient = clientRecipient;
+
+                    // Update transaction in Redis
+                    let allTxns = await redis.get('dents:pakasir:transactions') || [];
+                    if (Array.isArray(allTxns)) {
+                        const tIdx = allTxns.findIndex(t => t.id === matchedTxn.id || (matchedTxn.order_id && t.order_id === matchedTxn.order_id));
+                        if (tIdx !== -1) {
+                            allTxns[tIdx] = matchedTxn;
+                            await redis.set('dents:pakasir:transactions', allTxns);
+                        }
+                    }
+
+                    // Update webhook logs in Redis
+                    webhookLogs[0] = logEntry;
+                    await redis.set('dents:pakasir:webhook_logs', webhookLogs);
+
+                    console.log(`[AUTO-COMPLETION] Bukti pembayaran resmi berhasil dikirim ke ${clientRecipient} untuk Order #${matchedTxn.order_id}`);
+                } catch (complErr) {
+                    console.error('[AUTO-COMPLETION] Gagal mengirim email bukti bayar otomatis:', complErr.message);
+                    logEntry.completionEmailError = complErr.message;
+                    webhookLogs[0] = logEntry;
+                    await redis.set('dents:pakasir:webhook_logs', webhookLogs);
                 }
             }
         }
@@ -2545,6 +2667,7 @@ app.post('/api/admin/pakasir/transactions', requireTesterOrAdmin, async (req, re
             },
             body: JSON.stringify({
                 method: method,
+                payment_method: method,
                 amount: numAmount
             })
         });
@@ -2580,9 +2703,67 @@ app.post('/api/admin/pakasir/transactions', requireTesterOrAdmin, async (req, re
             customer_name: (customer_name || '').trim(),
             customer_email: (customer_email || '').trim(),
             notes: (notes || '').trim(),
+            invoice_id: (req.body.invoice_id || '').trim() || null,
             createdAt: nowIso,
             updatedAt: nowIso
         };
+
+        // If invoice_id provided, link payment details directly onto the invoice
+        if (req.body.invoice_id) {
+            try {
+                const inv = await redis.get(`dents:invoice:${req.body.invoice_id}`);
+                if (inv) {
+                    inv.pakasirTxnId = data.txn_id;
+                    inv.order_id = cleanOrderId;
+                    inv.paymentLink = transactionRecord.payment_link;
+                    inv.qr_string = transactionRecord.qr_string;
+                    inv.va_number = transactionRecord.va_number;
+                    inv.paymentMethod = method;
+                    inv.paymentMethodName = methodMeta.name;
+                    inv.updatedAt = nowIso;
+                    await redis.set(`dents:invoice:${inv.id}`, inv);
+
+                    // Auto-send invoice email with instant payment buttons if flag is set
+                    if (req.body.auto_send_email !== false && ((customer_email && customer_email.trim()) || inv.customerEmail)) {
+                        const cus = await redis.get(`dents:customer:${inv.customerId}`);
+                        if (cus) {
+                            if (customer_email) cus.email = customer_email.trim();
+                            await invoiceService.sendInvoiceEmail({
+                                redis,
+                                invoice: inv,
+                                customer: cus,
+                                paymentInfo: transactionRecord
+                            });
+                        }
+                    }
+                }
+            } catch (invErr) {
+                console.error('[INVOICE-LINK] Error linking transaction to invoice:', invErr);
+            }
+        }
+
+        // AUTO-SEND PAYMENT EMAIL TO CLIENT GMAIL (STANDALONE PAKASIR TRANSACTION)
+        let emailSent = false;
+        const recipientEmail = (customer_email || '').trim();
+        if (req.body.auto_send_email !== false && recipientEmail && !req.body.invoice_id) {
+            try {
+                await invoiceService.sendPakasirPaymentEmail({
+                    redis,
+                    transaction: transactionRecord,
+                    customer: {
+                        name: (customer_name || '').trim(),
+                        email: recipientEmail
+                    },
+                    targetEmail: recipientEmail
+                });
+                emailSent = true;
+                transactionRecord.emailSent = true;
+                transactionRecord.emailRecipient = recipientEmail;
+            } catch (mailErr) {
+                console.error('[PAKASIR-EMAIL] Gagal kirim email pembayaran ke klien:', mailErr.message);
+                transactionRecord.emailError = mailErr.message;
+            }
+        }
 
         // Save to Redis
         let txns = await redis.get('dents:pakasir:transactions') || [];
@@ -2592,12 +2773,86 @@ app.post('/api/admin/pakasir/transactions', requireTesterOrAdmin, async (req, re
 
         res.json({
             success: true,
-            message: 'Transaksi berhasil dibuat!',
-            data: transactionRecord
+            message: `Transaksi ${methodMeta.name} berhasil dibuat!${emailSent ? ` Rincian pembayaran otomatis terkirim ke Gmail ${recipientEmail}.` : ''}`,
+            data: transactionRecord,
+            emailSent
         });
     } catch (err) {
         console.error('Error creating Pakasir transaction:', err);
         res.status(500).json({ success: false, message: 'Server error saat menghubungi Pakasir: ' + err.message });
+    }
+});
+
+// Endpoint Kirim Ulang Email Instruksi Pembayaran Pakasir ke Klien
+app.post('/api/admin/pakasir/transactions/:id/send-email', requireTesterOrAdmin, async (req, res) => {
+    try {
+        let txns = await redis.get('dents:pakasir:transactions') || [];
+        const txn = txns.find(t => t.id === req.params.id || t.txn_id === req.params.id || t.order_id === req.params.id);
+        if (!txn) {
+            return res.status(404).json({ success: false, message: 'Transaksi tidak ditemukan.' });
+        }
+
+        const targetEmail = (req.body.email || txn.customer_email || '').trim();
+        if (!targetEmail) {
+            return res.status(400).json({ success: false, message: 'Alamat email klien wajib diisi.' });
+        }
+
+        const result = await invoiceService.sendPakasirPaymentEmail({
+            redis,
+            transaction: txn,
+            customer: { name: txn.customer_name || 'Klien', email: targetEmail },
+            targetEmail
+        });
+
+        res.json({
+            success: true,
+            message: `Instruksi pembayaran ${txn.method_name} berhasil dikirim ke ${targetEmail}!`,
+            messageId: result.messageId
+        });
+    } catch (err) {
+        console.error('Error sending Pakasir payment email:', err);
+        res.status(500).json({ success: false, message: 'Gagal mengirim email: ' + err.message });
+    }
+});
+
+// Endpoint Kirim Ulang Email Bukti Pembayaran Lunas Pakasir ke Klien
+app.post('/api/admin/pakasir/transactions/:id/send-completion-email', requireTesterOrAdmin, async (req, res) => {
+    try {
+        let txns = await redis.get('dents:pakasir:transactions') || [];
+        const txn = txns.find(t => t.id === req.params.id || t.txn_id === req.params.id || t.order_id === req.params.id);
+        if (!txn) {
+            return res.status(404).json({ success: false, message: 'Transaksi tidak ditemukan.' });
+        }
+
+        const targetEmail = (req.body.email || txn.customer_email || '').trim();
+        if (!targetEmail) {
+            return res.status(400).json({ success: false, message: 'Alamat email klien wajib diisi.' });
+        }
+
+        const result = await invoiceService.sendPakasirCompletionEmail({
+            redis,
+            transaction: txn,
+            customer: { name: txn.customer_name || 'Klien Dents Web', email: targetEmail },
+            targetEmail
+        });
+
+        // Update record
+        txn.completionEmailSent = true;
+        txn.completionEmailSentAt = new Date().toISOString();
+        const tIdx = txns.findIndex(t => t.id === txn.id);
+        if (tIdx !== -1) {
+            txns[tIdx] = txn;
+            await redis.set('dents:pakasir:transactions', txns);
+        }
+
+        res.json({
+            success: true,
+            message: `Bukti pembayaran resmi (${txn.method_name || 'Lunas'}) berhasil dikirim ke ${targetEmail}!`,
+            messageId: result.messageId
+        });
+    } catch (err) {
+        console.error('Error sending Pakasir completion email:', err);
+        res.status(500).json({ success: false, message: 'Gagal mengirim email bukti pembayaran: ' + err.message });
     }
 });
 
@@ -2768,7 +3023,7 @@ app.get('/api/admin/settings', requireAdmin, async (req, res) => {
     try {
         const settings = await getGlobalSettings();
         res.json({ success: true, data: settings });
-    } catch(err) { res.status(500).json({ success: false }); }
+    } catch (err) { res.status(500).json({ success: false }); }
 });
 app.put('/api/admin/settings', requireAdmin, async (req, res) => {
     try {
@@ -2803,6 +3058,920 @@ app.get('/google:code.html', async (req, res) => {
     res.send(`google-site-verification: google${code}.html`);
 });
 
+// =========================================================================
+// INVOICE & CUSTOMER MANAGEMENT API & PUBLIC ROUTES (MEGA UPGRADE)
+// =========================================================================
+
+// 1. Analytics & Overview API
+app.get('/api/admin/invoice/analytics', requireTesterOrAdmin, async (req, res) => {
+    try {
+        const invoiceIds = await redis.lrange('dents:invoices', 0, -1) || [];
+        let invoices = invoiceIds.length ? await Promise.all(invoiceIds.map(id => redis.get(`dents:invoice:${id}`))) : [];
+        invoices = invoices.filter(i => i).map(invoiceService.checkOverdue);
+
+        const stats = {
+            totalInvoices: invoices.length,
+            totalBilled: 0,
+            totalPaid: 0,
+            outstanding: 0,
+            totalOutstanding: 0,
+            overdue: 0,
+            totalOverdue: 0,
+            statusCounts: {
+                PAID: 0,
+                UNPAID: 0,
+                PARTIALLY_PAID: 0,
+                DRAFT: 0,
+                OVERDUE: 0
+            }
+        };
+
+        const period = String(req.query.period || 'this_month').toLowerCase();
+        const now = new Date();
+        const chartBuckets = [];
+
+        if (period === 'this_month') {
+            // Harian sepanjang bulan berjalan (Default 1 Bulan)
+            const year = now.getFullYear();
+            const month = now.getMonth();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const monthShort = now.toLocaleDateString('id-ID', { month: 'short' });
+
+            for (let d = 1; d <= daysInMonth; d++) {
+                const dayStr = String(d).padStart(2, '0');
+                const key = `${year}-${String(month + 1).padStart(2, '0')}-${dayStr}`;
+                const label = `${dayStr} ${monthShort}`;
+                chartBuckets.push({ key, label, revenue: 0, billed: 0 });
+            }
+        } else if (period === 'yearly' || period === 'years') {
+            // Tahunan (3 tahun terakhir hingga tahun ini)
+            const curYear = now.getFullYear();
+            for (let y = curYear - 2; y <= curYear; y++) {
+                const key = String(y);
+                const label = `Thn ${y}`;
+                chartBuckets.push({ key, label, revenue: 0, billed: 0 });
+            }
+        } else {
+            // N Bulan ke belakang (Default 6 atau sesuai query: 3, 6, 12 bulan)
+            let numMonths = 6;
+            if (period === '3_months' || period === '3') numMonths = 3;
+            else if (period === '12_months' || period === '12' || period === '1_year') numMonths = 12;
+            else if (!isNaN(parseInt(period))) numMonths = Math.min(Math.max(parseInt(period), 1), 24);
+
+            for (let i = numMonths - 1; i >= 0; i--) {
+                const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+                const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+                const label = d.toLocaleDateString('id-ID', { month: 'short', year: '2-digit' });
+                chartBuckets.push({ key, label, revenue: 0, billed: 0 });
+            }
+        }
+
+        invoices.forEach(inv => {
+            const status = inv.status || 'UNPAID';
+            if (stats.statusCounts[status] !== undefined) {
+                stats.statusCounts[status]++;
+            } else {
+                stats.statusCounts[status] = 1;
+            }
+
+            if (status !== 'DRAFT') {
+                stats.totalBilled += (inv.total || 0);
+            }
+            stats.totalPaid += (inv.amountPaid || 0);
+            if (status !== 'PAID' && status !== 'DRAFT') {
+                stats.outstanding += (inv.balance || 0);
+            }
+            if (status === 'OVERDUE') {
+                stats.overdue += (inv.balance || 0);
+            }
+
+            // Aggregasi bucket grafik
+            const dateStr = inv.invoiceDate || inv.createdAt;
+            if (dateStr) {
+                let bucket = null;
+                if (period === 'this_month') {
+                    const invDay = dateStr.substring(0, 10);
+                    bucket = chartBuckets.find(b => b.key === invDay);
+                } else if (period === 'yearly' || period === 'years') {
+                    const invYear = dateStr.substring(0, 4);
+                    bucket = chartBuckets.find(b => b.key === invYear);
+                } else {
+                    const invMonth = dateStr.substring(0, 7);
+                    bucket = chartBuckets.find(b => b.key === invMonth);
+                }
+
+                if (bucket) {
+                    if (status !== 'DRAFT') bucket.billed += (inv.total || 0);
+                    bucket.revenue += (inv.amountPaid || 0);
+                }
+            }
+        });
+
+        stats.totalOutstanding = stats.outstanding;
+        stats.totalOverdue = stats.overdue;
+
+        const chartData = {
+            labels: chartBuckets.map(b => b.label),
+            revenue: chartBuckets.map(b => b.revenue),
+            paid: chartBuckets.map(b => b.revenue),
+            billed: chartBuckets.map(b => b.billed),
+            period
+        };
+
+        const recentInvoices = invoices.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 6);
+
+        res.json({
+            success: true,
+            data: {
+                stats,
+                statusCounts: stats.statusCounts,
+                chart: chartData,
+                monthlyChart: chartData,
+                invoices: invoices.map(i => ({
+                    id: i.id,
+                    invoiceNumber: i.invoiceNumber,
+                    customerName: i.customerName || (i.customer && i.customer.companyName) || '',
+                    invoiceDate: i.invoiceDate,
+                    dueDate: i.dueDate,
+                    total: i.total || 0,
+                    amountPaid: i.amountPaid || 0,
+                    balance: i.balance || 0,
+                    status: i.status || 'UNPAID',
+                    createdAt: i.createdAt
+                })),
+                recentInvoices
+            }
+        });
+    } catch (err) {
+        console.error('Error fetching invoice analytics:', err);
+        res.status(500).json({ success: false, message: 'Gagal memuat analitik invoice: ' + err.message });
+    }
+});
+
+// 2. Customer Management CRUD
+app.get('/api/admin/customers', requireTesterOrAdmin, async (req, res) => {
+    try {
+        const ids = await redis.lrange('dents:customers', 0, -1) || [];
+        let customers = ids.length ? await Promise.all(ids.map(id => redis.get(`dents:customer:${id}`))) : [];
+        customers = customers.filter(c => c).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        res.json({ success: true, data: customers });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Gagal memuat data pelanggan.' });
+    }
+});
+
+app.post('/api/admin/customers', requireTesterOrAdmin, async (req, res) => {
+    try {
+        const { companyName, contactPerson, email, phone, address, city, province, postalCode, npwp, notes } = req.body || {};
+        if (!companyName || !companyName.trim()) {
+            return res.status(400).json({ success: false, message: 'Nama Perusahaan / Klien wajib diisi.' });
+        }
+
+        const id = `CUS-${Date.now()}`;
+        const newCustomer = {
+            id,
+            companyName: companyName.trim(),
+            contactPerson: (contactPerson || '').trim(),
+            email: (email || '').trim(),
+            phone: (phone || '').trim(),
+            address: (address || '').trim(),
+            city: (city || '').trim(),
+            province: (province || '').trim(),
+            postalCode: (postalCode || '').trim(),
+            npwp: (npwp || '').trim(),
+            notes: (notes || '').trim(),
+            createdAt: new Date().toISOString()
+        };
+
+        await redis.set(`dents:customer:${id}`, newCustomer);
+        await redis.lpush('dents:customers', id);
+
+        res.json({ success: true, message: 'Pelanggan berhasil disimpan!', data: newCustomer });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Gagal menyimpan pelanggan: ' + err.message });
+    }
+});
+
+app.get('/api/admin/customers/:id', requireTesterOrAdmin, async (req, res) => {
+    try {
+        const customer = await redis.get(`dents:customer:${req.params.id}`);
+        if (!customer) return res.status(404).json({ success: false, message: 'Pelanggan tidak ditemukan.' });
+        res.json({ success: true, data: customer });
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
+app.put('/api/admin/customers/:id', requireTesterOrAdmin, async (req, res) => {
+    try {
+        const existing = await redis.get(`dents:customer:${req.params.id}`);
+        if (!existing) return res.status(404).json({ success: false, message: 'Pelanggan tidak ditemukan.' });
+
+        const { companyName, contactPerson, email, phone, address, city, province, postalCode, npwp, notes } = req.body || {};
+        const updated = {
+            ...existing,
+            companyName: (companyName !== undefined ? companyName.trim() : existing.companyName),
+            contactPerson: (contactPerson !== undefined ? contactPerson.trim() : existing.contactPerson),
+            email: (email !== undefined ? email.trim() : existing.email),
+            phone: (phone !== undefined ? phone.trim() : existing.phone),
+            address: (address !== undefined ? address.trim() : existing.address),
+            city: (city !== undefined ? city.trim() : existing.city),
+            province: (province !== undefined ? province.trim() : existing.province),
+            postalCode: (postalCode !== undefined ? postalCode.trim() : existing.postalCode),
+            npwp: (npwp !== undefined ? npwp.trim() : existing.npwp),
+            notes: (notes !== undefined ? notes.trim() : existing.notes),
+            updatedAt: new Date().toISOString()
+        };
+
+        await redis.set(`dents:customer:${req.params.id}`, updated);
+        res.json({ success: true, message: 'Data pelanggan berhasil diperbarui!', data: updated });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Gagal memperbarui pelanggan: ' + err.message });
+    }
+});
+
+app.delete('/api/admin/customers/:id', requireAdmin, async (req, res) => {
+    try {
+        await redis.del(`dents:customer:${req.params.id}`);
+        await redis.lrem('dents:customers', 0, req.params.id);
+        res.json({ success: true, message: 'Pelanggan berhasil dihapus permanen.' });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Gagal menghapus pelanggan.' });
+    }
+});
+
+// 3. Invoice Management CRUD
+app.get('/api/admin/invoices', requireTesterOrAdmin, async (req, res) => {
+    try {
+        const ids = await redis.lrange('dents:invoices', 0, -1) || [];
+        let invoices = ids.length ? await Promise.all(ids.map(id => redis.get(`dents:invoice:${id}`))) : [];
+        invoices = invoices.filter(i => i);
+
+        // Populate customer information
+        for (let inv of invoices) {
+            inv = invoiceService.checkOverdue(inv);
+            if (inv.customerId) {
+                const cus = await redis.get(`dents:customer:${inv.customerId}`);
+                if (cus) {
+                    inv.customerName = cus.companyName || 'Tanpa Nama';
+                    inv.customerEmail = cus.email || '';
+                    inv.customerPhone = cus.phone || '';
+                }
+            }
+        }
+
+        invoices.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        res.json({ success: true, data: invoices });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Gagal memuat data faktur: ' + err.message });
+    }
+});
+
+app.post('/api/admin/invoices', requireTesterOrAdmin, async (req, res) => {
+    try {
+        const { customerId, invoiceDate, dueDate, items, notes, globalDiscountRate, globalTaxRate, auto_send_email, status } = req.body || {};
+        if (!customerId) {
+            return res.status(400).json({ success: false, message: 'Customer wajib dipilih.' });
+        }
+
+        const customer = await redis.get(`dents:customer:${customerId}`);
+        if (!customer) {
+            return res.status(404).json({ success: false, message: 'Customer tidak ditemukan di database.' });
+        }
+
+        const id = `INV-${Date.now()}`;
+        const publicId = `axz_${crypto.randomBytes(8).toString('hex')}`;
+        const year = new Date().getFullYear();
+        const counter = await redis.incr(`dents:counter:invoice:${year}`);
+        const invSettings = await invoiceService.getInvoiceSettings(redis);
+        const prefix = invSettings.invoicePrefix || 'DENTSWEB';
+        const number = `${prefix}-${year}-${String(counter).padStart(5, '0')}`;
+
+        // Process line items
+        let subtotal = 0;
+        const processedItems = [];
+        let itemsArray = [];
+        if (items) {
+            itemsArray = Array.isArray(items) ? items : Object.values(items);
+        }
+
+        itemsArray.forEach(item => {
+            if (!item.description || !item.description.trim()) return;
+            const qty = Math.max(1, parseInt(item.quantity, 10) || 1);
+            const rawPrice = item.unitPrice !== undefined ? item.unitPrice : (item.price !== undefined ? item.price : 0);
+            const price = Math.max(0, parseInt(rawPrice, 10) || 0);
+            const lineTotal = qty * price;
+            subtotal += lineTotal;
+            processedItems.push({
+                description: item.description.trim(),
+                period: (item.period || '').trim(),
+                quantity: qty,
+                price: price,
+                unitPrice: price,
+                total: lineTotal
+            });
+        });
+
+        if (processedItems.length === 0) {
+            return res.status(400).json({ success: false, message: 'Faktur harus memiliki minimal satu item layanan.' });
+        }
+
+        const discRate = parseFloat(globalDiscountRate !== undefined ? globalDiscountRate : req.body.discountRate) || 0;
+        const taxRate = parseFloat(globalTaxRate !== undefined ? globalTaxRate : req.body.taxRate) || 0;
+        const discountAmount = Math.round((subtotal * discRate) / 100);
+        const taxableBase = Math.max(0, subtotal - discountAmount);
+        const taxAmount = Math.round((taxableBase * taxRate) / 100);
+        const grandTotal = taxableBase + taxAmount;
+
+        const newInvoice = {
+            id,
+            publicId,
+            number,
+            invoiceNumber: number,
+            status: status || 'UNPAID',
+            customerId,
+            customerName: customer.companyName,
+            customerEmail: customer.email,
+            invoiceDate: invoiceDate || new Date().toISOString().split('T')[0],
+            dueDate: dueDate || new Date(Date.now() + 7 * 86400000).toISOString().split('T')[0],
+            currency: 'IDR',
+            items: processedItems,
+            subtotal,
+            discountRate: discRate,
+            discountAmount,
+            discount: discountAmount,
+            taxableBase,
+            taxRate,
+            tax: taxAmount,
+            taxAmount,
+            additionalFee: 0,
+            total: grandTotal,
+            amountPaid: 0,
+            balance: grandTotal,
+            balanceDue: grandTotal,
+            payments: [],
+            notes: (notes || invSettings.invoiceNotes || '').trim(),
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        };
+
+        await redis.set(`dents:invoice:${id}`, newInvoice);
+        await redis.lpush('dents:invoices', id);
+
+        // Auto send email if requested
+        let emailResult = null;
+        if (auto_send_email && customer.email) {
+            try {
+                emailResult = await invoiceService.sendInvoiceEmail({
+                    redis,
+                    invoice: newInvoice,
+                    customer
+                });
+            } catch (mailErr) {
+                console.error('[INVOICE-EMAIL] Gagal kirim email invoice baru:', mailErr.message);
+            }
+        }
+
+        res.json({
+            success: true,
+            message: `Invoice #${number} berhasil dibuat!${emailResult ? ' Email tagihan terkirim ke klien.' : ''}`,
+            data: newInvoice,
+            emailSent: !!emailResult
+        });
+    } catch (err) {
+        console.error('Error creating invoice:', err);
+        res.status(500).json({ success: false, message: 'Gagal membuat invoice: ' + err.message });
+    }
+});
+
+app.get('/api/admin/invoices/:id', requireTesterOrAdmin, async (req, res) => {
+    try {
+        let invoice = await redis.get(`dents:invoice:${req.params.id}`);
+        if (!invoice) return res.status(404).json({ success: false, message: 'Invoice tidak ditemukan.' });
+        invoice = invoiceService.checkOverdue(invoice);
+        const customer = await redis.get(`dents:customer:${invoice.customerId}`);
+        res.json({ success: true, data: { invoice, customer: customer || {} } });
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
+app.put('/api/admin/invoices/:id', requireTesterOrAdmin, async (req, res) => {
+    try {
+        const existingInvoice = await redis.get(`dents:invoice:${req.params.id}`);
+        if (!existingInvoice) return res.status(404).json({ success: false, message: 'Invoice tidak ditemukan.' });
+
+        const { customerId, invoiceDate, dueDate, items, notes, globalDiscountRate, globalTaxRate, status } = req.body || {};
+
+        let subtotal = 0;
+        const processedItems = [];
+        let itemsArray = [];
+        if (items) {
+            itemsArray = Array.isArray(items) ? items : Object.values(items);
+        }
+
+        itemsArray.forEach(item => {
+            if (!item.description || !item.description.trim()) return;
+            const qty = Math.max(1, parseInt(item.quantity, 10) || 1);
+            const rawPrice = item.unitPrice !== undefined ? item.unitPrice : (item.price !== undefined ? item.price : 0);
+            const price = Math.max(0, parseInt(rawPrice, 10) || 0);
+            const lineTotal = qty * price;
+            subtotal += lineTotal;
+            processedItems.push({
+                description: item.description.trim(),
+                period: (item.period || '').trim(),
+                quantity: qty,
+                price: price,
+                unitPrice: price,
+                total: lineTotal
+            });
+        });
+
+        const discRate = parseFloat(globalDiscountRate !== undefined ? globalDiscountRate : req.body.discountRate) || 0;
+        const taxRate = parseFloat(globalTaxRate !== undefined ? globalTaxRate : req.body.taxRate) || 0;
+        const discountAmount = Math.round((subtotal * discRate) / 100);
+        const taxableBase = Math.max(0, subtotal - discountAmount);
+        const taxAmount = Math.round((taxableBase * taxRate) / 100);
+        const grandTotal = taxableBase + taxAmount;
+
+        let paid = existingInvoice.amountPaid || 0;
+        let newBalance = Math.max(0, grandTotal - paid);
+        let targetStatus = status || existingInvoice.status || 'UNPAID';
+        let completed_at = existingInvoice.completed_at || null;
+
+        // If explicitly set to PAID
+        if (targetStatus === 'PAID') {
+            paid = grandTotal;
+            newBalance = 0;
+            completed_at = completed_at || new Date().toISOString();
+            if (!existingInvoice.payments || !existingInvoice.payments.length) {
+                existingInvoice.payments = [{
+                    id: `PAY-${Date.now()}`,
+                    amount: grandTotal,
+                    method: 'Lunas Manual (Admin)',
+                    reference: `MANUAL-${Date.now()}`,
+                    paidAt: completed_at
+                }];
+            }
+        } else if (targetStatus === 'UNPAID' && paid >= grandTotal) {
+            paid = 0;
+            newBalance = grandTotal;
+            completed_at = null;
+        }
+
+        const updatedInvoice = {
+            ...existingInvoice,
+            customerId: customerId || existingInvoice.customerId,
+            invoiceDate: invoiceDate || existingInvoice.invoiceDate,
+            dueDate: dueDate || existingInvoice.dueDate,
+            items: processedItems.length ? processedItems : existingInvoice.items,
+            notes: (notes !== undefined ? notes.trim() : existingInvoice.notes),
+            subtotal,
+            discountRate: discRate,
+            discountAmount,
+            discount: discountAmount,
+            taxableBase,
+            taxRate,
+            tax: taxAmount,
+            taxAmount,
+            total: grandTotal,
+            amountPaid: paid,
+            balance: newBalance,
+            balanceDue: newBalance,
+            status: targetStatus,
+            completed_at,
+            updatedAt: new Date().toISOString()
+        };
+
+        if (updatedInvoice.balance <= 0 && updatedInvoice.status !== 'DRAFT') {
+            updatedInvoice.status = 'PAID';
+        } else if (updatedInvoice.amountPaid > 0 && updatedInvoice.balance > 0 && updatedInvoice.status !== 'DRAFT') {
+            updatedInvoice.status = 'PARTIALLY_PAID';
+        }
+
+        await redis.set(`dents:invoice:${req.params.id}`, updatedInvoice);
+        res.json({ success: true, message: 'Invoice berhasil diperbarui!', data: updatedInvoice });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Gagal memperbarui invoice: ' + err.message });
+    }
+});
+
+app.delete('/api/admin/invoices/:id', requireAdmin, async (req, res) => {
+    try {
+        await redis.del(`dents:invoice:${req.params.id}`);
+        await redis.lrem('dents:invoices', 0, req.params.id);
+        res.json({ success: true, message: 'Data invoice berhasil dihapus secara permanen.' });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Gagal menghapus invoice.' });
+    }
+});
+
+// Endpoint Cepat: 1-Click Tandai Lunas (Mark as Paid)
+app.post('/api/admin/invoices/:id/mark-paid', requireTesterOrAdmin, async (req, res) => {
+    try {
+        const invoice = await redis.get(`dents:invoice:${req.params.id}`);
+        if (!invoice) return res.status(404).json({ success: false, message: 'Invoice tidak ditemukan.' });
+
+        const sendReceipt = req.body.send_receipt !== false;
+        const paymentMethod = req.body.method || 'Transfer Bank Manual (Diverifikasi Admin)';
+        const paidAt = new Date().toISOString();
+        const amount = (invoice.balance && invoice.balance > 0) ? invoice.balance : invoice.total;
+
+        const payment = {
+            id: `PAY-${Date.now()}`,
+            amount: amount,
+            method: paymentMethod,
+            reference: req.body.reference || `MANUAL-${Date.now()}`,
+            paidAt: paidAt
+        };
+
+        invoice.payments = invoice.payments || [];
+        invoice.payments.push(payment);
+        invoice.amountPaid = invoice.total;
+        invoice.balance = 0;
+        invoice.balanceDue = 0;
+        invoice.status = 'PAID';
+        invoice.completed_at = paidAt;
+        invoice.updatedAt = paidAt;
+
+        await redis.set(`dents:invoice:${req.params.id}`, invoice);
+
+        let receiptSent = false;
+        if (sendReceipt) {
+            const customer = await redis.get(`dents:customer:${invoice.customerId}`);
+            if (customer && customer.email) {
+                try {
+                    await invoiceService.sendReceiptEmail({
+                        redis,
+                        invoice,
+                        customer,
+                        paymentInfo: payment
+                    });
+                    receiptSent = true;
+                } catch (e) {
+                    console.error('[RECEIPT-EMAIL] Error:', e.message);
+                }
+            }
+        }
+
+        res.json({
+            success: true,
+            message: `Faktur #${invoice.number || invoice.invoiceNumber} berhasil ditandai LUNAS!${receiptSent ? ' Kuitansi PDF resmi otomatis terkirim ke Gmail klien.' : ''}`,
+            data: invoice
+        });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Gagal menandai lunas: ' + err.message });
+    }
+});
+
+// 4. Invoice Actions (Issue, Payment, Send Email, Send Receipt)
+app.post('/api/admin/invoices/:id/issue', requireTesterOrAdmin, async (req, res) => {
+    try {
+        const invoice = await redis.get(`dents:invoice:${req.params.id}`);
+        if (!invoice) return res.status(404).json({ success: false, message: 'Invoice tidak ditemukan.' });
+
+        invoice.status = 'UNPAID';
+        invoice.updatedAt = new Date().toISOString();
+        await redis.set(`dents:invoice:${req.params.id}`, invoice);
+
+        res.json({ success: true, message: `Invoice #${invoice.number} resmi diterbitkan (UNPAID)!`, data: invoice });
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
+app.post('/api/admin/invoices/:id/payment', requireTesterOrAdmin, async (req, res) => {
+    try {
+        const invoice = await redis.get(`dents:invoice:${req.params.id}`);
+        if (!invoice) return res.status(404).json({ success: false, message: 'Invoice tidak ditemukan.' });
+
+        const amount = parseInt(req.body.amount, 10);
+        if (isNaN(amount) || amount <= 0) {
+            return res.status(400).json({ success: false, message: 'Nominal pembayaran harus berupa angka positif.' });
+        }
+        if (amount > invoice.balance) {
+            return res.status(400).json({ success: false, message: `Nominal melebihi sisa tagihan (${invoiceService.formatRupiah(invoice.balance)}).` });
+        }
+
+        const payment = {
+            id: `PAY-${Date.now()}`,
+            amount: amount,
+            method: req.body.method || 'Transfer Bank Manual',
+            reference: req.body.reference || '-',
+            paidAt: new Date().toISOString()
+        };
+
+        invoice.payments = invoice.payments || [];
+        invoice.payments.push(payment);
+        invoice.amountPaid = (invoice.amountPaid || 0) + amount;
+        invoice.balance = Math.max(0, invoice.total - invoice.amountPaid);
+        if (invoice.balance === 0) {
+            invoice.status = 'PAID';
+            invoice.completed_at = payment.paidAt;
+        } else {
+            invoice.status = 'PARTIALLY_PAID';
+        }
+        invoice.updatedAt = new Date().toISOString();
+
+        await redis.set(`dents:invoice:${req.params.id}`, invoice);
+
+        // If requested to send receipt email
+        let receiptSent = false;
+        if (req.body.send_receipt) {
+            const customer = await redis.get(`dents:customer:${invoice.customerId}`);
+            if (customer && customer.email) {
+                try {
+                    await invoiceService.sendReceiptEmail({
+                        redis,
+                        invoice,
+                        customer,
+                        paymentInfo: payment
+                    });
+                    receiptSent = true;
+                } catch (e) {
+                    console.error('[RECEIPT-EMAIL] Error:', e.message);
+                }
+            }
+        }
+
+        res.json({
+            success: true,
+            message: `Pembayaran sebesar ${invoiceService.formatRupiah(amount)} berhasil dicatat!${receiptSent ? ' Kuitansi dikirim ke email.' : ''}`,
+            data: invoice,
+            invoice: invoice,
+            payment: payment,
+            receipt: {
+                id: `RCT-${payment.id}`,
+                publicId: invoice.publicId,
+                receiptNumber: `KW-${invoice.invoiceNumber || invoice.number}`,
+                amountPaid: amount,
+                paymentMethod: payment.method,
+                paymentDate: payment.paidAt
+            }
+        });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Gagal mencatat pembayaran: ' + err.message });
+    }
+});
+
+app.post('/api/admin/invoices/:id/send-email', requireTesterOrAdmin, async (req, res) => {
+    try {
+        const invoice = await redis.get(`dents:invoice:${req.params.id}`);
+        if (!invoice) return res.status(404).json({ success: false, message: 'Invoice tidak ditemukan.' });
+
+        const customer = await redis.get(`dents:customer:${invoice.customerId}`);
+        if (!customer) return res.status(404).json({ success: false, message: 'Data pelanggan invoice tidak ditemukan.' });
+
+        const targetEmail = (req.body.email || customer.email || '').trim();
+        if (!targetEmail) {
+            return res.status(400).json({ success: false, message: 'Pelanggan tidak memiliki alamat email. Masukkan alamat email tujuan.' });
+        }
+
+        customer.email = targetEmail;
+        const result = await invoiceService.sendInvoiceEmail({
+            redis,
+            invoice,
+            customer,
+            paymentInfo: {
+                payment_link: invoice.paymentLink,
+                va_number: invoice.vaNumber,
+                method_name: invoice.paymentMethodName
+            }
+        });
+
+        res.json({
+            success: true,
+            message: `Email tagihan Invoice #${invoice.number} berhasil dikirim ke ${targetEmail}!`,
+            data: result
+        });
+    } catch (err) {
+        console.error('Error sending invoice email:', err);
+        res.status(500).json({ success: false, message: 'Gagal mengirim email: ' + err.message });
+    }
+});
+
+app.post('/api/admin/invoices/:id/send-receipt', requireTesterOrAdmin, async (req, res) => {
+    try {
+        const invoice = await redis.get(`dents:invoice:${req.params.id}`);
+        if (!invoice) return res.status(404).json({ success: false, message: 'Invoice tidak ditemukan.' });
+
+        if (invoice.status !== 'PAID' && invoice.amountPaid <= 0) {
+            return res.status(400).json({ success: false, message: 'Kuitansi hanya bisa dikirim untuk tagihan yang sudah memiliki catatan pembayaran.' });
+        }
+
+        const customer = await redis.get(`dents:customer:${invoice.customerId}`);
+        if (!customer) return res.status(404).json({ success: false, message: 'Data pelanggan invoice tidak ditemukan.' });
+
+        const targetEmail = (req.body.email || customer.email || '').trim();
+        if (!targetEmail) {
+            return res.status(400).json({ success: false, message: 'Pelanggan tidak memiliki email. Masukkan email tujuan.' });
+        }
+
+        customer.email = targetEmail;
+        const lastPayment = invoice.payments && invoice.payments.length ? invoice.payments[invoice.payments.length - 1] : null;
+
+        const result = await invoiceService.sendReceiptEmail({
+            redis,
+            invoice,
+            customer,
+            paymentInfo: lastPayment
+        });
+
+        res.json({
+            success: true,
+            message: `Kuitansi resmi Invoice #${invoice.number} berhasil dikirim ke ${targetEmail}!`,
+            data: result
+        });
+    } catch (err) {
+        console.error('Error sending receipt email:', err);
+        res.status(500).json({ success: false, message: 'Gagal mengirim kuitansi: ' + err.message });
+    }
+});
+
+// 5. Receipts Management API
+app.get('/api/admin/receipts', requireTesterOrAdmin, async (req, res) => {
+    try {
+        const ids = await redis.lrange('dents:invoices', 0, -1) || [];
+        let invoices = ids.length ? await Promise.all(ids.map(id => redis.get(`dents:invoice:${id}`))) : [];
+
+        // Filter invoices that are PAID or have payments
+        const receipts = [];
+        for (let inv of invoices) {
+            if (inv && (inv.status === 'PAID' || inv.amountPaid > 0)) {
+                if (inv.customerId) {
+                    const cus = await redis.get(`dents:customer:${inv.customerId}`);
+                    if (cus) {
+                        inv.customerName = cus.companyName || 'Tanpa Nama';
+                        inv.customerEmail = cus.email || '';
+                    }
+                }
+                const lastPayment = (inv.payments && inv.payments.length) ? inv.payments[inv.payments.length - 1] : {};
+                receipts.push({
+                    ...inv,
+                    receiptNumber: inv.receiptNumber || `KW-${inv.invoiceNumber || inv.number}`,
+                    amountPaid: inv.amountPaid || inv.total,
+                    paymentMethod: lastPayment.method || 'Transfer Bank',
+                    paymentDate: lastPayment.paidAt || inv.completed_at || inv.updatedAt,
+                    reference: lastPayment.reference || '-',
+                    invoiceId: inv.id,
+                    paymentId: lastPayment.id || 'PAY-DEFAULT'
+                });
+            }
+        }
+
+        receipts.sort((a, b) => new Date(b.completed_at || b.updatedAt || b.createdAt) - new Date(a.completed_at || a.updatedAt || a.createdAt));
+        res.json({ success: true, data: receipts });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Gagal memuat kuitansi: ' + err.message });
+    }
+});
+
+// 6. Invoice Settings & Gmail SMTP Test API
+app.get('/api/admin/invoice/settings', requireTesterOrAdmin, async (req, res) => {
+    try {
+        const settings = await invoiceService.getInvoiceSettings(redis);
+        // Mask password slightly for safety
+        const safeSettings = {
+            ...settings,
+            smtpPass: settings.smtpPass ? (settings.smtpPass.slice(0, 3) + '••••••••' + settings.smtpPass.slice(-3)) : ''
+        };
+        res.json({ success: true, data: safeSettings });
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
+app.put('/api/admin/invoice/settings', requireAdmin, async (req, res) => {
+    try {
+        const incoming = req.body || {};
+        // If password is masked with bullets, preserve existing password
+        if (incoming.smtpPass && incoming.smtpPass.includes('••••')) {
+            delete incoming.smtpPass;
+        }
+        const updated = await invoiceService.saveInvoiceSettings(redis, incoming);
+        res.json({ success: true, message: 'Pengaturan invoice & identitas bisnis berhasil disimpan!', data: updated });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Gagal menyimpan pengaturan invoice.' });
+    }
+});
+
+app.post('/api/admin/invoice/settings/test-email', requireTesterOrAdmin, async (req, res) => {
+    try {
+        const targetEmail = (req.body.targetEmail || '').trim();
+        const result = await invoiceService.testSmtpConnection(redis, targetEmail);
+        res.json({
+            success: true,
+            message: `Koneksi Gmail SMTP Berhasil! Email diagnostik terkirim ke ${targetEmail || 'email pengirim'}.`,
+            data: result
+        });
+    } catch (err) {
+        console.error('SMTP Diagnostic Error:', err);
+        let helperMsg = '';
+        if (err.message && err.message.includes('535')) {
+            helperMsg = ' (Tips: Pastikan menggunakan Google App Password 16 huruf dari myaccount.google.com/apppasswords, bukan sandi akun Gmail biasa).';
+        }
+        res.status(400).json({
+            success: false,
+            message: 'Uji Koneksi Gmail SMTP Gagal: ' + err.message + helperMsg,
+            error: err.message
+        });
+    }
+});
+
+// 7. Public Client-Facing Invoice & Receipt Pages (No Auth Required)
+app.get('/invoice/:publicId', async (req, res) => {
+    try {
+        const ids = await redis.lrange('dents:invoices', 0, -1) || [];
+        let invoices = ids.length ? await Promise.all(ids.map(id => redis.get(`dents:invoice:${id}`))) : [];
+        let invoice = invoices.find(i => i && i.publicId === req.params.publicId);
+        if (!invoice) {
+            const settings = await getGlobalSettings();
+            return res.status(404).render('404', {
+                settings,
+                seo: buildSEO(settings, { title: 'Invoice Tidak Ditemukan', desc: 'Tagihan tidak ditemukan atau tautan telah kedaluwarsa.', path: req.path })
+            });
+        }
+
+        invoice = invoiceService.checkOverdue(invoice);
+        const customer = (await redis.get(`dents:customer:${invoice.customerId}`)) || { companyName: 'Klien Dents Web' };
+        const invoiceSettings = await invoiceService.getInvoiceSettings(redis);
+
+        res.render('invoice-public', {
+            invoice,
+            customer,
+            settings: invoiceSettings
+        });
+    } catch (err) {
+        console.error('Error rendering public invoice:', err);
+        res.status(500).send('Terjadi kesalahan memuat invoice.');
+    }
+});
+
+app.get('/invoice/:publicId/print', async (req, res) => {
+    try {
+        const ids = await redis.lrange('dents:invoices', 0, -1) || [];
+        let invoices = ids.length ? await Promise.all(ids.map(id => redis.get(`dents:invoice:${id}`))) : [];
+        let invoice = invoices.find(i => i && i.publicId === req.params.publicId);
+        if (!invoice) return res.status(404).send('Invoice Not Found');
+
+        invoice = invoiceService.checkOverdue(invoice);
+        const customer = (await redis.get(`dents:customer:${invoice.customerId}`)) || { companyName: 'Klien Dents Web' };
+        const invoiceSettings = await invoiceService.getInvoiceSettings(redis);
+
+        res.render('invoice-print', {
+            invoice,
+            customer,
+            settings: invoiceSettings
+        });
+    } catch (err) {
+        res.status(500).send('Error memuat print out invoice.');
+    }
+});
+
+app.get('/receipt/:publicId', async (req, res) => {
+    try {
+        const ids = await redis.lrange('dents:invoices', 0, -1) || [];
+        let invoices = ids.length ? await Promise.all(ids.map(id => redis.get(`dents:invoice:${id}`))) : [];
+        let invoice = invoices.find(i => i && i.publicId === req.params.publicId);
+        if (!invoice || (invoice.status !== 'PAID' && invoice.amountPaid <= 0)) {
+            return res.status(404).send('Kuitansi belum tersedia atau invoice belum memiliki catatan pembayaran.');
+        }
+
+        const customer = (await redis.get(`dents:customer:${invoice.customerId}`)) || { companyName: 'Klien Dents Web' };
+        const invoiceSettings = await invoiceService.getInvoiceSettings(redis);
+
+        res.render('receipt-public', {
+            invoice,
+            customer,
+            settings: invoiceSettings
+        });
+    } catch (err) {
+        res.status(500).send('Terjadi kesalahan memuat kuitansi resmi.');
+    }
+});
+
+app.get('/receipt/:publicId/print', async (req, res) => {
+    try {
+        const ids = await redis.lrange('dents:invoices', 0, -1) || [];
+        let invoices = ids.length ? await Promise.all(ids.map(id => redis.get(`dents:invoice:${id}`))) : [];
+        let invoice = invoices.find(i => i && i.publicId === req.params.publicId);
+        if (!invoice || (invoice.status !== 'PAID' && invoice.amountPaid <= 0)) {
+            return res.status(404).send('Kuitansi belum tersedia atau invoice belum memiliki catatan pembayaran.');
+        }
+
+        const customer = (await redis.get(`dents:customer:${invoice.customerId}`)) || { companyName: 'Klien Dents Web' };
+        const invoiceSettings = await invoiceService.getInvoiceSettings(redis);
+
+        res.render('receipt-print', {
+            invoice,
+            customer,
+            settings: invoiceSettings
+        });
+    } catch (err) {
+        res.status(500).send('Terjadi kesalahan memuat print kuitansi.');
+    }
+});
+
 // ==========================================
 // SEARCH ENGINE DISCOVERY (ROBOTS & SITEMAP)
 // ==========================================
@@ -2833,9 +4002,9 @@ app.all('/sitemap.xml', async (req, res) => {
         const settings = await getGlobalSettings();
         const baseUrl = (settings.siteUrl && settings.siteUrl.trim()) ? settings.siteUrl.replace(/\/+$/, '') : 'https://www.dentsweb.my.id';
         const today = new Date().toISOString().split('T')[0];
-        
+
         let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
-        
+
         const staticRoutes = [
             { path: '/', priority: '1.0', freq: 'daily' },
             { path: '/services', priority: '0.9', freq: 'weekly' },
