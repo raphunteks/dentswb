@@ -13,6 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="/public/css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
     <script src="/public/js/tech-icons.js"></script>
     <script src="/public/js/protect-devtools.js" defer></script>
 </head>
@@ -90,8 +91,29 @@
                     <span>FAQ</span>
                 </div>
 
-                <!-- Section 3: Keuangan & Pembayaran -->
-                <div class="admin-nav-category-title">Keuangan &amp; Transaksi</div>
+                <!-- Section 3: Keuangan & Faktur (Invoicing & Billing) -->
+                <div class="admin-nav-category-title">Keuangan &amp; Faktur</div>
+                <div class="admin-nav-item" data-tab="overview-invoice" data-title="Overview (Chart Analytics)">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                    <span>Overview Analytics</span>
+                    <span class="badge-tag-lime" style="font-size: 0.65rem; padding: 2px 6px; margin-left: auto;">Chart</span>
+                </div>
+                <div class="admin-nav-item" data-tab="customers" data-title="Pelanggan (Clients)">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    <span>Customers</span>
+                </div>
+                <div class="admin-nav-item" data-tab="invoices" data-title="Faktur &amp; Tagihan">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                    <span>Invoices</span>
+                </div>
+                <div class="admin-nav-item" data-tab="receipts" data-title="Kuitansi Pembayaran">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                    <span>Receipts</span>
+                </div>
+                <div class="admin-nav-item" data-tab="invoice-settings" data-title="Pengaturan Invoice &amp; SMTP">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    <span>Settings Invoice</span>
+                </div>
                 <div class="admin-nav-item" data-tab="pakasir" data-title="Pakasir Payment">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
                     <span>Pakasir Payment</span>
@@ -454,6 +476,16 @@
                                     <input type="text" class="form-control" id="pakasir-notes" placeholder="Cth: DP Pembuatan Website Custom Tier Growth" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
                                 </div>
 
+                                <div class="form-group" style="margin-top: 14px; margin-bottom: 18px; padding: 12px 14px; background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 10px;">
+                                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; color: #ffffff; font-size: 0.88rem; font-weight: 600; margin: 0;">
+                                        <input type="checkbox" id="pakasir-auto-send-email" checked style="width: 18px; height: 18px; accent-color: var(--lime-bright); cursor: pointer;">
+                                        <span>✉️ Otomatis kirim rincian instruksi bayar (QRIS / VA / Link) ke Gmail Klien</span>
+                                    </label>
+                                    <small style="display: block; color: var(--slate-muted); font-size: 0.78rem; margin-top: 4px; margin-left: 28px;">
+                                        Klien akan menerima email profesional berisi kode QRIS / nomor VA / link pembayaran langsung setelah transaksi berhasil dibuat.
+                                    </small>
+                                </div>
+
                                 <button type="submit" id="btn-submit-create-pakasir" class="btn-lime" style="width: 100%; padding: 12px; font-size: 1rem; display: inline-flex; align-items: center; justify-content: center; gap: 8px; margin-top: 10px;">
                                     <span>Buat Transaksi Pakasir Sekarang</span>
                                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
@@ -663,6 +695,402 @@
                             </button>
                         </form>
                     </div>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- TAB: OVERVIEW (CHART ANALYTICS)            -->
+            <!-- ========================================== -->
+            <div id="panel-overview-invoice" class="admin-panel" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                            <h2 style="font-size: 1.8rem; color: #ffffff; margin: 0;">Overview Keuangan &amp; Faktur</h2>
+                            <span class="badge-tag-lime" style="font-size: 0.72rem; padding: 3px 8px; border-radius: 999px;">Live Analytics</span>
+                        </div>
+                        <p style="color: var(--slate-muted); font-size: 0.95rem; margin: 0;">Pantau omzet tagihan, perputaran piutang klien, dan rasio pembayaran lunas.</p>
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <button type="button" class="btn-royal" onclick="openInvoiceModal()" style="padding: 8px 16px; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 6px;">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            <span>Buat Invoice Baru</span>
+                        </button>
+                        <button type="button" class="btn-ghost-white" onclick="loadInvoiceAnalytics()" style="padding: 8px 14px; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 6px;">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+                            <span>Refresh Data</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Metric Cards -->
+                <div class="pakasir-stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                    <div class="pakasir-stat-card">
+                        <div style="font-size: 0.78rem; color: var(--slate-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Total Faktur</div>
+                        <div id="inv-stat-total-invoices" style="font-size: 1.45rem; font-weight: 800; color: #ffffff;">0</div>
+                        <div style="font-size: 0.75rem; color: var(--slate-muted); margin-top: 4px;">Jumlah tagihan diterbitkan</div>
+                    </div>
+                    <div class="pakasir-stat-card">
+                        <div style="font-size: 0.78rem; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Total Tertagih (Billed)</div>
+                        <div id="inv-stat-total-billed" style="font-size: 1.45rem; font-weight: 800; color: #38bdf8;">Rp 0</div>
+                        <div style="font-size: 0.75rem; color: var(--slate-muted); margin-top: 4px;">Nilai kotor semua tagihan</div>
+                    </div>
+                    <div class="pakasir-stat-card">
+                        <div style="font-size: 0.78rem; color: #4ade80; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Total Lunas (Paid)</div>
+                        <div id="inv-stat-total-paid" style="font-size: 1.45rem; font-weight: 800; color: #4ade80;">Rp 0</div>
+                        <div style="font-size: 0.75rem; color: var(--slate-muted); margin-top: 4px;">Dana pembayaran diterima</div>
+                    </div>
+                    <div class="pakasir-stat-card">
+                        <div style="font-size: 0.78rem; color: #facc15; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Sisa Piutang (Outstanding)</div>
+                        <div id="inv-stat-outstanding" style="font-size: 1.45rem; font-weight: 800; color: #facc15;">Rp 0</div>
+                        <div style="font-size: 0.75rem; color: var(--slate-muted); margin-top: 4px;">Tagihan belum lunas</div>
+                    </div>
+                    <div class="pakasir-stat-card">
+                        <div style="font-size: 0.78rem; color: #f87171; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Lewat Jatuh Tempo (Overdue)</div>
+                        <div id="inv-stat-overdue" style="font-size: 1.45rem; font-weight: 800; color: #f87171;">Rp 0</div>
+                        <div style="font-size: 0.75rem; color: var(--slate-muted); margin-top: 4px;">Melebihi tanggal due date</div>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-top: 24px;">
+                    <div class="tactile-card-dark" style="padding: 22px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                            <h3 style="color: #ffffff; font-size: 1.05rem; margin: 0;">Tren Penagihan &amp; Pembayaran (6 Bulan Terakhir)</h3>
+                            <span style="font-size: 0.75rem; color: var(--slate-muted);">Rupiah (IDR)</span>
+                        </div>
+                        <div style="position: relative; height: 260px; width: 100%;">
+                            <canvas id="chart-monthly-revenue"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="tactile-card-dark" style="padding: 22px;">
+                        <div style="margin-bottom: 16px;">
+                            <h3 style="color: #ffffff; font-size: 1.05rem; margin: 0;">Proporsi Status Faktur</h3>
+                            <span style="font-size: 0.75rem; color: var(--slate-muted);">Rasio Lunas vs Piutang</span>
+                        </div>
+                        <div style="position: relative; height: 260px; width: 100%; display: flex; align-items: center; justify-content: center;">
+                            <canvas id="chart-status-pie"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Invoices Table -->
+                <div style="margin-top: 28px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                        <h3 style="color: #ffffff; font-size: 1.15rem; margin: 0;">Tagihan Terbaru</h3>
+                        <a href="javascript:void(0)" onclick="switchTab('invoices')" style="color: var(--lime-accent); font-size: 0.85rem; text-decoration: none; font-weight: 600;">Lihat Semua Tagihan &rarr;</a>
+                    </div>
+                    <div class="tactile-card-dark admin-table-responsive" style="padding: 0;">
+                        <table class="admin-table" id="table-recent-invoices">
+                            <thead>
+                                <tr>
+                                    <th>Nomor Faktur</th>
+                                    <th>Pelanggan</th>
+                                    <th>Tgl Faktur</th>
+                                    <th>Jatuh Tempo</th>
+                                    <th>Total Nilai</th>
+                                    <th>Status</th>
+                                    <th style="text-align: right;">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td colspan="7" style="text-align: center; color: var(--slate-muted); padding: 30px;">Memuat ringkasan tagihan...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- TAB: CUSTOMERS (PELANGGAN)                 -->
+            <!-- ========================================== -->
+            <div id="panel-customers" class="admin-panel" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+                    <div>
+                        <h2 style="font-size: 1.8rem; color: #ffffff; margin-bottom: 6px;">Manajemen Pelanggan</h2>
+                        <p style="color: var(--slate-muted); font-size: 0.95rem;">Kelola data kontak klien, nama perusahaan, email penerima tagihan, dan NPWP.</p>
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <button type="button" class="btn-royal" onclick="openCustomerModal()">+ Tambah Pelanggan Baru</button>
+                        <button type="button" class="btn-ghost-white" onclick="loadCustomers()">Refresh</button>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 16px; display: flex; gap: 12px; align-items: center;">
+                    <div style="position: relative; max-width: 350px; width: 100%;">
+                        <input type="text" id="search-customers" class="form-control" placeholder="Cari nama perusahaan, email, kontak..." onkeyup="filterCustomerTable()" style="background: var(--navy-surface); color: #fff; border-color: var(--navy-surface-border); font-size: 0.88rem;">
+                    </div>
+                    <span id="customers-count-badge" class="badge-tag-royal" style="font-size: 0.8rem;">0 Klien</span>
+                </div>
+
+                <div class="tactile-card-dark admin-table-responsive" style="padding: 0;">
+                    <table class="admin-table" id="table-customers">
+                        <thead>
+                            <tr>
+                                <th>Perusahaan / Klien</th>
+                                <th>Contact Person</th>
+                                <th>Email</th>
+                                <th>No. Telepon / WA</th>
+                                <th>Kota / Provinsi</th>
+                                <th>NPWP</th>
+                                <th style="text-align: right;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td colspan="7" style="text-align: center; color: var(--slate-muted); padding: 30px;">Memuat data pelanggan...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- TAB: INVOICES (FAKTUR & TAGIHAN)           -->
+            <!-- ========================================== -->
+            <div id="panel-invoices" class="admin-panel" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+                    <div>
+                        <h2 style="font-size: 1.8rem; color: #ffffff; margin-bottom: 6px;">Faktur &amp; Tagihan (Invoices)</h2>
+                        <p style="color: var(--slate-muted); font-size: 0.95rem;">Kelola tagihan website, kirim invoice ke Gmail klien, dan pantau status pelunasan.</p>
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <button type="button" class="btn-royal" onclick="openInvoiceModal()">+ Buat Invoice Baru</button>
+                        <button type="button" class="btn-ghost-white" onclick="loadInvoices()">Refresh</button>
+                    </div>
+                </div>
+
+                <!-- Filter Status Pills -->
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 18px;">
+                    <div class="pakasir-subnav" style="margin-bottom: 0;">
+                        <button type="button" class="btn-subnav active" onclick="filterInvoiceByStatus('ALL', this)">Semua Tagihan</button>
+                        <button type="button" class="btn-subnav" onclick="filterInvoiceByStatus('UNPAID', this)">Belum Lunas (Unpaid)</button>
+                        <button type="button" class="btn-subnav" onclick="filterInvoiceByStatus('PAID', this)">Lunas (Paid)</button>
+                        <button type="button" class="btn-subnav" onclick="filterInvoiceByStatus('OVERDUE', this)">Jatuh Tempo (Overdue)</button>
+                        <button type="button" class="btn-subnav" onclick="filterInvoiceByStatus('DRAFT', this)">Draft</button>
+                    </div>
+
+                    <div style="position: relative; max-width: 320px; width: 100%;">
+                        <input type="text" id="search-invoices" class="form-control" placeholder="Cari nomor faktur atau klien..." onkeyup="filterInvoiceTable()" style="background: var(--navy-surface); color: #fff; border-color: var(--navy-surface-border); font-size: 0.88rem;">
+                    </div>
+                </div>
+
+                <div class="tactile-card-dark admin-table-responsive" style="padding: 0;">
+                    <table class="admin-table" id="table-invoices">
+                        <thead>
+                            <tr>
+                                <th>Nomor Faktur</th>
+                                <th>Pelanggan</th>
+                                <th>Tgl Faktur</th>
+                                <th>Jatuh Tempo</th>
+                                <th>Total Tagihan</th>
+                                <th>Sisa Piutang</th>
+                                <th>Status</th>
+                                <th style="text-align: right;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td colspan="8" style="text-align: center; color: var(--slate-muted); padding: 30px;">Memuat data faktur...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- TAB: RECEIPTS (KUITANSI PEMBAYARAN)        -->
+            <!-- ========================================== -->
+            <div id="panel-receipts" class="admin-panel" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                            <h2 style="font-size: 1.8rem; color: #ffffff; margin: 0;">Kuitansi Resmi (Receipts)</h2>
+                            <span class="badge-tag-lime" style="font-size: 0.72rem; padding: 3px 8px; border-radius: 999px;">Tanda Terima Sah</span>
+                        </div>
+                        <p style="color: var(--slate-muted); font-size: 0.95rem; margin: 0;">Daftar pembayaran yang telah terverifikasi lunas dengan kuitansi resmi siap cetak dan kirim.</p>
+                    </div>
+                    <button type="button" class="btn-ghost-white" onclick="loadReceipts()">Refresh Kuitansi</button>
+                </div>
+
+                <div style="margin-bottom: 16px; display: flex; gap: 12px; align-items: center;">
+                    <div style="position: relative; max-width: 350px; width: 100%;">
+                        <input type="text" id="search-receipts" class="form-control" placeholder="Cari kuitansi, nama klien, atau referensi..." onkeyup="filterReceiptTable()" style="background: var(--navy-surface); color: #fff; border-color: var(--navy-surface-border); font-size: 0.88rem;">
+                    </div>
+                    <span id="receipts-count-badge" class="badge-tag-lime" style="font-size: 0.8rem;">0 Kuitansi Lunas</span>
+                </div>
+
+                <div class="tactile-card-dark admin-table-responsive" style="padding: 0;">
+                    <table class="admin-table" id="table-receipts">
+                        <thead>
+                            <tr>
+                                <th>Nomor Kuitansi</th>
+                                <th>Diterima Dari</th>
+                                <th>Jumlah Dibayar</th>
+                                <th>Metode Bayar</th>
+                                <th>Waktu Transaksi</th>
+                                <th>Status</th>
+                                <th style="text-align: right;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td colspan="7" style="text-align: center; color: var(--slate-muted); padding: 30px;">Memuat data kuitansi...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- TAB: SETTINGS INVOICE & GMAIL SMTP         -->
+            <!-- ========================================== -->
+            <div id="panel-invoice-settings" class="admin-panel" style="display: none;">
+                <div style="margin-bottom: 24px;">
+                    <h2 style="font-size: 1.8rem; color: #ffffff; margin-bottom: 6px;">Pengaturan Invoice &amp; Gmail SMTP</h2>
+                    <p style="color: var(--slate-muted); font-size: 0.95rem;">Atur identitas resmi agensi, rekening transfer bank, nomor prefix tagihan, dan integrasi pengiriman email Gmail.</p>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                    
+                    <!-- Kartu Kiri: Identitas Bisnis & Rekening Bank -->
+                    <div class="tactile-card-dark">
+                        <h3 style="color: #ffffff; font-size: 1.2rem; margin-top: 0; margin-bottom: 16px; border-bottom: 1px solid var(--navy-surface-border); padding-bottom: 10px;">
+                            Identitas Bisnis &amp; Rekening Bank
+                        </h3>
+
+                        <form id="form-invoice-settings" onsubmit="saveInvoiceSettings(event)">
+                            <div class="form-group">
+                                <label class="form-label">Nama Bisnis / Agensi *</label>
+                                <input type="text" name="businessName" class="form-control" required style="background: var(--navy-surface); color: #fff; border-color: var(--navy-surface-border);">
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                                <div class="form-group">
+                                    <label class="form-label">NPWP Perusahaan</label>
+                                    <input type="text" name="npwp" class="form-control" style="background: var(--navy-surface); color: #fff; border-color: var(--navy-surface-border);">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Prefix Nomor Invoice</label>
+                                    <input type="text" name="invoicePrefix" class="form-control" placeholder="DENTSWEB" required style="background: var(--navy-surface); color: #fff; border-color: var(--navy-surface-border);">
+                                </div>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                                <div class="form-group">
+                                    <label class="form-label">Email Penagihan Resmi</label>
+                                    <input type="email" name="businessEmail" class="form-control" style="background: var(--navy-surface); color: #fff; border-color: var(--navy-surface-border);">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Telepon / WhatsApp</label>
+                                    <input type="text" name="businessPhone" class="form-control" style="background: var(--navy-surface); color: #fff; border-color: var(--navy-surface-border);">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Alamat Resmi Kantor / Studio</label>
+                                <textarea name="businessAddress" class="form-control" rows="2" style="background: var(--navy-surface); color: #fff; border-color: var(--navy-surface-border);"></textarea>
+                            </div>
+
+                            <h4 style="color: var(--lime-accent); font-size: 0.95rem; margin: 18px 0 10px 0; border-top: 1px solid var(--navy-surface-border); padding-top: 14px;">
+                                Informasi Rekening Bank (Transfer Manual)
+                            </h4>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+                                <div class="form-group">
+                                    <label class="form-label">Nama Bank</label>
+                                    <input type="text" name="bankName" class="form-control" placeholder="BCA" style="background: var(--navy-surface); color: #fff; border-color: var(--navy-surface-border);">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Nomor Rekening</label>
+                                    <input type="text" name="bankAccount" class="form-control" style="background: var(--navy-surface); color: #fff; border-color: var(--navy-surface-border);">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Atas Nama</label>
+                                    <input type="text" name="bankAccountName" class="form-control" style="background: var(--navy-surface); color: #fff; border-color: var(--navy-surface-border);">
+                                </div>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                                <div class="form-group">
+                                    <label class="form-label">Default Diskon (%)</label>
+                                    <input type="number" step="0.1" name="defaultDiscRate" class="form-control" value="0" style="background: var(--navy-surface); color: #fff; border-color: var(--navy-surface-border);">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Default Pajak / PPN (%)</label>
+                                    <input type="number" step="0.1" name="defaultTaxRate" class="form-control" value="0" style="background: var(--navy-surface); color: #fff; border-color: var(--navy-surface-border);">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Catatan Standar Faktur (Terms &amp; Notes)</label>
+                                <textarea name="invoiceNotes" class="form-control" rows="2" style="background: var(--navy-surface); color: #fff; border-color: var(--navy-surface-border); font-size: 0.85rem;"></textarea>
+                            </div>
+
+                            <button type="submit" class="btn-royal" style="width: 100%; padding: 12px; margin-top: 10px;">
+                                Simpan Pengaturan Identitas
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Kartu Kanan: Integrasi Gmail SMTP & Uji Coba -->
+                    <div>
+                        <div class="tactile-card-dark" style="margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--navy-surface-border); padding-bottom: 12px; margin-bottom: 16px;">
+                                <div>
+                                    <h3 style="color: #ffffff; font-size: 1.2rem; margin: 0;">Konfigurasi Gmail SMTP Gratis</h3>
+                                    <p style="color: var(--slate-muted); font-size: 0.82rem; margin: 2px 0 0 0;">Mengirim email tagihan &amp; kuitansi via akun Google Anda</p>
+                                </div>
+                                <span class="badge-tag-lime" style="font-size: 0.75rem;">Nodemailer Active</span>
+                            </div>
+
+                            <form id="form-smtp-settings" onsubmit="saveSmtpSettings(event)">
+                                <div class="form-group">
+                                    <label class="form-label">Email Akun Gmail (Pengirim) *</label>
+                                    <input type="email" name="smtpUser" id="smtp-user" class="form-control" required style="background: var(--navy-surface); color: #fff; border-color: var(--navy-surface-border);">
+                                    <span style="font-size: 0.75rem; color: var(--slate-muted);">Contoh: dentswebbuilder@gmail.com</span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Google App Password (Sandi Aplikasi 16 Karakter) *</label>
+                                    <input type="password" name="smtpPass" id="smtp-pass" class="form-control" placeholder="••••••••••••••••" style="background: var(--navy-surface); color: #fff; border-color: var(--navy-surface-border);">
+                                    <div style="background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 8px; padding: 10px; margin-top: 6px; font-size: 0.78rem; color: #93c5fd; line-height: 1.4;">
+                                        <strong>Cara Mendapatkan Sandi Aplikasi:</strong><br>
+                                        Buka Akun Google &rarr; Keamanan &rarr; Verifikasi 2 Langkah &rarr; <em>Sandi Aplikasi (App Passwords)</em>. Buat nama "DentsWeb" lalu copy 16 huruf yang muncul.
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Nama Pengirim yang Tampil di Email Klien</label>
+                                    <input type="text" name="senderName" id="smtp-sender-name" class="form-control" placeholder="Dents Web Billing &amp; Invoicing" style="background: var(--navy-surface); color: #fff; border-color: var(--navy-surface-border);">
+                                </div>
+
+                                <div class="form-group">
+                                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: #f1f5f9; font-size: 0.88rem;">
+                                        <input type="checkbox" name="autoSendReceipt" id="smtp-auto-receipt" checked style="accent-color: var(--lime-bright);">
+                                        <span>Kirim otomatis Kuitansi Lunas ke email klien saat Webhook Pakasir sukses</span>
+                                    </label>
+                                </div>
+
+                                <button type="submit" class="btn-royal" style="width: 100%; padding: 12px; margin-top: 6px;">
+                                    Simpan Kredensial SMTP
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Kartu Diagnostik Test Email -->
+                        <div class="tactile-card-dark" style="border-color: rgba(59, 130, 246, 0.35);">
+                            <h4 style="color: #60a5fa; font-size: 1rem; margin-top: 0; margin-bottom: 8px;">
+                                ⚡ Uji Coba Diagnostik Pengiriman Email
+                            </h4>
+                            <p style="color: var(--slate-muted); font-size: 0.82rem; margin-bottom: 14px;">
+                                Verifikasi autentikasi Gmail dan kirim email uji coba untuk memastikan pesan masuk ke Inbox.
+                            </p>
+
+                            <div style="display: flex; gap: 10px;">
+                                <input type="email" id="test-email-destination" class="form-control" placeholder="Masukkan email penerima test..." style="background: var(--navy-surface); color: #fff; border-color: var(--navy-surface-border); font-size: 0.85rem;">
+                                <button type="button" class="btn-lime" id="btn-test-smtp" onclick="runSmtpDiagnostic()" style="padding: 10px 18px; font-size: 0.85rem; font-weight: 700; white-space: nowrap;">
+                                    Kirim Uji Coba
+                                </button>
+                            </div>
+                            <div id="smtp-test-result" style="margin-top: 10px; font-size: 0.82rem; display: none;"></div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
@@ -1351,6 +1779,10 @@
                     <span id="modal-pakasir-method" style="color: #ffffff; font-weight: 600;">-</span>
                 </div>
                 <div style="display: flex; justify-content: space-between;">
+                    <span style="color: var(--slate-muted);">Status Bukti Lunas:</span>
+                    <span id="modal-pakasir-completion-status" style="color: #ffffff; font-weight: 600;">-</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
                     <span style="color: var(--slate-muted);">Kadaluarsa Pada:</span>
                     <span id="modal-pakasir-expired" style="color: #facc15;">-</span>
                 </div>
@@ -1358,9 +1790,15 @@
 
             <!-- Action Buttons -->
             <div style="display: flex; gap: 10px; justify-content: space-between; flex-wrap: wrap;">
-                <div style="display: flex; gap: 8px;">
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                     <button type="button" id="modal-pakasir-btn-check" class="btn-royal" onclick="checkCurrentModalStatus()" style="font-size: 0.85rem; padding: 8px 16px; display: inline-flex; align-items: center; gap: 6px;">
                         <span>🔄 Cek Status Realtime</span>
+                    </button>
+                    <button type="button" id="modal-pakasir-btn-email" class="btn-lime" onclick="sendPakasirModalEmail()" style="font-size: 0.85rem; padding: 8px 16px; display: inline-flex; align-items: center; gap: 6px;">
+                        <span>✉️ Kirim Instruksi Bayar</span>
+                    </button>
+                    <button type="button" id="modal-pakasir-btn-completion-email" class="btn-lime" onclick="sendPakasirCompletionModalEmail()" style="display: none; font-size: 0.85rem; padding: 8px 16px; align-items: center; gap: 6px; background: #059669; border-color: #10b981;">
+                        <span>🧾 Kirim Bukti Lunas</span>
                     </button>
                     <button type="button" id="modal-pakasir-btn-cancel" class="btn-action-delete" onclick="cancelCurrentModalTxn()" style="font-size: 0.85rem; padding: 8px 14px;">
                         <span>Batalkan Transaksi</span>
@@ -1391,6 +1829,372 @@
         </div>
     </div>
 
+    <!-- ========================================== -->
+    <!-- MODAL CUSTOMER (TAMBAH / EDIT PELANGGAN)   -->
+    <!-- ========================================== -->
+    <div class="modal-overlay-kalana" id="modal-customer">
+        <div class="modal-card-kalana" style="max-width: 620px;">
+            <div class="modal-header-kalana">
+                <h3 id="modal-title-customer" style="color: #ffffff; font-size: 1.35rem; margin: 0;">Tambah Pelanggan Baru</h3>
+                <button type="button" class="modal-close-btn" onclick="closeModal('modal-customer')" aria-label="Tutup">&times;</button>
+            </div>
+            <form onsubmit="handleCustomerSubmit(event)">
+                <input type="hidden" name="id" id="cus-id">
+                
+                <div class="form-group">
+                    <label class="form-label">Nama Perusahaan / Klien *</label>
+                    <input type="text" class="form-control" name="companyName" id="cus-company" placeholder="Cth: PT Solusi Digital Nusantara" required style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                    <div class="form-group">
+                        <label class="form-label">Nama Kontak Person</label>
+                        <input type="text" class="form-control" name="contactPerson" id="cus-contact" placeholder="Cth: Bapak Budi Santoso" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email Penerima Tagihan *</label>
+                        <input type="email" class="form-control" name="email" id="cus-email" placeholder="budi@perusahaan.com" required style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                    <div class="form-group">
+                        <label class="form-label">No. Telepon / WhatsApp</label>
+                        <input type="text" class="form-control" name="phone" id="cus-phone" placeholder="081234567890" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">NPWP (Opsional)</label>
+                        <input type="text" class="form-control" name="npwp" id="cus-npwp" placeholder="00.000.000.0-000.000" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Alamat Lengkap</label>
+                    <textarea class="form-control" name="address" id="cus-address" rows="2" placeholder="Jalan, Gedung, Nomor..." style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);"></textarea>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+                    <div class="form-group">
+                        <label class="form-label">Kota</label>
+                        <input type="text" class="form-control" name="city" id="cus-city" placeholder="Jakarta Selatan" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Provinsi</label>
+                        <input type="text" class="form-control" name="province" id="cus-province" placeholder="DKI Jakarta" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Kode Pos</label>
+                        <input type="text" class="form-control" name="postalCode" id="cus-postal" placeholder="12345" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Catatan Tambahan Pelanggan</label>
+                    <textarea class="form-control" name="notes" id="cus-notes" rows="2" placeholder="Catatan internal..." style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border); font-size: 0.85rem;"></textarea>
+                </div>
+
+                <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px;">
+                    <button type="button" class="btn-ghost-white" onclick="closeModal('modal-customer')">Batal</button>
+                    <button type="submit" class="btn-royal">Simpan Pelanggan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL INVOICE (BUAT / EDIT FAKTUR)         -->
+    <!-- ========================================== -->
+    <div class="modal-overlay-kalana" id="modal-invoice">
+        <div class="modal-card-kalana" style="max-width: 820px;">
+            <div class="modal-header-kalana">
+                <h3 id="modal-title-invoice" style="color: #ffffff; font-size: 1.35rem; margin: 0;">Buat Faktur &amp; Tagihan Baru</h3>
+                <button type="button" class="modal-close-btn" onclick="closeModal('modal-invoice')" aria-label="Tutup">&times;</button>
+            </div>
+            <form onsubmit="handleInvoiceSubmit(event)">
+                <input type="hidden" name="id" id="inv-form-id">
+                
+                <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1.2fr; gap: 14px; margin-bottom: 16px;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label class="form-label">Pilih Pelanggan (Customer) *</label>
+                        <select class="form-control" name="customerId" id="inv-form-customer" required style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                            <option value="">Pilih Klien Terdaftar...</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label class="form-label">Tanggal Faktur *</label>
+                        <input type="date" class="form-control" name="invoiceDate" id="inv-form-date" required style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label class="form-label">Jatuh Tempo (Due Date) *</label>
+                        <input type="date" class="form-control" name="dueDate" id="inv-form-duedate" required style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border);">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label class="form-label">Status Tagihan *</label>
+                        <select class="form-control" name="status" id="inv-form-status" style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border); font-weight: 700;">
+                            <option value="UNPAID">BELUM LUNAS (UNPAID)</option>
+                            <option value="PAID">✓ LUNAS (PAID)</option>
+                            <option value="OVERDUE">LEWAT JATUH TEMPO (OVERDUE)</option>
+                            <option value="DRAFT">DRAFT</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Line Items Table Repeater -->
+                <div style="margin: 20px 0;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <label class="form-label" style="margin: 0; font-size: 0.95rem; font-weight: 700;">Rincian Item / Layanan Tagihan *</label>
+                        <button type="button" class="btn-ghost-white" onclick="addInvoiceItemRow()" style="font-size: 0.78rem; padding: 5px 12px; color: var(--lime-bright); border-color: rgba(190, 242, 100, 0.3);">
+                            + Tambah Baris Layanan
+                        </button>
+                    </div>
+
+                    <div style="background: #05081c; border: 1px solid var(--navy-surface-border); border-radius: 10px; padding: 12px; overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;" id="table-invoice-items-form">
+                            <thead>
+                                <tr style="color: var(--slate-muted); text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.5px; border-bottom: 1px solid var(--navy-surface-border);">
+                                    <th style="padding: 8px; text-align: left;">Deskripsi Layanan / Item</th>
+                                    <th style="padding: 8px; text-align: left; width: 140px;">Periode (Opsional)</th>
+                                    <th style="padding: 8px; text-align: center; width: 70px;">Qty</th>
+                                    <th style="padding: 8px; text-align: right; width: 140px;">Harga Satuan (Rp)</th>
+                                    <th style="padding: 8px; text-align: right; width: 140px;">Total (Rp)</th>
+                                    <th style="padding: 8px; text-align: center; width: 40px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="invoice-items-tbody">
+                                <!-- Dynamic rows injected here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Calculation Summary & Settings -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px;">
+                    <div>
+                        <div class="form-group">
+                            <label class="form-label">Catatan Tambahan untuk Klien</label>
+                            <textarea class="form-control" name="notes" id="inv-form-notes" rows="3" placeholder="Catatan pembayaran atau petunjuk garansi..." style="background: var(--navy-surface); color: #ffffff; border-color: var(--navy-surface-border); font-size: 0.82rem;"></textarea>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: #f1f5f9; font-size: 0.85rem;">
+                                <input type="checkbox" name="auto_send_email" id="inv-form-autosend" checked style="accent-color: var(--lime-bright);">
+                                <span>Kirim email tagihan Glassmorphism otomatis ke Gmail klien saat disimpan</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--navy-surface-border); border-radius: 10px; padding: 16px;">
+                        <table style="width: 100%; font-size: 0.85rem; color: #cbd5e1;">
+                            <tr>
+                                <td style="padding: 4px 0; color: var(--slate-muted);">Subtotal:</td>
+                                <td style="padding: 4px 0; text-align: right; font-weight: 700; color: #fff;" id="inv-calc-subtotal">Rp 0</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 4px 0; color: var(--slate-muted);">Diskon Global (%):</td>
+                                <td style="padding: 4px 0; text-align: right;">
+                                    <input type="number" step="0.1" min="0" max="100" name="globalDiscountRate" id="inv-form-disc" value="0" oninput="calcInvoiceTotals()" style="width: 70px; text-align: right; background: var(--navy-surface); color: #fff; border: 1px solid var(--navy-surface-border); border-radius: 6px; padding: 3px 6px; font-size: 0.82rem;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 4px 0; color: var(--slate-muted);">Pajak / PPN (%):</td>
+                                <td style="padding: 4px 0; text-align: right;">
+                                    <input type="number" step="0.1" min="0" max="100" name="globalTaxRate" id="inv-form-tax" value="0" oninput="calcInvoiceTotals()" style="width: 70px; text-align: right; background: var(--navy-surface); color: #fff; border: 1px solid var(--navy-surface-border); border-radius: 6px; padding: 3px 6px; font-size: 0.82rem;">
+                                </td>
+                            </tr>
+                            <tr style="border-top: 1px solid var(--navy-surface-border);">
+                                <td style="padding: 10px 0 4px 0; font-weight: 800; color: #fff; font-size: 0.95rem;">TOTAL TAGIHAN:</td>
+                                <td style="padding: 10px 0 4px 0; text-align: right; font-weight: 900; font-size: 1.15rem; color: var(--lime-bright);" id="inv-calc-total">Rp 0</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px;">
+                    <button type="button" class="btn-ghost-white" onclick="closeModal('modal-invoice')">Batal</button>
+                    <button type="submit" class="btn-royal" id="btn-save-invoice">Simpan &amp; Proses Tagihan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL DETAIL INVOICE (PREVIEW & AKSI)      -->
+    <!-- ========================================== -->
+    <div class="modal-overlay-kalana" id="modal-invoice-detail">
+        <div class="modal-card-kalana" style="max-width: 740px; padding: 26px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; border-bottom: 1px solid var(--navy-surface-border); padding-bottom: 16px;">
+                <div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <h3 id="inv-detail-number" style="color: #ffffff; margin: 0; font-size: 1.35rem; font-weight: 800;">-</h3>
+                        <span id="inv-detail-status-badge" class="badge-tag-royal">-</span>
+                    </div>
+                    <p id="inv-detail-customer-name" style="color: var(--slate-muted); font-size: 0.9rem; margin: 4px 0 0 0;">-</p>
+                </div>
+                <button type="button" class="btn-close-modal" onclick="closeModal('modal-invoice-detail')" style="background: none; border: none; color: var(--slate-muted); font-size: 1.6rem; cursor: pointer; line-height: 1;" aria-label="Tutup">&times;</button>
+            </div>
+
+            <!-- Detail Grid Info -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; font-size: 0.85rem;">
+                <div style="background: #05081c; border: 1px solid var(--navy-surface-border); border-radius: 10px; padding: 14px;">
+                    <div style="font-weight: 700; color: #fff; margin-bottom: 8px;">Informasi Klien</div>
+                    <div id="inv-detail-customer-box" style="color: #cbd5e1; line-height: 1.5;">-</div>
+                </div>
+                <div style="background: #05081c; border: 1px solid var(--navy-surface-border); border-radius: 10px; padding: 14px;">
+                    <div style="font-weight: 700; color: #fff; margin-bottom: 8px;">Detail Finansial</div>
+                    <table style="width: 100%; color: #cbd5e1;" id="inv-detail-financial-table">
+                        <tr><td style="color: var(--slate-muted);">Tgl Terbit:</td><td style="text-align: right;" id="inv-detail-date">-</td></tr>
+                        <tr><td style="color: var(--slate-muted);">Jatuh Tempo:</td><td style="text-align: right; color: #f87171;" id="inv-detail-duedate">-</td></tr>
+                        <tr><td style="color: var(--slate-muted);">Total Tagihan:</td><td style="text-align: right; font-weight: 800; color: #fff;" id="inv-detail-total">-</td></tr>
+                        <tr><td style="color: var(--slate-muted);">Sudah Dibayar:</td><td style="text-align: right; font-weight: 700; color: #4ade80;" id="inv-detail-paid">-</td></tr>
+                        <tr style="border-top: 1px solid var(--navy-surface-border);"><td style="padding-top: 4px; font-weight: 800; color: #facc15;">Sisa Tagihan:</td><td style="padding-top: 4px; text-align: right; font-weight: 800; color: #facc15;" id="inv-detail-balance">-</td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Items Table Preview -->
+            <div style="background: #05081c; border: 1px solid var(--navy-surface-border); border-radius: 10px; padding: 14px; margin-bottom: 20px;">
+                <div style="font-weight: 700; color: #fff; margin-bottom: 10px; font-size: 0.88rem;">Rincian Layanan Tagihan</div>
+                <div class="admin-table-responsive" style="max-height: 180px; overflow-y: auto;">
+                    <table style="width: 100%; font-size: 0.82rem; border-collapse: collapse;">
+                        <thead>
+                            <tr style="color: var(--slate-muted); border-bottom: 1px solid var(--navy-surface-border); text-align: left;">
+                                <th style="padding: 6px;">Deskripsi</th>
+                                <th style="padding: 6px; text-align: center;">Qty</th>
+                                <th style="padding: 6px; text-align: right;">Harga</th>
+                                <th style="padding: 6px; text-align: right;">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inv-detail-items-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Action Buttons Toolbar -->
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; border-top: 1px solid var(--navy-surface-border); padding-top: 16px;">
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <button type="button" class="btn-royal" id="btn-action-send-email" onclick="sendCurrentInvoiceEmail()" style="font-size: 0.82rem; padding: 8px 14px; display: inline-flex; align-items: center; gap: 6px;">
+                        <span>✉️ Kirim ke Gmail Klien</span>
+                    </button>
+                    <button type="button" class="btn-lime" id="btn-action-quick-paid" onclick="quickMarkPaid(window.currentSelectedInvoice?.id)" style="font-size: 0.82rem; padding: 8px 14px; display: inline-flex; align-items: center; gap: 6px;">
+                        <span>✓ Tandai Lunas (Mark as Paid)</span>
+                    </button>
+                    <button type="button" class="btn-ghost-white" id="btn-action-record-payment" onclick="openPaymentFromCurrentInvoice()" style="font-size: 0.82rem; padding: 8px 14px; display: inline-flex; align-items: center; gap: 6px;">
+                        <span>💳 Catat Pembayaran</span>
+                    </button>
+                    <button type="button" class="btn-ghost-white" id="btn-action-issue" onclick="issueCurrentInvoice()" style="font-size: 0.82rem; padding: 8px 14px; display: none;">
+                        <span>📢 Terbitkan (UNPAID)</span>
+                    </button>
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <a id="btn-action-view-public" href="#" target="_blank" class="btn-ghost-white" style="font-size: 0.82rem; padding: 8px 14px; text-decoration: none;">
+                        <span>📄 Tautan Publik &nearr;</span>
+                    </a>
+                    <a id="btn-action-print" href="#" target="_blank" class="btn-ghost-white" style="font-size: 0.82rem; padding: 8px 14px; text-decoration: none;">
+                        <span>🖨️ Cetak PDF</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL PAYMENT (CATAT PEMBAYARAN MANUAL)    -->
+    <!-- ========================================== -->
+    <div class="modal-overlay-kalana" id="modal-payment">
+        <div class="modal-card-kalana" style="max-width: 480px; padding: 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--navy-surface-border); padding-bottom: 12px;">
+                <div>
+                    <h3 style="color: #ffffff; margin: 0; font-size: 1.2rem;">Catat Pembayaran Masuk</h3>
+                    <p id="pay-modal-invoice-num" style="color: var(--slate-muted); font-size: 0.82rem; margin: 2px 0 0 0;">-</p>
+                </div>
+                <button type="button" class="btn-close-modal" onclick="closeModal('modal-payment')" style="background: none; border: none; color: var(--slate-muted); font-size: 1.6rem; cursor: pointer; line-height: 1;" aria-label="Tutup">&times;</button>
+            </div>
+
+            <form onsubmit="handlePaymentSubmit(event)">
+                <input type="hidden" name="invoiceId" id="pay-invoice-id">
+
+                <div class="form-group">
+                    <label class="form-label">Nominal Pembayaran (Rp) *</label>
+                    <input type="number" name="amount" id="pay-amount" class="form-control" required style="background: var(--navy-surface); color: #fff; border-color: var(--navy-surface-border); font-size: 1.1rem; font-weight: 700; color: var(--lime-bright);">
+                    <div style="font-size: 0.75rem; color: var(--slate-muted); margin-top: 4px;" id="pay-balance-hint">Sisa tagihan: Rp 0</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Metode Pembayaran *</label>
+                    <select name="method" id="pay-method" class="form-control" required style="background: var(--navy-surface); color: #fff; border-color: var(--navy-surface-border);">
+                        <option value="Transfer Bank BCA">Transfer Bank BCA</option>
+                        <option value="Transfer Bank Mandiri">Transfer Bank Mandiri</option>
+                        <option value="Transfer Bank BNI">Transfer Bank BNI</option>
+                        <option value="Transfer Bank BRI">Transfer Bank BRI</option>
+                        <option value="QRIS Pakasir">QRIS Pakasir</option>
+                        <option value="Tunai / Cash">Tunai / Cash</option>
+                        <option value="Lainnya">Lainnya</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Nomor Referensi / ID Transaksi</label>
+                    <input type="text" name="reference" id="pay-ref" class="form-control" placeholder="Contoh: REF-BCA-98213" style="background: var(--navy-surface); color: #fff; border-color: var(--navy-surface-border);">
+                </div>
+
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: #f1f5f9; font-size: 0.85rem;">
+                        <input type="checkbox" name="send_receipt" id="pay-send-receipt" checked style="accent-color: var(--lime-bright);">
+                        <span>Kirim email Kuitansi Resmi Lunas otomatis ke Gmail klien</span>
+                    </label>
+                </div>
+
+                <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+                    <button type="button" class="btn-ghost-white" onclick="closeModal('modal-payment')">Batal</button>
+                    <button type="submit" class="btn-lime">Simpan Pembayaran</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL RECEIPT DETAIL (KUITANSI RESMI)      -->
+    <!-- ========================================== -->
+    <div class="modal-overlay-kalana" id="modal-receipt-detail">
+        <div class="modal-card-kalana" style="max-width: 650px; padding: 26px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; border-bottom: 1px solid var(--navy-surface-border); padding-bottom: 16px;">
+                <div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <h3 id="receipt-detail-number" style="color: #ffffff; margin: 0; font-size: 1.35rem; font-weight: 800;">-</h3>
+                        <span class="badge-tag-lime">✓ LUNAS</span>
+                    </div>
+                    <p id="receipt-detail-customer-name" style="color: var(--slate-muted); font-size: 0.9rem; margin: 4px 0 0 0;">-</p>
+                </div>
+                <button type="button" class="btn-close-modal" onclick="closeModal('modal-receipt-detail')" style="background: none; border: none; color: var(--slate-muted); font-size: 1.6rem; cursor: pointer; line-height: 1;" aria-label="Tutup">&times;</button>
+            </div>
+
+            <div style="background: #05081c; border: 1px solid var(--navy-surface-border); border-radius: 12px; padding: 18px; margin-bottom: 20px;">
+                <table style="width: 100%; font-size: 0.88rem; color: #cbd5e1; border-collapse: collapse;">
+                    <tr><td style="padding: 6px 0; color: var(--slate-muted);">Diterima Dari:</td><td style="padding: 6px 0; text-align: right; font-weight: 700; color: #fff;" id="receipt-d-from">-</td></tr>
+                    <tr><td style="padding: 6px 0; color: var(--slate-muted);">Jumlah Dibayar:</td><td style="padding: 6px 0; text-align: right; font-weight: 900; font-size: 1.15rem; color: var(--lime-bright);" id="receipt-d-amount">-</td></tr>
+                    <tr><td style="padding: 6px 0; color: var(--slate-muted);">Metode Pembayaran:</td><td style="padding: 6px 0; text-align: right;" id="receipt-d-method">-</td></tr>
+                    <tr><td style="padding: 6px 0; color: var(--slate-muted);">Nomor Referensi:</td><td style="padding: 6px 0; text-align: right; font-family: monospace; color: #38bdf8;" id="receipt-d-ref">-</td></tr>
+                    <tr><td style="padding: 6px 0; color: var(--slate-muted);">Tanggal Pembayaran:</td><td style="padding: 6px 0; text-align: right;" id="receipt-d-date">-</td></tr>
+                </table>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                <button type="button" class="btn-royal" onclick="sendCurrentReceiptEmail()" style="font-size: 0.85rem; padding: 8px 16px; display: inline-flex; align-items: center; gap: 6px;">
+                    <span>✉️ Kirim Kuitansi ke Email Klien</span>
+                </button>
+                <div style="display: flex; gap: 8px;">
+                    <a id="btn-receipt-view-public" href="#" target="_blank" class="btn-ghost-white" style="font-size: 0.85rem; padding: 8px 14px; text-decoration: none;">
+                        <span>📄 Halaman Kuitansi &nearr;</span>
+                    </a>
+                    <a id="btn-receipt-print" href="#" target="_blank" class="btn-ghost-white" style="font-size: 0.85rem; padding: 8px 14px; text-decoration: none;">
+                        <span>🖨️ Cetak Kuitansi</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Quick Create Modal (+ Buat - Sesuai Gambar 1 & 2) -->
     <div class="modal-overlay-kalana" id="modal-quick-create">
         <div class="modal-card-kalana" style="max-width: 560px; padding: 28px;">
@@ -1408,6 +2212,22 @@
             </div>
 
             <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;">
+                <button type="button" onclick="quickCreateTarget('invoice')" style="background: var(--navy-surface); border: 1px solid var(--navy-surface-border); border-radius: 12px; padding: 16px; text-align: left; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--royal-blue)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--navy-surface-border)'; this.style.transform='none'">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                        <span style="font-size: 1.3rem;">🧾</span>
+                        <strong style="color: #fff; font-size: 0.95rem;">Faktur / Invoice</strong>
+                    </div>
+                    <p style="color: var(--slate-muted); font-size: 0.8rem; margin: 0; line-height: 1.4;">Buat tagihan baru &amp; kirim otomatis ke email klien.</p>
+                </button>
+
+                <button type="button" onclick="quickCreateTarget('customer')" style="background: var(--navy-surface); border: 1px solid var(--navy-surface-border); border-radius: 12px; padding: 16px; text-align: left; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--royal-blue)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--navy-surface-border)'; this.style.transform='none'">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                        <span style="font-size: 1.3rem;">👤</span>
+                        <strong style="color: #fff; font-size: 0.95rem;">Pelanggan Baru</strong>
+                    </div>
+                    <p style="color: var(--slate-muted); font-size: 0.8rem; margin: 0; line-height: 1.4;">Tambah profil klien, kontak person &amp; data NPWP.</p>
+                </button>
+
                 <button type="button" onclick="quickCreateTarget('portfolio')" style="background: var(--navy-surface); border: 1px solid var(--navy-surface-border); border-radius: 12px; padding: 16px; text-align: left; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--royal-blue)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--navy-surface-border)'; this.style.transform='none'">
                     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
                         <span style="font-size: 1.3rem;">🚀</span>
@@ -1472,7 +2292,11 @@
             pricing: [],
             testimonials: [],
             faq: [],
-            livechat: []
+            livechat: [],
+            customers: [],
+            invoices: [],
+            receipts: [],
+            invoiceSettings: {}
         };
 
         // UI Helpers
@@ -1734,6 +2558,14 @@
         function openModal(id) { 
             const m = document.getElementById(id);
             if (!m) return;
+
+            // modal-invoice memiliki lifecycle dan fungsi pemuatan sendiri (openInvoiceModal)
+            if (id === 'modal-invoice') {
+                m.classList.add('active');
+                m.style.display = 'flex';
+                return;
+            }
+
             const form = m.querySelector('form');
             if (form) {
                 form.reset();
@@ -1950,7 +2782,13 @@
 
         function quickCreateTarget(type) {
             closeModal('modal-quick-create');
-            if (type === 'portfolio') {
+            if (type === 'invoice') {
+                switchTab('invoices');
+                setTimeout(() => openInvoiceModal(), 120);
+            } else if (type === 'customer') {
+                switchTab('customers');
+                setTimeout(() => openCustomerModal(), 120);
+            } else if (type === 'portfolio') {
                 switchTab('portfolio');
                 setTimeout(() => openModal('modal-portfolio'), 120);
             } else if (type === 'article') {
@@ -2198,6 +3036,29 @@
 
             if (tab === 'pakasir') {
                 await loadPakasirData();
+            }
+
+            if (tab === 'overview-invoice') {
+                await loadInvoiceAnalytics();
+            }
+
+            if (tab === 'customers') {
+                await loadCustomers();
+            }
+
+            if (tab === 'invoices') {
+                if (!window.cacheData.customers || !window.cacheData.customers.length) {
+                    loadCustomers();
+                }
+                await loadInvoices();
+            }
+
+            if (tab === 'receipts') {
+                await loadReceipts();
+            }
+
+            if (tab === 'invoice-settings') {
+                await loadInvoiceSettings();
             }
         }
 
@@ -3011,7 +3872,9 @@
                         </td>
                         <td style="font-size: 0.82rem; color: var(--slate-muted); max-width: 180px;">
                             ${t.customer_name ? `<div style="color:#ffffff; font-weight:600;">${escapeHtml(t.customer_name)}</div>` : ''}
-                            ${t.notes ? `<div style="font-size:0.75rem; line-height:1.3;">${escapeHtml(t.notes)}</div>` : '-'}
+                            ${t.customer_email ? `<div style="font-size:0.72rem; color:#38bdf8; word-break:break-all;">${escapeHtml(t.customer_email)}</div>` : ''}
+                            ${t.notes ? `<div style="font-size:0.75rem; line-height:1.3; margin-top:2px;">${escapeHtml(t.notes)}</div>` : (!t.customer_name && !t.customer_email ? '-' : '')}
+                            ${t.completionEmailSent ? `<div style="font-size:0.7rem; color:#4ade80; margin-top:3px; display:inline-flex; align-items:center; gap:3px;">🧾 Bukti Lunas Terkirim</div>` : (t.emailSent ? `<div style="font-size:0.7rem; color:#38bdf8; margin-top:3px; display:inline-flex; align-items:center; gap:3px;">✉️ Terkirim ke Email</div>` : '')}
                         </td>
                         <td style="text-align: right; white-space: nowrap;">
                             <button type="button" class="btn-royal" onclick="openPakasirModalById('${t.id}')" style="padding: 5px 10px; font-size: 0.8rem; margin-right: 4px;">Lihat / Bayar</button>
@@ -3041,6 +3904,7 @@
                 return (t.order_id && t.order_id.toLowerCase().includes(q)) ||
                        (t.txn_id && t.txn_id.toLowerCase().includes(q)) ||
                        (t.customer_name && t.customer_name.toLowerCase().includes(q)) ||
+                       (t.customer_email && t.customer_email.toLowerCase().includes(q)) ||
                        (t.method && t.method.toLowerCase().includes(q));
             });
             renderPakasirHistory(filtered);
@@ -3060,6 +3924,7 @@
             const customer_name = document.getElementById('pakasir-customer-name').value.trim();
             const customer_email = document.getElementById('pakasir-customer-email').value.trim();
             const notes = document.getElementById('pakasir-notes').value.trim();
+            const auto_send_email = document.getElementById('pakasir-auto-send-email')?.checked !== false;
 
             try {
                 const res = await api('/api/admin/pakasir/transactions', 'POST', {
@@ -3068,13 +3933,16 @@
                     method,
                     customer_name,
                     customer_email,
-                    notes
+                    notes,
+                    auto_send_email
                 });
 
                 if (res && res.success) {
-                    showToast('Transaksi Pakasir berhasil dibuat!', 'success');
+                    showToast(res.message || 'Transaksi Pakasir berhasil dibuat!', 'success');
                     // Reset form & generate new Order ID
                     document.getElementById('form-create-pakasir').reset();
+                    const chk = document.getElementById('pakasir-auto-send-email');
+                    if (chk) chk.checked = true;
                     generateRandomOrderId();
 
                     // Open transaction detail modal
@@ -3120,6 +3988,28 @@
             document.getElementById('modal-pakasir-method').textContent = txn.method_name || txn.method || '-';
             document.getElementById('modal-pakasir-expired').textContent = txn.expired_at ? new Date(txn.expired_at).toLocaleString('id-ID') : '1x24 Jam';
 
+            // Completion Status & Email Button visibility
+            const complStatusEl = document.getElementById('modal-pakasir-completion-status');
+            if (complStatusEl) {
+                if (txn.completionEmailSent) {
+                    complStatusEl.innerHTML = `<span style="color: var(--lime-bright); font-size: 0.8rem;">✅ Terkirim (${escapeHtml(txn.customer_email || '-')})</span>`;
+                } else if (st === 'completed') {
+                    complStatusEl.innerHTML = `<span style="color: #facc15; font-size: 0.8rem;">⏳ Belum Terkirim</span>`;
+                } else {
+                    complStatusEl.textContent = '-';
+                }
+            }
+
+            const completionBtn = document.getElementById('modal-pakasir-btn-completion-email');
+            const paymentEmailBtn = document.getElementById('modal-pakasir-btn-email');
+            if (st === 'completed') {
+                if (completionBtn) completionBtn.style.display = 'inline-flex';
+                if (paymentEmailBtn) paymentEmailBtn.style.display = 'none';
+            } else {
+                if (completionBtn) completionBtn.style.display = 'none';
+                if (paymentEmailBtn) paymentEmailBtn.style.display = 'inline-flex';
+            }
+
             // Cancel Button visibility
             const cancelBtn = document.getElementById('modal-pakasir-btn-cancel');
             if (cancelBtn) {
@@ -3133,18 +4023,48 @@
             if (txn.method === 'qris') {
                 const qrString = txn.qr_string || '';
                 const qrImgUrl = qrString ? `https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encodeURIComponent(qrString)}` : '';
-                bodyEl.innerHTML = `
-                    <div style="text-align: center; background: #ffffff; padding: 20px; border-radius: 14px; border: 2px solid var(--navy-surface-border); max-width: 320px; margin: 0 auto 16px auto;">
-                        <img src="/public/img/axalogo.png" alt="Dents Logo" style="height: 24px; margin-bottom: 8px;">
-                        <div style="font-weight: 800; font-size: 1.1rem; color: #05081c; margin-bottom: 12px; letter-spacing: -0.5px;">QRIS STANDAR PEMBAYARAN</div>
-                        ${qrImgUrl ? `<img src="${qrImgUrl}" alt="QRIS QR Code" style="width: 220px; height: 220px; display: block; margin: 0 auto 10px auto; border-radius: 8px;">` : '<div style="padding: 40px; color:#64748b;">QR Code tidak tersedia</div>'}
-                        <div style="font-size: 0.75rem; color: #475569; font-weight: 600;">Scan dengan GoPay, OVO, Dana, ShopeePay, BCA, Mandiri, BRI, dll.</div>
-                    </div>
-                    <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
-                        ${qrString ? `<button type="button" class="btn-ghost-white" onclick="copyText('${escapeHtml(qrString)}', 'String QRIS berhasil disalin!')" style="font-size: 0.8rem; padding: 6px 12px;">📋 Salin String QR</button>` : ''}
-                        ${qrImgUrl ? `<a href="${qrImgUrl}" target="_blank" download="QRIS_${txn.order_id}.png" class="btn-ghost-white" style="font-size: 0.8rem; padding: 6px 12px; text-decoration: none;">📥 Unduh QR Image</a>` : ''}
-                    </div>
-                `;
+                const payLink = txn.payment_link || (txn.txn_id ? `https://app.pakasir.com/pay-v2/${txn.txn_id}` : '');
+                const isCompleted = (st === 'completed' || st === 'success' || st === 'paid');
+
+                if (isCompleted) {
+                    bodyEl.innerHTML = `
+                        <div style="text-align: center; background: #ffffff; padding: 26px 20px; border-radius: 16px; border: 2px solid #86efac; max-width: 320px; margin: 0 auto 16px auto; box-shadow: 0 8px 24px rgba(16, 185, 129, 0.15);">
+                            <img src="/public/img/axalogo.png" alt="Dents Logo" style="height: 26px; margin-bottom: 14px; object-fit: contain;">
+                            <div style="width: 66px; height: 66px; line-height: 66px; border-radius: 50%; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #ffffff; font-size: 34px; margin: 0 auto 12px auto; box-shadow: 0 8px 18px rgba(16, 185, 129, 0.35);">
+                                ✓
+                            </div>
+                            <div style="font-weight: 900; font-size: 1.3rem; color: #065f46; margin-bottom: 4px; letter-spacing: -0.5px;">
+                                Transaksi Berhasil
+                            </div>
+                            <div style="font-size: 0.8rem; color: #047857; font-weight: 800; background: #dcfce7; border: 1px solid #86efac; border-radius: 999px; padding: 4px 14px; display: inline-block; margin-bottom: 12px;">
+                                Pembayaran QRIS Lunas &amp; Sah
+                            </div>
+                            <div style="font-size: 0.8rem; color: #475569; line-height: 1.4;">
+                                Pembayaran senilai <strong style="color: #05081c;">Rp ${(txn.total_payment || txn.amount || 0).toLocaleString('id-ID')}</strong> telah diverifikasi secara realtime.
+                            </div>
+                            ${txn.completed_at ? `<div style="font-size: 0.72rem; color: #64748b; margin-top: 8px;">Dibayar Pada: ${new Date(txn.completed_at).toLocaleString('id-ID')}</div>` : ''}
+                        </div>
+                        <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+                            ${payLink ? `<a href="${payLink}" target="_blank" rel="noopener noreferrer" class="btn-royal" style="font-size: 0.82rem; padding: 7px 14px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;"><span>🔗 Buka Halaman Pembayaran</span></a>` : ''}
+                            ${qrImgUrl ? `<a href="${qrImgUrl}" target="_blank" download="QRIS_${txn.order_id}.png" class="btn-ghost-white" style="font-size: 0.82rem; padding: 7px 14px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;"><span>📥 Unduh QR Image</span></a>` : ''}
+                            ${qrString ? `<button type="button" class="btn-ghost-white" onclick="copyText('${escapeHtml(qrString)}', 'String QRIS berhasil disalin!')" style="font-size: 0.82rem; padding: 7px 12px;">📋 Salin String QR</button>` : ''}
+                        </div>
+                    `;
+                } else {
+                    bodyEl.innerHTML = `
+                        <div style="text-align: center; background: #ffffff; padding: 20px; border-radius: 14px; border: 2px solid var(--navy-surface-border); max-width: 320px; margin: 0 auto 16px auto;">
+                            <img src="/public/img/axalogo.png" alt="Dents Logo" style="height: 24px; margin-bottom: 8px; object-fit: contain;">
+                            <div style="font-weight: 800; font-size: 1.1rem; color: #05081c; margin-bottom: 12px; letter-spacing: -0.5px;">QRIS STANDAR PEMBAYARAN</div>
+                            ${qrImgUrl ? `<img src="${qrImgUrl}" alt="QRIS QR Code" style="width: 220px; height: 220px; display: block; margin: 0 auto 10px auto; border-radius: 8px;">` : '<div style="padding: 40px; color:#64748b;">QR Code tidak tersedia</div>'}
+                            <div style="font-size: 0.75rem; color: #475569; font-weight: 600;">Scan dengan GoPay, OVO, Dana, ShopeePay, BCA, Mandiri, BRI, dll.</div>
+                        </div>
+                        <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+                            ${payLink ? `<a href="${payLink}" target="_blank" rel="noopener noreferrer" class="btn-royal" style="font-size: 0.82rem; padding: 7px 14px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;"><span>🔗 Buka Halaman Pembayaran</span></a>` : ''}
+                            ${qrImgUrl ? `<a href="${qrImgUrl}" target="_blank" download="QRIS_${txn.order_id}.png" class="btn-ghost-white" style="font-size: 0.82rem; padding: 7px 14px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;"><span>📥 Unduh QR Image</span></a>` : ''}
+                            ${qrString ? `<button type="button" class="btn-ghost-white" onclick="copyText('${escapeHtml(qrString)}', 'String QRIS berhasil disalin!')" style="font-size: 0.82rem; padding: 7px 12px;">📋 Salin String QR</button>` : ''}
+                        </div>
+                    `;
+                }
             } else if (txn.method && txn.method.endsWith('_va')) {
                 const vaNumber = txn.va_number || '-';
                 bodyEl.innerHTML = `
@@ -3234,6 +4154,82 @@
                 // error handled
             } finally {
                 btn.disabled = false;
+            }
+        }
+
+        // Send / Resend Payment Instructions Email from Modal
+        async function sendPakasirModalEmail() {
+            if (!window.currentViewingTxn) return;
+            const txn = window.currentViewingTxn;
+            const defaultEmail = txn.customer_email || '';
+            const targetEmail = prompt('Kirim rincian instruksi bayar (QRIS / VA / Link) ke Gmail klien:', defaultEmail);
+            if (!targetEmail || !targetEmail.trim()) return;
+
+            const btn = document.getElementById('modal-pakasir-btn-email');
+            const originalText = btn ? btn.innerHTML : '';
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<span>Mengirim email...</span>';
+            }
+
+            try {
+                const res = await api(`/api/admin/pakasir/transactions/${txn.id || txn.order_id}/send-email`, 'POST', {
+                    email: targetEmail.trim()
+                });
+                if (res && res.success) {
+                    showToast(res.message || `Instruksi pembayaran berhasil dikirim ke ${targetEmail}!`, 'success');
+                    txn.customer_email = targetEmail.trim();
+                    txn.emailSent = true;
+                    txn.emailRecipient = targetEmail.trim();
+                    await loadPakasirData();
+                }
+            } catch (err) {
+                // error handled by api()
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = originalText;
+                }
+            }
+        }
+
+        // Send / Resend Payment Completion Proof Email from Modal
+        async function sendPakasirCompletionModalEmail() {
+            if (!window.currentViewingTxn) return;
+            const txn = window.currentViewingTxn;
+            const defaultEmail = txn.customer_email || '';
+            const targetEmail = prompt('Kirim bukti pembayaran resmi (Lunas) ke Gmail klien:', defaultEmail);
+            if (!targetEmail || !targetEmail.trim()) return;
+
+            const btn = document.getElementById('modal-pakasir-btn-completion-email');
+            const originalText = btn ? btn.innerHTML : '';
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<span>Mengirim bukti lunas...</span>';
+            }
+
+            try {
+                const res = await api(`/api/admin/pakasir/transactions/${txn.id || txn.order_id}/send-completion-email`, 'POST', {
+                    email: targetEmail.trim()
+                });
+                if (res && res.success) {
+                    showToast(res.message || `Bukti pembayaran resmi berhasil dikirim ke ${targetEmail}!`, 'success');
+                    txn.customer_email = targetEmail.trim();
+                    txn.completionEmailSent = true;
+                    txn.completionRecipient = targetEmail.trim();
+                    const complStatusEl = document.getElementById('modal-pakasir-completion-status');
+                    if (complStatusEl) {
+                        complStatusEl.innerHTML = `<span style="color: var(--lime-bright); font-size: 0.8rem;">✅ Terkirim (${escapeHtml(targetEmail.trim())})</span>`;
+                    }
+                    await loadPakasirData();
+                }
+            } catch (err) {
+                // error handled by api()
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = originalText;
+                }
             }
         }
 
@@ -3432,6 +4428,1090 @@
             } catch (e) {}
         }
 
+        // ==========================================
+        // INVOICE, CUSTOMER & RECEIPT SUITE
+        // ==========================================
+
+        function formatRupiah(amount) {
+            const num = Number(amount) || 0;
+            return 'Rp ' + Math.round(num).toLocaleString('id-ID');
+        }
+
+        function formatDateIndo(dateStr) {
+            if (!dateStr) return '-';
+            try {
+                const d = new Date(dateStr);
+                if (isNaN(d.getTime())) return dateStr;
+                return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+            } catch (e) {
+                return dateStr;
+            }
+        }
+
+        function getInvoiceStatusBadge(status) {
+            const s = String(status || '').toUpperCase();
+            if (s === 'PAID') return '<span class="badge-tag-lime">✓ LUNAS</span>';
+            if (s === 'UNPAID') return '<span style="background: rgba(234, 179, 8, 0.15); color: #facc15; border: 1px solid rgba(234, 179, 8, 0.3); padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">UNPAID</span>';
+            if (s === 'PARTIALLY_PAID') return '<span style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">SEBAGIAN</span>';
+            if (s === 'OVERDUE') return '<span class="badge-tag-coral">OVERDUE</span>';
+            if (s === 'CANCELLED') return '<span style="background: rgba(148, 163, 184, 0.15); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.3); padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">BATAL</span>';
+            return '<span class="badge-tag-royal">DRAFT</span>';
+        }
+
+        // --- 1. OVERVIEW & ANALYTICS ---
+        let chartRevenueInstance = null;
+        let chartStatusInstance = null;
+
+        async function loadInvoiceAnalytics() {
+            try {
+                const res = await api('/api/admin/invoice/analytics');
+                if (!res || !res.data) return;
+                const { stats, statusCounts, monthlyChart, recentInvoices } = res.data;
+
+                const totalInvEl = document.getElementById('inv-stat-total-invoices');
+                const totalBilledEl = document.getElementById('inv-stat-total-billed');
+                const totalPaidEl = document.getElementById('inv-stat-total-paid');
+                const outstandingEl = document.getElementById('inv-stat-outstanding');
+                const overdueEl = document.getElementById('inv-stat-overdue');
+
+                if (totalInvEl) totalInvEl.textContent = stats.totalInvoices || 0;
+                if (totalBilledEl) totalBilledEl.textContent = formatRupiah(stats.totalBilled);
+                if (totalPaidEl) totalPaidEl.textContent = formatRupiah(stats.totalPaid);
+                if (outstandingEl) outstandingEl.textContent = formatRupiah(stats.totalOutstanding);
+                if (overdueEl) overdueEl.textContent = formatRupiah(stats.totalOverdue);
+
+                renderInvoiceCharts(monthlyChart, statusCounts);
+
+                const tb = document.querySelector('#table-recent-invoices tbody');
+                if (tb) {
+                    if (recentInvoices && recentInvoices.length) {
+                        tb.innerHTML = recentInvoices.map(inv => `
+                            <tr>
+                                <td style="font-weight: 800; color: #ffffff;">${escapeHtml(inv.invoiceNumber)}</td>
+                                <td style="color: #cbd5e1; font-weight: 600;">${escapeHtml(inv.customerName || (inv.customer && inv.customer.companyName) || '-')}</td>
+                                <td style="color: var(--slate-muted); font-size: 0.85rem;">${formatDateIndo(inv.invoiceDate)}</td>
+                                <td style="color: var(--slate-muted); font-size: 0.85rem;">${formatDateIndo(inv.dueDate)}</td>
+                                <td style="font-weight: 800; color: #fff;">${formatRupiah(inv.total)}</td>
+                                <td>${getInvoiceStatusBadge(inv.status)}</td>
+                                <td style="text-align: right; white-space: nowrap;">
+                                    <button type="button" class="btn-ghost-white" style="font-size: 0.78rem; padding: 4px 10px;" onclick="openInvoiceDetail('${inv.id}')">Lihat Detail</button>
+                                </td>
+                            </tr>
+                        `).join('');
+                    } else {
+                        tb.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--slate-muted); padding: 30px;">Belum ada tagihan dibuat.</td></tr>';
+                    }
+                }
+            } catch (e) {
+                console.error('loadInvoiceAnalytics error:', e);
+            }
+        }
+
+        function renderInvoiceCharts(monthlyData, statusCounts) {
+            if (typeof Chart === 'undefined') return;
+
+            const revCanvas = document.getElementById('chart-monthly-revenue');
+            if (revCanvas) {
+                if (chartRevenueInstance) chartRevenueInstance.destroy();
+                const ctx = revCanvas.getContext('2d');
+                chartRevenueInstance = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: monthlyData && monthlyData.labels ? monthlyData.labels : [],
+                        datasets: [
+                            {
+                                label: 'Nilai Tertagih (Billed)',
+                                data: monthlyData && monthlyData.billed ? monthlyData.billed : [],
+                                backgroundColor: 'rgba(56, 189, 248, 0.75)',
+                                borderColor: '#38bdf8',
+                                borderWidth: 1.5,
+                                borderRadius: 6
+                            },
+                            {
+                                label: 'Dana Diterima (Paid)',
+                                data: monthlyData && monthlyData.paid ? monthlyData.paid : [],
+                                backgroundColor: 'rgba(190, 242, 100, 0.75)',
+                                borderColor: '#bef264',
+                                borderWidth: 1.5,
+                                borderRadius: 6
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: { color: '#94a3b8', font: { family: 'Plus Jakarta Sans', size: 12 } }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(c) {
+                                        return c.dataset.label + ': ' + formatRupiah(c.raw);
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: { color: 'rgba(255,255,255,0.05)' },
+                                ticks: { color: '#94a3b8' }
+                            },
+                            y: {
+                                grid: { color: 'rgba(255,255,255,0.05)' },
+                                ticks: {
+                                    color: '#94a3b8',
+                                    callback: function(v) {
+                                        if (v >= 1000000) return 'Rp ' + (v / 1000000).toFixed(1) + 'M';
+                                        if (v >= 1000) return 'Rp ' + (v / 1000).toFixed(0) + 'K';
+                                        return 'Rp ' + v;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            const statusCanvas = document.getElementById('chart-status-pie');
+            if (statusCanvas) {
+                if (chartStatusInstance) chartStatusInstance.destroy();
+                const ctx2 = statusCanvas.getContext('2d');
+                const counts = statusCounts || {};
+                const paidCount = counts.PAID || 0;
+                const unpaidCount = (counts.UNPAID || 0) + (counts.PARTIALLY_PAID || 0);
+                const overdueCount = counts.OVERDUE || 0;
+                const draftCount = counts.DRAFT || 0;
+
+                chartStatusInstance = new Chart(ctx2, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Lunas', 'Belum Lunas', 'Overdue', 'Draft'],
+                        datasets: [{
+                            data: [paidCount, unpaidCount, overdueCount, draftCount],
+                            backgroundColor: [
+                                '#4ade80',
+                                '#facc15',
+                                '#f87171',
+                                '#60a5fa'
+                            ],
+                            borderColor: '#0a0d26',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { color: '#94a3b8', font: { family: 'Plus Jakarta Sans', size: 11 }, padding: 12 }
+                            }
+                        },
+                        cutout: '65%'
+                    }
+                });
+            }
+        }
+
+        // --- 2. CUSTOMERS MANAGEMENT ---
+        async function loadCustomers() {
+            try {
+                const res = await api('/api/admin/customers');
+                window.cacheData.customers = res.data || [];
+                renderCustomerTable(window.cacheData.customers);
+                updateCustomerDropdown();
+            } catch (e) {
+                console.error('loadCustomers error:', e);
+            }
+        }
+
+        function renderCustomerTable(customers) {
+            const badge = document.getElementById('customers-count-badge');
+            if (badge) badge.textContent = `${customers.length} Klien`;
+
+            const tb = document.querySelector('#table-customers tbody');
+            if (!tb) return;
+            if (customers && customers.length) {
+                tb.innerHTML = customers.map(c => `
+                    <tr>
+                        <td>
+                            <div style="font-weight: 700; color: #ffffff;">${escapeHtml(c.companyName || '-')}</div>
+                            <div style="font-size: 0.78rem; color: var(--slate-muted);">${escapeHtml(c.address || '')}</div>
+                        </td>
+                        <td style="color: #cbd5e1;">${escapeHtml(c.contactPerson || '-')}</td>
+                        <td><a href="mailto:${escapeHtml(c.email)}" style="color: #38bdf8; text-decoration: none;">${escapeHtml(c.email)}</a></td>
+                        <td style="color: #cbd5e1;">${escapeHtml(c.phone || '-')}</td>
+                        <td style="color: var(--slate-muted); font-size: 0.85rem;">${escapeHtml(c.city || '')}${c.city && c.province ? ', ' : ''}${escapeHtml(c.province || '')}</td>
+                        <td style="font-family: monospace; font-size: 0.82rem; color: var(--slate-muted);">${escapeHtml(c.npwp || '-')}</td>
+                        <td style="text-align: right; white-space: nowrap;">
+                            <button class="btn-action-edit" onclick="openCustomerModal('${c.id}')">Edit</button>
+                            <button class="btn-action-delete" onclick="deleteCustomer('${c.id}')">Hapus</button>
+                        </td>
+                    </tr>
+                `).join('');
+            } else {
+                tb.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 30px; color: var(--slate-muted);">Belum ada data pelanggan di database. Klik tombol "+ Tambah Pelanggan Baru".</td></tr>';
+            }
+        }
+
+        function filterCustomerTable() {
+            const q = (document.getElementById('search-customers')?.value || '').toLowerCase().trim();
+            if (!q) {
+                renderCustomerTable(window.cacheData.customers || []);
+                return;
+            }
+            const filtered = (window.cacheData.customers || []).filter(c =>
+                (c.companyName && c.companyName.toLowerCase().includes(q)) ||
+                (c.contactPerson && c.contactPerson.toLowerCase().includes(q)) ||
+                (c.email && c.email.toLowerCase().includes(q)) ||
+                (c.phone && c.phone.toLowerCase().includes(q)) ||
+                (c.city && c.city.toLowerCase().includes(q))
+            );
+            renderCustomerTable(filtered);
+        }
+
+        function updateCustomerDropdown() {
+            const sel = document.getElementById('inv-form-customer');
+            if (!sel) return;
+            const currentVal = sel.value;
+            const customers = window.cacheData.customers || [];
+            let opts = '<option value="">Pilih Klien Terdaftar...</option>';
+            customers.forEach(c => {
+                opts += `<option value="${c.id}">${escapeHtml(c.companyName)} (${escapeHtml(c.contactPerson || c.email)})</option>`;
+            });
+            sel.innerHTML = opts;
+            if (currentVal) sel.value = currentVal;
+        }
+
+        function openCustomerModal(id = null) {
+            const title = document.getElementById('modal-title-customer');
+            const form = document.querySelector('#modal-customer form');
+            if (form) form.reset();
+
+            if (id) {
+                const c = (window.cacheData.customers || []).find(x => x.id === id);
+                if (c) {
+                    if (title) title.textContent = 'Edit Data Pelanggan';
+                    document.getElementById('cus-id').value = c.id || '';
+                    document.getElementById('cus-company').value = c.companyName || '';
+                    document.getElementById('cus-contact').value = c.contactPerson || '';
+                    document.getElementById('cus-email').value = c.email || '';
+                    document.getElementById('cus-phone').value = c.phone || '';
+                    document.getElementById('cus-npwp').value = c.npwp || '';
+                    document.getElementById('cus-address').value = c.address || '';
+                    document.getElementById('cus-city').value = c.city || '';
+                    document.getElementById('cus-province').value = c.province || '';
+                    document.getElementById('cus-postal').value = c.postalCode || '';
+                    document.getElementById('cus-notes').value = c.notes || '';
+                }
+            } else {
+                if (title) title.textContent = 'Tambah Pelanggan Baru';
+                document.getElementById('cus-id').value = '';
+            }
+            openModal('modal-customer');
+        }
+
+        async function handleCustomerSubmit(e) {
+            e.preventDefault();
+            const id = document.getElementById('cus-id').value.trim();
+            const payload = {
+                companyName: document.getElementById('cus-company').value.trim(),
+                contactPerson: document.getElementById('cus-contact').value.trim(),
+                email: document.getElementById('cus-email').value.trim(),
+                phone: document.getElementById('cus-phone').value.trim(),
+                npwp: document.getElementById('cus-npwp').value.trim(),
+                address: document.getElementById('cus-address').value.trim(),
+                city: document.getElementById('cus-city').value.trim(),
+                province: document.getElementById('cus-province').value.trim(),
+                postalCode: document.getElementById('cus-postal').value.trim(),
+                notes: document.getElementById('cus-notes').value.trim()
+            };
+
+            try {
+                const method = id ? 'PUT' : 'POST';
+                const url = id ? `/api/admin/customers/${id}` : '/api/admin/customers';
+                await api(url, method, payload);
+                showToast(id ? 'Data pelanggan berhasil diperbarui!' : 'Pelanggan baru berhasil ditambahkan!', 'success');
+                closeModal('modal-customer');
+                await loadCustomers();
+            } catch (e) {}
+        }
+
+        async function deleteCustomer(id) {
+            if (!confirm('Yakin ingin menghapus data pelanggan ini?')) return;
+            try {
+                await api(`/api/admin/customers/${id}`, 'DELETE');
+                showToast('Data pelanggan berhasil dihapus.', 'success');
+                await loadCustomers();
+            } catch (e) {}
+        }
+
+        // --- 3. INVOICES MANAGEMENT ---
+        let currentInvoiceFilterStatus = 'ALL';
+        window.currentSelectedInvoice = null;
+
+        async function loadInvoices() {
+            try {
+                const res = await api('/api/admin/invoices');
+                window.cacheData.invoices = res.data || [];
+                filterInvoiceByStatus(currentInvoiceFilterStatus);
+            } catch (e) {
+                console.error('loadInvoices error:', e);
+            }
+        }
+
+        function filterInvoiceByStatus(status, btnElement = null) {
+            currentInvoiceFilterStatus = status || 'ALL';
+            if (btnElement) {
+                btnElement.parentElement.querySelectorAll('.btn-subnav').forEach(b => b.classList.remove('active'));
+                btnElement.classList.add('active');
+            }
+            filterInvoiceTable();
+        }
+
+        function filterInvoiceTable() {
+            const q = (document.getElementById('search-invoices')?.value || '').toLowerCase().trim();
+            let list = window.cacheData.invoices || [];
+
+            if (currentInvoiceFilterStatus !== 'ALL') {
+                list = list.filter(inv => {
+                    const s = (inv.status || '').toUpperCase();
+                    if (currentInvoiceFilterStatus === 'UNPAID') return s === 'UNPAID' || s === 'PARTIALLY_PAID';
+                    return s === currentInvoiceFilterStatus;
+                });
+            }
+
+            if (q) {
+                list = list.filter(inv =>
+                    (inv.invoiceNumber && inv.invoiceNumber.toLowerCase().includes(q)) ||
+                    (inv.customerName && inv.customerName.toLowerCase().includes(q)) ||
+                    (inv.customer && inv.customer.companyName && inv.customer.companyName.toLowerCase().includes(q))
+                );
+            }
+
+            renderInvoiceTable(list);
+        }
+
+        function renderInvoiceTable(invoices) {
+            const tb = document.querySelector('#table-invoices tbody');
+            if (!tb) return;
+            if (invoices && invoices.length) {
+                tb.innerHTML = invoices.map(inv => {
+                    const customerName = inv.customerName || (inv.customer && inv.customer.companyName) || '-';
+                    const isUnpaid = (inv.status || '').toUpperCase() !== 'PAID';
+                    return `
+                        <tr>
+                            <td style="font-weight: 800; color: #ffffff;">${escapeHtml(inv.invoiceNumber)}</td>
+                            <td style="color: #cbd5e1; font-weight: 600;">${escapeHtml(customerName)}</td>
+                            <td style="color: var(--slate-muted); font-size: 0.85rem;">${formatDateIndo(inv.invoiceDate)}</td>
+                            <td style="color: var(--slate-muted); font-size: 0.85rem;">${formatDateIndo(inv.dueDate)}</td>
+                            <td style="font-weight: 800; color: #fff;">${formatRupiah(inv.total)}</td>
+                            <td style="font-weight: 700; color: ${(inv.balanceDue || 0) > 0 ? '#facc15' : '#4ade80'};">${formatRupiah(inv.balanceDue)}</td>
+                            <td>${getInvoiceStatusBadge(inv.status)}</td>
+                            <td style="text-align: right; white-space: nowrap;">
+                                ${isUnpaid ? `
+                                    <button type="button" class="btn-lime" style="font-size: 0.76rem; padding: 4px 8px; margin-right: 4px;" onclick="quickMarkPaid('${inv.id}')" title="Ubah langsung jadi LUNAS (PAID)">✓ Lunas</button>
+                                ` : ''}
+                                <button type="button" class="btn-royal" style="font-size: 0.78rem; padding: 4px 10px; margin-right: 4px;" onclick="openInvoiceDetail('${inv.id}')">Detail</button>
+                                <button type="button" class="btn-action-edit" onclick="openInvoiceModal('${inv.id}')">Edit</button>
+                                <button type="button" class="btn-action-delete" onclick="deleteInvoice('${inv.id}')">Hapus</button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            } else {
+                tb.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 30px; color: var(--slate-muted);">Tidak ada data tagihan yang sesuai kriteria.</td></tr>';
+            }
+        }
+
+        function addInvoiceItemRow(item = {}) {
+            const tbody = document.getElementById('invoice-items-tbody');
+            if (!tbody) return;
+            const itemDesc = item.description || '';
+            const itemPeriod = item.period || '';
+            const itemQty = item.quantity !== undefined ? item.quantity : 1;
+            const itemPrice = item.unitPrice !== undefined ? item.unitPrice : (item.price !== undefined ? item.price : 0);
+            const tr = document.createElement('tr');
+            tr.className = 'invoice-item-row';
+            tr.innerHTML = `
+                <td style="padding: 6px;">
+                    <input type="text" class="form-control item-desc" placeholder="Contoh: Pembuatan Website Bisnis Elegan" value="${escapeHtml(itemDesc)}" required style="background: var(--navy-surface); color: #fff; border-color: var(--navy-surface-border); font-size: 0.85rem; padding: 6px 10px;">
+                </td>
+                <td style="padding: 6px;">
+                    <input type="text" class="form-control item-period" placeholder="1 Bulan / 1 Tahun" value="${escapeHtml(itemPeriod)}" style="background: var(--navy-surface); color: #fff; border-color: var(--navy-surface-border); font-size: 0.85rem; padding: 6px 10px;">
+                </td>
+                <td style="padding: 6px;">
+                    <input type="number" min="1" step="1" class="form-control item-qty" value="${itemQty}" oninput="calcInvoiceTotals()" style="text-align: center; background: var(--navy-surface); color: #fff; border-color: var(--navy-surface-border); font-size: 0.85rem; padding: 6px 8px;">
+                </td>
+                <td style="padding: 6px;">
+                    <input type="number" min="0" step="1000" class="form-control item-price" placeholder="0" value="${itemPrice}" oninput="calcInvoiceTotals()" style="text-align: right; background: var(--navy-surface); color: #fff; border-color: var(--navy-surface-border); font-size: 0.85rem; padding: 6px 10px;">
+                </td>
+                <td style="padding: 6px; text-align: right; font-weight: 700; color: #fff;" class="item-subtotal">
+                    ${formatRupiah(itemQty * itemPrice)}
+                </td>
+                <td style="padding: 6px; text-align: center;">
+                    <button type="button" onclick="removeInvoiceItemRow(this)" style="background: none; border: none; color: #f87171; font-size: 1.1rem; cursor: pointer; line-height: 1;">&times;</button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+            calcInvoiceTotals();
+        }
+
+        function removeInvoiceItemRow(btn) {
+            const tbody = document.getElementById('invoice-items-tbody');
+            const row = btn.closest('tr');
+            if (tbody.querySelectorAll('tr').length <= 1) {
+                showToast('Minimal harus ada 1 baris item layanan!', 'error');
+                return;
+            }
+            row.remove();
+            calcInvoiceTotals();
+        }
+
+        function calcInvoiceTotals() {
+            const tbody = document.getElementById('invoice-items-tbody');
+            if (!tbody) return;
+            const rows = tbody.querySelectorAll('tr');
+            let subtotal = 0;
+
+            rows.forEach(r => {
+                const qty = parseFloat(r.querySelector('.item-qty')?.value) || 0;
+                const price = parseFloat(r.querySelector('.item-price')?.value) || 0;
+                const itemTot = qty * price;
+                const subtotalEl = r.querySelector('.item-subtotal');
+                if (subtotalEl) subtotalEl.textContent = formatRupiah(itemTot);
+                subtotal += itemTot;
+            });
+
+            const discRate = parseFloat(document.getElementById('inv-form-disc')?.value) || 0;
+            const taxRate = parseFloat(document.getElementById('inv-form-tax')?.value) || 0;
+
+            const discountAmount = subtotal * (discRate / 100);
+            const taxable = subtotal - discountAmount;
+            const taxAmount = taxable * (taxRate / 100);
+            const total = Math.max(0, taxable + taxAmount);
+
+            const subEl = document.getElementById('inv-calc-subtotal');
+            const totEl = document.getElementById('inv-calc-total');
+            if (subEl) subEl.textContent = formatRupiah(subtotal);
+            if (totEl) totEl.textContent = formatRupiah(total);
+        }
+
+        async function openInvoiceModal(id = null) {
+            const m = document.getElementById('modal-invoice');
+            if (!m) return;
+            const form = m.querySelector('form');
+            if (form) form.reset();
+
+            // Pastikan data klien selalu dimuat terlebih dahulu
+            if (!window.cacheData.customers || !window.cacheData.customers.length) {
+                await loadCustomers();
+            }
+            updateCustomerDropdown();
+
+            const title = document.getElementById('modal-title-invoice');
+            const btnSubmit = document.getElementById('btn-save-invoice');
+            const tbody = document.getElementById('invoice-items-tbody');
+            if (tbody) tbody.innerHTML = '';
+
+            const safeDate = (val) => {
+                if (!val) return '';
+                if (typeof val === 'string' && val.length >= 10 && /^\d{4}-\d{2}-\d{2}/.test(val)) {
+                    return val.substring(0, 10);
+                }
+                const d = new Date(val);
+                return isNaN(d.getTime()) ? '' : d.toISOString().substring(0, 10);
+            };
+
+            if (id) {
+                let inv = (window.cacheData.invoices || []).find(x => String(x.id) === String(id));
+                if (!inv) {
+                    try {
+                        const res = await api(`/api/admin/invoices/${id}`);
+                        inv = res.data && (res.data.invoice || res.data);
+                    } catch (e) {}
+                }
+
+                if (inv) {
+                    const invNumber = inv.invoiceNumber || inv.number || id;
+                    if (title) title.textContent = 'Edit Faktur Tagihan #' + invNumber;
+                    if (btnSubmit) btnSubmit.textContent = 'Simpan Perubahan Faktur';
+
+                    const idInput = document.getElementById('inv-form-id');
+                    if (idInput) idInput.value = inv.id || '';
+                    
+                    // Pastikan klien terpilih di dropdown
+                    const cusSelect = document.getElementById('inv-form-customer');
+                    if (cusSelect && inv.customerId) {
+                        const exists = Array.from(cusSelect.options).some(o => o.value === inv.customerId);
+                        if (!exists) {
+                            const opt = document.createElement('option');
+                            opt.value = inv.customerId;
+                            opt.textContent = `${inv.customerName || 'Klien'} (${inv.customerEmail || ''})`;
+                            cusSelect.appendChild(opt);
+                        }
+                        cusSelect.value = inv.customerId;
+                    }
+
+                    const dateInput = document.getElementById('inv-form-date');
+                    if (dateInput) dateInput.value = safeDate(inv.invoiceDate);
+
+                    const dueInput = document.getElementById('inv-form-duedate');
+                    if (dueInput) dueInput.value = safeDate(inv.dueDate);
+
+                    const statusSelect = document.getElementById('inv-form-status');
+                    if (statusSelect) {
+                        statusSelect.value = (inv.status || 'UNPAID').toUpperCase();
+                    }
+
+                    const notesInput = document.getElementById('inv-form-notes');
+                    if (notesInput) notesInput.value = inv.notes || '';
+
+                    const discInput = document.getElementById('inv-form-disc');
+                    if (discInput) discInput.value = inv.discountRate || 0;
+
+                    const taxInput = document.getElementById('inv-form-tax');
+                    if (taxInput) taxInput.value = inv.taxRate || 0;
+
+                    if (inv.items && inv.items.length) {
+                        inv.items.forEach(it => addInvoiceItemRow(it));
+                    } else {
+                        addInvoiceItemRow();
+                    }
+                }
+            } else {
+                if (title) title.textContent = 'Buat Faktur & Tagihan Baru';
+                if (btnSubmit) btnSubmit.textContent = 'Simpan & Proses Tagihan';
+
+                const idInput = document.getElementById('inv-form-id');
+                if (idInput) idInput.value = '';
+                
+                // Pastikan Tanggal Faktur & Jatuh Tempo (Due Date) KOSONG untuk invoice baru
+                const dateInput = document.getElementById('inv-form-date');
+                if (dateInput) dateInput.value = '';
+
+                const dueInput = document.getElementById('inv-form-duedate');
+                if (dueInput) dueInput.value = '';
+
+                const statusSelect = document.getElementById('inv-form-status');
+                if (statusSelect) statusSelect.value = 'UNPAID';
+
+                const defaultOfficialNotes = "Terima kasih telah mempercayakan proyek website Anda kepada Dents Web. Pembayaran dapat ditransfer ke rekening resmi kami di atas.";
+                const notesInput = document.getElementById('inv-form-notes');
+                if (notesInput) {
+                    let setNotes = (window.cacheData.invoiceSettings && window.cacheData.invoiceSettings.invoiceNotes) || defaultOfficialNotes;
+                    if (setNotes.includes('Virtual Account resmi kami')) {
+                        setNotes = defaultOfficialNotes;
+                    }
+                    notesInput.value = setNotes;
+                }
+
+                const discInput = document.getElementById('inv-form-disc');
+                if (discInput) discInput.value = (window.cacheData.invoiceSettings && window.cacheData.invoiceSettings.defaultDiscRate) || 0;
+
+                const taxInput = document.getElementById('inv-form-tax');
+                if (taxInput) taxInput.value = (window.cacheData.invoiceSettings && window.cacheData.invoiceSettings.defaultTaxRate) || 0;
+
+                addInvoiceItemRow();
+            }
+
+            calcInvoiceTotals();
+            m.classList.add('active');
+            m.style.display = 'flex';
+        }
+
+        async function handleInvoiceSubmit(e) {
+            e.preventDefault();
+            const id = document.getElementById('inv-form-id').value.trim();
+            const customerId = document.getElementById('inv-form-customer').value;
+            const invoiceDate = document.getElementById('inv-form-date').value;
+            const dueDate = document.getElementById('inv-form-duedate').value;
+            const status = document.getElementById('inv-form-status')?.value || 'UNPAID';
+            const notes = document.getElementById('inv-form-notes').value.trim();
+            const globalDiscountRate = parseFloat(document.getElementById('inv-form-disc').value) || 0;
+            const globalTaxRate = parseFloat(document.getElementById('inv-form-tax').value) || 0;
+            const auto_send_email = document.getElementById('inv-form-autosend')?.checked || false;
+
+            const rows = document.querySelectorAll('#invoice-items-tbody tr');
+            const items = [];
+            rows.forEach(r => {
+                const desc = r.querySelector('.item-desc')?.value.trim();
+                const period = r.querySelector('.item-period')?.value.trim();
+                const qty = parseFloat(r.querySelector('.item-qty')?.value) || 1;
+                const price = parseFloat(r.querySelector('.item-price')?.value) || 0;
+                if (desc) {
+                    items.push({ description: desc, period, quantity: qty, unitPrice: price });
+                }
+            });
+
+            if (!items.length) {
+                showToast('Mohon masukkan minimal 1 deskripsi layanan!', 'error');
+                return;
+            }
+
+            const payload = {
+                customerId,
+                invoiceDate,
+                dueDate,
+                status,
+                notes,
+                globalDiscountRate,
+                discountRate: globalDiscountRate,
+                globalTaxRate,
+                items,
+                auto_send_email
+            };
+
+            try {
+                const method = id ? 'PUT' : 'POST';
+                const url = id ? `/api/admin/invoices/${id}` : '/api/admin/invoices';
+                const res = await api(url, method, payload);
+
+                if (res && res.emailResult && res.emailResult.success) {
+                    showToast('Faktur berhasil disimpan & email PDF tagihan terkirim ke klien!', 'success');
+                } else {
+                    showToast(id ? 'Faktur tagihan berhasil diperbarui!' : 'Faktur baru berhasil dibuat!', 'success');
+                }
+
+                closeModal('modal-invoice');
+                await loadInvoices();
+                if (id && window.currentSelectedInvoice && window.currentSelectedInvoice.id === id) {
+                    openInvoiceDetail(id);
+                }
+            } catch (e) {}
+        }
+
+        async function openInvoiceDetail(id) {
+            let inv = (window.cacheData.invoices || []).find(x => x.id === id);
+            if (!inv) {
+                try {
+                    const res = await api(`/api/admin/invoices`);
+                    window.cacheData.invoices = res.data || [];
+                    inv = window.cacheData.invoices.find(x => x.id === id);
+                } catch (e) {}
+            }
+            if (!inv) return;
+            window.currentSelectedInvoice = inv;
+
+            document.getElementById('inv-detail-number').textContent = inv.invoiceNumber || inv.number;
+            document.getElementById('inv-detail-status-badge').innerHTML = getInvoiceStatusBadge(inv.status);
+            const custName = inv.customerName || (inv.customer && inv.customer.companyName) || '-';
+            document.getElementById('inv-detail-customer-name').textContent = custName;
+
+            const c = inv.customer || {};
+            document.getElementById('inv-detail-customer-box').innerHTML = `
+                <div style="font-weight: 700; color: #fff;">${escapeHtml(custName)}</div>
+                <div style="font-size: 0.8rem; color: var(--slate-muted);">${escapeHtml(c.contactPerson || '-')}</div>
+                <div style="font-size: 0.8rem; color: #38bdf8;">${escapeHtml(c.email || inv.customerEmail || '-')}</div>
+                <div style="font-size: 0.8rem; color: var(--slate-muted);">${escapeHtml(c.phone || '-')}</div>
+            `;
+
+            // Render Detail Finansial Termasuk Subtotal & Diskon
+            const discRate = Number(inv.discountRate || 0);
+            const discVal = Number(inv.discountAmount || inv.discount || (discRate > 0 ? Math.round((inv.subtotal * discRate) / 100) : 0));
+            const subtotalVal = inv.subtotal !== undefined ? inv.subtotal : inv.total;
+            const finTable = document.getElementById('inv-detail-financial-table');
+            if (finTable) {
+                let finRows = `
+                    <tr><td style="color: var(--slate-muted);">Tgl Terbit:</td><td style="text-align: right;" id="inv-detail-date">${formatDateIndo(inv.invoiceDate)}</td></tr>
+                    <tr><td style="color: var(--slate-muted);">Jatuh Tempo:</td><td style="text-align: right; color: #f87171;" id="inv-detail-duedate">${formatDateIndo(inv.dueDate)}</td></tr>
+                    <tr><td style="color: var(--slate-muted);">Subtotal:</td><td style="text-align: right; color: #cbd5e1;">${formatRupiah(subtotalVal)}</td></tr>
+                `;
+                if (discVal > 0 || discRate > 0) {
+                    finRows += `<tr><td style="color: #f87171;">Discount (${discRate}%):</td><td style="text-align: right; color: #f87171; font-weight: 700;">-${formatRupiah(discVal)}</td></tr>`;
+                }
+                if (inv.tax || inv.taxAmount) {
+                    finRows += `<tr><td style="color: var(--slate-muted);">PPN (${inv.taxRate || 0}%):</td><td style="text-align: right; color: #cbd5e1;">+${formatRupiah(inv.tax || inv.taxAmount)}</td></tr>`;
+                }
+                finRows += `
+                    <tr style="border-top: 1px solid var(--navy-surface-border);"><td style="padding-top: 4px; font-weight: 800; color: #fff;">Total Tagihan:</td><td style="padding-top: 4px; text-align: right; font-weight: 800; color: #fff;" id="inv-detail-total">${formatRupiah(inv.total)}</td></tr>
+                    <tr><td style="color: var(--slate-muted);">Sudah Dibayar:</td><td style="text-align: right; font-weight: 700; color: #4ade80;" id="inv-detail-paid">${formatRupiah(inv.amountPaid || 0)}</td></tr>
+                    <tr style="border-top: 1px solid var(--navy-surface-border);"><td style="padding-top: 4px; font-weight: 800; color: #facc15;">Sisa Tagihan:</td><td style="padding-top: 4px; text-align: right; font-weight: 800; color: #facc15;" id="inv-detail-balance">${formatRupiah(inv.balanceDue || inv.balance || 0)}</td></tr>
+                `;
+                finTable.innerHTML = finRows;
+            } else {
+                const dDate = document.getElementById('inv-detail-date'); if (dDate) dDate.textContent = formatDateIndo(inv.invoiceDate);
+                const dDue = document.getElementById('inv-detail-duedate'); if (dDue) dDue.textContent = formatDateIndo(inv.dueDate);
+                const dTot = document.getElementById('inv-detail-total'); if (dTot) dTot.textContent = formatRupiah(inv.total);
+                const dPaid = document.getElementById('inv-detail-paid'); if (dPaid) dPaid.textContent = formatRupiah(inv.amountPaid || 0);
+                const dBal = document.getElementById('inv-detail-balance'); if (dBal) dBal.textContent = formatRupiah(inv.balanceDue || inv.balance || 0);
+            }
+
+            const itemsTb = document.getElementById('inv-detail-items-body');
+            if (itemsTb) {
+                itemsTb.innerHTML = (inv.items || []).map(it => `
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <td style="padding: 6px; color: #fff;">${escapeHtml(it.description)}${it.period ? `<br><small style="color: var(--slate-muted);">${escapeHtml(it.period)}</small>` : ''}</td>
+                        <td style="padding: 6px; text-align: center; color: var(--slate-muted);">${it.quantity}</td>
+                        <td style="padding: 6px; text-align: right; color: var(--slate-muted);">${formatRupiah(it.unitPrice || it.price)}</td>
+                        <td style="padding: 6px; text-align: right; color: #fff; font-weight: 700;">${formatRupiah(it.total || (it.quantity * (it.unitPrice || it.price)))}</td>
+                    </tr>
+                `).join('');
+            }
+
+            const btnIssue = document.getElementById('btn-action-issue');
+            const btnPay = document.getElementById('btn-action-record-payment');
+            const btnMarkPaid = document.getElementById('btn-action-quick-paid');
+            const isUnpaid = (inv.status || '').toUpperCase() !== 'PAID';
+            const isPaid = (inv.status || '').toUpperCase() === 'PAID';
+
+            if (btnIssue) btnIssue.style.display = (inv.status === 'DRAFT') ? 'inline-flex' : 'none';
+            if (btnPay) btnPay.style.display = ((inv.balanceDue || inv.balance || 0) > 0) ? 'inline-flex' : 'none';
+            if (btnMarkPaid) btnMarkPaid.style.display = isUnpaid ? 'inline-flex' : 'none';
+
+            // Jika status PAID (LUNAS), arahkan tombol ke /receipt/:publicId bukan ke /invoice/:publicId
+            const publicUrl = isPaid ? ('/receipt/' + (inv.publicId || inv.id)) : ('/invoice/' + (inv.publicId || inv.id));
+            const printUrl = isPaid ? ('/receipt/' + (inv.publicId || inv.id) + '/print') : ('/invoice/' + (inv.publicId || inv.id) + '/print');
+            const btnViewPub = document.getElementById('btn-action-view-public');
+            const btnPrint = document.getElementById('btn-action-print');
+            if (btnViewPub) {
+                btnViewPub.href = publicUrl;
+                btnViewPub.innerHTML = isPaid 
+                    ? `<svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Tautan Publik (Kuitansi) ↗`
+                    : `<svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg> Tautan Publik ↗`;
+            }
+            if (btnPrint) {
+                btnPrint.href = printUrl;
+                btnPrint.innerHTML = isPaid 
+                    ? `<svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg> Cetak Kuitansi PDF`
+                    : `<svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg> Cetak PDF`;
+            }
+
+            openModal('modal-invoice-detail');
+        }
+
+        async function quickMarkPaid(id) {
+            if (!id) return;
+            const inv = (window.cacheData.invoices || []).find(x => x.id === id);
+            const invNum = inv ? (inv.invoiceNumber || inv.number) : id;
+
+            const confirmMsg = `Ubah status Faktur #${invNum} menjadi LUNAS (PAID) secara manual?\n\nDokumen Kuitansi Resmi (.PDF) juga otomatis dibuat & dikirimkan ke Gmail klien.`;
+            if (!confirm(confirmMsg)) return;
+
+            try {
+                const res = await api(`/api/admin/invoices/${id}/mark-paid`, 'POST', {
+                    method: 'Transfer Bank Manual (Diverifikasi Admin)',
+                    send_receipt: true
+                });
+                showToast(res.message || 'Faktur berhasil ditandai LUNAS!', 'success');
+                await loadInvoices();
+                await loadReceipts();
+                if (window.currentSelectedInvoice && window.currentSelectedInvoice.id === id) {
+                    openInvoiceDetail(id);
+                }
+            } catch (err) {
+                showToast('Gagal menandai lunas: ' + err.message, 'error');
+            }
+        }
+
+        async function issueCurrentInvoice() {
+            if (!window.currentSelectedInvoice) return;
+            try {
+                const res = await api(`/api/admin/invoices/${window.currentSelectedInvoice.id}/issue`, 'POST');
+                showToast('Faktur resmi diterbitkan (Status: UNPAID)!', 'success');
+                await loadInvoices();
+                await openInvoiceDetail(window.currentSelectedInvoice.id);
+            } catch (e) {}
+        }
+
+        async function sendCurrentInvoiceEmail() {
+            if (!window.currentSelectedInvoice) return;
+            const inv = window.currentSelectedInvoice;
+            const targetEmail = prompt('Kirim email tagihan Glassmorphism ke alamat:', inv.customerEmail || (inv.customer && inv.customer.email) || '');
+            if (!targetEmail) return;
+
+            try {
+                showToast('Mengirim email faktur via Gmail SMTP...', 'info');
+                await api(`/api/admin/invoices/${inv.id}/send-email`, 'POST', { email: targetEmail });
+                showToast('Email tagihan berhasil terkirim ke ' + targetEmail + '!', 'success');
+            } catch (e) {}
+        }
+
+        async function deleteInvoice(id) {
+            if (!confirm('Yakin ingin menghapus faktur ini? Semua data pembayaran dan kuitansi terkait juga akan dihapus.')) return;
+            try {
+                await api(`/api/admin/invoices/${id}`, 'DELETE');
+                showToast('Faktur berhasil dihapus.', 'success');
+                closeModal('modal-invoice-detail');
+                await loadInvoices();
+            } catch (e) {}
+        }
+
+        // --- 4. RECORD PAYMENTS ---
+        function openPaymentFromCurrentInvoice() {
+            if (!window.currentSelectedInvoice) return;
+            const inv = window.currentSelectedInvoice;
+            document.getElementById('pay-invoice-id').value = inv.id;
+            document.getElementById('pay-modal-invoice-num').textContent = `Faktur: ${inv.invoiceNumber} • Pelanggan: ${inv.customerName || (inv.customer && inv.customer.companyName) || '-'}`;
+            document.getElementById('pay-amount').value = Math.max(0, inv.balanceDue || 0);
+            document.getElementById('pay-balance-hint').textContent = `Sisa tagihan yang harus dibayar: ${formatRupiah(inv.balanceDue || 0)}`;
+            document.getElementById('pay-ref').value = '';
+            openModal('modal-payment');
+        }
+
+        async function handlePaymentSubmit(e) {
+            e.preventDefault();
+            const invoiceId = document.getElementById('pay-invoice-id').value;
+            const amount = parseFloat(document.getElementById('pay-amount').value) || 0;
+            const method = document.getElementById('pay-method').value;
+            const reference = document.getElementById('pay-ref').value.trim();
+            const send_receipt = document.getElementById('pay-send-receipt')?.checked || false;
+
+            if (amount <= 0) {
+                showToast('Nominal pembayaran harus lebih besar dari 0!', 'error');
+                return;
+            }
+
+            try {
+                const res = await api(`/api/admin/invoices/${invoiceId}/payment`, 'POST', {
+                    amount,
+                    method,
+                    reference,
+                    send_receipt
+                });
+
+                if (res && res.emailResult && res.emailResult.success) {
+                    showToast('Pembayaran dicatat & Kuitansi Resmi terkirim ke Gmail klien!', 'success');
+                } else {
+                    showToast('Pembayaran berhasil dicatat!', 'success');
+                }
+
+                closeModal('modal-payment');
+                await loadInvoices();
+                if (window.currentSelectedInvoice && window.currentSelectedInvoice.id === invoiceId) {
+                    await openInvoiceDetail(invoiceId);
+                }
+            } catch (e) {}
+        }
+
+        // --- 5. RECEIPTS (KUITANSI RESMI) ---
+        window.currentSelectedReceipt = null;
+
+        async function loadReceipts() {
+            try {
+                const res = await api('/api/admin/receipts');
+                window.cacheData.receipts = res.data || [];
+                renderReceiptTable(window.cacheData.receipts);
+            } catch (e) {
+                console.error('loadReceipts error:', e);
+            }
+        }
+
+        function renderReceiptTable(receipts) {
+            const badge = document.getElementById('receipts-count-badge');
+            if (badge) badge.textContent = `${receipts.length} Kuitansi Lunas`;
+
+            const tb = document.querySelector('#table-receipts tbody');
+            if (!tb) return;
+            if (receipts && receipts.length) {
+                tb.innerHTML = receipts.map(r => `
+                    <tr>
+                        <td style="font-weight: 800; color: #ffffff;">${escapeHtml(r.receiptNumber)}</td>
+                        <td style="color: #cbd5e1; font-weight: 600;">${escapeHtml(r.customerName || (r.customer && r.customer.companyName) || '-')}</td>
+                        <td style="font-weight: 800; color: var(--lime-bright);">${formatRupiah(r.amountPaid)}</td>
+                        <td style="color: var(--slate-muted); font-size: 0.85rem;">${escapeHtml(r.paymentMethod || 'Transfer')}</td>
+                        <td style="color: var(--slate-muted); font-size: 0.85rem;">${formatDateIndo(r.paymentDate)}</td>
+                        <td><span class="badge-tag-lime">✓ LUNAS</span></td>
+                        <td style="text-align: right; white-space: nowrap;">
+                            <button type="button" class="btn-royal" style="font-size: 0.78rem; padding: 4px 10px;" onclick="openReceiptDetail('${r.id}')">Lihat Kuitansi</button>
+                        </td>
+                    </tr>
+                `).join('');
+            } else {
+                tb.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 30px; color: var(--slate-muted);">Belum ada kuitansi pembayaran resmi yang diterbitkan.</td></tr>';
+            }
+        }
+
+        function filterReceiptTable() {
+            const q = (document.getElementById('search-receipts')?.value || '').toLowerCase().trim();
+            if (!q) {
+                renderReceiptTable(window.cacheData.receipts || []);
+                return;
+            }
+            const filtered = (window.cacheData.receipts || []).filter(r =>
+                (r.receiptNumber && r.receiptNumber.toLowerCase().includes(q)) ||
+                (r.customerName && r.customerName.toLowerCase().includes(q)) ||
+                (r.reference && r.reference.toLowerCase().includes(q)) ||
+                (r.paymentMethod && r.paymentMethod.toLowerCase().includes(q))
+            );
+            renderReceiptTable(filtered);
+        }
+
+        function openReceiptDetail(id) {
+            const r = (window.cacheData.receipts || []).find(x => x.id === id);
+            if (!r) return;
+            window.currentSelectedReceipt = r;
+
+            document.getElementById('receipt-detail-number').textContent = r.receiptNumber;
+            const custName = r.customerName || (r.customer && r.customer.companyName) || '-';
+            document.getElementById('receipt-detail-customer-name').textContent = custName;
+            document.getElementById('receipt-d-from').textContent = custName;
+            document.getElementById('receipt-d-amount').textContent = formatRupiah(r.amountPaid);
+            document.getElementById('receipt-d-method').textContent = r.paymentMethod || 'Transfer';
+            document.getElementById('receipt-d-ref').textContent = r.reference || '-';
+            document.getElementById('receipt-d-date').textContent = formatDateIndo(r.paymentDate);
+
+            const pubUrl = '/receipt/' + (r.publicId || r.id);
+            const printUrl = '/receipt/' + (r.publicId || r.id) + '/print';
+            const btnPub = document.getElementById('btn-receipt-view-public');
+            const btnPrint = document.getElementById('btn-receipt-print');
+            if (btnPub) btnPub.href = pubUrl;
+            if (btnPrint) btnPrint.href = printUrl;
+
+            openModal('modal-receipt-detail');
+        }
+
+        async function sendCurrentReceiptEmail() {
+            if (!window.currentSelectedReceipt) return;
+            const r = window.currentSelectedReceipt;
+            const targetEmail = prompt('Kirim Kuitansi Resmi ke alamat Gmail klien:', r.customerEmail || (r.customer && r.customer.email) || '');
+            if (!targetEmail) return;
+
+            try {
+                showToast('Mengirim Kuitansi Resmi via Gmail SMTP...', 'info');
+                await api(`/api/admin/invoices/${r.invoiceId}/send-receipt`, 'POST', {
+                    paymentId: r.paymentId,
+                    email: targetEmail
+                });
+                showToast('Kuitansi Resmi berhasil terkirim ke ' + targetEmail + '!', 'success');
+            } catch (e) {}
+        }
+
+        // --- 6. SETTINGS & GMAIL SMTP DIAGNOSTIC ---
+        async function loadInvoiceSettings() {
+            try {
+                const res = await api('/api/admin/invoice/settings');
+                if (!res || !res.data) return;
+                window.cacheData.invoiceSettings = res.data;
+                const s = res.data;
+
+                const formId = document.getElementById('form-invoice-settings');
+                if (formId) {
+                    if (formId.elements['businessName']) formId.elements['businessName'].value = s.businessName || '';
+                    if (formId.elements['npwp']) formId.elements['npwp'].value = s.npwp || '';
+                    if (formId.elements['invoicePrefix']) formId.elements['invoicePrefix'].value = s.invoicePrefix || 'DENTSWEB';
+                    if (formId.elements['businessEmail']) formId.elements['businessEmail'].value = s.businessEmail || '';
+                    if (formId.elements['businessPhone']) formId.elements['businessPhone'].value = s.businessPhone || '';
+                    if (formId.elements['businessAddress']) formId.elements['businessAddress'].value = s.businessAddress || '';
+                    if (formId.elements['bankName']) formId.elements['bankName'].value = s.bankName || '';
+                    if (formId.elements['bankAccount']) formId.elements['bankAccount'].value = s.bankAccount || '';
+                    if (formId.elements['bankAccountName']) formId.elements['bankAccountName'].value = s.bankAccountName || '';
+                    if (formId.elements['defaultDiscRate']) formId.elements['defaultDiscRate'].value = s.defaultDiscRate || 0;
+                    if (formId.elements['defaultTaxRate']) formId.elements['defaultTaxRate'].value = s.defaultTaxRate || 0;
+                    if (formId.elements['invoiceNotes']) formId.elements['invoiceNotes'].value = s.invoiceNotes || '';
+                }
+
+                const formSmtp = document.getElementById('form-smtp-settings');
+                if (formSmtp) {
+                    if (formSmtp.elements['smtpUser']) formSmtp.elements['smtpUser'].value = s.smtpUser || '';
+                    if (formSmtp.elements['smtpPass']) formSmtp.elements['smtpPass'].value = s.smtpPass || '';
+                    if (formSmtp.elements['senderName']) formSmtp.elements['senderName'].value = s.senderName || 'Dents Web Billing & Invoicing';
+                    if (formSmtp.elements['autoSendReceipt']) formSmtp.elements['autoSendReceipt'].checked = s.autoSendReceipt !== false;
+                }
+
+                const testDest = document.getElementById('test-email-destination');
+                if (testDest && !testDest.value) {
+                    testDest.value = s.businessEmail || s.smtpUser || '';
+                }
+            } catch (e) {
+                console.error('loadInvoiceSettings error:', e);
+            }
+        }
+
+        async function saveInvoiceSettings(e) {
+            e.preventDefault();
+            const form = e.target;
+            const payload = {
+                businessName: form.elements['businessName'].value.trim(),
+                npwp: form.elements['npwp'].value.trim(),
+                invoicePrefix: form.elements['invoicePrefix'].value.trim(),
+                businessEmail: form.elements['businessEmail'].value.trim(),
+                businessPhone: form.elements['businessPhone'].value.trim(),
+                businessAddress: form.elements['businessAddress'].value.trim(),
+                bankName: form.elements['bankName'].value.trim(),
+                bankAccount: form.elements['bankAccount'].value.trim(),
+                bankAccountName: form.elements['bankAccountName'].value.trim(),
+                defaultDiscRate: parseFloat(form.elements['defaultDiscRate'].value) || 0,
+                defaultTaxRate: parseFloat(form.elements['defaultTaxRate'].value) || 0,
+                invoiceNotes: form.elements['invoiceNotes'].value.trim()
+            };
+
+            try {
+                await api('/api/admin/invoice/settings', 'PUT', payload);
+                showToast('Pengaturan identitas bisnis & rekening bank berhasil disimpan!', 'success');
+                await loadInvoiceSettings();
+            } catch (e) {}
+        }
+
+        async function saveSmtpSettings(e) {
+            e.preventDefault();
+            const form = e.target;
+            const payload = {
+                smtpUser: form.elements['smtpUser'].value.trim(),
+                smtpPass: form.elements['smtpPass'].value.trim(),
+                senderName: form.elements['senderName'].value.trim(),
+                autoSendReceipt: form.elements['autoSendReceipt'].checked
+            };
+
+            try {
+                await api('/api/admin/invoice/settings', 'PUT', payload);
+                showToast('Kredensial Gmail SMTP & notifikasi berhasil disimpan!', 'success');
+                await loadInvoiceSettings();
+            } catch (e) {}
+        }
+
+        async function runSmtpDiagnostic() {
+            const dest = document.getElementById('test-email-destination')?.value.trim();
+            const resBox = document.getElementById('smtp-test-result');
+            const btn = document.getElementById('btn-test-smtp');
+
+            if (!dest) {
+                showToast('Mohon masukkan email penerima test!', 'error');
+                return;
+            }
+
+            if (btn) {
+                btn.disabled = true;
+                btn.textContent = 'Menguji Koneksi...';
+            }
+            if (resBox) {
+                resBox.style.display = 'block';
+                resBox.innerHTML = '<span style="color: #60a5fa;">Sedang mencoba login ke Gmail SMTP dan mengirim email diagnostik...</span>';
+            }
+
+            try {
+                const res = await api('/api/admin/invoice/settings/test-email', 'POST', { targetEmail: dest });
+                if (resBox) {
+                    resBox.innerHTML = `
+                        <div style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: 8px; padding: 10px; color: #4ade80;">
+                            <strong>✓ Sukses Terkirim!</strong> Server Gmail menerima pesan diagnostik.<br>
+                            <small style="color: #cbd5e1;">Pesan ID: ${escapeHtml(res.data?.messageId || '-')}. Silakan periksa Inbox ${escapeHtml(dest)}.</small>
+                        </div>
+                    `;
+                }
+                showToast('Email diagnostik berhasil terkirim ke ' + dest, 'success');
+            } catch (err) {
+                if (resBox) {
+                    resBox.innerHTML = `
+                        <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 10px; color: #f87171;">
+                            <strong>✕ Pengiriman Gagal:</strong> ${escapeHtml(err.message)}<br>
+                            <div style="font-size: 0.78rem; color: #cbd5e1; margin-top: 6px; line-height: 1.4;">
+                                <strong>Saran Perbaikan:</strong><br>
+                                1. Pastikan Anda menggunakan <strong>Sandi Aplikasi (Google App Password)</strong> 16 digit, BUKAN sandi login biasa.<br>
+                                2. Aktifkan Verifikasi 2 Langkah pada akun Google &rarr; Masuk ke <em>myaccount.google.com/apppasswords</em>.
+                            </div>
+                        </div>
+                    `;
+                }
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.textContent = 'Kirim Uji Coba';
+                }
+            }
+        }
+
         // Global functions exposure
         window.openModal = openModal;
         window.closeModal = closeModal;
@@ -3466,6 +5546,7 @@
         window.openPakasirModal = openPakasirModal;
         window.openPakasirModalById = openPakasirModalById;
         window.checkCurrentModalStatus = checkCurrentModalStatus;
+        window.sendPakasirModalEmail = sendPakasirModalEmail;
         window.cancelCurrentModalTxn = cancelCurrentModalTxn;
         window.checkPakasirStatus = checkPakasirStatus;
         window.cancelPakasirTxn = cancelPakasirTxn;
@@ -3479,6 +5560,40 @@
         window.runFeeCalculator = runFeeCalculator;
         window.handleSavePakasirConfig = handleSavePakasirConfig;
         window.loadPakasirData = loadPakasirData;
+        // Invoice exposures
+        window.loadInvoiceAnalytics = loadInvoiceAnalytics;
+        window.renderInvoiceCharts = renderInvoiceCharts;
+        window.loadCustomers = loadCustomers;
+        window.renderCustomerTable = renderCustomerTable;
+        window.openCustomerModal = openCustomerModal;
+        window.handleCustomerSubmit = handleCustomerSubmit;
+        window.deleteCustomer = deleteCustomer;
+        window.filterCustomerTable = filterCustomerTable;
+        window.loadInvoices = loadInvoices;
+        window.renderInvoiceTable = renderInvoiceTable;
+        window.openInvoiceModal = openInvoiceModal;
+        window.addInvoiceItemRow = addInvoiceItemRow;
+        window.removeInvoiceItemRow = removeInvoiceItemRow;
+        window.calcInvoiceTotals = calcInvoiceTotals;
+        window.handleInvoiceSubmit = handleInvoiceSubmit;
+        window.filterInvoiceByStatus = filterInvoiceByStatus;
+        window.filterInvoiceTable = filterInvoiceTable;
+        window.openInvoiceDetail = openInvoiceDetail;
+        window.quickMarkPaid = quickMarkPaid;
+        window.issueCurrentInvoice = issueCurrentInvoice;
+        window.sendCurrentInvoiceEmail = sendCurrentInvoiceEmail;
+        window.deleteInvoice = deleteInvoice;
+        window.openPaymentFromCurrentInvoice = openPaymentFromCurrentInvoice;
+        window.handlePaymentSubmit = handlePaymentSubmit;
+        window.loadReceipts = loadReceipts;
+        window.renderReceiptTable = renderReceiptTable;
+        window.filterReceiptTable = filterReceiptTable;
+        window.openReceiptDetail = openReceiptDetail;
+        window.sendCurrentReceiptEmail = sendCurrentReceiptEmail;
+        window.loadInvoiceSettings = loadInvoiceSettings;
+        window.saveInvoiceSettings = saveInvoiceSettings;
+        window.saveSmtpSettings = saveSmtpSettings;
+        window.runSmtpDiagnostic = runSmtpDiagnostic;
     </script>
 </body>
 </html>
