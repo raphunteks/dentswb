@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice <%= invoice.number %> - <%= settings.businessName || 'DENTS WEB' %></title>
+    <link rel="icon" type="image/png" href="/img/axalogo.png">
+    <link rel="stylesheet" href="/css/invoice-app.css">
+    <link rel="stylesheet" href="/css/invoice.css">
+</head>
+<body class="min-h-screen bg-gray-50">
+    <!-- Navbar Minimalis untuk Publik -->
+    <div class="bg-white border-b py-3 px-6 mb-8 hide-print shadow-sm">
+        <div class="container flex justify-between items-center">
+            <div class="font-bold text-primary flex items-center gap-2">
+                <span><%= settings.businessName || 'DENTS WEB' %></span>
+            </div>
+            <div class="flex gap-2">
+                <a href="/invoice/<%= invoice.publicId %>/print" target="_blank" class="btn btn-outline btn-sm">🖨️ Print / Save PDF</a>
+                <% if(invoice.status === 'PAID') { %>
+                    <!-- URL DIUBAH KE FORMAT BARU /receipt/:publicId -->
+                    <a href="/receipt/<%= invoice.publicId %>" target="_blank" class="btn btn-sm" style="background: var(--success); color: white; border-color: var(--success);">Lihat Kuitansi</a>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mb-12 flex justify-center hide-print">
+        <div class="w-full max-w-4xl">
+            <div class="card p-8 bg-white">
+                <% if(invoice.status === 'PAID') { %>
+                    <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px 18px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                        <div style="color: #166534; font-size: 0.9rem; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+                            <span style="background: #22c55e; color: #fff; width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.8rem;">✓</span>
+                            <span>Faktur ini telah LUNAS. Kuitansi resmi pembayaran telah diterbitkan.</span>
+                        </div>
+                        <a href="/receipt/<%= invoice.publicId %>" style="background: #16a34a; color: #ffffff; padding: 6px 14px; border-radius: 6px; text-decoration: none; font-size: 0.82rem; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(22, 163, 74, 0.2);">
+                            Buka Kuitansi Resmi Lunas ↗
+                        </a>
+                    </div>
+                <% } %>
+                <div class="flex justify-between items-start mb-8 border-b pb-6">
+                    <div>
+                        <img src="/img/axalogo.png" alt="DENTS WEB Logo" class="doc-logo">
+                        <h1 class="text-3xl font-bold text-primary mb-2">INVOICE</h1>
+                        <p class="text-gray-500 font-medium">#<%= invoice.number %></p>
+                    </div>
+                    <div class="text-right">
+                        <h2 class="font-bold text-xl"><%= settings.businessName || 'DENTS WEB' %></h2>
+                        <p class="text-sm text-gray-500"><%= settings.businessAddress || '' %></p>
+                        <p class="text-sm text-gray-500"><%= settings.businessEmail || '' %></p>
+                        <p class="text-sm text-gray-500"><%= settings.businessPhone || '' %></p>
+                        <% if(settings.npwp) { %><p class="text-sm text-gray-500">NPWP: <%= settings.npwp %></p><% } %>
+                    </div>
+                </div>
+
+                <div class="flex justify-between mb-8">
+                    <div>
+                        <h3 class="font-bold text-gray-600 border-b mb-2 pb-1">BILL TO:</h3>
+                        <p class="font-bold"><%= customer.companyName %></p>
+                        <p class="text-sm text-gray-600"><%= customer.address || '' %></p>
+                        <p class="text-sm text-gray-600"><%= customer.city || '' %> <%= customer.postalCode || '' %></p>
+                        <p class="text-sm text-gray-600"><%= customer.email || '' %></p>
+                    </div>
+                    <div class="text-right">
+                        <table class="text-sm ml-auto">
+                            <tr><td class="font-bold pr-4 py-1">Status:</td><td><span class="badge badge-<%= invoice.status.toLowerCase() %>"><%= invoice.status %></span></td></tr>
+                            <tr><td class="font-bold pr-4 py-1">Invoice Date:</td><td class="text-gray-600"><%= formatDate(invoice.invoiceDate) %></td></tr>
+                            <tr><td class="font-bold pr-4 py-1">Due Date:</td><td class="text-gray-600"><%= formatDate(invoice.dueDate) %></td></tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto mb-8">
+                    <table class="invoice-table w-full">
+                        <thead>
+                            <tr>
+                                <th class="text-left">DESCRIPTION</th>
+                                <th class="text-center">QTY</th>
+                                <th class="text-right">PRICE</th>
+                                <th class="text-right">TOTAL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% invoice.items.forEach(item => { %>
+                            <tr>
+                                <td>
+                                    <b class="text-sm"><%= item.description %></b>
+                                    <% if(item.period) { %><div class="text-xs text-gray-500 mt-1"><%= item.period %></div><% } %>
+                                </td>
+                                <td class="text-center text-sm"><%= item.quantity %></td>
+                                <td class="text-right text-sm"><%= formatRupiah(item.price) %></td>
+                                <td class="text-right text-sm font-medium"><%= formatRupiah(item.total) %></td>
+                            </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="flex flex-col md:flex-row justify-between mb-8 gap-8">
+                    <div class="w-full md:w-1/2">
+                        <h4 class="font-bold text-sm text-gray-600 mb-2">Payment Details</h4>
+                        <div class="bg-gray-50 p-4 rounded border border-gray-100 mb-4">
+                            <p class="text-sm font-bold">Bank Transfer:</p>
+                            <p class="text-sm"><%= settings.bankName %> - <%= settings.bankAccount %></p>
+                            <p class="text-sm">A/N: <%= settings.bankAccountName %></p>
+                        </div>
+                        <% if(invoice.notes) { %>
+                            <h4 class="font-bold text-sm text-gray-600 mb-2">Notes:</h4>
+                            <p class="text-sm whitespace-pre-wrap text-gray-700"><%= invoice.notes %></p>
+                        <% } %>
+                        <% if(invoice.status === 'PAID') { %>
+                            <img src="/public/img/axapaid.png" onerror="this.onerror=null; this.src='/img/axapaid.png';" alt="PAID STAMP" class="stamp-lunas" style="width: 130px; margin-top: 1.5rem; opacity: 0.9;">
+                        <% } %>
+                    </div>
+                    
+                    <div class="w-full md:w-1/2 right-summary-block">
+                        <table class="w-full text-right text-sm">
+                            <tr><td class="py-1 text-gray-600">Subtotal</td><td class="py-1 font-medium"><%= formatRupiah(invoice.subtotal) %></td></tr>
+                            <% const discRatePub = Number(invoice.discountRate || 0); %>
+                            <% const discValPub = Number(invoice.discountAmount || invoice.discount || (discRatePub > 0 ? Math.round((invoice.subtotal * discRatePub) / 100) : 0)); %>
+                            <% if(discValPub > 0 || discRatePub > 0) { %>
+                                <tr><td class="py-1 text-gray-600">Discount (<%= discRatePub %>%)</td><td class="py-1 text-red-500 font-medium">- <%= formatRupiah(discValPub) %></td></tr>
+                            <% } %>
+                            <tr><td class="py-1 text-gray-600"><%= settings.defaultTaxName || 'PPN' %> (<%= invoice.taxRate || 0 %>%)</td><td class="py-1 font-medium"><%= formatRupiah(invoice.tax || 0) %></td></tr>
+                            <tr class="text-lg font-bold border-t"><td class="py-3">Grand Total</td><td class="py-3 text-primary"><%= formatRupiah(invoice.total) %></td></tr>
+                            <tr><td class="py-1 text-gray-600">Amount Paid</td><td class="py-1 text-green-600 font-medium"><%= formatRupiah(invoice.amountPaid) %></td></tr>
+                            <tr class="font-bold text-xl"><td class="py-2">Balance Due</td><td class="py-2 text-red-600"><%= formatRupiah(invoice.balance) %></td></tr>
+                        </table>
+
+                        <!-- QR CODE VERIFIKASI SAH DIBAWAH BALANCE DUE -->
+                        <% const invoiceVerifyUrl = `${(typeof settings !== 'undefined' && settings.siteUrl ? settings.siteUrl : 'https://www.dentsweb.my.id').replace(/\/$/, '')}/invoice/${invoice.publicId || invoice.id}`; %>
+                        <div class="qr-verify-container" style="display: flex; justify-content: flex-end; margin-top: 14px; text-align: right;">
+                            <div style="display: inline-block; background: #ffffff; padding: 6px 8px; border: 1.5px solid #bae6fd; border-radius: 12px; text-align: center; box-shadow: 0 2px 8px rgba(2, 132, 199, 0.08);">
+                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=110x110&margin=2&data=<%= encodeURIComponent(invoiceVerifyUrl) %>" alt="QR Code Verifikasi Sah" width="90" height="90" style="display: block; margin: 0 auto; border-radius: 6px;">
+                                <div style="font-size: 0.65rem; font-weight: 800; color: #0284c7; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.4px;">
+                                    Scan Verifikasi Sah
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
