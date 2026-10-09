@@ -1367,7 +1367,7 @@
 
                     <!-- Image Preview Container -->
                     <div class="upload-preview-box" id="preview-box-portfolio">
-                        <img id="preview-img-portfolio" src="" alt="Preview Cover" class="upload-preview-img">
+                        <img id="preview-img-portfolio" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" alt="Preview Cover" class="upload-preview-img">
                         <button type="button" class="upload-remove-btn" id="remove-img-portfolio" title="Hapus Gambar">&times;</button>
                     </div>
 
@@ -1492,7 +1492,7 @@
                     </div>
 
                     <div class="upload-preview-box" id="preview-box-articles">
-                        <img id="preview-img-articles" src="" alt="Preview Cover" class="upload-preview-img">
+                        <img id="preview-img-articles" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" alt="Preview Cover" class="upload-preview-img">
                         <button type="button" class="upload-remove-btn" id="remove-img-articles" title="Hapus Gambar">&times;</button>
                     </div>
 
@@ -1691,7 +1691,7 @@
                     </div>
 
                     <div class="upload-preview-box" id="preview-box-testimonials" style="margin-top: 10px;">
-                        <img id="preview-img-testimonials" src="" alt="Preview Foto Klien" class="upload-preview-img" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover;">
+                        <img id="preview-img-testimonials" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" alt="Preview Foto Klien" class="upload-preview-img" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover;">
                         <button type="button" class="upload-remove-btn" id="remove-img-testimonials" title="Hapus Foto">&times;</button>
                     </div>
 
@@ -4060,8 +4060,8 @@
                         </div>
                         <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
                             ${payLink ? `<a href="${payLink}" target="_blank" rel="noopener noreferrer" class="btn-royal" style="font-size: 0.82rem; padding: 7px 14px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;"><span>🔗 Buka Halaman Pembayaran</span></a>` : ''}
-                            ${qrImgUrl ? `<a href="${qrImgUrl}" target="_blank" download="QRIS_${txn.order_id}.png" class="btn-ghost-white" style="font-size: 0.82rem; padding: 7px 14px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;"><span>📥 Unduh QR Image</span></a>` : ''}
-                            ${qrString ? `<button type="button" class="btn-ghost-white" onclick="copyText('${escapeHtml(qrString)}', 'String QRIS berhasil disalin!')" style="font-size: 0.82rem; padding: 7px 12px;">📋 Salin String QR</button>` : ''}
+                            ${qrImgUrl ? `<a href="${qrImgUrl}" target="_blank" download="QRIS_${txn.order_id}.png" class="btn-ghost-white" style="font-size: 0.82rem; padding: 7px 14px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;"><span>📥 Unduh Gambar QR</span></a>` : ''}
+                            ${qrString ? `<button type="button" class="btn-ghost-white" onclick="copyText('${escapeHtml(qrString)}', 'Kode QRIS berhasil disalin!')" style="font-size: 0.82rem; padding: 7px 12px;">📋 Salin Kode QRIS</button>` : ''}
                         </div>
                     `;
                 } else {
@@ -4074,8 +4074,8 @@
                         </div>
                         <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
                             ${payLink ? `<a href="${payLink}" target="_blank" rel="noopener noreferrer" class="btn-royal" style="font-size: 0.82rem; padding: 7px 14px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;"><span>🔗 Buka Halaman Pembayaran</span></a>` : ''}
-                            ${qrImgUrl ? `<a href="${qrImgUrl}" target="_blank" download="QRIS_${txn.order_id}.png" class="btn-ghost-white" style="font-size: 0.82rem; padding: 7px 14px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;"><span>📥 Unduh QR Image</span></a>` : ''}
-                            ${qrString ? `<button type="button" class="btn-ghost-white" onclick="copyText('${escapeHtml(qrString)}', 'String QRIS berhasil disalin!')" style="font-size: 0.82rem; padding: 7px 12px;">📋 Salin String QR</button>` : ''}
+                            ${qrImgUrl ? `<a href="${qrImgUrl}" target="_blank" download="QRIS_${txn.order_id}.png" class="btn-ghost-white" style="font-size: 0.82rem; padding: 7px 14px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;"><span>📥 Unduh Gambar QR</span></a>` : ''}
+                            ${qrString ? `<button type="button" class="btn-ghost-white" onclick="copyText('${escapeHtml(qrString)}', 'Kode QRIS berhasil disalin!')" style="font-size: 0.82rem; padding: 7px 12px;">📋 Salin Kode QRIS</button>` : ''}
                         </div>
                     `;
                 }
