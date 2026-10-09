@@ -18,12 +18,18 @@
     <meta name="google-site-verification" content="<%= gVerifyCode %>" />
     <% } %>
     <% if (typeof settings !== 'undefined' && settings.analyticsId) { %>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=<%= settings.analyticsId %>"></script>
     <script>
+      // Non-blocking Google Analytics 4 (Deferred after load to eliminate TBT)
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', '<%= settings.analyticsId %>');
+      window.addEventListener('load', function() {
+        var s = document.createElement('script');
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=<%= settings.analyticsId %>';
+        s.async = true;
+        document.head.appendChild(s);
+        gtag('js', new Date());
+        gtag('config', '<%= settings.analyticsId %>');
+      }, { once: true });
     </script>
     <% } %>
     
@@ -51,17 +57,20 @@
     <link rel="icon" type="image/png" href="<%= typeof settings !== 'undefined' && settings.favicon ? settings.favicon : '/public/img/axalogo.png' %>">
     <link rel="apple-touch-icon" href="<%= typeof settings !== 'undefined' && settings.logo ? settings.logo : '/public/img/axalogo.png' %>">
     
+    <!-- Ultra High-Speed Non-Blocking Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@500;600;700;800&family=Playfair+Display:ital,wght@1,400;1,500;1,600;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@500;600;700;800&family=Playfair+Display:ital,wght@1,400;1,500;1,600;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@500;600;700;800&family=Playfair+Display:ital,wght@1,400;1,500;1,600;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@500;600;700;800&family=Playfair+Display:ital,wght@1,400;1,500;1,600;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap"></noscript>
     
     <link rel="stylesheet" href="/public/css/style.css">
-    <script src="/public/js/tech-icons.js"></script>
+    <script src="/public/js/tech-icons.js" defer></script>
 
-    <!-- GSAP 3 & Three.js WebGL Engine (Local High-Performance Static Bundles) -->
-    <script src="/public/vendor/three.min.js"></script>
-    <script src="/public/vendor/gsap.min.js"></script>
-    <script src="/public/vendor/ScrollTrigger.min.js"></script>
+    <!-- GSAP 3 & Three.js WebGL Engine (Local High-Performance Static Bundles - Fully Deferred) -->
+    <script src="/public/vendor/three.min.js" defer></script>
+    <script src="/public/vendor/gsap.min.js" defer></script>
+    <script src="/public/vendor/ScrollTrigger.min.js" defer></script>
     <script src="/public/js/hero-scene.js" defer></script>
     <script src="/public/js/animations.js" defer></script>
 </head>
