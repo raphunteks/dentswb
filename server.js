@@ -10,6 +10,7 @@ const crypto = require('crypto');
 const { Redis } = require('@upstash/redis');
 const nodemailer = require('nodemailer');
 const invoiceService = require('./services/invoice-email-service');
+const agenticMarkdownService = require('./services/agentic-markdown-service');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -20,9 +21,37 @@ app.set('trust proxy', 1);
 // HTTP Response Compression (Gzip / Brotli)
 app.use(compression());
 
-// Global SEO & Search Console Link Header (Informs all crawlers of official sitemap on any request)
+// Global SEO & Agentic Discovery Link Headers (Sitemap, ARD 1.0 Catalog & Markdown Alternates)
 app.use((req, res, next) => {
-    res.setHeader('Link', '<https://www.dentsweb.my.id/sitemap.xml>; rel="sitemap"');
+    res.setHeader('Link', '<https://www.dentsweb.my.id/sitemap.xml>; rel="sitemap", </.well-known/ai-catalog.json>; rel="ai-catalog", </llms.txt>; rel="alternate"; type="text/markdown"');
+    res.setHeader('Vary', 'Accept');
+    next();
+});
+
+// RFC 9110 Markdown Content Negotiation for AI Agents & Crawlers
+app.use((req, res, next) => {
+    const acceptHeader = req.headers.accept || '';
+    if (req.method === 'GET' && !req.path.startsWith('/public') && !req.path.startsWith('/api') && !req.path.startsWith('/admin') && acceptHeader.includes('text/markdown')) {
+        res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
+        res.setHeader('Vary', 'Accept');
+        const siteUrl = 'https://www.dentsweb.my.id';
+
+        if (req.path === '/pricing') {
+            return res.send(agenticMarkdownService.generatePricingMarkdown(siteUrl));
+        } else if (req.path === '/services') {
+            return res.send(agenticMarkdownService.generateServicesMarkdown(siteUrl));
+        } else if (req.path === '/contact') {
+            return res.send(agenticMarkdownService.generateContactMarkdown(siteUrl));
+        } else if (req.path === '/faq') {
+            return res.send(agenticMarkdownService.generateFaqMarkdown(siteUrl));
+        } else if (req.path === '/about') {
+            return res.send(agenticMarkdownService.generateSiteOverviewMarkdown(siteUrl));
+        } else if (req.path === '/portfolio') {
+            return res.send(agenticMarkdownService.generateSiteOverviewMarkdown(siteUrl));
+        } else if (req.path === '/' || req.path === '') {
+            return res.send(agenticMarkdownService.generateSiteOverviewMarkdown(siteUrl));
+        }
+    }
     next();
 });
 
@@ -4131,43 +4160,116 @@ app.get('/robots.txt', async (req, res) => {
         'User-agent: Applebot-Extended',
         'Allow: /',
         '',
+        'User-agent: CCBot',
+        'Allow: /',
+        '',
+        'User-agent: OAI-SearchBot',
+        'Allow: /',
+        '',
+        'User-agent: Claude-SearchBot',
+        'Allow: /',
+        '',
         `Sitemap: ${siteUrl}/sitemap.xml`,
+        `Agentmap: ${siteUrl}/.well-known/ai-catalog.json`,
         `Host: ${siteUrl}`
     ].join('\n'));
 });
 
-// Machine-Readable AI Agent Documentation (Agentic Web 2026 standard)
+// Machine-Readable AI Agent Documentation (llmstxt.org Gold Standard)
 app.get('/llms.txt', async (req, res) => {
     const settings = await getGlobalSettings();
     const siteUrl = (settings.siteUrl && settings.siteUrl.trim()) ? settings.siteUrl.replace(/\/+$/, '') : 'https://www.dentsweb.my.id';
     res.type('text/plain; charset=utf-8');
     res.setHeader('Cache-Control', 'public, max-age=86400');
     res.send([
-        `# Dents Web (${siteUrl})`,
-        `> Studio Pembuatan Website Kustom, Landing Page Konversi Tinggi & Solusi Digital Performa Tinggi`,
-        '',
-        `## Tentang Kami`,
-        `Dents Web adalah penyedia arsitektur web presisi tinggi dengan standar performa modern: Core Web Vitals < 1s, zero-template bloat, 100% kepemilikan kode, dan SEO-ready dari awal.`,
-        '',
-        `## Layanan Utama`,
-        `- Pembuatan Website Kustom (Company Profile, Katalog, Web App, Portal Berita)`,
-        `- Landing Page Konversi Tinggi (Direct response, sales funnel, tracking siap pakai)`,
-        `- Sistem Informasi & Otomasi Digital (Google Apps Script, Dashboard Operasional, Integrasi Webhook)`,
-        `- UI/UX Design & Rebranding Modern`,
-        '',
-        `## Kontak Resmi`,
-        `- Website: ${siteUrl}`,
-        `- WhatsApp Official: https://wa.me/6285338922586`,
-        `- Email: dentswebsitebuilder@gmail.com`,
-        '',
-        `## Peta Situs & URL Dokumen`,
-        `- Beranda: ${siteUrl}/`,
-        `- Layanan: ${siteUrl}/services`,
-        `- Portofolio: ${siteUrl}/portfolio`,
-        `- Paket Harga: ${siteUrl}/pricing`,
-        `- Artikel: ${siteUrl}/articles`,
-        `- Sitemap XML: ${siteUrl}/sitemap.xml`
+        `# Dents Web`,
+        `> Studio Rekayasa Website Kustom, Landing Page Konversi Tinggi & Solusi Digital Berperforma Tinggi.`,
+        ``,
+        `Dents Web adalah penyedia arsitektur web presisi tinggi dengan standar performa modern: Core Web Vitals LCP < 1.0 detik, zero-template bloat, 100% kepemilikan kode tanpa ketergantungan plugin pihak ketiga, dan SEO-ready dari fondasi awal.`,
+        ``,
+        `## Layanan & Solusi Utama`,
+        `- [Landing Page Konversi Tinggi](${siteUrl}/pricing): Halaman penjualan direct response dengan Core Web Vitals < 1 detik, tracking terpasang, dan copy responsif.`,
+        `- [Website Kustom & Company Profile](${siteUrl}/services): Arsitektur web kustom tanpa template bloat, SEO-first, dan 100% kepemilikan kode.`,
+        `- [Sistem Informasi & Otomasi Digital](${siteUrl}/services): Integrasi dashboard operasional, Google Sheets/Drive, dan webhook otomatis.`,
+        `- [UI/UX Design & Rebranding Modern](${siteUrl}/portfolio): Desain antarmuka visual premium berstandar studio internasional dengan interaktivitas 60 FPS.`,
+        ``,
+        `## Dokumentasi & Referensi Resmi`,
+        `- [Beranda Studio](${siteUrl}/): Informasi utama identitas studio Dents Web.`,
+        `- [Portofolio Live](${siteUrl}/portfolio): Studi kasus dan showcase website klien yang telah live.`,
+        `- [Paket Harga Resmi](${siteUrl}/pricing): Rincian paket harga transparan mulai dari Rp 1.300.000.`,
+        `- [Artikel & Edukasi Web](${siteUrl}/articles): Panduan teknis performa web, SEO, dan konversi bisnis.`,
+        `- [Tanya Jawab (FAQ)](${siteUrl}/faq): Jawaban seputar alur kerja, garansi, teknologi, dan kepemilikan aset.`,
+        `- [Kontak & Konsultasi](${siteUrl}/contact): Formulir konsultasi proyek resmi dan saluran WhatsApp tim teknis.`,
+        `- [Sitemap XML](${siteUrl}/sitemap.xml): Peta situs terstruktur untuk mesin pencari dan agen AI.`,
+        ``,
+        `## Informasi Lanjutan Untuk Agen AI`,
+        `- [Dokumentasi Lengkap LLM](${siteUrl}/llms-full.txt): Konteks komprehensif, arsitektur teknis, dan rincian paket harga untuk penalaran model AI mendalam.`,
+        `- [AI Catalog (ARD 1.0)](${siteUrl}/.well-known/ai-catalog.json): Katalog sumber daya terstruktur untuk penemuan agen AI otomatis.`
     ].join('\n'));
+});
+
+// Full Documentation for Deep Reasoning LLMs
+app.get('/llms-full.txt', async (req, res) => {
+    const settings = await getGlobalSettings();
+    const siteUrl = (settings.siteUrl && settings.siteUrl.trim()) ? settings.siteUrl.replace(/\/+$/, '') : 'https://www.dentsweb.my.id';
+    res.type('text/plain; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=86400');
+    res.send(agenticMarkdownService.generateFullLLMDocumentation(siteUrl));
+});
+
+// Agentic Resource Discovery (ARD Spec 1.0 - Checked by Lighthouse 13.5.0 ard-schema)
+app.get('/.well-known/ai-catalog.json', async (req, res) => {
+    const settings = await getGlobalSettings();
+    const siteUrl = (settings.siteUrl && settings.siteUrl.trim()) ? settings.siteUrl.replace(/\/+$/, '') : 'https://www.dentsweb.my.id';
+    
+    res.setHeader('Content-Type', 'application/ai-catalog+json; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=86400');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Link', `<${siteUrl}/.well-known/ai-catalog.json>; rel="ai-catalog"`);
+    
+    const catalog = {
+        specVersion: "1.0",
+        trustManifest: {
+            identity: siteUrl
+        },
+        entries: [
+            {
+                identifier: "urn:air:dentsweb:skills:site-documentation",
+                displayName: "Dents Web Full LLM Documentation",
+                type: 'text/markdown; profile="urn:air:agent-skills"',
+                url: `${siteUrl}/llms-full.txt`,
+                representativeQueries: [
+                    "Jasa pembuatan website profesional performa tinggi Dents Web",
+                    "Spesifikasi arsitektur web modern tanpa template bloat",
+                    "Dokumentasi lengkap layanan dan keahlian web Dents Web"
+                ]
+            },
+            {
+                identifier: "urn:air:dentsweb:skills:pricing-catalog",
+                displayName: "Dents Web Official Pricing Packages",
+                type: 'text/markdown; profile="urn:air:agent-skills"',
+                url: `${siteUrl}/pricing`,
+                representativeQueries: [
+                    "Berapa harga pembuatan landing page di Dents Web?",
+                    "Biaya paket website company profile dan web app Dents Web",
+                    "Daftar paket harga resmi website transparan Dents Web"
+                ]
+            },
+            {
+                identifier: "urn:air:dentsweb:skills:services-directory",
+                displayName: "Dents Web Services Directory & Capabilities",
+                type: 'text/markdown; profile="urn:air:agent-skills"',
+                url: `${siteUrl}/services`,
+                representativeQueries: [
+                    "Layanan apa saja yang disediakan oleh Dents Web?",
+                    "Jasa integrasi Google Sheets dashboard dan otomasi web",
+                    "Pembuatan landing page dengan Core Web Vitals di bawah 1 detik"
+                ]
+            }
+        ]
+    };
+    
+    res.status(200).json(catalog);
 });
 
 app.all('/sitemap.xml', async (req, res) => {
