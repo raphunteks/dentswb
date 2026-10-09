@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#05081c">
     
-    <title><%= seo.title %> | <%= typeof settings !== 'undefined' && settings.brandName ? settings.brandName : 'Dents Web' %></title>
+    <title><%= seo.title %></title>
     <meta name="description" content="<%= seo.desc %>">
     <link rel="canonical" href="<%= typeof seo !== 'undefined' && seo.url ? seo.url : ((typeof settings !== 'undefined' && settings.siteUrl ? settings.siteUrl : 'https://www.dentsweb.my.id') + (seo.path || '')) %>">
     <meta name="referrer" content="origin-when-cross-origin">
@@ -126,7 +126,7 @@
                             <%= project.description %>
                         </p>
 
-                        <div class="tactile-card" style="padding: 28px; border-left: 6px solid var(--royal-blue); margin-top: 30px; background: #ffffff;">
+                        <div class="tactile-card" style="padding: 28px; margin-top: 30px; background: #ffffff;">
                             <h4 style="color: var(--navy-text); margin-bottom: 8px; font-size: 1.15rem; display: flex; align-items: center; gap: 8px;">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--royal-blue)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                                 Fokus Pengerjaan
@@ -182,10 +182,10 @@
                 <!-- Callout CTA -->
                 <div class="tactile-card tactile-card-heavy pptx-scale-in" style="margin-top: 60px; padding: 60px 40px; text-align: center; background: #ffffff; border-color: var(--border-light); border-bottom-color: var(--royal-blue);">
                     <h2 style="font-size: clamp(1.8rem, 3.5vw, 2.5rem); color: var(--navy-text); margin-bottom: 16px;">
-                        Ingin Membangun Solusi Serupa buat <span class="font-editorial text-royal">Bisnis Lu?</span>
+                        Ingin Membangun Solusi Serupa untuk <span class="font-editorial text-royal">Bisnis Anda?</span>
                     </h2>
                     <p style="max-width: 600px; margin: 0 auto 32px; color: var(--slate-body); font-size: 1.05rem;">
-                        Diskusikan kebutuhan spesifik lu dengan tim arsitek kami. Kami siap berikan estimasi biaya dan roadmap eksekusi konkret.
+                        Diskusikan kebutuhan spesifik Anda dengan tim arsitek kami. Kami siap memberikan estimasi biaya dan peta jalan eksekusi yang konkret.
                     </p>
                     <a href="/contact" class="btn-royal" style="display: inline-flex; align-items: center; gap: 8px;">
                         Mulai Konsultasi Gratis
