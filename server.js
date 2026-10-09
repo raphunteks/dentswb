@@ -20,6 +20,12 @@ app.set('trust proxy', 1);
 // HTTP Response Compression (Gzip / Brotli)
 app.use(compression());
 
+// Global SEO & Search Console Link Header (Informs all crawlers of official sitemap on any request)
+app.use((req, res, next) => {
+    res.setHeader('Link', '<https://www.dentsweb.my.id/sitemap.xml>; rel="sitemap"');
+    next();
+});
+
 // Initialize Upstash Redis
 const redis = new Redis({
     url: process.env.KV_REST_API_URL,
@@ -4109,7 +4115,58 @@ app.get('/robots.txt', async (req, res) => {
         'Disallow: /webhook-dashboard',
         'Disallow: /api/',
         '',
-        `Sitemap: ${siteUrl}/sitemap.xml`
+        '# AI Agents & Search Crawlers (Agentic Web 2026 Standards)',
+        'User-agent: Google-Extended',
+        'Allow: /',
+        '',
+        'User-agent: GPTBot',
+        'Allow: /',
+        '',
+        'User-agent: ClaudeBot',
+        'Allow: /',
+        '',
+        'User-agent: PerplexityBot',
+        'Allow: /',
+        '',
+        'User-agent: Applebot-Extended',
+        'Allow: /',
+        '',
+        `Sitemap: ${siteUrl}/sitemap.xml`,
+        `Host: ${siteUrl}`
+    ].join('\n'));
+});
+
+// Machine-Readable AI Agent Documentation (Agentic Web 2026 standard)
+app.get('/llms.txt', async (req, res) => {
+    const settings = await getGlobalSettings();
+    const siteUrl = (settings.siteUrl && settings.siteUrl.trim()) ? settings.siteUrl.replace(/\/+$/, '') : 'https://www.dentsweb.my.id';
+    res.type('text/plain; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=86400');
+    res.send([
+        `# Dents Web (${siteUrl})`,
+        `> Studio Pembuatan Website Kustom, Landing Page Konversi Tinggi & Solusi Digital Performa Tinggi`,
+        '',
+        `## Tentang Kami`,
+        `Dents Web adalah penyedia arsitektur web presisi tinggi dengan standar performa modern: Core Web Vitals < 1s, zero-template bloat, 100% kepemilikan kode, dan SEO-ready dari awal.`,
+        '',
+        `## Layanan Utama`,
+        `- Pembuatan Website Kustom (Company Profile, Katalog, Web App, Portal Berita)`,
+        `- Landing Page Konversi Tinggi (Direct response, sales funnel, tracking siap pakai)`,
+        `- Sistem Informasi & Otomasi Digital (Google Apps Script, Dashboard Operasional, Integrasi Webhook)`,
+        `- UI/UX Design & Rebranding Modern`,
+        '',
+        `## Kontak Resmi`,
+        `- Website: ${siteUrl}`,
+        `- WhatsApp Official: https://wa.me/6285338922586`,
+        `- Email: dentswebsitebuilder@gmail.com`,
+        '',
+        `## Peta Situs & URL Dokumen`,
+        `- Beranda: ${siteUrl}/`,
+        `- Layanan: ${siteUrl}/services`,
+        `- Portofolio: ${siteUrl}/portfolio`,
+        `- Paket Harga: ${siteUrl}/pricing`,
+        `- Artikel: ${siteUrl}/articles`,
+        `- Sitemap XML: ${siteUrl}/sitemap.xml`
     ].join('\n'));
 });
 
@@ -4117,9 +4174,9 @@ app.all('/sitemap.xml', async (req, res) => {
     try {
         const settings = await getGlobalSettings();
         const baseUrl = (settings.siteUrl && settings.siteUrl.trim()) ? settings.siteUrl.replace(/\/+$/, '') : 'https://www.dentsweb.my.id';
-        const today = new Date().toISOString().split('T')[0];
+        const stableReleaseDate = '2026-10-09';
 
-        let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
+        let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n`;
 
         const staticRoutes = [
             { path: '/', priority: '1.0', freq: 'daily' },
@@ -4132,11 +4189,9 @@ app.all('/sitemap.xml', async (req, res) => {
             { path: '/contact', priority: '0.8', freq: 'monthly' }
         ];
 
-        const staticReleaseDate = '2026-04-01';
         staticRoutes.forEach(route => {
             const loc = route.path === '/' ? `${baseUrl}/` : `${baseUrl}${route.path}`;
-            const modDate = route.path === '/' ? today : staticReleaseDate;
-            xml += `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${modDate}</lastmod>\n    <changefreq>${route.freq}</changefreq>\n    <priority>${route.priority}</priority>\n  </url>\n`;
+            xml += `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${stableReleaseDate}</lastmod>\n    <changefreq>${route.freq}</changefreq>\n    <priority>${route.priority}</priority>\n  </url>\n`;
         });
 
         const [portfolio, articles] = await Promise.all([
@@ -4146,14 +4201,14 @@ app.all('/sitemap.xml', async (req, res) => {
 
         if (portfolio && Array.isArray(portfolio)) {
             portfolio.filter(p => p.isPublished).forEach(p => {
-                const portDate = (p.updatedAt || p.createdAt || '2026-03-25').split('T')[0];
+                const portDate = (p.updatedAt || p.createdAt || '2026-10-01').split('T')[0];
                 xml += `  <url>\n    <loc>${baseUrl}/portfolio/${p.slug}</loc>\n    <lastmod>${portDate}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.7</priority>\n  </url>\n`;
             });
         }
 
         if (articles && Array.isArray(articles)) {
             articles.filter(a => a.isPublished !== false).forEach(a => {
-                const artDate = (a.updatedAt || a.publishedAt || today).split('T')[0];
+                const artDate = (a.updatedAt || a.publishedAt || stableReleaseDate).split('T')[0];
                 xml += `  <url>\n    <loc>${baseUrl}/article/${a.slug}</loc>\n    <lastmod>${artDate}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
             });
         }
