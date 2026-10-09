@@ -32,15 +32,14 @@
     <%- include('partials/header') %>
 
     <main class="main-content" style="background: var(--navy-deep); min-height: 85vh; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; padding: 60px 20px;">
-        <!-- Background Ambient Glow & Grid -->
-        <div style="position: absolute; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(33, 82, 207, 0.25) 0%, rgba(217, 255, 66, 0.05) 50%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%, -50%); filter: blur(60px); pointer-events: none;"></div>
-        <div style="position: absolute; inset: 0; background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none;"></div>
+        <!-- Background Ambient Glow -->
+        <div style="position: absolute; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(33, 82, 207, 0.2) 0%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%, -50%); filter: blur(80px); pointer-events: none;"></div>
 
         <div class="container" style="position: relative; z-index: 2; max-width: 720px; text-align: center;">
             <div class="error-404-card" style="background: rgba(16, 24, 59, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: var(--radius-xl); padding: 48px 32px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);">
                 
-                <!-- Cyber Broken Connection SVG -->
-                <div style="display: inline-flex; align-items: center; justify-content: center; width: 96px; height: 96px; border-radius: 50%; background: rgba(33, 82, 207, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); margin-bottom: 24px; color: var(--lime-accent); box-shadow: 0 0 30px rgba(217, 255, 66, 0.2);">
+                <!-- Broken Connection SVG -->
+                <div style="display: inline-flex; align-items: center; justify-content: center; width: 88px; height: 88px; border-radius: 50%; background: rgba(33, 82, 207, 0.12); border: 1px solid rgba(56, 189, 248, 0.25); margin-bottom: 24px; color: var(--lime-accent);">
                     <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="10"></circle>
                         <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
