@@ -50,6 +50,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@500;600;700;800&family=Playfair+Display:ital,wght@1,400;1,500;1,600;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="/public/css/style.css?v=4.2.1">
+
+    <!-- Agentic Web Discovery (ARD 1.0 & llmstxt.org Gold Standard) -->
+    <link rel="ai-catalog" href="/.well-known/ai-catalog.json">
+    <link rel="alternate" type="text/markdown" href="/llms.txt" title="Ringkasan Markdown LLM">
+    <script src="/public/js/webmcp.js?v=4.2.1" defer></script>
 </head>
 <body>
     
@@ -133,23 +138,23 @@
                                 Isi formulir di bawah ini. Tim kami akan merespons maksimal dalam 1x24 jam melalui WhatsApp.
                             </p>
 
-                            <form id="contact-form">
+                            <form id="contact-form" toolname="submit_project_inquiry" tooldescription="Kirim formulir konsultasi proyek website atau sistem informasi ke tim Dents Web">
                                 <div id="form-alert" style="display:none; padding: 16px; border-radius: var(--radius-md); margin-bottom: 24px; font-weight: 600; font-size: 0.95rem;"></div>
 
                                 <!-- Service Selector Pills -->
                                 <div class="form-group">
                                     <label class="form-label">Pilih Layanan Yang Dibutuhkan *</label>
                                     <div class="radio-pill-group">
-                                        <input type="radio" id="srv_web" name="service_type" value="Web Development" class="radio-pill-input" checked>
+                                        <input type="radio" id="srv_web" name="service_type" value="Web Development" class="radio-pill-input" checked toolparamdescription="Kategori layanan: Web Development (Landing Page & Company Profile)">
                                         <label for="srv_web" class="radio-pill-label">Web Development</label>
 
-                                        <input type="radio" id="srv_sys" name="service_type" value="Sistem Informasi" class="radio-pill-input">
+                                        <input type="radio" id="srv_sys" name="service_type" value="Sistem Informasi" class="radio-pill-input" toolparamdescription="Kategori layanan: Sistem Informasi & Otomasi Digital">
                                         <label for="srv_sys" class="radio-pill-label">Sistem Informasi</label>
 
-                                        <input type="radio" id="srv_uiux" name="service_type" value="UI/UX Design" class="radio-pill-input">
+                                        <input type="radio" id="srv_uiux" name="service_type" value="UI/UX Design" class="radio-pill-input" toolparamdescription="Kategori layanan: UI/UX Design & Visual Rebranding">
                                         <label for="srv_uiux" class="radio-pill-label">UI/UX Design</label>
 
-                                        <input type="radio" id="srv_other" name="service_type" value="Lainnya" class="radio-pill-input">
+                                        <input type="radio" id="srv_other" name="service_type" value="Lainnya" class="radio-pill-input" toolparamdescription="Kategori layanan: Konsultasi Kustom & Solusi Khusus">
                                         <label for="srv_other" class="radio-pill-label">Konsultasi Custom</label>
                                     </div>
                                 </div>
@@ -158,22 +163,22 @@
                                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                                     <div class="form-group">
                                         <label class="form-label">Nama Lengkap *</label>
-                                        <input type="text" class="form-control" name="name" placeholder="Cth: Budi Pratama" required>
+                                        <input type="text" class="form-control" name="name" placeholder="Cth: Budi Pratama" required toolparamdescription="Nama lengkap narahubung atau pemilik proyek">
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label">Nomor WhatsApp *</label>
-                                        <input type="tel" class="form-control" name="whatsapp" placeholder="Cth: 08123456789" required>
+                                        <input type="tel" class="form-control" name="whatsapp" placeholder="Cth: 08123456789" required toolparamdescription="Nomor WhatsApp aktif untuk respon cepat dan konfirmasi penawaran">
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     <label class="form-label">Alamat Email (Opsional)</label>
-                                    <input type="email" class="form-control" name="email" placeholder="Cth: budi@perusahaan.com">
+                                    <input type="email" class="form-control" name="email" placeholder="Cth: budi@perusahaan.com" toolparamdescription="Alamat email resmi untuk pengiriman dokumen proposal atau invoice (opsional)">
                                 </div>
 
                                 <div class="form-group">
                                     <label class="form-label">Detail Singkat Proyek *</label>
-                                    <textarea class="form-control" name="message" rows="5" placeholder="Ceritakan tujuan proyek, fitur utama yang diinginkan, dan estimasi peluncuran jika ada..." required></textarea>
+                                    <textarea class="form-control" name="message" rows="5" placeholder="Ceritakan tujuan proyek, fitur utama yang diinginkan, dan estimasi peluncuran jika ada..." required toolparamdescription="Rincian deskripsi kebutuhan proyek website, fitur utama yang diinginkan, dan target peluncuran"></textarea>
                                 </div>
 
                                 <button type="submit" class="btn-royal" style="width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 8px;" id="btn-submit">
