@@ -144,51 +144,51 @@ async function ensureSeedData() {
         const INITIAL_SERVICES_4_TIERS = [
             {
                 id: 'srv_1',
-                title: 'Starter — Web Form & Otomasi Google Apps Script',
-                slug: 'starter-web-automation',
-                icon: 'cpu',
-                shortDescription: 'Website 1-3 halaman terintegrasi Google Sheets tanpa biaya sewa hosting bulanan.',
-                description: 'Solusi digitalisasi hemat biaya memanfaatkan infrastruktur cloud Google. Data formulir pendaftaran, pesanan, atau inventaris langsung masuk ke Google Sheets Anda secara real-time.',
-                features: ['1 - 3 Halaman & 1 - 4 Section', 'Database Realtime Google Sheets', 'Integrasi Direct WhatsApp & Maps', 'Zero Server Fee Selamanya', 'Pengerjaan Cepat 2 - 4 Hari'],
-                startingPrice: 'Rp 500.000',
+                title: 'Landing Page — Fokus Konversi',
+                slug: 'landing-page',
+                icon: 'globe',
+                shortDescription: 'Website satu halaman yang dirancang untuk mengubah pengunjung menjadi pembeli. Ideal untuk kampanye iklan dan peluncuran produk.',
+                description: 'Satu halaman fokus konversi dengan psikologi closing, copywriting persuasif, dan kecepatan muat Core Web Vitals 95+. Siap dihubungkan ke Meta Ads dan Google Ads.',
+                features: ['Satu Halaman Fokus Konversi', 'Copywriting & Struktur Closing', 'Core Web Vitals Skor 95+ (< 1 detik)', 'Domain, Hosting & SSL Gratis 1 Thn', 'Tersedia Tier Core, Premier, Signature, Prestige'],
+                startingPrice: 'Mulai Rp 1.300.000',
                 order: 1,
                 isFeatured: false,
                 isPublished: true
             },
             {
                 id: 'srv_2',
-                title: 'Business — High-Converting Landing Page',
-                slug: 'landing-page',
-                icon: 'globe',
-                shortDescription: 'Website 1-6 halaman terintegrasi fokus closing tinggi yang siap dihubungkan ke iklan Meta Ads dan Google Ads.',
-                description: 'Website 1 - 6 halaman (atau sales page panjang) dengan copywriting persuasif dan kecepatan loading di bawah 1 detik untuk memaksimalkan hasil belanja iklan Anda.',
-                features: ['1 - 6 Halaman Responsif (Sales Page)', 'Core Web Vitals Skor 95+', 'WhatsApp Direct Click', 'Domain, Hosting & SSL Gratis 1 Thn', 'Pengerjaan Cepat 3 - 5 Hari'],
-                startingPrice: 'Rp 1.500.000',
-                order: 2,
-                isFeatured: false,
-                isPublished: true
-            },
-            {
-                id: 'srv_3',
-                title: 'Pro — Corporate Company Profile',
+                title: 'Corporate Company Profile',
                 slug: 'company-profile',
                 icon: 'layers',
-                shortDescription: 'Website profil perusahaan multi-halaman berwibawa dengan CMS mandiri dan optimasi SEO Google.',
-                description: 'Bangun otoritas bisnis Anda di hadapan klien dan investor dengan website 5-8 halaman berstandar internasional, dilengkapi CMS mandiri dan email bisnis resmi.',
-                features: ['5 - 8 Halaman Dinamis', 'Panel Admin / CMS Mandiri', 'Google SEO Schema Gold Standard', 'Hingga 1 Email Bisnis Resmi (@perusahaan.com)', 'Garansi 30 Hari & Tutorial Admin'],
-                startingPrice: 'Rp 3.500.000',
-                order: 3,
+                shortDescription: 'Website representatif 5 halaman lengkap (Home, About, Layanan, Portofolio, Kontak) untuk membangun otoritas bisnis dan kepercayaan mitra.',
+                description: 'Wajah digital profesional yang membuat klien, investor, dan mitra langsung tahu Anda serius. Dilengkapi CMS bahasa Indonesia, optimasi SEO Google, dan email bisnis resmi.',
+                features: ['5 Halaman Lengkap Representatif', 'Tersedia Panel Admin CMS Mandiri', 'SEO Google Schema Gold Standard', 'Email Bisnis Resmi (@perusahaan.com)', 'Tersedia Tier Core, Premier, Signature, Prestige'],
+                startingPrice: 'Mulai Rp 3.000.000',
+                order: 2,
                 isFeatured: true,
                 isPublished: true
             },
             {
+                id: 'srv_3',
+                title: 'Toko Online & E-Commerce',
+                slug: 'e-commerce',
+                icon: 'shopping-cart',
+                shortDescription: 'Toko online Shopify atau full-stack kustom dengan checkout flow otomatis dan integrasi payment gateway resmi.',
+                description: 'Satu paket lengkap yang dirakit mengikuti kebutuhan toko Anda dari katalog produk, sistem keranjang, payment gateway (QRIS, VA, Kartu), hingga laporan penjualan otomatis.',
+                features: ['Katalog Produk & Kategori Dinamis', 'Payment Gateway Terintegrasi', 'Optimasi Kecepatan Checkout', 'Training Admin Pengelolaan Toko', 'Setup Domain, SSL & Analitik GA4'],
+                startingPrice: 'Mulai Rp 6.000.000',
+                order: 3,
+                isFeatured: false,
+                isPublished: true
+            },
+            {
                 id: 'srv_4',
-                title: 'Custom+ — Web Application & Sistem Bisnis',
+                title: 'Custom+ Web Application & Sistem Bisnis',
                 slug: 'web-app',
                 icon: 'cpu',
-                shortDescription: 'Aplikasi web khusus sesuai alur SOP bisnis dengan database cloud dan multi-role user.',
-                description: 'Solusi pengembangan web 10-12 halaman terintegrasi untuk kasir web, sistem reservasi, portal karyawan, atau dashboard analitik operasional perusahaan.',
-                features: ['10 - 12 Halaman Alur Khusus', 'Multi-Role User & Hak Akses', 'Database Cloud PostgreSQL/Redis', 'Integrasi API & Payment Gateway', '100% Hak Milik Source Code'],
+                shortDescription: 'Pengembangan sistem web aplikasi khusus untuk operasional bisnis, kasir web, sistem reservasi, dan portal multi-role user.',
+                description: 'Solusi arsitektur web full-stack terintegrasi sesuai SOP unik perusahaan Anda. Database cloud scalable, multi-role privileges, dan 100% kepemilikan source code.',
+                features: ['Arsitektur Full-Stack (Node.js/Cloud DB)', 'Multi-Role User (Admin, Staff, Klien)', 'Integrasi API Pihak Ketiga & Webhook', 'Laporan Analitik & Ekspor PDF/Excel', '100% Hak Milik Source Code Tanpa Lock-in'],
                 startingPrice: 'Rp 7.500.000+',
                 order: 4,
                 isFeatured: false,
@@ -197,83 +197,192 @@ async function ensureSeedData() {
         ];
 
         const INITIAL_PRICING_4_TIERS = [
+            // --- LANDING PAGE (1 Halaman, Fokus Konversi) ---
             {
-                id: 'price_1',
-                name: 'Starter — Web Form & Otomasi (GAS)',
-                price: 'Rp 500.000',
-                description: 'Website 1 - 3 halaman dan 1 - 4 section ringkas dengan integrasi database Google Sheets tanpa biaya hosting selamanya.',
+                id: 'price_lp_1',
+                category: 'landing-page',
+                tier: 'Core',
+                name: 'Landing Page — Core',
+                badge: 'Paket Dasar',
+                price: 'Rp 1.300.000',
+                description: 'Titik masuk. Mulai dari sini, naik paket kapan saja tanpa rebuild.',
                 features: [
-                    '1 - 3 Halaman Responsif',
-                    '1 - 4 Section Fokus Konversi',
-                    'Database Realtime Google Sheets',
-                    'Integrasi Direct WhatsApp & Maps',
-                    'Nol Biaya Server / Hosting Selamanya',
-                    'Pengerjaan Cepat 2 - 4 Hari Kerja'
+                    'Satu halaman fokus konversi tinggi',
+                    'Upgrade kapan saja tanpa rebuild',
+                    '2x revisi desain & layout',
+                    'Core Web Vitals Skor 95+ (Super Cepat)',
+                    'Gratis Domain & SSL 1 Tahun'
                 ],
-                limitations: [
-                    'Cold Start: Butuh 1-2 detik saat dibuka pertama kali',
-                    'Batas Kuota Google: Eksekusi maks. 6 menit per proses',
-                    'Bukan untuk checkout ribuan user bersamaan'
-                ],
+                addOnsNote: 'Booking System 800K · Panel Admin 700K · Visual 300K/5 foto · Extra Revisi 200K/round',
                 isFeatured: false,
                 isPublished: true,
                 order: 1
             },
             {
-                id: 'price_2',
-                name: 'Business — High-Converting Landing Page',
-                price: 'Rp 1.500.000',
-                description: 'Landing page 1 - 6 halaman terintegrasi yang dirancang khusus untuk mengubah pengunjung iklan menjadi pembeli.',
+                id: 'price_lp_2',
+                category: 'landing-page',
+                tier: 'Premier',
+                name: 'Landing Page — Premier',
+                badge: 'CMS Mandiri',
+                price: 'Rp 2.100.000',
+                description: 'Kelola konten halaman secara mandiri, tanpa nunggu siapa pun.',
                 features: [
-                    '1 - 6 Halaman Responsif (Sales Page)',
-                    'Struktur Psikologi Closing & Copywriting',
-                    'Core Web Vitals Skor 95+ (Super Cepat)',
-                    'Gratis Domain (.com/.my.id) & SSL 1 Tahun',
-                    'High-Speed SSD Cloud Hosting 1 Tahun',
-                    'Direct WhatsApp Button Teks Otomatis',
-                    'Pengerjaan 3 - 5 Hari Kerja (Garansi 14 Hari)'
+                    'Panel Admin / CMS eksklusif (700K kalau terpisah)',
+                    'Update konten halaman mandiri kapan saja',
+                    '2x revisi desain & layout',
+                    'Google SEO & Sitemap XML Ready',
+                    'Gratis Domain & High-Speed Cloud Host 1 Tahun'
                 ],
+                addOnsNote: 'Booking System 800K · Visual 300K/5 foto · Extra Revisi 200K/round',
                 isFeatured: false,
                 isPublished: true,
                 order: 2
             },
             {
-                id: 'price_3',
-                name: 'Pro — Corporate Company Profile',
-                price: 'Rp 3.500.000',
-                description: 'Website profil bisnis multi-halaman berwibawa dengan CMS mandiri dan optimasi SEO Google untuk reputasi perusahaan.',
+                id: 'price_lp_3',
+                category: 'landing-page',
+                tier: 'Signature',
+                name: 'Landing Page — Signature',
+                badge: 'Paling Banyak Dipilih',
+                price: 'Rp 2.000.000',
+                description: 'Booking dan visual sudah di dalam. Dirakit dari fitur terfavorit, hemat 700K.',
                 features: [
-                    '5 - 8 Halaman Dinamis Premium',
-                    'Panel Admin / CMS Mandiri (Edit Tanpa Koding)',
-                    'Gratis Domain (.com/.id/.co.id) & Cloud Host 1 Thn',
-                    'Hingga 1 Email Bisnis Resmi (@perusahaan.com)',
-                    'Dynamic Schema Google SEO & Sitemap XML',
-                    'Formulir Leads Masuk & Google Maps Interaktif',
-                    'Proteksi Keamanan SSL & Firewall Tingkat Lanjut',
-                    'Garansi Bug-Free 30 Hari & Video Tutorial Admin'
+                    'Booking System terintegrasi (800K kalau terpisah)',
+                    'Visual hingga 10 foto disiapkan tim (600K kalau terpisah)',
+                    '2x revisi desain & layout',
+                    'Direct WhatsApp Button teks otomatis',
+                    'Core Web Vitals 99/100, gratis Domain & SSL 1 Thn'
                 ],
+                addOnsNote: 'Panel Admin 700K · Extra Revisi 200K/round',
                 isFeatured: true,
                 isPublished: true,
                 order: 3
             },
             {
-                id: 'price_4',
-                name: 'Custom+ — Web Application & Sistem Bisnis',
-                price: 'Rp 7.500.000+',
-                description: 'Sistem web aplikasi khusus untuk operasional bisnis, kasir web, reservasi, portal data, dan integrasi database cloud.',
+                id: 'price_lp_4',
+                category: 'landing-page',
+                tier: 'Prestige',
+                name: 'Landing Page — Prestige',
+                badge: 'Paket Lengkap',
+                price: 'Rp 2.500.000',
+                description: 'Semua fitur menyala dari hari pertama tanpa perlu add-on tambahan.',
                 features: [
-                    '10 - 12 Halaman Terintegrasi Sesuai SOP',
-                    'Full-Stack Software Architecture (Node.js/Cloud DB)',
-                    'Database Terdedikasi (PostgreSQL / Redis / MySQL)',
-                    'Multi-Role User Privilege (Admin, Staf, Klien)',
-                    'Integrasi API Pihak Ketiga (Payment Gateway/WA API)',
-                    'Laporan Otomatis & Ekspor Data (PDF/Excel)',
-                    '100% Hak Milik Source Code & Dokumentasi',
-                    'Dedicated Developer SLA Prioritas 60 Hari'
+                    'Booking System terintegrasi lengkap',
+                    'Panel Admin / CMS Mandiri',
+                    'Visual hingga 10 foto siap pakai',
+                    '3x revisi (1x lebih banyak dari paket lain)',
+                    'Setup Google Analytics & Domain 1 Tahun'
                 ],
+                addOnsNote: 'Extra round revisi 200K/round',
                 isFeatured: false,
                 isPublished: true,
                 order: 4
+            },
+
+            // --- COMPANY PROFILE (5 Halaman Lengkap) ---
+            {
+                id: 'price_cp_1',
+                category: 'company-profile',
+                tier: 'Core',
+                name: 'Company Profile — Core',
+                badge: 'Paket Dasar',
+                price: 'Rp 3.000.000',
+                description: 'Website representatif 5 halaman untuk bisnis Anda, siap tumbuh kapan saja.',
+                features: [
+                    'Lima halaman representatif (Home, About, Layanan, Portofolio, Kontak)',
+                    'Upgrade arsitektur tanpa rebuild ulang',
+                    '2x revisi desain menyeluruh',
+                    'Desain custom sesuai identitas brand',
+                    'Responsif di semua perangkat (Desktop, Tablet, HP)'
+                ],
+                addOnsNote: 'Panel Admin CMS 1.500K · Booking 1.000K · Visual 300K/5 foto · Extra Revisi 350K/round',
+                isFeatured: false,
+                isPublished: true,
+                order: 5
+            },
+            {
+                id: 'price_cp_2',
+                category: 'company-profile',
+                tier: 'Premier',
+                name: 'Company Profile — Premier',
+                badge: 'CMS Mandiri',
+                price: 'Rp 3.800.000',
+                description: 'Kelola seluruh konten website profil secara mandiri tanpa koding.',
+                features: [
+                    'Panel Admin CMS Dents Web eksklusif (1.500K kalau terpisah)',
+                    'Dashboard bahasa Indonesia yang mudah dipahami',
+                    'Kelola seluruh teks, gambar, dan layanan mandiri',
+                    '2x revisi desain & struktur',
+                    'Hingga 1 Email Bisnis Resmi (@perusahaan.com)'
+                ],
+                addOnsNote: 'Booking 1.000K · Visual 300K/5 foto · Extra Revisi 350K/round',
+                isFeatured: false,
+                isPublished: true,
+                order: 6
+            },
+            {
+                id: 'price_cp_3',
+                category: 'company-profile',
+                tier: 'Signature',
+                name: 'Company Profile — Signature',
+                badge: 'Paling Banyak Dipilih',
+                price: 'Rp 3.500.000',
+                description: 'Booking dan visual hingga 20 foto sudah di dalam, tinggal jalan. Hemat 1.700K.',
+                features: [
+                    'Booking System terintegrasi (1.000K kalau terpisah)',
+                    'Visual hingga 20 foto disiapkan tim (1.200K kalau terpisah)',
+                    '5 halaman profesional siap presentasi klien/investor',
+                    '2x revisi desain & copywriting oleh tim',
+                    'Google SEO Gold Standard & Domain 1 Tahun'
+                ],
+                addOnsNote: 'Panel Admin CMS 1.500K · Extra Revisi 350K/round',
+                isFeatured: true,
+                isPublished: true,
+                order: 7
+            },
+            {
+                id: 'price_cp_4',
+                category: 'company-profile',
+                tier: 'Prestige',
+                name: 'Company Profile — Prestige',
+                badge: 'Paket Lengkap',
+                price: 'Rp 4.500.000',
+                description: 'Semua fitur korporat menyala dari hari pertama. Reputasi digital tertinggi.',
+                features: [
+                    'Panel Admin CMS Dents Web bahasa Indonesia',
+                    'Booking System terintegrasi otomatis ke WhatsApp',
+                    'Visual aset hingga 20 foto disiapkan',
+                    '3x revisi (1x lebih leluasa)',
+                    'Email bisnis resmi + Google Analytics + Garansi 30 Hari'
+                ],
+                addOnsNote: 'Extra round revisi 350K/round',
+                isFeatured: false,
+                isPublished: true,
+                order: 8
+            },
+
+            // --- E-COMMERCE / TOKO ONLINE ---
+            {
+                id: 'price_ecom_1',
+                category: 'ecommerce',
+                tier: 'Shopify / Custom',
+                name: 'Toko Online Shopify & Kustom',
+                badge: 'Satu Paket · Scope Menyesuaikan',
+                price: 'Mulai Rp 6.000.000',
+                description: 'Tidak ada tier kaku. Satu paket yang dirakit mengikuti kebutuhan toko Anda, dari katalog sampai gateway pembayaran.',
+                features: [
+                    'Desain custom Shopify / Full-Stack sesuai brand',
+                    'Setup kategori produk dan halaman utama katalog',
+                    'Checkout flow siap pakai & payment gateway dikonfigurasi',
+                    'Koneksi domain & SSL Cloudflare gratis',
+                    'SEO Google, Search Console & Google Analytics (GA4)',
+                    'Preview rapi saat dibagikan di WA & medsos',
+                    '3x revisi & 1 sesi pelatihan admin (30 menit)'
+                ],
+                addOnsNote: 'Visual Produk 300K/5 foto · Extra Revisi 500K/round · Setup Produk Massal Negosiasi',
+                isFeatured: true,
+                isPublished: true,
+                order: 9
             }
         ];
 
@@ -351,7 +460,7 @@ async function ensureSeedData() {
         const REAL_PORTFOLIO_PROJECTS = [
             {
                 id: 'port_1',
-                title: 'BEM KBMFKG UMI — Portal Organisasi & Aspirasi Mahasiswa',
+                title: 'BEM KBMFKG UMI — Portal Organisasi Mahasiswa',
                 slug: 'bem-kbmfkg-umi',
                 client: 'BEM KBMFKG UMI',
                 category: 'PORTAL ORGANISASI & KAMPUS',
@@ -369,7 +478,7 @@ async function ensureSeedData() {
             },
             {
                 id: 'port_2',
-                title: 'HMI Kedokteran Gigi UMI — Pusat Arsip & Database Kader',
+                title: 'HMI Kedokteran Gigi UMI — Pusat Database Kader',
                 slug: 'hmi-komkg-umi',
                 client: 'HMI Komisariat Kedokteran Gigi UMI',
                 category: 'SISTEM INFORMASI & ARSIP DIGITAL',
@@ -387,7 +496,7 @@ async function ensureSeedData() {
             },
             {
                 id: 'port_3',
-                title: 'Estaka Dental Clinic — Web Klinik & Booking WhatsApp',
+                title: 'Estaka Dental Clinic — Web Klinik & Booking WA',
                 slug: 'estaka-dental-clinic',
                 client: 'Estaka Dental Care & Aesthetics',
                 category: 'LAYANAN KESEHATAN & BOOKING ONLINE',
@@ -405,7 +514,7 @@ async function ensureSeedData() {
             },
             {
                 id: 'port_4',
-                title: 'Fahri Dental Care — Skrining Risiko Karies Gigi Anak',
+                title: 'Fahri Dental Care — Skrining Risiko Karies Anak',
                 slug: 'fahri-dental-care',
                 client: 'drg. Fahri Dental Care',
                 category: 'SKRINING KESEHATAN & KUESIONER',
@@ -423,7 +532,7 @@ async function ensureSeedData() {
             },
             {
                 id: 'port_5',
-                title: 'NovaCare.AI — Otomasi Notifikasi & Jadwal Pasien Klinik',
+                title: 'NovaCare.AI — Otomasi Notifikasi Pasien Klinik',
                 slug: 'novacare-ai',
                 client: 'NovaCare Health Solutions',
                 category: 'SISTEM INFORMASI & OTOMASI KLINIK',
@@ -513,7 +622,7 @@ async function ensureSeedData() {
             },
             {
                 id: 'port_10',
-                title: 'DentsHub Riset — Portal Pencarian Jurnal & Sitasi Medis',
+                title: 'DentsHub Riset — Portal Jurnal & Sitasi Medis',
                 slug: 'dentshub-riset',
                 client: 'DentsHub Academic Research Center',
                 category: 'REPOSITORI AKADEMIK & LITERATUR',
@@ -531,7 +640,7 @@ async function ensureSeedData() {
             },
             {
                 id: 'port_11',
-                title: 'FilterCan — Toko Online Preset Foto & Slider Before-After',
+                title: 'FilterCan — Toko Preset & Before-After Slider',
                 slug: 'marketplace-filtercan',
                 client: 'FilterCan Creative Studio',
                 category: 'E-COMMERCE & ASET DIGITAL',
@@ -894,34 +1003,12 @@ async function ensureSeedData() {
             }
         ];
 
-        const MIGRATION_VERSION = 'v7_pricing_services_refinements';
+        const MIGRATION_VERSION = 'v9_seo_performance_static';
         const currentMigration = await redis.get('dents:migration:portfolio');
         if (currentMigration !== MIGRATION_VERSION) {
-            console.log('[MIGRATION v7] Syncing refined Pricing & Services tiers (1-6 hal Business, 1 email Pro, no email Starter, no pixel Business) & verifying Base64 WebP in Redis DB...');
-
-            // Ambil portfolio yang sudah ada di Redis untuk mempertahankan data kustom
-            const existingPortfolio = await redis.get('dents:portfolio') || [];
-            const imageMap = {};
-            if (Array.isArray(existingPortfolio)) {
-                existingPortfolio.forEach(p => {
-                    if (p.id && p.image && p.image !== '/public/img/axalogo.png') imageMap[p.id] = p.image;
-                    if (p.slug && p.image && p.image !== '/public/img/axalogo.png') imageMap[p.slug] = p.image;
-                });
-            }
-
+            // Restore clean static WebP file paths for ultra-lightweight HTML (<250KB) and valid social metadata
             const syncedPortfolio = REAL_PORTFOLIO_PROJECTS.map((proj, idx) => {
-                let img = imageMap[proj.id] || imageMap[proj.slug] || proj.image;
-                // If it's a file path, convert to Base64 WebP Data URI so it lives 100% in Redis DB
-                if (!img || img.startsWith('/public/img/portfolio/')) {
-                    const localPath = path.join(process.cwd(), 'public/img/portfolio', `port_${idx + 1}.webp`);
-                    if (fs.existsSync(localPath)) {
-                        try {
-                            const buf = fs.readFileSync(localPath);
-                            img = 'data:image/webp;base64,' + buf.toString('base64');
-                        } catch (e) { }
-                    }
-                }
-                return { ...proj, image: img };
+                return { ...proj, image: `/public/img/portfolio/port_${idx + 1}.webp` };
             });
 
             await redis.set('dents:portfolio', syncedPortfolio);
@@ -930,7 +1017,6 @@ async function ensureSeedData() {
             await redis.set('dents:services', INITIAL_SERVICES_4_TIERS);
             await redis.set('dents:testimonials', MASKED_TESTIMONIALS);
             await redis.set('dents:migration:portfolio', MIGRATION_VERSION);
-            console.log('[MIGRATION v7] Sync complete: Pricing & Services tiers refined in Redis DB.');
         }
 
         if (!testimonials || !testimonials.length) {
@@ -945,7 +1031,7 @@ async function ensureSeedData() {
             await redis.set('dents:articles', [
                 {
                     id: 'art_1',
-                    title: 'Panduan Lengkap HTML5 Semantik: Fondasi Struktur Web Standar W3C',
+                    title: 'Panduan HTML5 Semantik: Fondasi Struktur Web',
                     slug: 'panduan-lengkap-html5-semantik',
                     category: 'Frontend',
                     excerpt: 'Pahami elemen semantik HTML5 seperti header, main, section, dan article untuk meningkatkan aksesibilitas dan ranking SEO Google.',
@@ -985,7 +1071,7 @@ async function ensureSeedData() {
                 },
                 {
                     id: 'art_2',
-                    title: 'Modern CSS3, Flexbox & Grid: Membangun Tata Letak Responsif Tanpa Pusing',
+                    title: 'Modern CSS3, Flexbox & Grid: Panduan Layout Responsif',
                     slug: 'modern-css3-flexbox-grid-tata-letak-responsif',
                     category: 'Frontend',
                     excerpt: 'Kuasai teknik layouting satu dimensi dengan Flexbox dan dua dimensi dengan CSS Grid untuk tampilan responsif di smartphone hingga desktop 4K.',
@@ -1014,7 +1100,7 @@ async function ensureSeedData() {
                 },
                 {
                     id: 'art_3',
-                    title: 'Logika & Variabel JavaScript ES6+: Dasar Pemrograman Modern untuk Pemula',
+                    title: 'JavaScript ES6+: Panduan Variabel Modern',
                     slug: 'logika-variabel-javascript-es6-dasar-pemrograman',
                     category: 'Frontend',
                     excerpt: 'Pelajari perbedaan const, let, arrow functions, destructuring, dan async/await yang menjadi fondasi ekosistem web saat ini.',
@@ -1043,7 +1129,7 @@ console.log(formatUser({ name: 'Ahmad' }));</code></pre>
                 },
                 {
                     id: 'art_4',
-                    title: 'Mengenal Ekosistem React & Komponen Deklaratif untuk Antarmuka Modern',
+                    title: 'Ekosistem React: Komponen Deklaratif & UI Modern',
                     slug: 'mengenal-ekosistem-react-komponen-deklaratif',
                     category: 'Frontend',
                     excerpt: 'Pahami paradigma komponen, state reaktif dengan useState & useEffect, serta cara kerja Virtual DOM dalam menciptakan UX kilat.',
@@ -1074,7 +1160,7 @@ export function CounterButton() {
                 },
                 {
                     id: 'art_5',
-                    title: 'Membangun RESTful API Pertama dengan Node.js dan Express.js',
+                    title: 'Panduan RESTful API dengan Node.js & Express',
                     slug: 'membangun-restful-api-nodejs-expressjs',
                     category: 'Backend',
                     excerpt: 'Langkah praktis membuat endpoint CRUD lengkap, middleware validasi, dan manajemen respons JSON yang terstruktur.',
@@ -1108,7 +1194,7 @@ app.listen(3000, () => console.log('Server berjalan di port 3000'));</code></pre
                 },
                 {
                     id: 'art_6',
-                    title: 'Pengenalan Bahasa Pemrograman Python: Sintaks Bersih untuk Web & Otomasi',
+                    title: 'Pengenalan Python: Sintaks Bersih Web & Otomasi',
                     slug: 'pengenalan-bahasa-python-sintaks-bersih-otomasi',
                     category: 'Backend',
                     excerpt: 'Kenapa Python menjadi bahasa terpopuler di dunia? Pelajari sintaks mudah dibaca, tipe data dinamis, dan integrasi library AI.',
@@ -1131,7 +1217,7 @@ app.listen(3000, () => console.log('Server berjalan di port 3000'));</code></pre
                 },
                 {
                     id: 'art_7',
-                    title: 'Manajemen Basis Data: Perbedaan Fundamental SQL Relasional vs NoSQL Dokumen',
+                    title: 'Manajemen Database: SQL vs NoSQL Dokumen',
                     slug: 'manajemen-database-sql-relasional-vs-nosql-dokumen',
                     category: 'Database',
                     excerpt: 'Panduan memilih database yang tepat untuk aplikasi Anda: PostgreSQL, MySQL, vs MongoDB, Redis, dan Upstash serverless.',
@@ -1153,7 +1239,7 @@ app.listen(3000, () => console.log('Server berjalan di port 3000'));</code></pre
                 },
                 {
                     id: 'art_8',
-                    title: 'Pengantar Docker & Kontainerisasi: Solusi Mengatasi "It Works on My Machine"',
+                    title: 'Pengantar Docker: Solusi Kontainerisasi Web',
                     slug: 'pengantar-docker-kontainerisasi-solusi-deployment',
                     category: 'DevOps',
                     excerpt: 'Cara mengemas aplikasi beserta pustaka dependensinya ke dalam Docker Image agar berjalan identik di komputer lokal maupun server produksi.',
@@ -1180,7 +1266,7 @@ CMD ["npm", "start"]</code></pre>
                 },
                 {
                     id: 'art_9',
-                    title: 'Alur Kerja Git & GitHub untuk Kolaborasi Tim Pengembang Software Profesional',
+                    title: 'Alur Kerja Git & GitHub untuk Kolaborasi Tim',
                     slug: 'alur-kerja-git-github-kolaborasi-tim-pengembang',
                     category: 'DevOps',
                     excerpt: 'Kuasai branch strategy, semantic commit messages, merge conflict resolution, dan Pull Request review untuk kerja tim yang produktif.',
@@ -1203,7 +1289,7 @@ CMD ["npm", "start"]</code></pre>
                 },
                 {
                     id: 'art_10',
-                    title: 'Keamanan Web Esensial: Praktik Terbaik Mencegah SQL Injection, XSS, dan CSRF',
+                    title: 'Keamanan Web: Cegah SQL Injection & XSS',
                     slug: 'keamanan-web-esensial-mencegah-sql-injection-xss-csrf',
                     category: 'Security',
                     excerpt: 'Panduan pertahanan siber untuk aplikasi web modern: sanitasi input pengguna, HTTP security headers, Helmet.js, dan token proteksi.',
@@ -1305,9 +1391,25 @@ function buildSEO(settings, pageData, extraData = {}) {
     const cleanPath = pageData.path === '/' ? '' : (pageData.path || '');
     const fullUrl = `${siteUrl}${cleanPath}`;
 
-    const title = pageData.title ? `${pageData.title} | ${settings.brandName || 'Dents Web'}` : settings.defaultSeoTitle;
+    const brand = settings.brandName || 'Dents Web';
+    let title = settings.defaultSeoTitle || 'Dents Web — Studio Website & Aplikasi Performa Tinggi';
+    if (pageData.title) {
+        if (pageData.title.includes(brand)) {
+            title = pageData.title;
+        } else {
+            title = `${pageData.title} | ${brand}`;
+        }
+    }
     const desc = pageData.desc || settings.defaultSeoDescription;
-    const image = pageData.image ? (pageData.image.startsWith('http') ? pageData.image : `${siteUrl}${pageData.image}`) : `${siteUrl}${settings.defaultOgImage || '/public/img/axalogo.png'}`;
+
+    // Sanitize image: NEVER allow data URIs in social metadata!
+    let rawImage = pageData.image;
+    if (rawImage && rawImage.startsWith('data:')) {
+        rawImage = null;
+    }
+    const image = rawImage
+        ? (rawImage.startsWith('http') ? rawImage : `${siteUrl}${rawImage.startsWith('/') ? '' : '/'}${rawImage}`)
+        : `${siteUrl}${settings.defaultOgImage || '/public/img/axalogo.png'}`;
     const keywords = pageData.keywords || "jasa pembuatan website, web developer profesional, landing page konversi tinggi, sistem informasi kustom, Dents Web, Google Sitelinks, SEO website, arsitektur web performa tinggi";
     const googleVerification = cleanGoogleVerification(settings.googleVerification);
 
@@ -1614,7 +1716,12 @@ async function requireTesterOrAdmin(req, res, next) {
 // ==========================================
 // PUBLIC SSR ROUTES
 // ==========================================
+const setPublicCacheHeaders = (res) => {
+    res.setHeader('Cache-Control', 'public, max-age=60, s-maxage=3600, stale-while-revalidate=86400');
+};
+
 app.get('/', async (req, res) => {
+    setPublicCacheHeaders(res);
     const settings = await getGlobalSettings();
     const rawServices = await redis.get('dents:services') || [];
     const rawPortfolio = await redis.get('dents:portfolio') || [];
@@ -1643,6 +1750,7 @@ app.get('/', async (req, res) => {
 });
 
 app.get('/services', async (req, res) => {
+    setPublicCacheHeaders(res);
     const settings = await getGlobalSettings();
     const siteUrl = settings.siteUrl ? settings.siteUrl.replace(/\/+$/, '') : 'https://www.dentsweb.my.id';
     const services = await redis.get('dents:services') || [];
@@ -1694,6 +1802,7 @@ app.get('/api/portfolio/:id/image', async (req, res) => {
 });
 
 app.get('/portfolio', async (req, res) => {
+    setPublicCacheHeaders(res);
     const settings = await getGlobalSettings();
     const siteUrl = settings.siteUrl ? settings.siteUrl.replace(/\/+$/, '') : 'https://www.dentsweb.my.id';
     const portfolio = await redis.get('dents:portfolio') || [];
@@ -1720,6 +1829,7 @@ app.get('/portfolio', async (req, res) => {
 });
 
 app.get('/portfolio/:slug', async (req, res) => {
+    setPublicCacheHeaders(res);
     const settings = await getGlobalSettings();
     const portfolioList = await redis.get('dents:portfolio') || [];
     const project = portfolioList.find(p => p.slug === req.params.slug && p.isPublished);
@@ -1743,6 +1853,7 @@ app.get('/portfolio/:slug', async (req, res) => {
 });
 
 app.get('/pricing', async (req, res) => {
+    setPublicCacheHeaders(res);
     const settings = await getGlobalSettings();
     const pricing = await redis.get('dents:pricing') || [];
     const activePricing = pricing.filter(p => p.isPublished !== false).sort((a, b) => (a.order || 0) - (b.order || 0));
@@ -1755,6 +1866,7 @@ app.get('/pricing', async (req, res) => {
 });
 
 app.get('/faq', async (req, res) => {
+    setPublicCacheHeaders(res);
     const settings = await getGlobalSettings();
     const siteUrl = settings.siteUrl ? settings.siteUrl.replace(/\/+$/, '') : 'https://www.dentsweb.my.id';
     const faq = await redis.get('dents:faq') || [];
@@ -1778,6 +1890,7 @@ app.get('/faq', async (req, res) => {
 });
 
 app.get('/about', async (req, res) => {
+    setPublicCacheHeaders(res);
     const settings = await getGlobalSettings();
     res.render('about', {
         settings,
@@ -1786,6 +1899,7 @@ app.get('/about', async (req, res) => {
 });
 
 app.get('/contact', async (req, res) => {
+    setPublicCacheHeaders(res);
     const settings = await getGlobalSettings();
     res.render('contact', {
         settings,
@@ -1797,6 +1911,7 @@ app.get('/contact', async (req, res) => {
 // ARTICLES SSR ROUTES (Gold Standard SEO)
 // ==========================================
 app.get('/articles', async (req, res) => {
+    setPublicCacheHeaders(res);
     const settings = await getGlobalSettings();
     const siteUrl = settings.siteUrl ? settings.siteUrl.replace(/\/+$/, '') : 'https://www.dentsweb.my.id';
     const allArticles = await redis.get('dents:articles') || [];
@@ -1854,6 +1969,7 @@ app.get('/articles', async (req, res) => {
 });
 
 app.get('/article/:slug', async (req, res) => {
+    setPublicCacheHeaders(res);
     const settings = await getGlobalSettings();
     const siteUrl = settings.siteUrl ? settings.siteUrl.replace(/\/+$/, '') : 'https://www.dentsweb.my.id';
     const allArticles = await redis.get('dents:articles') || [];
@@ -4016,9 +4132,11 @@ app.all('/sitemap.xml', async (req, res) => {
             { path: '/contact', priority: '0.8', freq: 'monthly' }
         ];
 
+        const staticReleaseDate = '2026-04-01';
         staticRoutes.forEach(route => {
             const loc = route.path === '/' ? `${baseUrl}/` : `${baseUrl}${route.path}`;
-            xml += `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>${route.freq}</changefreq>\n    <priority>${route.priority}</priority>\n  </url>\n`;
+            const modDate = route.path === '/' ? today : staticReleaseDate;
+            xml += `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${modDate}</lastmod>\n    <changefreq>${route.freq}</changefreq>\n    <priority>${route.priority}</priority>\n  </url>\n`;
         });
 
         const [portfolio, articles] = await Promise.all([
@@ -4028,7 +4146,8 @@ app.all('/sitemap.xml', async (req, res) => {
 
         if (portfolio && Array.isArray(portfolio)) {
             portfolio.filter(p => p.isPublished).forEach(p => {
-                xml += `  <url>\n    <loc>${baseUrl}/portfolio/${p.slug}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.7</priority>\n  </url>\n`;
+                const portDate = (p.updatedAt || p.createdAt || '2026-03-25').split('T')[0];
+                xml += `  <url>\n    <loc>${baseUrl}/portfolio/${p.slug}</loc>\n    <lastmod>${portDate}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.7</priority>\n  </url>\n`;
             });
         }
 
