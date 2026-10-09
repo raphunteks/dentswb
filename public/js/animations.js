@@ -48,7 +48,7 @@
         const bridgeCue = document.getElementById('hero-bridge-cue');
 
         if (scrollContainer && heroFrame && stage1 && stage2 && stage3 && typeof ScrollTrigger !== 'undefined') {
-            // Initial stage states
+            // Initial stage states: Stage 1 clean, Stage 2 & 3 hidden
             gsap.set(stage1, { opacity: 1, y: 0, pointerEvents: 'auto' });
             gsap.set(stage2, { opacity: 0, y: 35, pointerEvents: 'none' });
             gsap.set(stage3, { opacity: 0, y: 35, pointerEvents: 'none' });
@@ -56,7 +56,7 @@
 
             const updateHUD = (p) => {
                 if (progressBar) {
-                    progressBar.style.width = Math.min(100, Math.max(6, p * 100)) + '%';
+                    progressBar.style.width = Math.min(100, Math.max(6, (p || 0) * 100)) + '%';
                 }
                 if (stageNum) {
                     if (p < 0.35) {
@@ -69,14 +69,16 @@
                 }
             };
 
+            // Force initial HUD state at 0%
+            updateHUD(0);
+
+            // Native CSS sticky handles the viewport lock; ScrollTrigger tracks timeline scrub
             const tl = gsap.timeline({
                 scrollTrigger: {
                     trigger: scrollContainer,
-                    pin: heroFrame,
                     start: 'top top',
                     end: 'bottom bottom',
-                    scrub: 0.6,
-                    anticipatePin: 1,
+                    scrub: 0.5,
                     invalidateOnRefresh: true,
                     onUpdate: (self) => updateHUD(self.progress)
                 }
