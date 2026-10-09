@@ -27,24 +27,13 @@
             if (prefersReducedMotion) {
                 gsap.set(heroChars, { opacity: 1, y: 0, scale: 1, rotateX: 0 });
             } else {
-                gsap.fromTo(heroChars, 
-                    {
-                        opacity: 0,
-                        y: 35,
-                        scale: 0.9,
-                        rotateX: -20
-                    },
-                    {
-                        opacity: 1,
-                        y: 0,
-                        scale: 1,
-                        rotateX: 0,
-                        duration: 0.85,
-                        stagger: 0.06,
-                        ease: 'power3.out',
-                        delay: 0.15
-                    }
-                );
+                gsap.from(heroChars, {
+                    y: 25,
+                    scale: 0.94,
+                    duration: 0.8,
+                    stagger: 0.05,
+                    ease: 'power3.out'
+                });
             }
         }
 
