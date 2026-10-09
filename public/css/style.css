@@ -450,11 +450,13 @@ h6 {
   transform: scale(1.02);
 }
 
-/* Mobile Hamburger Button */
+/* Mobile Hamburger Button (48px standard touch target) */
 .nav-hamburger {
   display: none;
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  min-height: 48px;
   background: #f1f4fa;
   border: 1px solid var(--border-light);
   border-radius: var(--radius-pill);
@@ -1712,8 +1714,10 @@ h6 {
 
   .nav-hamburger {
     display: flex;
-    width: 40px;
-    height: 40px;
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
   }
 
   /* Grid: 1 Column on mobile with tight natural gap */
@@ -1923,7 +1927,13 @@ h6 {
   line-height: 1;
   color: #4f5b7d;
   cursor: pointer;
-  padding: 2px 6px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 6px;
   transition: all 0.2s;
 }
@@ -4536,6 +4546,7 @@ h6 {
   position: relative;
   width: 100%;
   min-height: 100vh;
+  min-height: 100dvh;
   background: linear-gradient(180deg, #04081a 0%, #0a1633 55%, #0d1d42 100%);
   overflow: hidden;
 }
@@ -4552,6 +4563,7 @@ h6 {
   width: 100%;
   height: 100%;
   min-height: 100vh;
+  min-height: 100dvh;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -4720,7 +4732,7 @@ h6 {
   font-weight: 600;
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.45);
+  color: #94a3b8;
 }
 
 .hero-scroll-clean-track {
@@ -4745,7 +4757,7 @@ h6 {
   font-size: 0.78rem;
   font-weight: 500;
   letter-spacing: 0.18em;
-  color: rgba(255, 255, 255, 0.5);
+  color: #94a3b8;
   font-variant-numeric: tabular-nums;
 }
 
